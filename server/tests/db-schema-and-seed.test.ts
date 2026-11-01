@@ -142,8 +142,8 @@ describe('Database Schema, Models, Partial Indexes & Seed Verification (Issue I-
     }
 
     expect(caughtCollectorError).not.toBeNull();
-    expect(caughtCollectorError.code).toBe('P2002');
-    expect(caughtCollectorError.meta).toEqual(
+    expect(caughtCollectorError?.code).toBe('P2002');
+    expect(caughtCollectorError?.meta).toEqual(
       expect.objectContaining({
         modelName: 'QueueTicket',
         target: expect.arrayContaining(['userId']),
@@ -230,8 +230,8 @@ describe('Database Schema, Models, Partial Indexes & Seed Verification (Issue I-
     }
 
     expect(caughtStaffError).not.toBeNull();
-    expect(caughtStaffError.code).toBe('P2002');
-    expect(caughtStaffError.meta).toEqual(
+    expect(caughtStaffError?.code).toBe('P2002');
+    expect(caughtStaffError?.meta).toEqual(
       expect.objectContaining({
         modelName: 'QueueTicket',
         target: expect.arrayContaining(['handledByStaffId']),
