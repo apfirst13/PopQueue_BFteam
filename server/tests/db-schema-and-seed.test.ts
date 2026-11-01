@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { PrismaClient, Role, TicketStatus } from '@prisma/client';
+import { PrismaClient, Role, TicketStatus, Prisma } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { seed } from '../prisma/seed.js';
 import { getQueueDateAsDate } from '../src/utils/clock.js';
@@ -123,7 +123,7 @@ describe('Database Schema, Models, Partial Indexes & Seed Verification (Issue I-
     expect(ticket1.id).toBeDefined();
 
     // Attempting to create a 2nd active ticket for the same user must be rejected by unique_active_ticket_user (P2002)
-    let caughtCollectorError: any = null;
+    let caughtCollectorError: Prisma.PrismaClientKnownRequestError | null = null;
     try {
       await prisma.queueTicket.create({
         data: {
@@ -135,8 +135,10 @@ describe('Database Schema, Models, Partial Indexes & Seed Verification (Issue I-
           status: TicketStatus.WAITING,
         },
       });
-    } catch (err: any) {
-      caughtCollectorError = err;
+    } catch (err: unknown) {
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        caughtCollectorError = err;
+      }
     }
 
     expect(caughtCollectorError).not.toBeNull();
@@ -206,7 +208,7 @@ describe('Database Schema, Models, Partial Indexes & Seed Verification (Issue I-
     expect(ticket1.id).toBeDefined();
 
     // Attempting to assign another ticket in UNBOXING/CALLED to the same staff must be rejected by unique_active_staff_ticket (P2002)
-    let caughtStaffError: any = null;
+    let caughtStaffError: Prisma.PrismaClientKnownRequestError | null = null;
     try {
       await prisma.queueTicket.create({
         data: {
@@ -221,8 +223,10 @@ describe('Database Schema, Models, Partial Indexes & Seed Verification (Issue I-
           startedAt: new Date(),
         },
       });
-    } catch (err: any) {
-      caughtStaffError = err;
+    } catch (err: unknown) {
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        caughtStaffError = err;
+      }
     }
 
     expect(caughtStaffError).not.toBeNull();
