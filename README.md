@@ -59,6 +59,26 @@ npm run dev
 
 ---
 
+## Authentication & Role Identity (Feature F-01 / Issue I-02)
+
+PopQueue uses stateless JWT authentication with all-device token revocation via database `tokenVersion`:
+
+### Endpoints
+* `POST /api/auth/login` — Public. Expects `{ "username": "...", "password": "..." }`. Returns 200 `{ "data": { "token": "...", "user": { ... } } }`.
+* `POST /api/auth/logout` — Protected (`Bearer <token>`). Increments user's `tokenVersion` in PostgreSQL, immediately invalidating all active tokens across devices. Returns 200 `{ "data": { "success": true } }`.
+* `GET /api/auth/me` — Protected (`Bearer <token>`). Returns user identity and `assignedSeries` (`[]` for Collectors; array of assigned series for Box Masters).
+
+### Seed Test Accounts
+All seeded accounts use passwords defined in `SEED_COLLECTOR_PASSWORD` and `SEED_STAFF_PASSWORD`:
+* **Collectors (Role `COLLECTOR`):**
+  * `collector1` to `collector6` (Password default: `collector_dev_password123`)
+* **Box Masters (Role `BOX_MASTER`):**
+  * `staff_crybaby` (Assigned: `CRY` Crybaby Sunset Concert, Password default: `staff_dev_password123`)
+  * `staff_crybaby2` (Assigned: `CRY` Crybaby Sunset Concert, Password default: `staff_dev_password123`)
+  * `staff_labubu` (Assigned: `LAB` Labubu Macaron, Password default: `staff_dev_password123`)
+
+---
+
 ## Available Root Scripts
 
 * `npm run lint` — Lint all workspaces with ESLint
@@ -69,4 +89,3 @@ npm run dev
 * `npm run db:migrate` — Run Prisma migrations against PostgreSQL (`prisma migrate dev`)
 * `npm run db:seed` — Run idempotent database seed script (`prisma db seed`)
 * `npm run db:reset-demo` — Reset database cleanly, apply all migrations (including partial indexes), and re-seed 9 accounts + 3 series
-

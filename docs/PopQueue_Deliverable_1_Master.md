@@ -1102,14 +1102,14 @@ FR-05, FR-06, BR-04, NFR-02, NFR-05 | Dependencies: F-01, F-02 (ตั๋ว), F
 
 | AC | Planned TEST | Level | Actual test file / name | Result | Commit |
 | :---: | :---: | :---: | :--- | :---: | :---: |
-| AC-01 | TEST-01 | Integration | `tests/api/auth.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-02 | TEST-02 | Integration | `tests/api/auth.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-03 | TEST-03 | Integration | `tests/api/auth.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-04 | TEST-04 | Integration | `tests/security/unauthenticated.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-05 | TEST-05 | Integration | `tests/api/auth.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-06 | TEST-06 | Integration | `tests/api/auth.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-07 | TEST-07 | Integration (DB) | `tests/security/password-hash.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-08 | TEST-08U | Unit | `tests/unit/role-guard.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
+| AC-01 | TEST-01 | Integration | `tests/api/auth.test.ts` / logs in successfully with valid credentials | Pass | `d8d300e` |
+| AC-02 | TEST-02 | Integration | `tests/api/auth.test.ts` / returns identical 401 INVALID_CREDENTIALS | Pass | `d8d300e` |
+| AC-03 | TEST-03 | Integration | `tests/api/auth.test.ts` / returns 400 VALIDATION_ERROR on missing/malformed | Pass | `d8d300e` |
+| AC-04 | TEST-04 | Security | `tests/security/unauthenticated.test.ts` / rejects unauthenticated & malformed | Pass | `d8d300e` |
+| AC-05 | TEST-05 | Integration | `tests/api/auth.test.ts` / revokes token via tokenVersion increment | Pass | `d8d300e` |
+| AC-06 | TEST-06 | Integration | `tests/api/auth.test.ts` / returns profile and assignedSeries | Pass | `d8d300e` |
+| AC-07 | TEST-07 | Security / Characterization | `tests/security/password-hash.test.ts` / bcrypt cost >= 10 | Pass | `d8d300e` |
+| AC-08 | TEST-08U | Unit | `tests/unit/role-guard.test.ts` / requireRole 403 FORBIDDEN_ROLE & 401 | Pass | `d8d300e` |
 | AC-09 | TEST-09 | Integration | `tests/api/series.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
 | AC-10 | TEST-10 | Integration | `tests/api/join.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
 | AC-11 | TEST-11 | Integration | `tests/api/join.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
@@ -1164,6 +1164,7 @@ FR-05, FR-06, BR-04, NFR-02, NFR-05 | Dependencies: F-01, F-02 (ตั๋ว), F
 
 | Test / AC | Commit ที่ Test ล้ม (แดง) – วันที่ | Log ที่แสดงความล้มเหลวตามที่คาด | Commit ที่ทำให้ผ่าน (เขียว) – วันที่ | Log ผ่าน |
 | :--- | :--- | :--- | :--- | :--- |
+| TEST-01..06, 08U / AC-01..06, AC-08 (F-01) | `e3a0a63` – 2026-11-02 | `docs/evidence/i02-red-test-log.txt` (19 failed / 2 passed) | `d8d300e` – 2026-11-02 | `docs/evidence/i02-green-test-log.txt` (38 passed / 38 passed) |
 | TEST-16 / AC-16 | `[TBD]` | `[TBD]` | `[TBD]` | `[TBD]` |
 | TEST-25 หรือ TEST-30 / AC-25, AC-30 | `[TBD]` | `[TBD]` | `[TBD]` | `[TBD]` |
 | TEST-37 / AC-37 | `[TBD]` | `[TBD]` | `[TBD]` | `[TBD]` |
@@ -1176,9 +1177,9 @@ FR-05, FR-06, BR-04, NFR-02, NFR-05 | Dependencies: F-01, F-02 (ตั๋ว), F
 
 | ลำดับ | เหตุการณ์ | Commit ID | วันที่-เวลา | ผู้ทำ |
 | :---: | :--- | :---: | :---: | :---: |
-| 1 | Contract + STS ของ F-01..F-04 (เอกสารเท่านั้น – Issue I-00) | `[TBD]` | `[TBD]` | `[TBD]` |
-| 2 | Test (แดง) ของ F-01 | `[TBD]` | `[TBD]` | `[TBD]` |
-| 3 | Implement F-01 (เขียว) | `[TBD]` | `[TBD]` | `[TBD]` |
+| 1 | Contract + STS ของ F-01..F-04 (เอกสารเท่านั้น – Issue I-00) | `be364fc` | 2026-11-01 22:54 | Theerawat & First |
+| 2 | Test (แดง) ของ F-01 | `e3a0a63` | 2026-11-02 02:31 | Theerawat |
+| 3 | Implement F-01 (เขียว) | `d8d300e` | 2026-11-02 02:33 | Theerawat |
 | 4 | Test (แดง) ของ F-02 / F-03 / F-04 | `[TBD]` | `[TBD]` | `[TBD]` |
 | 5 | Implement F-02 / F-03 / F-04 | `[TBD]` | `[TBD]` | `[TBD]` |
 | 6 | แก้ไข Contract ระหว่างทาง (ถ้ามี พร้อมเหตุผล) | `[TBD]` | `[TBD]` | `[TBD]` |
