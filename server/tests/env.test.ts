@@ -33,6 +33,7 @@ describe('Environment Configuration & Validation (NFR-01, Part C §9)', () => {
     const config = loadConfig(validBaseEnv);
     expect(config.JWT_SECRET).toBe(validBaseEnv.JWT_SECRET);
     expect(config.TZ).toBe('Asia/Bangkok');
+    expect(config.JWT_EXPIRES_IN).toBe('8h');
     expect(config.BCRYPT_COST).toBe(10);
   });
 });

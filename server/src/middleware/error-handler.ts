@@ -29,6 +29,18 @@ export function errorHandler(
   res: Response<ErrorResponse>,
   _next: NextFunction,
 ): void {
+  // Map express.json() SyntaxError to 400 VALIDATION_ERROR (CHG-08)
+  if (err instanceof SyntaxError && 'status' in err && (err as { status?: number }).status === 400) {
+    res.status(400).json({
+      error: {
+        code: 'VALIDATION_ERROR',
+        message: 'Malformed JSON payload',
+        statusCode: 400,
+      },
+    });
+    return;
+  }
+
   if (err instanceof AppError) {
     res.status(err.statusCode).json({
       error: {

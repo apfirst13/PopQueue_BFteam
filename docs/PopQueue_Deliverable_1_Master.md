@@ -285,6 +285,7 @@ Semester 1/2026 | Department of Computer Engineering, KMUTT
 | CHG-05 | 2026-11-01 | Renumber AC/TEST เป็น 1:1 (AC-01..39) | ลดความไม่สอดคล้องของ ID | ทีมตกลง (v0.2) |
 | CHG-06 | 2026-11-01 | เปลี่ยนการออกเลขคิวเป็น Raw SQL `ON CONFLICT` (D-10) | Prisma upsert ไม่ atomic ภายใต้ race | ทีมตกลง (v0.2) |
 | CHG-07 | 2026-11-02 | ปรับ UI Stack จาก Next.js 14 เป็น React 18 + Vite | สเปก §5.1 ส่งเสริมการใช้ Stack จาก Labs 1–4 และสถาปัตยกรรม SPA เพียงพอต่อการใช้งาน | ทีมตกลง (v0.2) |
+| CHG-08 | 2026-11-02 | ปรับปรุง STS ของ F-01 (TEST-03 Malformed JSON, TEST-04 Parameterized + Algorithm confusion, TEST-07 Characterization, TEST-08U Unauthenticated) และเพิ่ม config `JWT_EXPIRES_IN` | Handout §3.5 & NFR-02: ดักจับ SyntaxError ป้องกัน 500 unhandled, ป้องกัน Algorithm confusion (alg:none), แยก characterization test ของ Seed, และสร้างตาราง protected route กลางรองรับ I-02..I-06 | ทีมตกลง (v0.2.2) |
 
 ---
 
@@ -660,6 +661,7 @@ F-05, F-06, F-07 (Sprint 2), Dockerfile/CI/CD/GCP (Lab 5), F-08, F-09, NFR-07, R
 | v0.1 | 2026-11-01 | `[TBD – ถ้ามี commit]` | ฉบับร่างแรก (AC-01..AC-26, ซีรีส์ 2 รายการ) | `[TBD]` |
 | v0.2 | 2026-11-01 | `[TBD]` | เพิ่ม AC list ต่อฟีเจอร์, Validation/Failure cases, Data/UI "no change", Feature DoD; Renumber AC/TEST เป็น 1:1 (AC-01..39); เพิ่ม BR-09, `FORBIDDEN_NOT_HANDLER`, `SERIES_CLOSED`, `NO_ACTIVE_TICKET`; Seed เพิ่ม (collector×6, staff_crybaby2, series SKP); เปลี่ยนการออกเลขคิวเป็น Raw SQL (D-10); ย้าย Rate limit ไป Sprint 3 | `[TBD]` |
 | v0.2.1 | 2026-11-02 | `[TBD]` | ปรับปรุง Contract สถาปัตยกรรม Web Client เป็น React 18 + Vite ตาม CHG-07 (สเปก §5.1 ส่งเสริม Labs 1–4 stack และสถาปัตยกรรม SPA เพียงพอ) | ทีมตกลง |
+| v0.2.2 | 2026-11-02 | `[TBD]` | ปรับปรุงรายละเอียด STS ของ F-01 ตาม CHG-08: เพิ่ม Malformed JSON ใน TEST-03, Parameterized + Algorithm confusion ใน TEST-04, TEST-07 เป็น Characterization, และ TEST-08U ตรวจสอบ 401 เมื่อขาด req.user | ทีมตกลง |
 | v0.x | `[TBD]` | `[TBD]` | การแก้ไข Contract ระหว่าง Implement (ต้องระบุเหตุผลทุกครั้ง ห้ามเขียนทับประวัติ) | `[TBD]` |
 
 ### ข้อตกลงร่วมของชุดทดสอบ (Test Conventions)
@@ -733,12 +735,12 @@ login: ทุกคน | logout/me: ผู้ล็อกอินเท่า�
 | :---: | :---: | :---: | :--- | :--- | :--- |
 | **TEST-01** | AC-01 | Integration | Seed มี `collector1`, `staff_crybaby` | `POST /api/auth/login` ด้วยรหัสถูกต้อง | 200; มี `token`; `user.role` = `COLLECTOR` / `BOX_MASTER`; ถอด JWT ได้ `sub` ตรง |
 | **TEST-02** | AC-02 | Integration | (a) `collector1` + รหัสผิด (b) username `nobody` | `POST /api/auth/login` | ทั้งสองกรณี 401 `INVALID_CREDENTIALS` body เหมือนกัน; ไม่มี `token` |
-| **TEST-03** | AC-03 | Integration | Body `{}`, `{username:""}`, `{password:"x"}` | `POST /api/auth/login` | 400 `VALIDATION_ERROR` ทุกกรณี |
-| **TEST-04** | AC-04 | Integration | ตารางรายการ Protected route (จาก Role Matrix) | ยิงแต่ละ route โดย: ไม่มี header / `Bearer garbage` / Token แก้ payload / Token `exp` ในอดีต | ทุกกรณี 401 `UNAUTHENTICATED`; body ไม่มี field ของตั๋ว/ผู้ใช้ |
-| **TEST-05** | AC-05 | Integration | Token ใหม่ของ `collector1` | `POST /api/auth/logout` แล้ว `GET /api/auth/me` ด้วย Token เดิม แล้ว login ใหม่และ `GET /me` | logout 200; `/me` ครั้งแรก 401; Token ใหม่ `/me` 200; ค่า `tokenVersion` ใน DB เพิ่ม 1 |
+| **TEST-03** | AC-03 | Integration | Body `{}`, `{username:""}`, `{password:"x"}`, Malformed JSON string | `POST /api/auth/login` | 400 `VALIDATION_ERROR` ทุกกรณี (รวม JSON syntax parse error) |
+| **TEST-04** | AC-04 | Security | ตารางรายการ `protectedRoutes` กลาง (จาก Role Matrix) | ยิงแต่ละ route โดย: ไม่มี header / `Bearer garbage` / Token แก้ payload / Token `exp` ในอดีต / Token `alg: none` / Token อัลกอริทึมอื่น | ทุกกรณี 401 `UNAUTHENTICATED`; body ไม่มี field ของตั๋ว/ผู้ใช้ |
+| **TEST-05** | AC-05 | Integration | Token ใหม่ของ `collector6` (แยก user เพื่อป้องกัน Flaky test ขณะรันขนาน) | `POST /api/auth/logout` แล้ว `GET /api/auth/me` ด้วย Token เดิม แล้ว login ใหม่และ `GET /me` | logout 200; `/me` ครั้งแรก 401; Token ใหม่ `/me` 200; ค่า `tokenVersion` ใน DB เพิ่ม 1 |
 | **TEST-06** | AC-06 | Integration | Token `staff_crybaby`, `staff_labubu`, `collector1` | `GET /api/auth/me` | staff_crybaby→`assignedSeries=[CRY]`; staff_labubu→`[LAB]`; collector1→`[]`; role ถูกต้อง |
-| **TEST-07** | AC-07 | Integration (DB) | หลังรัน Seed | Query `passwordHash` ของทุก User ใน PostgreSQL | ตรง regex `^\$2[aby]\$(\d{2})\$` และ cost ≥ 10; ≠ รหัสต้นฉบับ; `bcrypt.compare` สำเร็จ |
-| **TEST-08U** | AC-08 | Unit | `req.user.role` = COLLECTOR และ BOX_MASTER | เรียก `requireRole(['BOX_MASTER'])` | BOX_MASTER ผ่าน (`next()`); COLLECTOR ถูกปฏิเสธ 403 `FORBIDDEN_ROLE` |
+| **TEST-07** | AC-07 | Security / Characterization | หลังรัน Seed (Characterization Test) | Query `passwordHash` ของทุก User ใน PostgreSQL | ตรง regex `^\$2[aby]\$(\d{2})\$` และ cost ≥ 10; ≠ รหัสต้นฉบับ; `bcrypt.compare` สำเร็จ |
+| **TEST-08U** | AC-08 | Unit | (a) `req.user.role` = COLLECTOR และ BOX_MASTER (b) ขาด `req.user` | เรียก `requireRole(['BOX_MASTER'])` | BOX_MASTER ผ่าน (`next()`); COLLECTOR ถูกปฏิเสธ 403 `FORBIDDEN_ROLE`; ขาด req.user ตอบ 401 `UNAUTHENTICATED` |
 
 ### 1.11 Definition of Done & Evidence – F-01
 - [ ] AC-01..08 มี Test (TEST-01..08U) ทำงานจริง; แสดงหลักฐาน Test ล้ม (แดง) ก่อนแล้วผ่าน (เขียว) พร้อม commit ID
@@ -1100,14 +1102,14 @@ FR-05, FR-06, BR-04, NFR-02, NFR-05 | Dependencies: F-01, F-02 (ตั๋ว), F
 
 | AC | Planned TEST | Level | Actual test file / name | Result | Commit |
 | :---: | :---: | :---: | :--- | :---: | :---: |
-| AC-01 | TEST-01 | Integration | `tests/api/auth.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-02 | TEST-02 | Integration | `tests/api/auth.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-03 | TEST-03 | Integration | `tests/api/auth.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-04 | TEST-04 | Integration | `tests/security/unauthenticated.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-05 | TEST-05 | Integration | `tests/api/auth.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-06 | TEST-06 | Integration | `tests/api/auth.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-07 | TEST-07 | Integration (DB) | `tests/security/password-hash.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-08 | TEST-08U | Unit | `tests/unit/role-guard.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
+| AC-01 | TEST-01 | Integration | `tests/api/auth.test.ts` / logs in successfully with valid credentials | Pass | `d8d300e` |
+| AC-02 | TEST-02 | Integration | `tests/api/auth.test.ts` / returns identical 401 INVALID_CREDENTIALS | Pass | `d8d300e` |
+| AC-03 | TEST-03 | Integration | `tests/api/auth.test.ts` / returns 400 VALIDATION_ERROR on missing/malformed | Pass | `d8d300e` |
+| AC-04 | TEST-04 | Security | `tests/security/unauthenticated.test.ts` / rejects unauthenticated & malformed | Pass | `d8d300e` |
+| AC-05 | TEST-05 | Integration | `tests/api/auth.test.ts` / revokes token via tokenVersion increment | Pass | `d8d300e` |
+| AC-06 | TEST-06 | Integration | `tests/api/auth.test.ts` / returns profile and assignedSeries | Pass | `d8d300e` |
+| AC-07 | TEST-07 | Security / Characterization | `tests/security/password-hash.test.ts` / bcrypt cost >= 10 | Pass | `d8d300e` |
+| AC-08 | TEST-08U | Unit | `tests/unit/role-guard.test.ts` / requireRole 403 FORBIDDEN_ROLE & 401 | Pass | `d8d300e` |
 | AC-09 | TEST-09 | Integration | `tests/api/series.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
 | AC-10 | TEST-10 | Integration | `tests/api/join.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
 | AC-11 | TEST-11 | Integration | `tests/api/join.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
@@ -1162,6 +1164,7 @@ FR-05, FR-06, BR-04, NFR-02, NFR-05 | Dependencies: F-01, F-02 (ตั๋ว), F
 
 | Test / AC | Commit ที่ Test ล้ม (แดง) – วันที่ | Log ที่แสดงความล้มเหลวตามที่คาด | Commit ที่ทำให้ผ่าน (เขียว) – วันที่ | Log ผ่าน |
 | :--- | :--- | :--- | :--- | :--- |
+| TEST-01..06, 08U / AC-01..06, AC-08 (F-01) | `e3a0a63` – 2026-11-02 | `docs/evidence/i02-red-test-log.txt` (19 failed / 2 passed) | `d8d300e` – 2026-11-02 | `docs/evidence/i02-green-test-log.txt` (38 passed / 38 passed) |
 | TEST-16 / AC-16 | `[TBD]` | `[TBD]` | `[TBD]` | `[TBD]` |
 | TEST-25 หรือ TEST-30 / AC-25, AC-30 | `[TBD]` | `[TBD]` | `[TBD]` | `[TBD]` |
 | TEST-37 / AC-37 | `[TBD]` | `[TBD]` | `[TBD]` | `[TBD]` |
@@ -1174,9 +1177,9 @@ FR-05, FR-06, BR-04, NFR-02, NFR-05 | Dependencies: F-01, F-02 (ตั๋ว), F
 
 | ลำดับ | เหตุการณ์ | Commit ID | วันที่-เวลา | ผู้ทำ |
 | :---: | :--- | :---: | :---: | :---: |
-| 1 | Contract + STS ของ F-01..F-04 (เอกสารเท่านั้น – Issue I-00) | `[TBD]` | `[TBD]` | `[TBD]` |
-| 2 | Test (แดง) ของ F-01 | `[TBD]` | `[TBD]` | `[TBD]` |
-| 3 | Implement F-01 (เขียว) | `[TBD]` | `[TBD]` | `[TBD]` |
+| 1 | Contract + STS ของ F-01..F-04 (เอกสารเท่านั้น – Issue I-00) | `be364fc` | 2026-11-01 22:54 | Theerawat & First |
+| 2 | Test (แดง) ของ F-01 | `e3a0a63` | 2026-11-02 02:31 | Theerawat |
+| 3 | Implement F-01 (เขียว) | `d8d300e` | 2026-11-02 02:33 | Theerawat |
 | 4 | Test (แดง) ของ F-02 / F-03 / F-04 | `[TBD]` | `[TBD]` | `[TBD]` |
 | 5 | Implement F-02 / F-03 / F-04 | `[TBD]` | `[TBD]` | `[TBD]` |
 | 6 | แก้ไข Contract ระหว่างทาง (ถ้ามี พร้อมเหตุผล) | `[TBD]` | `[TBD]` | `[TBD]` |
