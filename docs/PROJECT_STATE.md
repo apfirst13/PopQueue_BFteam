@@ -22,11 +22,11 @@
 | **I-08** | E2E, Persistence & Release | Playwright tests, persistence script, release PR & tag `v0.1.0-sprint1` | Todo | `feature/i08-release` | - |
 
 ## Feature & Acceptance Criteria Status
-* Full Contract & STS for F-01..F-04 with AC-01..AC-39 is defined in `docs/sprints/sprint-1/PopQueue_Deliverable_1_Master.md`.
+* Full Contract & STS for F-01..F-04 with AC-01..AC-39 is defined in `docs/PopQueue_Deliverable_1_Master.md`.
 * Automated test results will be populated in Part F upon test execution on the release commit.
 
 ## Key Design Decisions
-* **D-01 to D-14:** Documented in Part A §8 of `docs/sprints/sprint-1/PopQueue_Deliverable_1_Master.md`.
+* **D-01 to D-14:** Documented in Part A §8 of `docs/PopQueue_Deliverable_1_Master.md`.
 * Atomic queue numbering via Raw SQL `INSERT ... ON CONFLICT DO UPDATE ... RETURNING` (D-10).
 * Concurrency race prevention via 2 PostgreSQL Partial Unique Indexes (`unique_active_ticket_user`, `unique_active_staff_ticket`).
 * Stateless JWT with token revocation via `tokenVersion` on `User` table (D-04, D-11).
