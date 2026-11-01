@@ -18,6 +18,7 @@ describe('Centralized Error Handler (NFR-05)', () => {
       error: {
         code: 'BAD_REQUEST',
         message: 'Invalid input data',
+        statusCode: 400,
         details: { field: 'name' },
       },
     });
@@ -39,6 +40,7 @@ describe('Centralized Error Handler (NFR-05)', () => {
       error: {
         code: 'INTERNAL_ERROR',
         message: 'An unexpected internal error occurred',
+        statusCode: 500,
       },
     });
     expect(response.body.stack).toBeUndefined();

@@ -122,9 +122,10 @@ describe('Database Schema, Models, Partial Indexes & Seed Verification (Issue I-
     });
     expect(ticket1.id).toBeDefined();
 
-    // Attempting to create a 2nd active ticket for the same user must be rejected by unique_active_ticket_user
-    await expect(
-      prisma.queueTicket.create({
+    // Attempting to create a 2nd active ticket for the same user must be rejected by unique_active_ticket_user (P2002)
+    let caughtCollectorError: any = null;
+    try {
+      await prisma.queueTicket.create({
         data: {
           seriesId: labSeries.id,
           userId: collector.id,
@@ -133,8 +134,41 @@ describe('Database Schema, Models, Partial Indexes & Seed Verification (Issue I-
           displayNumber: 'LAB-102',
           status: TicketStatus.WAITING,
         },
+      });
+    } catch (err: any) {
+      caughtCollectorError = err;
+    }
+
+    expect(caughtCollectorError).not.toBeNull();
+    expect(caughtCollectorError.code).toBe('P2002');
+    expect(caughtCollectorError.meta).toEqual(
+      expect.objectContaining({
+        modelName: 'QueueTicket',
+        target: expect.arrayContaining(['userId']),
       })
-    ).rejects.toThrow();
+    );
+
+    // Positive control: after the first ticket becomes COMPLETED, creating a new active ticket for the same user must succeed
+    await prisma.queueTicket.update({
+      where: { id: ticket1.id },
+      data: {
+        status: TicketStatus.COMPLETED,
+        completedAt: new Date(),
+      },
+    });
+
+    const ticket2 = await prisma.queueTicket.create({
+      data: {
+        seriesId: labSeries.id,
+        userId: collector.id,
+        queueDate,
+        queueNumber: 103,
+        displayNumber: 'LAB-103',
+        status: TicketStatus.WAITING,
+      },
+    });
+    expect(ticket2.id).toBeDefined();
+    expect(ticket2.status).toBe(TicketStatus.WAITING);
 
     // Clean up
     await prisma.queueTicket.deleteMany({ where: { userId: collector.id } });
@@ -171,9 +205,10 @@ describe('Database Schema, Models, Partial Indexes & Seed Verification (Issue I-
     });
     expect(ticket1.id).toBeDefined();
 
-    // Attempting to assign another ticket in UNBOXING/CALLED to the same staff must be rejected by unique_active_staff_ticket
-    await expect(
-      prisma.queueTicket.create({
+    // Attempting to assign another ticket in UNBOXING/CALLED to the same staff must be rejected by unique_active_staff_ticket (P2002)
+    let caughtStaffError: any = null;
+    try {
+      await prisma.queueTicket.create({
         data: {
           seriesId: crySeries.id,
           userId: collector2.id,
@@ -185,8 +220,19 @@ describe('Database Schema, Models, Partial Indexes & Seed Verification (Issue I-
           calledAt: new Date(),
           startedAt: new Date(),
         },
+      });
+    } catch (err: any) {
+      caughtStaffError = err;
+    }
+
+    expect(caughtStaffError).not.toBeNull();
+    expect(caughtStaffError.code).toBe('P2002');
+    expect(caughtStaffError.meta).toEqual(
+      expect.objectContaining({
+        modelName: 'QueueTicket',
+        target: expect.arrayContaining(['handledByStaffId']),
       })
-    ).rejects.toThrow();
+    );
 
     // Clean up
     await prisma.queueTicket.deleteMany({
