@@ -10,6 +10,9 @@ const envSchema = z.object({
   DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),
   JWT_SECRET: z.string().min(16, 'JWT_SECRET must be at least 16 characters'),
   CORS_ORIGIN: z.string().default('http://localhost:3000'),
+  BCRYPT_COST: z.coerce.number().default(10),
+  SEED_COLLECTOR_PASSWORD: z.string().default('collector_dev_password123'),
+  SEED_STAFF_PASSWORD: z.string().default('staff_dev_password123'),
 });
 
 export type Config = z.infer<typeof envSchema>;

@@ -37,4 +37,4 @@
 3. Short Polling (3s) for real-time updates without WebSockets/SSE.
 
 ## Next Step for the Team / Agent
-* Begin **Issue I-01**: Initialize Node.js/Express + TypeScript scaffolding in `server/`, setup Prisma schema with PostgreSQL, create migrations including the 2 partial unique indexes, and create idempotent seed script for 9 accounts + 3 series.
+* Complete review and merge of **Issue I-01** (Scaffold, Prisma models, migrations with 2 partial unique indexes, seed 9 accounts, and db:reset-demo). Next issue is **Issue I-02** (F-01: Auth & Role Identity).

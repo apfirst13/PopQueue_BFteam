@@ -43,10 +43,17 @@ docker compose up -d
 # 4. Install dependencies across all workspaces from clean state
 npm install
 
-# 5. Run automated test suites across all workspaces
+# 5. Run database migration and seed data
+npm run db:migrate
+npm run db:seed
+
+# Alternatively: reset cleanly and re-seed anytime
+npm run db:reset-demo
+
+# 6. Run automated test suites across all workspaces
 npm test
 
-# 6. Start the development server
+# 7. Start the development server
 npm run dev
 ```
 
@@ -59,5 +66,7 @@ npm run dev
 * `npm test` — Run unit and integration tests across all workspaces via Vitest
 * `npm run build` — Compile and build all workspaces
 * `npm run dev` — Start the backend development server with hot-reload
-* `npm run db:migrate` — Database migration command (placeholder: not implemented yet)
-* `npm run db:seed` — Database seed command (placeholder: not implemented yet)
+* `npm run db:migrate` — Run Prisma migrations against PostgreSQL (`prisma migrate dev`)
+* `npm run db:seed` — Run idempotent database seed script (`prisma db seed`)
+* `npm run db:reset-demo` — Reset database cleanly, apply all migrations (including partial indexes), and re-seed 9 accounts + 3 series
+

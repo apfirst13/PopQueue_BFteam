@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { FakeClock, SystemClock, getQueueDate } from '../src/utils/clock.js';
+import { FakeClock, SystemClock, getQueueDate, getQueueDateAsDate } from '../src/utils/clock.js';
 
 describe('Clock and Timezone Utilities (NFR-09)', () => {
   it('FakeClock provides injectable and mutable time', () => {
@@ -31,5 +31,12 @@ describe('Clock and Timezone Utilities (NFR-09)', () => {
     // 2026-11-01 17:01:00 UTC = 2026-11-02 00:01:00 in Bangkok (UTC+7)
     const afterMidnight = new Date('2026-11-01T17:01:00.000Z');
     expect(getQueueDate(afterMidnight)).toBe('2026-11-02');
+  });
+
+  it('getQueueDateAsDate returns a Date normalized to midnight UTC of the Bangkok date', () => {
+    const afterMidnight = new Date('2026-11-01T17:01:00.000Z');
+    const dateObj = getQueueDateAsDate(afterMidnight);
+    expect(dateObj).toBeInstanceOf(Date);
+    expect(dateObj.toISOString()).toBe('2026-11-02T00:00:00.000Z');
   });
 });

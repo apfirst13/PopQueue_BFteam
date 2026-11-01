@@ -42,3 +42,12 @@ export function getQueueDate(dateInput: Date = defaultClock.now()): string {
   });
   return formatter.format(dateInput);
 }
+
+/**
+ * Returns a Date object representing midnight (00:00:00.000Z) of the queue date in Asia/Bangkok
+ * suitable for Prisma @db.Date fields
+ */
+export function getQueueDateAsDate(dateInput: Date = defaultClock.now()): Date {
+  const dateStr = getQueueDate(dateInput);
+  return new Date(`${dateStr}T00:00:00.000Z`);
+}

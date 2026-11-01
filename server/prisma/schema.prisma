@@ -7,4 +7,84 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// Domain models placeholder (NO models in scaffold phase per issue specification)
+enum Role {
+  COLLECTOR
+  BOX_MASTER
+}
+
+enum TicketStatus {
+  WAITING
+  CALLED
+  UNBOXING
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+model User {
+  id             String                  @id @default(uuid())
+  username       String                  @unique
+  passwordHash   String                  // bcrypt cost >= 10
+  fullName       String
+  role           Role                    @default(COLLECTOR)
+  tokenVersion   Int                     @default(0) // Logout: tokenVersion + 1
+  tickets        QueueTicket[]           @relation("UserTickets")
+  handledTickets QueueTicket[]           @relation("StaffHandledTickets")
+  assignments    StaffSeriesAssignment[]
+  createdAt      DateTime                @default(now())
+}
+
+model Series {
+  id          String                  @id @default(uuid())
+  code        String                  @unique // CRY, LAB, SKP
+  name        String
+  isActive    Boolean                 @default(true)
+  tickets     QueueTicket[]
+  assignments StaffSeriesAssignment[]
+  counters    QueueCounter[]
+  createdAt   DateTime                @default(now())
+}
+
+model StaffSeriesAssignment {
+  id       String @id @default(uuid())
+  staffId  String
+  seriesId String
+  staff    User   @relation(fields: [staffId], references: [id])
+  series   Series @relation(fields: [seriesId], references: [id])
+
+  @@unique([staffId, seriesId])
+}
+
+model QueueTicket {
+  id               String       @id @default(uuid())
+  seriesId         String
+  series           Series       @relation(fields: [seriesId], references: [id])
+  userId           String
+  user             User         @relation("UserTickets", fields: [userId], references: [id])
+  handledByStaffId String?
+  handledByStaff   User?        @relation("StaffHandledTickets", fields: [handledByStaffId], references: [id])
+  queueDate        DateTime     @db.Date // วันที่ตาม Asia/Bangkok
+  queueNumber      Int
+  displayNumber    String // เช่น CRY-001
+  status           TicketStatus @default(WAITING)
+  createdAt        DateTime     @default(now())
+  calledAt         DateTime?
+  startedAt        DateTime?
+  completedAt      DateTime?
+  forfeitedAt      DateTime? // ใช้ใน Sprint 2 (Cancel/No-Show)
+
+  @@unique([seriesId, queueDate, queueNumber])
+  @@index([seriesId, status, queueDate, queueNumber])
+  @@index([userId])
+  // Note: Partial Unique Indexes (BR-02, BR-06) written in migration 0002_partial_unique_indexes
+}
+
+model QueueCounter {
+  id         String   @id @default(uuid())
+  seriesId   String
+  series     Series   @relation(fields: [seriesId], references: [id])
+  queueDate  DateTime @db.Date
+  lastNumber Int      @default(0)
+
+  @@unique([seriesId, queueDate])
+}
