@@ -14,9 +14,9 @@ Semester 1/2026 | Department of Computer Engineering, KMUTT
 * **หัวข้อที่ได้รับมอบหมาย (Assigned Theme):** Theme 9 – Queue and Service Management System
 * **บริบทของระบบ (Context):** On-site Virtual Waiting Queue สำหรับ Live Unboxing Station หน้าร้าน Art Toy (Waiting line วันเดียวกันเท่านั้น ไม่มีการจองล่วงหน้า)
 * **สมาชิกในทีม (Team Members – Pair Programming):**
-  1. `[TBD – ชื่อ-นามสกุล นักศึกษาคนที่ 1]` (รหัสนักศึกษา: `[TBD]`)
-  2. `[TBD – ชื่อ-นามสกุล นักศึกษาคนที่ 2]` (รหัสนักศึกษา: `[TBD]`)
-* **GitHub Repository URL (1 repo ต่อคู่):** `[TBD – URL จริงของ repo ที่ใช้ส่ง]`
+  1. นายธีรวัฒญ์ รุ่งสว่าง (รหัสนักศึกษา: `67070507206`)
+  2. นายอภิวัชร์ ปัณฐธนาพัฒน์ (รหัสนักศึกษา: `67070507209`)
+* **GitHub Repository URL (1 repo ต่อคู่):** `https://github.com/apfirst13/qdrive-license-queue`
 * **Submitted Release Tag:** `v0.1.0-sprint1` *(ตั้งชื่อตามแผน – ยืนยันหลัง tag จริง)*
 * **Submitted Release Commit:** `[TBD – Commit SHA ของ release commit บน main]`
 * **Tested Commit (ชุดเดียวกับ Release Commit):** `[TBD]`
@@ -1198,7 +1198,7 @@ FR-05, FR-06, BR-04, NFR-02, NFR-05 | Dependencies: F-01, F-02 (ตั๋ว), F
 
 > **เขียนจากประวัติ Issue/PR/commit จริงหลังทำงานเสร็จ ไม่เขียนล่วงหน้า** ทั้งสองคนต้องมีส่วนร่วมทุกกิจกรรม ไม่แบ่งบทบาทถาวร (เช่น คนหนึ่งเขียนสเปก อีกคนเขียนโค้ด) งานแบบ Pair ให้ระบุทั้งสองคนใน Issue/PR
 
-| กิจกรรม | นักศึกษา 1: `[TBD ชื่อ]` | นักศึกษา 2: `[TBD ชื่อ]` | หลักฐาน (Issue/PR/commit) |
+| กิจกรรม | นายธีรวัฒญ์ รุ่งสว่าง (รหัส: `67070507206`) | นายอภิวัชร์ ปัณฐธนาพัฒน์ (รหัส: `67070507209`) | หลักฐาน (Issue/PR/commit) |
 | :--- | :--- | :--- | :--- |
 | Requirements & Design (Part A–D) | `[TBD]` | `[TBD]` | `[TBD]` |
 | Feature contracts & STS (Part E) | `[TBD]` | `[TBD]` | `[TBD]` |
