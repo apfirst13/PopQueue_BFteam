@@ -16,7 +16,7 @@ Semester 1/2026 | Department of Computer Engineering, KMUTT
 * **สมาชิกในทีม (Team Members – Pair Programming):**
   1. นายธีรวัฒญ์ รุ่งสว่าง (รหัสนักศึกษา: `67070507206`)
   2. นายอภิวัชร์ ปัณฐธนาพัฒน์ (รหัสนักศึกษา: `67070507209`)
-* **GitHub Repository URL (1 repo ต่อคู่):** `https://github.com/apfirst13/qdrive-license-queue`
+* **GitHub Repository URL (1 repo ต่อคู่):** `https://github.com/apfirst13/PopQueue_BFteam`
 * **Submitted Release Tag:** `v0.1.0-sprint1` *(ตั้งชื่อตามแผน – ยืนยันหลัง tag จริง)*
 * **Submitted Release Commit:** `[TBD – Commit SHA ของ release commit บน main]`
 * **Tested Commit (ชุดเดียวกับ Release Commit):** `[TBD]`
@@ -284,6 +284,7 @@ Semester 1/2026 | Department of Computer Engineering, KMUTT
 | CHG-04 | 2026-11-01 | ย้าย Rate Limit เป็น NFR-07 / Sprint 3 | ชนกับ test login ผิดซ้ำและ UAT | ทีมตกลง (v0.2) |
 | CHG-05 | 2026-11-01 | Renumber AC/TEST เป็น 1:1 (AC-01..39) | ลดความไม่สอดคล้องของ ID | ทีมตกลง (v0.2) |
 | CHG-06 | 2026-11-01 | เปลี่ยนการออกเลขคิวเป็น Raw SQL `ON CONFLICT` (D-10) | Prisma upsert ไม่ atomic ภายใต้ race | ทีมตกลง (v0.2) |
+| CHG-07 | 2026-11-02 | ปรับ UI Stack จาก Next.js 14 เป็น React 18 + Vite | สเปก §5.1 ส่งเสริมการใช้ Stack จาก Labs 1–4 และสถาปัตยกรรม SPA เพียงพอต่อการใช้งาน | ทีมตกลง (v0.2) |
 
 ---
 
@@ -292,7 +293,7 @@ Semester 1/2026 | Department of Computer Engineering, KMUTT
 ## 1. สถาปัตยกรรม Stack และกลยุทธ์การทดสอบ
 
 ```
-[Web Client: Next.js 14 + TailwindCSS]      ← หน้าจอ, validation เบื้องต้น, Polling 3 วินาที (ไม่ตัดสินสิทธิ์/กฎธุรกิจ)
+[Web Client: React 18 + Vite + TailwindCSS] ← หน้าจอ, validation เบื้องต้น, Polling 3 วินาที (ไม่ตัดสินสิทธิ์/กฎธุรกิจ)
         |  HTTPS REST (JSON) + Authorization: Bearer <JWT>
 [API Layer: Node.js + Express + TypeScript] ← Auth/Role middleware, Zod validation, Service layer (กฎธุรกิจ), Error mapping
         |  Prisma ORM + Raw SQL (ใน Transaction เดียวกัน)
@@ -301,13 +302,13 @@ Semester 1/2026 | Department of Computer Engineering, KMUTT
 
 | Layer | หน้าที่ | กฎธุรกิจที่บังคับที่ชั้นนี้ |
 | :--- | :--- | :--- |
-| **UI (Next.js)** | แสดงผล, เก็บ Token, Polling, แสดง Error ตาม code | **ไม่มี** – การซ่อนปุ่มไม่ใช่การอนุญาตสิทธิ์ |
+| **UI (React + Vite)** | แสดงผล, เก็บ Token, Polling, แสดง Error ตาม code | **ไม่มี** – การซ่อนปุ่มไม่ใช่การอนุญาตสิทธิ์ |
 | **API (Express)** | ยืนยันตัวตน, Role/Scope/Ownership, validate input, State Machine, ออกเลขคิว | BR-03, BR-04, BR-05, BR-07, BR-09, ลำดับตรวจสอบ (§6) |
 | **Database (PostgreSQL)** | เก็บข้อมูลถาวร, ป้องกัน Race | BR-01 (unique + counter), BR-02 (partial unique), BR-06 (partial unique) |
 
 * **การสื่อสาร:** UI → API ด้วย REST/JSON เท่านั้น; API → DB ผ่าน Prisma (และ Raw SQL เฉพาะจุดที่ต้อง atomic/lock); ไม่มี Business Rule ที่ฝั่ง Client
 * **เหตุผลเลือก Stack:** ใช้ TypeScript ทั้ง Client/Server เพื่อลดภาระการเรียนรู้ของทีม 2 คน, Prisma + PostgreSQL รองรับ Transaction/Index/Row lock ที่จำเป็นต่อ BR-01/02/06, Docker แพ็กเกจและ Deploy บน GCP Cloud Run ได้ (Modular Monolith, ไม่ใช่ Microservices)
-* **โครงสร้าง Repo:** `server/` (API + Prisma), `client/` (Next.js), `e2e/` (Playwright), `scripts/`, `docs/`
+* **โครงสร้าง Repo:** `server/` (API + Prisma), `client/` (React + Vite), `e2e/` (Playwright), `scripts/`, `docs/`
 
 ### Test Strategy
 
@@ -587,11 +588,11 @@ model QueueCounter {
 | `JWT_EXPIRES_IN` | `8h` |
 | `BCRYPT_COST` | `10` |
 | `PORT`, `TZ` | `4000`, `Asia/Bangkok` |
-| `CORS_ORIGIN`, `NEXT_PUBLIC_API_URL` | Origin ของ Client / URL ของ API |
+| `CORS_ORIGIN`, `VITE_API_URL` | Origin ของ Client / URL ของ API |
 | `SEED_COLLECTOR_PASSWORD`, `SEED_STAFF_PASSWORD` | รหัส Seed (ส่งผ่านช่องทางส่วนตัวของวิชา) |
 | `LOGIN_RATE_LIMIT_ENABLED` | *(Sprint 3)* ปิดในโหมดเทสต์ |
 
-* **Secret Handling:** `.env` อยู่ใน `.gitignore`; commit เฉพาะ `.env.example` (ค่า placeholder); Client Bundle ไม่มี Secret (เฉพาะ `NEXT_PUBLIC_*` ที่ไม่ลับ); บน GCP เก็บใน Secret Manager
+* **Secret Handling:** `.env` อยู่ใน `.gitignore`; commit เฉพาะ `.env.example` (ค่า placeholder); Client Bundle ไม่มี Secret (เฉพาะ `VITE_*` ที่ไม่ลับ); บน GCP เก็บใน Secret Manager
 * **GCP Plan (Lab 5):** Docker multi-stage → Artifact Registry → **Cloud Run** (API และ Web) → **Cloud SQL PostgreSQL 16** (ข้อมูลถาวร/ข้าม Restart) → **Secret Manager**; รัน `prisma migrate deploy` ใน Release step; Pipeline จาก GitHub (PR build/test เป็น Gate → merge main → deploy) *(รายละเอียดจริงตามคำแนะนำ Lab 5)*
 
 ---
@@ -658,6 +659,7 @@ F-05, F-06, F-07 (Sprint 2), Dockerfile/CI/CD/GCP (Lab 5), F-08, F-09, NFR-07, R
 | :---: | :---: | :---: | :--- | :--- |
 | v0.1 | 2026-11-01 | `[TBD – ถ้ามี commit]` | ฉบับร่างแรก (AC-01..AC-26, ซีรีส์ 2 รายการ) | `[TBD]` |
 | v0.2 | 2026-11-01 | `[TBD]` | เพิ่ม AC list ต่อฟีเจอร์, Validation/Failure cases, Data/UI "no change", Feature DoD; Renumber AC/TEST เป็น 1:1 (AC-01..39); เพิ่ม BR-09, `FORBIDDEN_NOT_HANDLER`, `SERIES_CLOSED`, `NO_ACTIVE_TICKET`; Seed เพิ่ม (collector×6, staff_crybaby2, series SKP); เปลี่ยนการออกเลขคิวเป็น Raw SQL (D-10); ย้าย Rate limit ไป Sprint 3 | `[TBD]` |
+| v0.2.1 | 2026-11-02 | `[TBD]` | ปรับปรุง Contract สถาปัตยกรรม Web Client เป็น React 18 + Vite ตาม CHG-07 (สเปก §5.1 ส่งเสริม Labs 1–4 stack และสถาปัตยกรรม SPA เพียงพอ) | ทีมตกลง |
 | v0.x | `[TBD]` | `[TBD]` | การแก้ไข Contract ระหว่าง Implement (ต้องระบุเหตุผลทุกครั้ง ห้ามเขียนทับประวัติ) | `[TBD]` |
 
 ### ข้อตกลงร่วมของชุดทดสอบ (Test Conventions)
@@ -1242,5 +1244,5 @@ FR-05, FR-06, BR-04, NFR-02, NFR-05 | Dependencies: F-01, F-02 (ตั๋ว), F
 | **I-04** | F-04 Ticket & Ownership | AC-34..38 | TDD: `my-ticket`, `tickets/:id`, ตรวจ 404→403, ไม่รั่วข้อมูล |
 | **I-05** | F-03 List & Call Next | AC-21..25, 31, 32 | TDD: `GET /staff/tickets`, `call-next` (SKIP LOCKED, STAFF_BUSY, FORBIDDEN_SERIES), Concurrency |
 | **I-06** | F-03 Start/Complete/State | AC-26..30 | TDD: `start-unboxing`, `complete`, State guard (Unit), FORBIDDEN_SERIES / NOT_HANDLER |
-| **I-07** | Web UI | AC-19, 20, 33 (ส่วน UI) | Next.js: `/login`, `/series`, `/my-ticket` (Polling), `/staff/counter`, สถานะ Loading/Empty/Error, 375px |
+| **I-07** | Web UI | AC-19, 20, 33 (ส่วน UI) | React + Vite: `/login`, `/series`, `/my-ticket` (Polling), `/staff/counter`, สถานะ Loading/Empty/Error, 375px |
 | **I-08** | E2E, Persistence, Release | AC-19, 20, 33, 39 | Playwright, `test-persistence.mjs`, รัน Full Suite บน staging, Release PR → `main`, tag `v0.1.0-sprint1`, เก็บหลักฐานกรอก Part F, สร้าง PDF เดียว (สารบัญ+เลขหน้า) |

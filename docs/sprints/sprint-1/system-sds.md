@@ -12,7 +12,7 @@
 ---
 
 ## 🏗️ สถาปัตยกรรมและเทคโนโลยีที่ใช้ใน Sprint 1 (Sprint 1 Stack)
-* **Web Client:** Next.js 14 + TailwindCSS (รันบนพอร์ต 3000) – รองรับ Mobile-first 375px, Short Polling 3 วินาทีสำหรับอัปเดตสถานะตั๋ว, จัดการ UI States (Loading, Empty, Error)
+* **Web Client:** React 18 + Vite + TailwindCSS (รันบนพอร์ต 3000) – รองรับ Mobile-first 375px, Short Polling 3 วินาทีสำหรับอัปเดตสถานะตั๋ว, จัดการ UI States (Loading, Empty, Error)
 * **API Server:** Node.js + Express + TypeScript (รันบนพอร์ต 4000) – ตรวจสอบ Input ด้วย Zod, ยืนยันตัวตนด้วย Stateless JWT พร้อมตรวจ `tokenVersion` ทุกคำขอ, แยก Service Layer ควบคุมกฎธุรกิจ
 * **Database:** PostgreSQL 16 ผ่าน Prisma ORM – ติดตั้งบน Docker Volume คงทนถาวร
 

@@ -11,14 +11,14 @@
 
 | Issue | Title | Scope / Feature | Status | Branch | PR |
 |:---:|---|---|:---:|---|:---:|
-| **I-00** | Contract Baseline & Master Specification | Part A–E Master Spec (v0.2) | **In Review** | `feature/i00-baseline-docs` | PR #1 |
-| **I-01** | Scaffold, DB, Migrations & Seed | Express + TS + Prisma + 2 Partial Indexes + Seed 9 accounts | **Next** | `feature/i01-scaffold` | - |
+| **I-00** | Contract Baseline & Master Specification | Part A–E Master Spec (v0.2) | **Merged** | `feature/i00-baseline-docs` | PR #1 (Merged) |
+| **I-01** | Scaffold, DB, Migrations & Seed | Express + TS + Prisma + 2 Partial Indexes + Seed 9 accounts | **In Review** | `feature/i01-scaffold` | PR #12 |
 | **I-02** | F-01: Auth & Role Identity | Login, Logout, Me, Auth/Role middleware, Bcrypt (AC-01..08) | Todo | `feature/i02-auth` | - |
 | **I-03** | F-02: Queue Discovery & Safe Join | Series list, Raw SQL atomic join, 50-user concurrency (AC-09..18) | Todo | `feature/i03-join` | - |
 | **I-04** | F-04: Ticket Inspection & Ownership | My-ticket, ticket by ID, 403 ownership guard (AC-34..38) | Todo | `feature/i04-ticket` | - |
 | **I-05** | F-03: Staff Counter & Call Next | Queue list, Call next (SKIP LOCKED, STAFF_BUSY) (AC-21..25, 31, 32) | Todo | `feature/i05-staff-call` | - |
 | **I-06** | F-03: Start Unboxing & Complete | State transition machine, handler ownership guard (AC-26..30) | Todo | `feature/i06-staff-state` | - |
-| **I-07** | Next.js Web UI | 4 Screens: Login, Series, My Ticket, Staff Counter (AC-19, 20, 33) | Todo | `feature/i07-web-ui` | - |
+| **I-07** | Web UI (React + Vite) | 4 Screens: Login, Series, My Ticket, Staff Counter (AC-19, 20, 33) | Todo | `feature/i07-web-ui` | - |
 | **I-08** | E2E, Persistence & Release | Playwright tests, persistence script, release PR & tag `v0.1.0-sprint1` | Todo | `feature/i08-release` | - |
 
 ## Feature & Acceptance Criteria Status
@@ -31,10 +31,28 @@
 * Concurrency race prevention via 2 PostgreSQL Partial Unique Indexes (`unique_active_ticket_user`, `unique_active_staff_ticket`).
 * Stateless JWT with token revocation via `tokenVersion` on `User` table (D-04, D-11).
 
+## Checklist: Places to Update When Stack Changes (จุดที่ต้องอัปเดตเมื่อมีการเปลี่ยนเทคโนโลยี/Stack)
+1. **Master Specification (`docs/PopQueue_Deliverable_1_Master.md`):**
+   - § ข้อมูลการส่งมอบและหน้าปก (Repository URL, Project Details)
+   - Part B §2.3 ตาราง Approved / Recorded Changes (เพิ่ม Change ID เช่น `CHG-xx`)
+   - Part C §1 Architecture Diagram, Layer Table, Repository Structure
+   - Part C §8 UI Navigation & Technology Details
+   - Part C §9 Configuration & Environment Variables (`VITE_*` vs `NEXT_PUBLIC_*`)
+   - Part E §0 Contract Version History
+   - Appendix: Issue Roadmap
+2. **Sprint Pointers & Mini-SDS (`docs/sprints/sprint-1/system-sds.md`, etc.):**
+   - ข้อความสรุปเทคโนโลยีใน Sprint Stack
+3. **Project State (`docs/PROJECT_STATE.md`):**
+   - ตารางสถานะงาน (Issue Roadmap Table)
+4. **Monorepo & Package Configurations:**
+   - Root `package.json`, workspace `package.json`, `.env.example`, `README.md`
+5. **Issue Tracker & GitHub PRs:**
+   - ชื่อและคำอธิบายของการ์ด Issue และ Pull Request บน GitHub
+
 ## Known Debt & Limitations
 1. Sprint 1 has no Cancel/No-Show (arrives in Sprint 2); temporary relief via `npm run db:reset-demo` and 6 seeded collector accounts (D-09).
 2. Countdown timer (120s) on Collector screen is visual-only in Sprint 1 (server enforcement in Sprint 2).
 3. Short Polling (3s) for real-time updates without WebSockets/SSE.
 
 ## Next Step for the Team / Agent
-* Begin **Issue I-01**: Initialize Node.js/Express + TypeScript scaffolding in `server/`, setup Prisma schema with PostgreSQL, create migrations including the 2 partial unique indexes, and create idempotent seed script for 9 accounts + 3 series.
+* Complete review and merge of **Issue I-01** (Scaffold, Prisma models, migrations with 2 partial unique indexes, seed 9 accounts, and db:reset-demo). Next issue is **Issue I-02** (F-01: Auth & Role Identity).
