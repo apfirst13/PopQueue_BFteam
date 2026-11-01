@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import { Role } from '@prisma/client';
 import { config } from '../../src/config/env.js';
 
@@ -17,17 +17,19 @@ export function signTestToken(
   payload: TestJwtPayload,
   expiresIn: string = '8h',
 ): string {
-  return jwt.sign(payload, config.JWT_SECRET, {
+  const options: SignOptions = {
     algorithm: 'HS256',
-    expiresIn,
-  });
+    expiresIn: expiresIn as SignOptions['expiresIn'],
+  };
+  return jwt.sign(payload, config.JWT_SECRET, options);
 }
 
 export function signExpiredTestToken(payload: TestJwtPayload): string {
-  return jwt.sign(payload, config.JWT_SECRET, {
+  const options: SignOptions = {
     algorithm: 'HS256',
-    expiresIn: '-10s',
-  });
+    expiresIn: '-10s' as SignOptions['expiresIn'],
+  };
+  return jwt.sign(payload, config.JWT_SECRET, options);
 }
 
 export function signAlgorithmNoneToken(payload: TestJwtPayload): string {
@@ -38,11 +40,12 @@ export function signAlgorithmNoneToken(payload: TestJwtPayload): string {
 }
 
 export function signAlgorithmConfusionToken(payload: TestJwtPayload): string {
-  // Sign using HS512 instead of HS256
-  return jwt.sign(payload, config.JWT_SECRET, {
+  const options: SignOptions = {
     algorithm: 'HS512',
-    expiresIn: '8h',
-  });
+    expiresIn: '8h' as SignOptions['expiresIn'],
+  };
+  // Sign using HS512 instead of HS256
+  return jwt.sign(payload, config.JWT_SECRET, options);
 }
 
 export function getAuthHeader(token: string): { Authorization: string } {
