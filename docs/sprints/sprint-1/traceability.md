@@ -7,7 +7,7 @@
 
 ## 📌 Master Document Reference
 ตารางความสัมพันธ์ฉบับเต็ม 100% จัดเก็บไว้ที่:  
-👉 **[docs/PopQueue_Deliverable_1_Master.md (Part B, Section 2)](../PopQueue_Deliverable_1_Master.md#2-ตารางสอบกลับ-requirement--feature--sprint--ac--test)**
+👉 **[docs/PopQueue_Deliverable_1_Master.md (Part B, Section 2)](../../PopQueue_Deliverable_1_Master.md#2-ตารางสอบกลับ-requirement--feature--sprint--ac--test)**
 
 ---
 

@@ -9,7 +9,7 @@
 
 ## 📌 Master Document Reference
 เอกสารฉบับสมบูรณ์ที่พร้อมแปลงเป็น PDF ส่งมอบ LEB2 ถูกจัดเก็บไว้ที่:  
-👉 **[docs/PopQueue_Deliverable_1_Master.md (Part A)](../PopQueue_Deliverable_1_Master.md#part-a-software-requirements-specification-srs--scope-10-คะแนน)**
+👉 **[docs/PopQueue_Deliverable_1_Master.md (Part A)](../../PopQueue_Deliverable_1_Master.md#part-a-software-requirements-specification-srs--scope-10-คะแนน)**
 
 ---
 
