@@ -4,6 +4,7 @@ export interface ErrorResponse {
   error: {
     code: string;
     message: string;
+    statusCode: number;
     details?: unknown;
   };
 }
@@ -33,6 +34,7 @@ export function errorHandler(
       error: {
         code: err.code,
         message: err.message,
+        statusCode: err.statusCode,
         ...(err.details !== undefined ? { details: err.details } : {}),
       },
     });
@@ -44,6 +46,7 @@ export function errorHandler(
     error: {
       code: 'INTERNAL_ERROR',
       message: 'An unexpected internal error occurred',
+      statusCode: 500,
     },
   });
 }

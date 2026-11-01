@@ -5,10 +5,10 @@ dotenv.config();
 
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
-  PORT: z.coerce.number().default(3001),
+  PORT: z.coerce.number().default(4000),
   TZ: z.string().default('Asia/Bangkok'),
   DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),
-  JWT_SECRET: z.string().min(16, 'JWT_SECRET must be at least 16 characters'),
+  JWT_SECRET: z.string().min(32, 'JWT_SECRET must be at least 32 characters'),
   CORS_ORIGIN: z.string().default('http://localhost:3000'),
   BCRYPT_COST: z.coerce.number().default(10),
   SEED_COLLECTOR_PASSWORD: z.string().default('collector_dev_password123'),
@@ -28,11 +28,4 @@ export function loadConfig(env: Record<string, string | undefined> = process.env
   return result.data;
 }
 
-// Lazy/cached configuration for application runtime
-const activeEnv = process.env.NODE_ENV === 'test' ? {
-  ...process.env,
-  DATABASE_URL: process.env.DATABASE_URL || 'postgresql://popqueue:popqueue_dev_password@localhost:5432/popqueue_test',
-  JWT_SECRET: process.env.JWT_SECRET || 'test-jwt-secret-key-32-chars-long-test-env',
-} : process.env;
-
-export const config = loadConfig(activeEnv);
+export const config = loadConfig(process.env);
