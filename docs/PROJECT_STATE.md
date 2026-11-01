@@ -12,7 +12,7 @@
 | Issue | Title | Scope / Feature | Status | Branch | PR |
 |:---:|---|---|:---:|---|:---:|
 | **I-00** | Contract Baseline & Master Specification | Part A–E Master Spec (v0.2) | **Merged** | `feature/i00-baseline-docs` | PR #1 (Merged) |
-| **I-01** | Scaffold, DB, Migrations & Seed | Express + TS + Prisma + 2 Partial Indexes + Seed 9 accounts | **In Review** | `feature/i01-scaffold` | - |
+| **I-01** | Scaffold, DB, Migrations & Seed | Express + TS + Prisma + 2 Partial Indexes + Seed 9 accounts | **In Review** | `feature/i01-scaffold` | PR #12 |
 | **I-02** | F-01: Auth & Role Identity | Login, Logout, Me, Auth/Role middleware, Bcrypt (AC-01..08) | Todo | `feature/i02-auth` | - |
 | **I-03** | F-02: Queue Discovery & Safe Join | Series list, Raw SQL atomic join, 50-user concurrency (AC-09..18) | Todo | `feature/i03-join` | - |
 | **I-04** | F-04: Ticket Inspection & Ownership | My-ticket, ticket by ID, 403 ownership guard (AC-34..38) | Todo | `feature/i04-ticket` | - |
@@ -30,6 +30,24 @@
 * Atomic queue numbering via Raw SQL `INSERT ... ON CONFLICT DO UPDATE ... RETURNING` (D-10).
 * Concurrency race prevention via 2 PostgreSQL Partial Unique Indexes (`unique_active_ticket_user`, `unique_active_staff_ticket`).
 * Stateless JWT with token revocation via `tokenVersion` on `User` table (D-04, D-11).
+
+## Checklist: Places to Update When Stack Changes (จุดที่ต้องอัปเดตเมื่อมีการเปลี่ยนเทคโนโลยี/Stack)
+1. **Master Specification (`docs/PopQueue_Deliverable_1_Master.md`):**
+   - § ข้อมูลการส่งมอบและหน้าปก (Repository URL, Project Details)
+   - Part B §2.3 ตาราง Approved / Recorded Changes (เพิ่ม Change ID เช่น `CHG-xx`)
+   - Part C §1 Architecture Diagram, Layer Table, Repository Structure
+   - Part C §8 UI Navigation & Technology Details
+   - Part C §9 Configuration & Environment Variables (`VITE_*` vs `NEXT_PUBLIC_*`)
+   - Part E §0 Contract Version History
+   - Appendix: Issue Roadmap
+2. **Sprint Pointers & Mini-SDS (`docs/sprints/sprint-1/system-sds.md`, etc.):**
+   - ข้อความสรุปเทคโนโลยีใน Sprint Stack
+3. **Project State (`docs/PROJECT_STATE.md`):**
+   - ตารางสถานะงาน (Issue Roadmap Table)
+4. **Monorepo & Package Configurations:**
+   - Root `package.json`, workspace `package.json`, `.env.example`, `README.md`
+5. **Issue Tracker & GitHub PRs:**
+   - ชื่อและคำอธิบายของการ์ด Issue และ Pull Request บน GitHub
 
 ## Known Debt & Limitations
 1. Sprint 1 has no Cancel/No-Show (arrives in Sprint 2); temporary relief via `npm run db:reset-demo` and 6 seeded collector accounts (D-09).
