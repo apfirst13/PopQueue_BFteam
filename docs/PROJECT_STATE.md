@@ -11,7 +11,7 @@
 
 | Issue | Title | Scope / Feature | Status | Branch | PR |
 |:---:|---|---|:---:|---|:---:|
-| **I-00** | Contract Baseline & Master Specification | Part A–E Master Spec (v0.2) | **Done** | `sprint-1-staging` | Commit `ab49348` |
+| **I-00** | Contract Baseline & Master Specification | Part A–E Master Spec (v0.2) | **In Review** | `feature/i00-baseline-docs` | PR #1 |
 | **I-01** | Scaffold, DB, Migrations & Seed | Express + TS + Prisma + 2 Partial Indexes + Seed 9 accounts | **Next** | `feature/i01-scaffold` | - |
 | **I-02** | F-01: Auth & Role Identity | Login, Logout, Me, Auth/Role middleware, Bcrypt (AC-01..08) | Todo | `feature/i02-auth` | - |
 | **I-03** | F-02: Queue Discovery & Safe Join | Series list, Raw SQL atomic join, 50-user concurrency (AC-09..18) | Todo | `feature/i03-join` | - |
