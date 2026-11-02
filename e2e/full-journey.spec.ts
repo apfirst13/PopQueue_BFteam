@@ -41,7 +41,7 @@ test.describe('TEST-33 / AC-33: Multi-Context Full Journey & Live Polling Transi
 
     await expect(collectorPage).toHaveURL(/\/my-ticket/);
     await expect(collectorPage.locator('h2')).toContainText('บัตรคิวของคุณ');
-    await expect(collectorPage.locator('.badge')).toHaveText('WAITING');
+    await expect(collectorPage.locator('.card .badge')).toHaveText('WAITING');
     await expect(collectorPage.locator('text=CRY-001')).toBeVisible();
 
     // Screenshot: Collector Waiting
@@ -85,8 +85,8 @@ test.describe('TEST-33 / AC-33: Multi-Context Full Journey & Live Polling Transi
     });
 
     // 5. Collector Page reflects CALLED via 3s polling WITHOUT reload
-    await expect(collectorPage.locator('.badge')).toHaveText('CALLED', { timeout: 10000 });
-    await expect(collectorPage.locator('.countdown-timer')).toBeVisible();
+    await expect(collectorPage.locator('.card .badge')).toHaveText('CALLED', { timeout: 10000 });
+    await expect(collectorPage.locator('.alert-warning')).toBeVisible();
     await expect(collectorPage.locator('text=ถึงคิวแล้ว กรุณามาที่เคาน์เตอร์')).toBeVisible();
 
     // Screenshot: Collector Called (reflected live)
@@ -109,7 +109,7 @@ test.describe('TEST-33 / AC-33: Multi-Context Full Journey & Live Polling Transi
     });
 
     // 7. Collector Page reflects UNBOXING via 3s polling
-    await expect(collectorPage.locator('.badge')).toHaveText('UNBOXING', { timeout: 10000 });
+    await expect(collectorPage.locator('.card .badge')).toHaveText('UNBOXING', { timeout: 10000 });
     await expect(collectorPage.locator('text=กำลังให้บริการ')).toBeVisible();
 
     // Screenshot: Collector Unboxing
@@ -132,14 +132,15 @@ test.describe('TEST-33 / AC-33: Multi-Context Full Journey & Live Polling Transi
       fullPage: true,
     });
 
-    // 9. Collector Page reflects COMPLETED via polling
-    await expect(collectorPage.locator('.badge')).toHaveText('COMPLETED', { timeout: 10000 });
-    await expect(collectorPage.locator('text=การให้บริการเสร็จสิ้นแล้ว')).toBeVisible();
+    // 9. Collector Page reflects ticket completion via 3s polling without reload (AC-35: 404 NO_ACTIVE_TICKET)
+    await expect(collectorPage.getByRole('heading', { name: 'ยังไม่มีบัตรคิว' })).toBeVisible({ timeout: 10000 });
+    await expect(collectorPage.locator('text=คุณยังไม่มีบัตรคิวที่กำลังใช้งานในขณะนี้')).toBeVisible();
+    await expect(collectorPage.locator('text=เลือกซีรีส์และรับบัตรคิว')).toBeVisible();
 
-    // 10. Reload Collector page - still displays COMPLETED state and action to join new ticket
+    // 10. Reload Collector page - still displays clean state and action to join new ticket
     await collectorPage.reload();
-    await expect(collectorPage.locator('.badge')).toHaveText('COMPLETED');
-    await expect(collectorPage.locator('text=การให้บริการเสร็จสิ้นแล้ว')).toBeVisible();
+    await expect(collectorPage.getByRole('heading', { name: 'ยังไม่มีบัตรคิว' })).toBeVisible();
+    await expect(collectorPage.locator('text=คุณยังไม่มีบัตรคิวที่กำลังใช้งานในขณะนี้')).toBeVisible();
 
     // Screenshot: Collector Completed & Reloaded
     await collectorPage.screenshot({
@@ -147,7 +148,7 @@ test.describe('TEST-33 / AC-33: Multi-Context Full Journey & Live Polling Transi
       fullPage: true,
     });
 
-    // 11. Assert DB Record Integrity
+    // 11. Assert DB Record Integrity and Retrieval of Recorded Ticket (AC-36)
     const savedTicket = await testPrisma.queueTicket.findFirst({
       where: { displayNumber: 'CRY-001' },
     });
@@ -163,6 +164,25 @@ test.describe('TEST-33 / AC-33: Multi-Context Full Journey & Live Polling Transi
       expect(savedTicket.calledAt.getTime()).toBeLessThanOrEqual(savedTicket.startedAt.getTime());
       expect(savedTicket.startedAt.getTime()).toBeLessThanOrEqual(savedTicket.completedAt.getTime());
     }
+
+    // 12. Retrieve recorded ticket via API (GET /api/tickets/:id) - AC-36
+    const token = await collectorPage.evaluate(() => localStorage.getItem('popqueue_token'));
+    expect(token).toBeTruthy();
+    const detailResponse = await fetch(`http://localhost:4000/api/tickets/${savedTicket?.id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    expect(detailResponse.status).toBe(200);
+    const detailBody = (await detailResponse.json()) as {
+      status: string;
+      data: { status: string; displayNumber: string; calledAt: string; startedAt: string; completedAt: string };
+    };
+    expect(detailBody.data.status).toBe('COMPLETED');
+    expect(detailBody.data.displayNumber).toBe('CRY-001');
+    expect(detailBody.data.calledAt).toBeTruthy();
+    expect(detailBody.data.startedAt).toBeTruthy();
+    expect(detailBody.data.completedAt).toBeTruthy();
 
     await collectorContext.close();
     await staffContext.close();
@@ -244,7 +264,7 @@ test.describe('TEST-33 / AC-33: Multi-Context Full Journey & Live Polling Transi
     });
 
     // 3. Logout
-    const logoutBtn = page.locator('button', { hasText: 'ออกจากระบบ (Sign Out)' });
+    const logoutBtn = page.locator('button', { hasText: 'ออกจากระบบ' });
     await expect(logoutBtn).toBeVisible();
     await logoutBtn.click();
 

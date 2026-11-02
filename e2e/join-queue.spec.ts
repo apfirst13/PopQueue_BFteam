@@ -48,7 +48,7 @@ test.describe('TEST-19 / AC-19: Collector Queue Join & Duplicate Active Queue Re
     await expect(ticketNumber).toBeVisible();
     await expect(ticketNumber).toContainText('CRY-001');
 
-    const statusBadge = page.locator('.badge');
+    const statusBadge = page.locator('.card .badge');
     await expect(statusBadge).toHaveText('WAITING');
     await expect(page.locator('text=เหลืออีก 0 คิวก่อนหน้า')).toBeVisible();
 

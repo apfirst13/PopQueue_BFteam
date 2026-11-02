@@ -1,13 +1,10 @@
 import { PrismaClient } from '@prisma/client';
 import path from 'path';
-import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-export const screenshotDir = path.resolve(__dirname, '../../docs/evidence/screenshots');
 export function getScreenshotPath(filename: string): string {
-  return path.join(screenshotDir, filename);
+  const cwd = process.cwd();
+  const rootDir = cwd.endsWith('e2e') ? path.resolve(cwd, '..') : cwd;
+  return path.resolve(rootDir, 'docs/evidence/screenshots', filename);
 }
 
 const testDbUrl =
