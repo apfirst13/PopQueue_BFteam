@@ -135,7 +135,7 @@ describe('Authentication & Route Guard Component Tests', () => {
 
     await waitFor(() => {
       expect(localStorage.getItem('popqueue_token')).toBe('jwt-collector-token');
-      expect(screen.getByText(/รายการซีรีส์|series/i)).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: /รายการซีรีส์/i })).toBeInTheDocument();
     });
   });
 
@@ -153,25 +153,34 @@ describe('Authentication & Route Guard Component Tests', () => {
       }),
     } as Response);
 
-    // 2. GET /api/tickets/my-ticket returns 200 active ticket
+    // 2. GET /api/tickets/my-ticket returns 200 active ticket (during login check)
+    const activeTicketPayload = {
+      data: {
+        ticket: {
+          id: 't-123',
+          displayNumber: 'CRY-001',
+          queueNumber: 1,
+          status: 'WAITING',
+          waitingAhead: 0,
+          series: { id: 's1', code: 'CRY', name: 'Crybaby Sunset' },
+          createdAt: '2026-11-02T10:00:00.000Z',
+          calledAt: null,
+          startedAt: null,
+        },
+      },
+    };
+
     vi.mocked(fetch).mockResolvedValueOnce({
       ok: true,
       status: 200,
-      json: async () => ({
-        data: {
-          ticket: {
-            id: 't-123',
-            displayNumber: 'CRY-001',
-            queueNumber: 1,
-            status: 'WAITING',
-            waitingAhead: 0,
-            series: { id: 's1', code: 'CRY', name: 'Crybaby Sunset' },
-            createdAt: '2026-11-02T10:00:00.000Z',
-            calledAt: null,
-            startedAt: null,
-          },
-        },
-      }),
+      json: async () => activeTicketPayload,
+    } as Response);
+
+    // 3. GET /api/tickets/my-ticket returns 200 (when MyTicketPage mounts)
+    vi.mocked(fetch).mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: async () => activeTicketPayload,
     } as Response);
 
     renderWithRouter('/login');

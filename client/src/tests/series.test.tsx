@@ -64,8 +64,8 @@ describe('SeriesPage Component Tests (AC-19, Master §2.6)', () => {
 
     renderSeries();
 
-    const closedBadge = await screen.findByText(/ปิดรับคิว/i);
-    expect(closedBadge).toBeInTheDocument();
+    const closedBadges = await screen.findAllByText(/ปิดรับคิว/i);
+    expect(closedBadges.length).toBeGreaterThan(0);
 
     const joinButtons = screen.getAllByRole('button', { name: /เข้าคิว|join|ปิดรับคิว/i });
     // SKP button is disabled

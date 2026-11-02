@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '../context/AuthContext.js';
@@ -45,7 +45,7 @@ describe('MyTicketPage Component Tests (AC-19, AC-33, Master §4.3, §4.6)', () 
 
     renderTicket();
 
-    expect(await screen.findByText(/ยังไม่มีบัตรคิว/i)).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: /ยังไม่มีบัตรคิว/i })).toBeInTheDocument();
     const seriesLink = screen.getByRole('link', { name: /เลือกซีรีส์|รับบัตรคิว/i });
     expect(seriesLink).toHaveAttribute('href', '/series');
   });
@@ -131,7 +131,7 @@ describe('MyTicketPage Component Tests (AC-19, AC-33, Master §4.3, §4.6)', () 
     renderTicket();
 
     expect(await screen.findByText(/กำลังให้บริการ/i)).toBeInTheDocument();
-    expect(screen.getByText(/UNBOXING/i)).toBeInTheDocument();
+    expect(screen.getByText('UNBOXING')).toBeInTheDocument();
   });
 
   it('displays retry button on error and re-fetches when clicked', async () => {
