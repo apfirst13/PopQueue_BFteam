@@ -30,3 +30,62 @@ export async function resetQueueState(): Promise<void> {
     },
   });
 }
+
+export interface TicketFixtureParams {
+  userId: string;
+  seriesId: string;
+  queueNumber: number;
+  displayNumber: string;
+  status?: import('@prisma/client').TicketStatus;
+  queueDate?: Date;
+  createdAt?: Date;
+  calledAt?: Date;
+  startedAt?: Date;
+  completedAt?: Date;
+  handledByStaffId?: string;
+}
+
+/**
+ * Creates a raw ticket fixture in the database for integration test setups.
+ */
+export async function createTicketFixture(params: TicketFixtureParams) {
+  const queueDate = params.queueDate ?? new Date();
+  // Ensure date has no time component (Postgres DATE)
+  const dateOnly = new Date(Date.UTC(queueDate.getUTCFullYear(), queueDate.getUTCMonth(), queueDate.getUTCDate()));
+
+  return await prisma.queueTicket.create({
+    data: {
+      userId: params.userId,
+      seriesId: params.seriesId,
+      queueNumber: params.queueNumber,
+      displayNumber: params.displayNumber,
+      status: params.status ?? 'WAITING',
+      queueDate: dateOnly,
+      createdAt: params.createdAt ?? new Date(),
+      calledAt: params.calledAt ?? null,
+      startedAt: params.startedAt ?? null,
+      completedAt: params.completedAt ?? null,
+      handledByStaffId: params.handledByStaffId ?? null,
+    },
+  });
+}
+
+/**
+ * Transitions a ticket to CALLED status with strict requirements:
+ * Sets status=CALLED, calledAt=new Date(), and handledByStaffId (satisfying unique_active_staff_ticket).
+ */
+export async function transitionTicketToCalled(
+  ticketId: string,
+  handledByStaffId: string,
+  calledAt: Date = new Date(),
+) {
+  return await prisma.queueTicket.update({
+    where: { id: ticketId },
+    data: {
+      status: 'CALLED',
+      calledAt,
+      handledByStaffId,
+    },
+  });
+}
+
