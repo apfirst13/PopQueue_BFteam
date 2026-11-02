@@ -45,4 +45,16 @@ export const protectedRoutes: ProtectedRouteDef[] = [
     body: { seriesId: '00000000-0000-0000-0000-000000000000' },
     addedInIssue: 'I-05',
   },
+  {
+    method: 'POST',
+    path: '/api/staff/tickets/00000000-0000-0000-0000-000000000000/start-unboxing',
+    description: 'Start unboxing verification for called ticket',
+    addedInIssue: 'I-06',
+  },
+  {
+    method: 'POST',
+    path: '/api/staff/tickets/00000000-0000-0000-0000-000000000000/complete',
+    description: 'Complete unboxing service for ticket',
+    addedInIssue: 'I-06',
+  },
 ];
