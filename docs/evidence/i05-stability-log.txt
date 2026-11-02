@@ -1,0 +1,141 @@
+﻿7ab403238abda28af20c68f9f9761b71230b62e5
+
+=== RUN ITERATION 1 ===
+
+node.exe : [33mThe CJS build of Vite's Node API is deprecated. See 
+https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([33mThe CJS bu...e details.[39m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+ RUN  v2.1.9 C:/!KMUTT/Year 3/Semeter 1/SE/Project/Project SE/qdrive-license-queue/server
+
+ Γ£ô tests/concurrency/call-next-concurrency.test.ts (2 tests) 215ms
+ Γ£ô tests/concurrency/numbering.test.ts (1 test) 531ms
+   Γ£ô Concurrency: Safe Sequential Numbering (TEST-15, AC-15, BR-01, NFR-03) > TEST-15: 50 concurrent distinct collectors receive sequential numbers 1..50 with zero gaps and zero duplicates 523ms
+ Γ£ô tests/concurrency/duplicate.test.ts (1 test) 231ms
+
+ Test Files  3 passed (3)
+      Tests  4 passed (4)
+   Start at  18:26:55
+   Duration  3.31s (transform 212ms, setup 71ms, collect 1.41s, tests 977ms, environment 1ms, prepare 309ms)
+
+
+
+Iteration 1 ExitCode: 0
+
+
+=== RUN ITERATION 2 ===
+
+node.exe : [33mThe CJS build of Vite's Node API is deprecated. See 
+https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([33mThe CJS bu...e details.[39m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+ RUN  v2.1.9 C:/!KMUTT/Year 3/Semeter 1/SE/Project/Project SE/qdrive-license-queue/server
+
+ Γ£ô tests/concurrency/call-next-concurrency.test.ts (2 tests) 204ms
+ Γ£ô tests/concurrency/numbering.test.ts (1 test) 550ms
+   Γ£ô Concurrency: Safe Sequential Numbering (TEST-15, AC-15, BR-01, NFR-03) > TEST-15: 50 concurrent distinct collectors receive sequential numbers 1..50 with zero gaps and zero duplicates 542ms
+ Γ£ô tests/concurrency/duplicate.test.ts (1 test) 214ms
+
+ Test Files  3 passed (3)
+      Tests  4 passed (4)
+   Start at  18:27:00
+   Duration  3.17s (transform 158ms, setup 42ms, collect 1.37s, tests 969ms, environment 1ms, prepare 281ms)
+
+
+
+Iteration 2 ExitCode: 0
+
+
+=== RUN ITERATION 3 ===
+
+node.exe : [33mThe CJS build of Vite's Node API is deprecated. See 
+https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([33mThe CJS bu...e details.[39m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+ RUN  v2.1.9 C:/!KMUTT/Year 3/Semeter 1/SE/Project/Project SE/qdrive-license-queue/server
+
+ Γ£ô tests/concurrency/call-next-concurrency.test.ts (2 tests) 259ms
+ Γ£ô tests/concurrency/numbering.test.ts (1 test) 602ms
+   Γ£ô Concurrency: Safe Sequential Numbering (TEST-15, AC-15, BR-01, NFR-03) > TEST-15: 50 concurrent distinct collectors receive sequential numbers 1..50 with zero gaps and zero duplicates 593ms
+ Γ£ô tests/concurrency/duplicate.test.ts (1 test) 250ms
+
+ Test Files  3 passed (3)
+      Tests  4 passed (4)
+   Start at  18:27:05
+   Duration  3.62s (transform 199ms, setup 50ms, collect 1.46s, tests 1.11s, environment 1ms, prepare 297ms)
+
+
+
+Iteration 3 ExitCode: 0
+
+
+=== RUN ITERATION 4 ===
+
+node.exe : [33mThe CJS build of Vite's Node API is deprecated. See 
+https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([33mThe CJS bu...e details.[39m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+ RUN  v2.1.9 C:/!KMUTT/Year 3/Semeter 1/SE/Project/Project SE/qdrive-license-queue/server
+
+ Γ£ô tests/concurrency/call-next-concurrency.test.ts (2 tests) 214ms
+ Γ£ô tests/concurrency/numbering.test.ts (1 test) 524ms
+   Γ£ô Concurrency: Safe Sequential Numbering (TEST-15, AC-15, BR-01, NFR-03) > TEST-15: 50 concurrent distinct collectors receive sequential numbers 1..50 with zero gaps and zero duplicates 515ms
+ Γ£ô tests/concurrency/duplicate.test.ts (1 test) 229ms
+
+ Test Files  3 passed (3)
+      Tests  4 passed (4)
+   Start at  18:27:11
+   Duration  3.14s (transform 162ms, setup 39ms, collect 1.29s, tests 966ms, environment 1ms, prepare 297ms)
+
+
+
+Iteration 4 ExitCode: 0
+
+
+=== RUN ITERATION 5 ===
+
+node.exe : [33mThe CJS build of Vite's Node API is deprecated. See 
+https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([33mThe CJS bu...e details.[39m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+ RUN  v2.1.9 C:/!KMUTT/Year 3/Semeter 1/SE/Project/Project SE/qdrive-license-queue/server
+
+ Γ£ô tests/concurrency/call-next-concurrency.test.ts (2 tests) 237ms
+ Γ£ô tests/concurrency/numbering.test.ts (1 test) 499ms
+   Γ£ô Concurrency: Safe Sequential Numbering (TEST-15, AC-15, BR-01, NFR-03) > TEST-15: 50 concurrent distinct collectors receive sequential numbers 1..50 with zero gaps and zero duplicates 490ms
+ Γ£ô tests/concurrency/duplicate.test.ts (1 test) 250ms
+
+ Test Files  3 passed (3)
+      Tests  4 passed (4)
+   Start at  18:27:16
+   Duration  3.31s (transform 174ms, setup 43ms, collect 1.46s, tests 986ms, environment 1ms, prepare 290ms)
+
+
+
+Iteration 5 ExitCode: 0
+
