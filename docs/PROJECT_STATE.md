@@ -17,8 +17,8 @@
 | **I-03** | F-02: Queue Discovery & Safe Join | Series list, Raw SQL atomic join, 50-user concurrency (AC-09..18) | **Merged** | `feature/i03-join` | PR #14 (Merged) |
 | **I-04** | F-04: Ticket Inspection & Ownership | My-ticket, ticket by ID, 403 ownership guard (AC-34..38) | **Merged** | `feature/i04-ticket` | PR #15 (Merged) |
 | **I-05** | F-03: Staff Counter & Call Next | Queue list, Call next (SKIP LOCKED, STAFF_BUSY) (AC-21..25, 31, 32) | **Merged** | `feature/i05-staff-call` | PR #17 (Merged) |
-| **I-06** | F-03: Start Unboxing & Complete | State transition machine, handler ownership guard (AC-26..30) | **Implemented** | `feature/i06-staff-state` | PR (Ready for Review) |
-| **I-07** | Web UI (React + Vite) | 4 Screens: Login, Series, My Ticket, Staff Counter (AC-19, 20, 33) | Todo | `feature/i07-web-ui` | - |
+| **I-06** | F-03: Start Unboxing & Complete | State transition machine, handler ownership guard (AC-26..30) | **Merged** | `feature/i06-staff-state` | PR #18 (Merged) |
+| **I-07** | Web UI (React + Vite) | 4 Screens: Login, Series, My Ticket, Staff Counter (AC-19, 20, 33) | **Implemented** | `feature/i07-web-ui` | PR Ready |
 | **I-08** | E2E, Persistence & Release | Playwright tests, persistence script, release PR & tag `v0.1.0-sprint1` | Todo | `feature/i08-release` | - |
 
 ## Feature & Acceptance Criteria Status
@@ -30,6 +30,7 @@
 * Atomic queue numbering via Raw SQL `INSERT ... ON CONFLICT DO UPDATE ... RETURNING` (D-10).
 * Concurrency race prevention via 2 PostgreSQL Partial Unique Indexes (`unique_active_ticket_user`, `unique_active_staff_ticket`).
 * Stateless JWT with token revocation via `tokenVersion` on `User` table (D-04, D-11).
+* **CHG-08:** Web UI styles implemented with Native Semantic CSS Variables and Mobile-first layout container instead of Tailwind PostCSS build tools to prevent monorepo build complexity while preserving 100% WCAG 2.1 AA tokens.
 
 ## Checklist: Places to Update When Stack Changes (จุดที่ต้องอัปเดตเมื่อมีการเปลี่ยนเทคโนโลยี/Stack)
 1. **Master Specification (`docs/PopQueue_Deliverable_1_Master.md`):**
@@ -55,4 +56,4 @@
 3. Short Polling (3s) for real-time updates without WebSockets/SSE.
 
 ## Next Step for the Team / Agent
-* Complete review and merge of **Issue I-06** (F-03: Start Unboxing & Complete, PR for `feature/i06-staff-state`). Next issue is **Issue I-07** (Web UI: React + Vite, 4 Screens: Login, Series, My Ticket, Staff Counter).
+* Open Pull Request for **Issue I-07** (`feature/i07-web-ui` -> `sprint-1-staging`) with UI demonstration screenshots. Next issue is **Issue I-08** (E2E Playwright Automation, DB Persistence & Final Sprint 1 Release).

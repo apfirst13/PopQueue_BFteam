@@ -1,0 +1,54 @@
+﻿Tested Commit: d7b93aace1752be6ef5b975644b8c323231c95f3
+
+
+> client@0.1.0 test
+> vitest run
+
+
+[1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90mC:/!KMUTT/Year 3/Semeter 1/SE/Project/Project SE/qdrive-license-queue/client[39m
+
+ [32mΓ£ô[39m src/tests/polling.test.ts [2m([22m[2m3 tests[22m[2m)[22m[90m 41[2mms[22m[39m
+ [32mΓ£ô[39m src/App.test.tsx [2m([22m[2m1 test[22m[2m)[22m[90m 180[2mms[22m[39m
+ [32mΓ£ô[39m src/tests/ticket.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 359[2mms[22m[39m
+ [32mΓ£ô[39m src/tests/series.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 455[2mms[22m[39m
+ [32mΓ£ô[39m src/tests/staff.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 501[2mms[22m[39m
+ [32mΓ£ô[39m src/tests/auth.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 2902[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m Authentication & Route Guard Component Tests[2m > [22mdisplays Invalid username or password error on 401 INVALID_CREDENTIALS [33m438[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m Authentication & Route Guard Component Tests[2m > [22mcollector login without active ticket redirects to /series [33m722[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m Authentication & Route Guard Component Tests[2m > [22mcollector login with active ticket redirects directly to /my-ticket [33m695[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m Authentication & Route Guard Component Tests[2m > [22mbox master login redirects to /staff/counter [33m673[2mms[22m[39m
+node.exe : [90mstderr[2m | src/tests/auth.test.tsx[2m > [22m[2mAuthentication & Route Guard Component Tests[2m > 
+[22m[2mapiClient: 401 UNAUTHENTICATED clears localStorage and redirects to /login
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([90mstderr[2m...rects to /login:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[22m[39mError: Not implemented: navigation (except hash changes)
+    at module.exports (C:\!KMUTT\Year 3\Semeter 1\SE\Project\Project 
+SE\qdrive-license-queue\node_modules\jsdom\lib\jsdom\browser\not-implemented.js:9:17)
+    at navigateFetch (C:\!KMUTT\Year 3\Semeter 1\SE\Project\Project 
+SE\qdrive-license-queue\node_modules\jsdom\lib\jsdom\living\window\navigation.js:77:3)
+    at exports.navigate (C:\!KMUTT\Year 3\Semeter 1\SE\Project\Project 
+SE\qdrive-license-queue\node_modules\jsdom\lib\jsdom\living\window\navigation.js:55:3)
+    at LocationImpl._locationObjectNavigate (C:\!KMUTT\Year 3\Semeter 1\SE\Project\Project 
+SE\qdrive-license-queue\node_modules\jsdom\lib\jsdom\living\window\Location-impl.js:31:5)
+    at LocationImpl._locationObjectSetterNavigate (C:\!KMUTT\Year 3\Semeter 1\SE\Project\Project 
+SE\qdrive-license-queue\node_modules\jsdom\lib\jsdom\living\window\Location-impl.js:25:17)
+    at LocationImpl.set href [as href] (C:\!KMUTT\Year 3\Semeter 1\SE\Project\Project 
+SE\qdrive-license-queue\node_modules\jsdom\lib\jsdom\living\window\Location-impl.js:47:10)
+    at Location.set href [as href] (C:\!KMUTT\Year 3\Semeter 1\SE\Project\Project 
+SE\qdrive-license-queue\node_modules\jsdom\lib\jsdom\living\generated\Location.js:125:37)
+    at Module.apiClient (C:\!KMUTT\Year 3\Semeter 1\SE\Project\Project 
+SE\qdrive-license-queue\client\src\api\client.ts:62:27)
+    at C:\!KMUTT\Year 3\Semeter 1\SE\Project\Project SE\qdrive-license-queue\client\src\tests\auth.test.tsx:283:5
+    at file:///C:/!KMUTT/Year%203/Semeter%201/SE/Project/Project%20SE/qdrive-license-queue/node_modules/@vitest/runner/
+dist/index.js:533:5 [90mundefined[39m
+
+
+[2m Test Files [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m30 passed[39m[22m[90m (30)[39m
+[2m   Start at [22m 21:34:12
+[2m   Duration [22m 6.31s[2m (transform 535ms, setup 1.96s, collect 3.86s, tests 4.44s, environment 10.52s, prepare 1.34s)[22m
+
