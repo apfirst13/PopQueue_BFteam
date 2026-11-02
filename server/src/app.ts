@@ -3,6 +3,7 @@ import cors from 'cors';
 import { authRouter } from './routes/auth.routes.js';
 import { seriesRouter } from './routes/series.routes.js';
 import { ticketRouter } from './routes/ticket.routes.js';
+import { staffRouter } from './routes/staff.routes.js';
 import { errorHandler } from './middleware/error-handler.js';
 import { Clock, defaultClock } from './utils/clock.js';
 
@@ -31,6 +32,9 @@ export function createApp(options: AppOptions = {}): Express {
   // Queue Discovery & Safe Joining routes (F-02)
   app.use('/api/series', seriesRouter);
   app.use('/api/tickets', ticketRouter);
+
+  // Box Master Service Counter routes (F-03)
+  app.use('/api/staff', staffRouter);
 
   // Centralized error handler
   app.use(errorHandler);

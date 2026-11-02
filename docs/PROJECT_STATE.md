@@ -15,8 +15,8 @@
 | **I-01** | Scaffold, DB, Migrations & Seed | Express + TS + Prisma + 2 Partial Indexes + Seed 9 accounts | **Merged** | `feature/i01-scaffold` | PR #12 (Merged) |
 | **I-02** | F-01: Auth & Role Identity | Login, Logout, Me, Auth/Role middleware, Bcrypt (AC-01..08) | **Merged** | `feature/i02-auth` | PR #13 (Merged) |
 | **I-03** | F-02: Queue Discovery & Safe Join | Series list, Raw SQL atomic join, 50-user concurrency (AC-09..18) | **Merged** | `feature/i03-join` | PR #14 (Merged) |
-| **I-04** | F-04: Ticket Inspection & Ownership | My-ticket, ticket by ID, 403 ownership guard (AC-34..38) | **In Review** | `feature/i04-ticket` | PR #15 |
-| **I-05** | F-03: Staff Counter & Call Next | Queue list, Call next (SKIP LOCKED, STAFF_BUSY) (AC-21..25, 31, 32) | Todo | `feature/i05-staff-call` | - |
+| **I-04** | F-04: Ticket Inspection & Ownership | My-ticket, ticket by ID, 403 ownership guard (AC-34..38) | **Merged** | `feature/i04-ticket` | PR #15 (Merged) |
+| **I-05** | F-03: Staff Counter & Call Next | Queue list, Call next (SKIP LOCKED, STAFF_BUSY) (AC-21..25, 31, 32) | **Implemented** | `feature/i05-staff-call` | PR (Ready for Review) |
 | **I-06** | F-03: Start Unboxing & Complete | State transition machine, handler ownership guard (AC-26..30) | Todo | `feature/i06-staff-state` | - |
 | **I-07** | Web UI (React + Vite) | 4 Screens: Login, Series, My Ticket, Staff Counter (AC-19, 20, 33) | Todo | `feature/i07-web-ui` | - |
 | **I-08** | E2E, Persistence & Release | Playwright tests, persistence script, release PR & tag `v0.1.0-sprint1` | Todo | `feature/i08-release` | - |

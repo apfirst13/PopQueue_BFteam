@@ -32,4 +32,17 @@ export const protectedRoutes: ProtectedRouteDef[] = [
     description: 'Get ticket details by ID',
     addedInIssue: 'I-04',
   },
+  {
+    method: 'GET',
+    path: '/api/staff/tickets',
+    description: 'Get assigned series queues for staff counter',
+    addedInIssue: 'I-05',
+  },
+  {
+    method: 'POST',
+    path: '/api/staff/call-next',
+    description: 'Call next waiting ticket in series',
+    body: { seriesId: '00000000-0000-0000-0000-000000000000' },
+    addedInIssue: 'I-05',
+  },
 ];
