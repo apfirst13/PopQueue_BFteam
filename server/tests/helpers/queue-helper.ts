@@ -89,3 +89,33 @@ export async function transitionTicketToCalled(
   });
 }
 
+export async function transitionTicketToUnboxing(
+  ticketId: string,
+  handledByStaffId: string,
+  startedAt: Date = new Date(),
+) {
+  return await prisma.queueTicket.update({
+    where: { id: ticketId },
+    data: {
+      status: 'UNBOXING',
+      startedAt,
+      handledByStaffId,
+    },
+  });
+}
+
+export async function transitionTicketToCompleted(
+  ticketId: string,
+  handledByStaffId: string,
+  completedAt: Date = new Date(),
+) {
+  return await prisma.queueTicket.update({
+    where: { id: ticketId },
+    data: {
+      status: 'COMPLETED',
+      completedAt,
+      handledByStaffId,
+    },
+  });
+}
+
