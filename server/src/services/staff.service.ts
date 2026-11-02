@@ -2,6 +2,7 @@ import { Prisma, TicketStatus } from '@prisma/client';
 import { prisma } from '../config/db.js';
 import { AppError } from '../middleware/error-handler.js';
 import { Clock, defaultClock } from '../utils/clock.js';
+import { canTransition } from '../utils/state-machine.js';
 
 export interface ActiveServingTicketDto {
   id: string;
@@ -33,6 +34,18 @@ export interface CallNextResultDto {
   status: TicketStatus;
   handledByStaffId: string | null;
   calledAt: string;
+}
+
+export interface StartUnboxingResultDto {
+  ticketId: string;
+  status: TicketStatus;
+  startedAt: string;
+}
+
+export interface CompleteTicketResultDto {
+  ticketId: string;
+  status: TicketStatus;
+  completedAt: string;
 }
 
 /**
@@ -208,6 +221,178 @@ export class StaffService {
       }
       throw error;
     }
+  }
+
+  /**
+   * Starts unboxing verification for a CALLED ticket (F-03, AC-26, BR-03, BR-07)
+   * Evaluation order:
+   * 1) Resource existence (404)
+   * 2) Series scope (403 FORBIDDEN_SERIES)
+   * 3) Handler ownership (403 FORBIDDEN_NOT_HANDLER)
+   * 4) State transition validity (400 INVALID_STATE_TRANSITION)
+   * 5) Atomic guarded update
+   */
+  async startUnboxing(
+    staffId: string,
+    ticketId: string,
+    clock: Clock = defaultClock,
+  ): Promise<StartUnboxingResultDto> {
+    // 1. Resource existence check (404)
+    const ticket = await prisma.queueTicket.findUnique({
+      where: { id: ticketId },
+      select: {
+        id: true,
+        seriesId: true,
+        status: true,
+        handledByStaffId: true,
+      },
+    });
+
+    if (!ticket) {
+      throw new AppError(404, 'RESOURCE_NOT_FOUND', 'Ticket not found');
+    }
+
+    // 2. Series scope check (403 FORBIDDEN_SERIES)
+    const assignment = await prisma.staffSeriesAssignment.findUnique({
+      where: {
+        staffId_seriesId: {
+          staffId,
+          seriesId: ticket.seriesId,
+        },
+      },
+    });
+
+    if (!assignment) {
+      throw new AppError(403, 'FORBIDDEN_SERIES', 'Staff is not assigned to this series');
+    }
+
+    // 3. Handler ownership check: only if ticket already has a handler (403 FORBIDDEN_NOT_HANDLER)
+    if (ticket.handledByStaffId !== null && ticket.handledByStaffId !== staffId) {
+      throw new AppError(403, 'FORBIDDEN_NOT_HANDLER', 'Staff is not the handler of this ticket');
+    }
+
+    // 4. State transition validity check (400 INVALID_STATE_TRANSITION)
+    if (!canTransition(ticket.status, 'START_UNBOXING')) {
+      throw new AppError(
+        400,
+        'INVALID_STATE_TRANSITION',
+        'Invalid ticket state transition: ticket must be in CALLED status to start unboxing',
+      );
+    }
+
+    // 5. Atomic guarded update: single UPDATE ... WHERE id AND status AND handler
+    const now = clock.now();
+    const result = await prisma.queueTicket.updateMany({
+      where: {
+        id: ticketId,
+        status: TicketStatus.CALLED,
+        handledByStaffId: staffId,
+      },
+      data: {
+        status: TicketStatus.UNBOXING,
+        startedAt: now,
+      },
+    });
+
+    if (result.count === 0) {
+      throw new AppError(
+        400,
+        'INVALID_STATE_TRANSITION',
+        'Invalid ticket state transition: concurrent state change detected',
+      );
+    }
+
+    return {
+      ticketId,
+      status: TicketStatus.UNBOXING,
+      startedAt: now.toISOString(),
+    };
+  }
+
+  /**
+   * Completes service for an UNBOXING ticket (F-03, AC-27, BR-03, BR-07)
+   * Evaluation order:
+   * 1) Resource existence (404)
+   * 2) Series scope (403 FORBIDDEN_SERIES)
+   * 3) Handler ownership (403 FORBIDDEN_NOT_HANDLER)
+   * 4) State transition validity (400 INVALID_STATE_TRANSITION)
+   * 5) Atomic guarded update
+   */
+  async complete(
+    staffId: string,
+    ticketId: string,
+    clock: Clock = defaultClock,
+  ): Promise<CompleteTicketResultDto> {
+    // 1. Resource existence check (404)
+    const ticket = await prisma.queueTicket.findUnique({
+      where: { id: ticketId },
+      select: {
+        id: true,
+        seriesId: true,
+        status: true,
+        handledByStaffId: true,
+      },
+    });
+
+    if (!ticket) {
+      throw new AppError(404, 'RESOURCE_NOT_FOUND', 'Ticket not found');
+    }
+
+    // 2. Series scope check (403 FORBIDDEN_SERIES)
+    const assignment = await prisma.staffSeriesAssignment.findUnique({
+      where: {
+        staffId_seriesId: {
+          staffId,
+          seriesId: ticket.seriesId,
+        },
+      },
+    });
+
+    if (!assignment) {
+      throw new AppError(403, 'FORBIDDEN_SERIES', 'Staff is not assigned to this series');
+    }
+
+    // 3. Handler ownership check: only if ticket already has a handler (403 FORBIDDEN_NOT_HANDLER)
+    if (ticket.handledByStaffId !== null && ticket.handledByStaffId !== staffId) {
+      throw new AppError(403, 'FORBIDDEN_NOT_HANDLER', 'Staff is not the handler of this ticket');
+    }
+
+    // 4. State transition validity check (400 INVALID_STATE_TRANSITION)
+    if (!canTransition(ticket.status, 'COMPLETE')) {
+      throw new AppError(
+        400,
+        'INVALID_STATE_TRANSITION',
+        'Invalid ticket state transition: ticket must be in UNBOXING status to complete',
+      );
+    }
+
+    // 5. Atomic guarded update: single UPDATE ... WHERE id AND status AND handler
+    const now = clock.now();
+    const result = await prisma.queueTicket.updateMany({
+      where: {
+        id: ticketId,
+        status: TicketStatus.UNBOXING,
+        handledByStaffId: staffId,
+      },
+      data: {
+        status: TicketStatus.COMPLETED,
+        completedAt: now,
+      },
+    });
+
+    if (result.count === 0) {
+      throw new AppError(
+        400,
+        'INVALID_STATE_TRANSITION',
+        'Invalid ticket state transition: concurrent state change detected',
+      );
+    }
+
+    return {
+      ticketId,
+      status: TicketStatus.COMPLETED,
+      completedAt: now.toISOString(),
+    };
   }
 }
 

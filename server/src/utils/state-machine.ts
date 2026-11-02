@@ -10,7 +10,15 @@ export type StaffTicketAction = 'CALL_NEXT' | 'START_UNBOXING' | 'COMPLETE';
  * - CALLED -> START_UNBOXING
  * - UNBOXING -> COMPLETE
  */
-export function canTransition(_fromStatus: TicketStatus, _action: StaffTicketAction): boolean {
-  // RED phase stub: unconditionally returns false so valid transitions fail test
+export function canTransition(fromStatus: TicketStatus, action: StaffTicketAction): boolean {
+  if (fromStatus === TicketStatus.WAITING && action === 'CALL_NEXT') {
+    return true;
+  }
+  if (fromStatus === TicketStatus.CALLED && action === 'START_UNBOXING') {
+    return true;
+  }
+  if (fromStatus === TicketStatus.UNBOXING && action === 'COMPLETE') {
+    return true;
+  }
   return false;
 }
