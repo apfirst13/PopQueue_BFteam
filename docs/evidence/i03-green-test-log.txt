@@ -1,0 +1,47 @@
+﻿a35aff3fa15865721862634e142570c1b36fa223
+
+> server@0.1.0 test
+> vitest run
+
+node.exe : [33mThe CJS build of Vite's Node API is deprecated. See 
+https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([33mThe CJS bu...e details.[39m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+ RUN  v2.1.9 C:/!KMUTT/Year 3/Semeter 1/SE/Project/Project SE/qdrive-license-queue/server
+
+ Γ£ô tests/api/auth.test.ts (5 tests) 782ms
+ Γ£ô tests/api/join.test.ts (6 tests) 219ms
+stdout | tests/db-schema-and-seed.test.ts > Database Schema, Models, Partial Indexes & Seed Verification (Issue I-01)
+Seeding completed successfully: 9 Users, 3 Series, 3 Assignments.
+
+stdout | tests/db-schema-and-seed.test.ts > Database Schema, Models, Partial Indexes & Seed Verification (Issue I-01) > Seed script is idempotent (can run multiple times without duplicating)
+Seeding completed successfully: 9 Users, 3 Series, 3 Assignments.
+
+ Γ£ô tests/db-schema-and-seed.test.ts (6 tests) 1057ms
+   Γ£ô Database Schema, Models, Partial Indexes & Seed Verification (Issue I-01) > Seeds 9 users with valid bcrypt cost >= 10 and correct roles (NFR-01, AC-07) 597ms
+ Γ£ô tests/security/unauthenticated.test.ts (18 tests) 103ms
+ Γ£ô tests/concurrency/numbering.test.ts (1 test) 480ms
+   Γ£ô Concurrency: Safe Sequential Numbering (TEST-15, AC-15, BR-01, NFR-03) > TEST-15: 50 concurrent distinct collectors receive sequential numbers 1..50 with zero gaps and zero duplicates 473ms
+ Γ£ô tests/api/series.test.ts (1 test) 111ms
+ Γ£ô tests/api/queue-reset.test.ts (1 test) 134ms
+ Γ£ô tests/unit/role-guard.test.ts (3 tests) 6ms
+ Γ£ô tests/concurrency/duplicate.test.ts (1 test) 200ms
+ Γ£ô tests/clock.test.ts (4 tests) 21ms
+ Γ£ô tests/error-handler.test.ts (2 tests) 42ms
+ Γ£ô tests/security/password-hash.test.ts (1 test) 712ms
+   Γ£ô Security: Password Hash Characterization (TEST-07, AC-07, NFR-01) > verifies that all seeded accounts have secure bcrypt password hashes with cost >= 10 686ms
+ Γ£ô tests/env.test.ts (4 tests) 4ms
+ Γ£ô tests/unit/queue-date.test.ts (1 test) 24ms
+ Γ£ô tests/health.test.ts (1 test) 37ms
+
+ Test Files  15 passed (15)
+      Tests  55 passed (55)
+   Start at  13:22:51
+   Duration  11.45s (transform 222ms, setup 121ms, collect 3.65s, tests 3.93s, environment 3ms, prepare 1.30s)
+
+
