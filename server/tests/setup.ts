@@ -1,3 +1,8 @@
+import dotenv from 'dotenv';
+
+// Load .env first so DATABASE_URL_TEST is available
+dotenv.config();
+
 // Test environment setup
 process.env.NODE_ENV = 'test';
 

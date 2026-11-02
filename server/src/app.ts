@@ -1,10 +1,21 @@
 import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import { authRouter } from './routes/auth.routes.js';
+import { seriesRouter } from './routes/series.routes.js';
+import { ticketRouter } from './routes/ticket.routes.js';
 import { errorHandler } from './middleware/error-handler.js';
+import { Clock, defaultClock } from './utils/clock.js';
 
-export function createApp(): Express {
+export interface AppOptions {
+  clock?: Clock;
+}
+
+export function createApp(options: AppOptions = {}): Express {
   const app = express();
+  const clock = options.clock ?? defaultClock;
+
+  // Attach clock to request or app locals for downstream handlers
+  app.locals.clock = clock;
 
   app.use(cors());
   app.use(express.json());
@@ -16,6 +27,10 @@ export function createApp(): Express {
 
   // Authentication & Role Identity routes (F-01)
   app.use('/api/auth', authRouter);
+
+  // Queue Discovery & Safe Joining routes (F-02)
+  app.use('/api/series', seriesRouter);
+  app.use('/api/tickets', ticketRouter);
 
   // Centralized error handler
   app.use(errorHandler);
