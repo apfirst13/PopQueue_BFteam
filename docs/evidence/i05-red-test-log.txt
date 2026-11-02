@@ -1,0 +1,240 @@
+﻿a09a6e8e4a56e464b8f79d0070a095de2ba1c3ee
+
+> server@0.1.0 test
+> vitest run
+
+node.exe : [33mThe CJS build of Vite's Node API is deprecated. See 
+https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([33mThe CJS bu...e details.[39m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+ RUN  v2.1.9 C:/!KMUTT/Year 3/Semeter 1/SE/Project/Project SE/qdrive-license-queue/server
+
+ Γ£ô tests/api/auth.test.ts (5 tests) 831ms
+ Γ£ô tests/api/join.test.ts (6 tests) 231ms
+ Γ¥» tests/api/call-next.test.ts (7 tests | 5 failed) 181ms
+   ├ù Call Next Queue Ticket API: POST /api/staff/call-next (F-03, AC-22..25, AC-31) > TEST-22: calls lowest WAITING ticket (FIFO), sets status=CALLED, handledByStaffId, and calledAt 97ms
+     ΓåÆ expected 501 to be 200 // Object.is equality
+   ├ù Call Next Queue Ticket API: POST /api/staff/call-next (F-03, AC-22..25, AC-31) > TEST-23: returns 404 EMPTY_QUEUE when no WAITING tickets exist in the series 13ms
+     ΓåÆ expected 501 to be 404 // Object.is equality
+   ├ù Call Next Queue Ticket API: POST /api/staff/call-next (F-03, AC-22..25, AC-31) > TEST-24: returns 409 STAFF_BUSY when staff already has an active serving ticket (CALLED or UNBOXING) 19ms
+     ΓåÆ expected 501 to be 409 // Object.is equality
+   ├ù Call Next Queue Ticket API: POST /api/staff/call-next (F-03, AC-22..25, AC-31) > TEST-25: returns 403 FORBIDDEN_SERIES when staff attempts to call next in unassigned series 12ms
+     ΓåÆ expected 501 to be 403 // Object.is equality
+   ├ù Call Next Queue Ticket API: POST /api/staff/call-next (F-03, AC-22..25, AC-31) > Schema Validation: returns 400 VALIDATION_ERROR for missing or malformed seriesId 9ms
+     ΓåÆ expected 501 to be 400 // Object.is equality
+stdout | tests/db-schema-and-seed.test.ts > Database Schema, Models, Partial Indexes & Seed Verification (Issue I-01)
+Seeding completed successfully: 9 Users, 3 Series, 3 Assignments.
+
+stdout | tests/db-schema-and-seed.test.ts > Database Schema, Models, Partial Indexes & Seed Verification (Issue I-01) > Seed script is idempotent (can run multiple times without duplicating)
+Seeding completed successfully: 9 Users, 3 Series, 3 Assignments.
+
+ Γ£ô tests/db-schema-and-seed.test.ts (6 tests) 1140ms
+   Γ£ô Database Schema, Models, Partial Indexes & Seed Verification (Issue I-01) > Seeds 9 users with valid bcrypt cost >= 10 and correct roles (NFR-01, AC-07) 669ms
+ Γ£ô tests/api/my-ticket.test.ts (5 tests) 144ms
+ Γ¥» tests/concurrency/call-next-concurrency.test.ts (2 tests | 2 failed) 154ms
+   ├ù Concurrency: Box Master Call Next Races (TEST-32, AC-32, BR-03, BR-06, NFR-04) > TEST-32a: two staff members calling next simultaneously receive distinct sequential tickets without collision (SKIP LOCKED) 112ms
+     ΓåÆ expected 501 to be 200 // Object.is equality
+   ├ù Concurrency: Box Master Call Next Races (TEST-32, AC-32, BR-03, BR-06, NFR-04) > TEST-32b: 5 concurrent call-next requests from the same staff yield exactly 1 success and 4 STAFF_BUSY rejections 38ms
+     ΓåÆ expected +0 to be 1 // Object.is equality
+ Γ£ô tests/api/ticket-security.test.ts (5 tests) 136ms
+ Γ¥» tests/api/staff-tickets.test.ts (1 test | 1 failed) 108ms
+   ├ù Staff Service Counter API: GET /api/staff/tickets (F-03, AC-21, FR-07, BR-05) > TEST-21: returns assigned series queues for staff_crybaby and staff_labubu without cross-series leakage 102ms
+     ΓåÆ expected 501 to be 200 // Object.is equality
+ Γ£ô tests/security/unauthenticated.test.ts (42 tests) 178ms
+ Γ£ô tests/concurrency/numbering.test.ts (1 test) 504ms
+   Γ£ô Concurrency: Safe Sequential Numbering (TEST-15, AC-15, BR-01, NFR-03) > TEST-15: 50 concurrent distinct collectors receive sequential numbers 1..50 with zero gaps and zero duplicates 496ms
+ Γ£ô tests/api/series.test.ts (1 test) 104ms
+ Γ£ô tests/api/ticket-detail.test.ts (1 test) 84ms
+ Γ£ô tests/api/queue-reset.test.ts (1 test) 257ms
+ Γ£ô tests/unit/role-guard.test.ts (3 tests) 5ms
+ Γ£ô tests/concurrency/duplicate.test.ts (1 test) 215ms
+ Γ£ô tests/clock.test.ts (4 tests) 21ms
+ Γ£ô tests/error-handler.test.ts (2 tests) 42ms
+ Γ£ô tests/security/password-hash.test.ts (1 test) 699ms
+   Γ£ô Security: Password Hash Characterization (TEST-07, AC-07, NFR-01) > verifies that all seeded accounts have secure bcrypt password hashes with cost >= 10 659ms
+ Γ£ô tests/env.test.ts (4 tests) 4ms
+ Γ£ô tests/unit/queue-date.test.ts (1 test) 20ms
+ Γ£ô tests/health.test.ts (1 test) 39ms
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ» Failed Tests 8 ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»
+
+ FAIL  tests/api/call-next.test.ts > Call Next Queue Ticket API: POST /api/staff/call-next (F-03, AC-22..25, AC-31) > 
+TEST-22: calls lowest WAITING ticket (FIFO), sets status=CALLED, handledByStaffId, and calledAt
+AssertionError: expected 501 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 501
+
+ Γ¥» tests/api/call-next.test.ts:46:29
+     44|       .send({ seriesId: crySeries.id });
+     45| 
+     46|     expect(response.status).toBe(200);
+       |                             ^
+     47|     expect(response.body).toHaveProperty('data');
+     48|     const { ticketId, displayNumber, status, handledByStaffId, calledAΓÇª
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[1/8]ΓÄ»
+
+ FAIL  tests/api/call-next.test.ts > Call Next Queue Ticket API: POST /api/staff/call-next (F-03, AC-22..25, AC-31) > 
+TEST-23: returns 404 EMPTY_QUEUE when no WAITING tickets exist in the series
+AssertionError: expected 501 to be 404 // Object.is equality
+
+- Expected
++ Received
+
+- 404
++ 501
+
+ Γ¥» tests/api/call-next.test.ts:78:29
+     76|       .send({ seriesId: crySeries.id });
+     77| 
+     78|     expect(response.status).toBe(404);
+       |                             ^
+     79|     expect(response.body).toHaveProperty('error');
+     80|     expect(response.body.error.code).toBe('EMPTY_QUEUE');
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[2/8]ΓÄ»
+
+ FAIL  tests/api/call-next.test.ts > Call Next Queue Ticket API: POST /api/staff/call-next (F-03, AC-22..25, AC-31) > 
+TEST-24: returns 409 STAFF_BUSY when staff already has an active serving ticket (CALLED or UNBOXING)
+AssertionError: expected 501 to be 409 // Object.is equality
+
+- Expected
++ Received
+
+- 409
++ 501
+
+ Γ¥» tests/api/call-next.test.ts:116:29
+    114|       .send({ seriesId: crySeries.id });
+    115| 
+    116|     expect(response.status).toBe(409);
+       |                             ^
+    117|     expect(response.body.error.code).toBe('STAFF_BUSY');
+    118|     expect(response.body.error.statusCode).toBe(409);
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[3/8]ΓÄ»
+
+ FAIL  tests/api/call-next.test.ts > Call Next Queue Ticket API: POST /api/staff/call-next (F-03, AC-22..25, AC-31) > 
+TEST-25: returns 403 FORBIDDEN_SERIES when staff attempts to call next in unassigned series
+AssertionError: expected 501 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 501
+
+ Γ¥» tests/api/call-next.test.ts:147:29
+    145|       .send({ seriesId: labSeries.id });
+    146| 
+    147|     expect(response.status).toBe(403);
+       |                             ^
+    148|     expect(response.body.error.code).toBe('FORBIDDEN_SERIES');
+    149|     expect(response.body.error.statusCode).toBe(403);
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[4/8]ΓÄ»
+
+ FAIL  tests/api/call-next.test.ts > Call Next Queue Ticket API: POST /api/staff/call-next (F-03, AC-22..25, AC-31) > 
+Schema Validation: returns 400 VALIDATION_ERROR for missing or malformed seriesId
+AssertionError: expected 501 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 501
+
+ Γ¥» tests/api/call-next.test.ts:166:31
+    164|       .set('Authorization', `Bearer ${token}`)
+    165|       .send({});
+    166|     expect(missingRes.status).toBe(400);
+       |                               ^
+    167|     expect(missingRes.body.error.code).toBe('VALIDATION_ERROR');
+    168| 
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[5/8]ΓÄ»
+
+ FAIL  tests/api/staff-tickets.test.ts > Staff Service Counter API: GET /api/staff/tickets (F-03, AC-21, FR-07, BR-05) 
+> TEST-21: returns assigned series queues for staff_crybaby and staff_labubu without cross-series leakage
+AssertionError: expected 501 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 501
+
+ Γ¥» tests/api/staff-tickets.test.ts:61:27
+     59|       .set('Authorization', `Bearer ${cryToken}`);
+     60| 
+     61|     expect(cryRes.status).toBe(200);
+       |                           ^
+     62|     expect(cryRes.body).toHaveProperty('data');
+     63|     expect(cryRes.body.data).toHaveProperty('series');
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[6/8]ΓÄ»
+
+ FAIL  tests/concurrency/call-next-concurrency.test.ts > Concurrency: Box Master Call Next Races (TEST-32, AC-32, 
+BR-03, BR-06, NFR-04) > TEST-32a: two staff members calling next simultaneously receive distinct sequential tickets 
+without collision (SKIP LOCKED)
+AssertionError: expected 501 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 501
+
+ Γ¥» tests/concurrency/call-next-concurrency.test.ts:67:25
+     65| 
+     66|     // 3. Assert: Both requests succeed with 200 OK
+     67|     expect(res1.status).toBe(200);
+       |                         ^
+     68|     expect(res2.status).toBe(200);
+     69| 
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[7/8]ΓÄ»
+
+ FAIL  tests/concurrency/call-next-concurrency.test.ts > Concurrency: Box Master Call Next Races (TEST-32, AC-32, 
+BR-03, BR-06, NFR-04) > TEST-32b: 5 concurrent call-next requests from the same staff yield exactly 1 success and 4 
+STAFF_BUSY rejections
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ Γ¥» tests/concurrency/call-next-concurrency.test.ts:136:37
+    134|     const busyResponses = responses.filter((r) => r.status === 409);
+    135| 
+    136|     expect(successResponses.length).toBe(1);
+       |                                     ^
+    137|     expect(busyResponses.length).toBe(concurrentRequests - 1);
+    138| 
+
+ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[8/8]ΓÄ»
+
+ Test Files  3 failed | 18 passed (21)
+      Tests  8 failed | 92 passed (100)
+   Start at  18:23:39
+   Duration  17.12s (transform 266ms, setup 180ms, collect 6.41s, tests 5.10s, environment 4ms, prepare 2.03s)
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path C:\!KMUTT\Year 3\Semeter 1\SE\Project\Project SE\qdrive-license-queue\server
+npm error workspace server@0.1.0
+npm error location C:\!KMUTT\Year 3\Semeter 1\SE\Project\Project SE\qdrive-license-queue\server
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run
+
