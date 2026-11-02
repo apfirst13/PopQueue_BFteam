@@ -286,6 +286,7 @@ Semester 1/2026 | Department of Computer Engineering, KMUTT
 | CHG-06 | 2026-11-01 | เปลี่ยนการออกเลขคิวเป็น Raw SQL `ON CONFLICT` (D-10) | Prisma upsert ไม่ atomic ภายใต้ race | ทีมตกลง (v0.2) |
 | CHG-07 | 2026-11-02 | ปรับ UI Stack จาก Next.js 14 เป็น React 18 + Vite | สเปก §5.1 ส่งเสริมการใช้ Stack จาก Labs 1–4 และสถาปัตยกรรม SPA เพียงพอต่อการใช้งาน | ทีมตกลง (v0.2) |
 | CHG-08 | 2026-11-02 | ปรับปรุง STS ของ F-01 (TEST-03 Malformed JSON, TEST-04 Parameterized + Algorithm confusion, TEST-07 Characterization, TEST-08U Unauthenticated) และเพิ่ม config `JWT_EXPIRES_IN` | Handout §3.5 & NFR-02: ดักจับ SyntaxError ป้องกัน 500 unhandled, ป้องกัน Algorithm confusion (alg:none), แยก characterization test ของ Seed, และสร้างตาราง protected route กลางรองรับ I-02..I-06 | ทีมตกลง (v0.2.2) |
+| CHG-09 | 2026-11-02 | ปรับปรุง STS ของ F-02 (TEST-16 เสริม assertion `QueueCounter.lastNumber=1` พิสูจน์ rollback ภายใต้ race, TEST-17U เป็น Characterization) และกำหนด `AppOptions { clock }` สำหรับ Clock Injection | Handout §3.5 & Decision D-10: พิสูจน์ Rollback ภายใต้ race condition โดยไม่สูญเสียเลขคิว, แยก characterization test ของ timezone clock จาก I-01, และรองรับการฉีด FakeClock ในการทดสอบข้ามเที่ยงคืน | ทีมตกลง (v0.2.3) |
 
 ---
 
@@ -662,6 +663,7 @@ F-05, F-06, F-07 (Sprint 2), Dockerfile/CI/CD/GCP (Lab 5), F-08, F-09, NFR-07, R
 | v0.2 | 2026-11-01 | `[TBD]` | เพิ่ม AC list ต่อฟีเจอร์, Validation/Failure cases, Data/UI "no change", Feature DoD; Renumber AC/TEST เป็น 1:1 (AC-01..39); เพิ่ม BR-09, `FORBIDDEN_NOT_HANDLER`, `SERIES_CLOSED`, `NO_ACTIVE_TICKET`; Seed เพิ่ม (collector×6, staff_crybaby2, series SKP); เปลี่ยนการออกเลขคิวเป็น Raw SQL (D-10); ย้าย Rate limit ไป Sprint 3 | `[TBD]` |
 | v0.2.1 | 2026-11-02 | `[TBD]` | ปรับปรุง Contract สถาปัตยกรรม Web Client เป็น React 18 + Vite ตาม CHG-07 (สเปก §5.1 ส่งเสริม Labs 1–4 stack และสถาปัตยกรรม SPA เพียงพอ) | ทีมตกลง |
 | v0.2.2 | 2026-11-02 | `[TBD]` | ปรับปรุงรายละเอียด STS ของ F-01 ตาม CHG-08: เพิ่ม Malformed JSON ใน TEST-03, Parameterized + Algorithm confusion ใน TEST-04, TEST-07 เป็น Characterization, และ TEST-08U ตรวจสอบ 401 เมื่อขาด req.user | ทีมตกลง |
+| v0.2.3 | 2026-11-02 | `[TBD]` | ปรับปรุง STS ของ F-02 ตาม CHG-09: เสริม assertion `QueueCounter.lastNumber=1` ใน TEST-16, ระบุ TEST-17U เป็น Characterization, และกำหนด `AppOptions { clock }` | Theerawat (AI-assisted plan review) |
 | v0.x | `[TBD]` | `[TBD]` | การแก้ไข Contract ระหว่าง Implement (ต้องระบุเหตุผลทุกครั้ง ห้ามเขียนทับประวัติ) | `[TBD]` |
 
 ### ข้อตกลงร่วมของชุดทดสอบ (Test Conventions)
@@ -822,8 +824,8 @@ FR-03, FR-04, BR-01, BR-02, BR-09, BR-04 (Box Master ห้าม join), NFR-03,
 | **TEST-13** | AC-13 | Integration | – | join ด้วย UUID สุ่มที่ไม่มี / `{}` / `{seriesId:"abc"}` | 404 `RESOURCE_NOT_FOUND` / 400 / 400 `VALIDATION_ERROR` |
 | **TEST-14** | AC-14 | Integration | Token `staff_crybaby`; และไม่ส่ง Token | join CRY | 403 `FORBIDDEN_ROLE`; 401 `UNAUTHENTICATED`; ไม่มีตั๋วเพิ่ม |
 | **TEST-15** | AC-15 | Concurrency | Fixture 50 Collector ต่างบัญชี | `Promise.all` join CRY 50 คำขอ | 50 × 201; เซต `queueNumber` = {1..50}; ไม่มีซ้ำ; `QueueCounter.lastNumber=50` |
-| **TEST-16** | AC-16 | Concurrency | `collector2` ไม่มีตั๋ว | `Promise.all` join 10 คำขอ | 201 จำนวน 1; 409 `DUPLICATE_ACTIVE_QUEUE` จำนวน 9; DB ตั๋ว Active = 1 |
-| **TEST-17U** | AC-17 | Unit | `Date` = 2026-11-08T16:59:59Z, 17:00:00Z | `getQueueDate(now)` | `2026-11-08` และ `2026-11-09` ตามลำดับ |
+| **TEST-16** | AC-16 | Concurrency | `collector2` ไม่มีตั๋ว | `Promise.all` join 10 คำขอ | 201 จำนวน 1; 409 `DUPLICATE_ACTIVE_QUEUE` จำนวน 9; DB ตั๋ว Active = 1; และ `QueueCounter.lastNumber = 1` |
+| **TEST-17U** | AC-17 | Unit (Characterization) | `Date` = 2026-11-08T16:59:59Z, 17:00:00Z | `getQueueDate(now)` | `2026-11-08` และ `2026-11-09` ตามลำดับ |
 | **TEST-17** | AC-17 | Integration | `clock` = 23:59:59+07 แล้ว 00:00:01+07 (วันถัดไป) ผู้ใช้ต่างกัน | join CRY ทั้งสองครั้ง | ครั้งแรกได้เลข n ของวันเดิม; ครั้งหลังได้ `001` และ `queueDate` ใหม่ |
 | **TEST-18** | AC-18 | Integration | ตั๋ว CRY-001 สถานะ COMPLETED (ตั้งผ่าน DB fixture) | `collector3` join CRY | 201 `CRY-002` |
 | **TEST-19** | AC-19 | E2E (Playwright) | DB เทสต์ว่าง; `collector1` | Login → เลือก CRY → Join → กด Join ซ้ำ | ถึง `/my-ticket` เห็น `CRY-001` + `WAITING`; Join ซ้ำเห็นข้อความ/รหัส `DUPLICATE_ACTIVE_QUEUE` |
