@@ -8,7 +8,6 @@ import { Role, TicketStatus } from '@prisma/client';
 
 describe('F-04 Ticket Inspection: GET /api/tickets/my-ticket (TEST-34, TEST-35)', () => {
   let collector1Token: string;
-  let collector2Token: string;
   let collector4Token: string;
   let staffCryToken: string;
 
@@ -33,7 +32,6 @@ describe('F-04 Ticket Inspection: GET /api/tickets/my-ticket (TEST-34, TEST-35)'
     crySeries = series;
 
     collector1Token = signTestToken(c1.id, Role.COLLECTOR, c1.tokenVersion);
-    collector2Token = signTestToken(c2.id, Role.COLLECTOR, c2.tokenVersion);
     collector4Token = signTestToken(c4.id, Role.COLLECTOR, c4.tokenVersion);
     staffCryToken = signTestToken(staffCry.id, Role.BOX_MASTER, staffCry.tokenVersion);
   });

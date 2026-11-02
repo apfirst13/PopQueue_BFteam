@@ -1,4 +1,4 @@
-import { Prisma, TicketStatus } from '@prisma/client';
+import { Prisma, Role, TicketStatus } from '@prisma/client';
 import { prisma } from '../config/db.js';
 import { AppError } from '../middleware/error-handler.js';
 import { Clock, defaultClock, getQueueDate, getQueueDateAsDate } from '../utils/clock.js';
@@ -11,6 +11,45 @@ export interface JoinQueueResult {
   status: TicketStatus;
   seriesName: string;
   createdAt: string;
+}
+
+export interface ActiveTicketResult {
+  ticket: {
+    id: string;
+    displayNumber: string;
+    queueNumber: number;
+    status: TicketStatus;
+    waitingAhead: number;
+    series: {
+      id: string;
+      code: string;
+      name: string;
+    };
+    createdAt: string;
+    calledAt: string | null;
+    startedAt: string | null;
+  };
+}
+
+export interface TicketDetailResult {
+  id: string;
+  displayNumber: string;
+  status: TicketStatus;
+  series: {
+    id: string;
+    code: string;
+    name: string;
+  };
+  userFullName?: string;
+  createdAt: string;
+  calledAt: string | null;
+  startedAt: string | null;
+  completedAt: string | null;
+}
+
+export interface TicketUserIdentity {
+  id: string;
+  role: Role;
 }
 
 export class TicketService {
@@ -97,6 +136,162 @@ export class TicketService {
       throw error;
     }
   }
+
+  /**
+   * Retrieves active ticket for current collector with waitingAhead calculation (AC-34, AC-35, FR-05)
+   */
+  async getMyActiveTicket(
+    userId: string,
+    _clock: Clock = defaultClock,
+  ): Promise<ActiveTicketResult> {
+    const activeTicket = await prisma.queueTicket.findFirst({
+      where: {
+        userId,
+        status: {
+          in: [TicketStatus.WAITING, TicketStatus.CALLED, TicketStatus.UNBOXING],
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      include: {
+        series: {
+          select: {
+            id: true,
+            code: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    if (!activeTicket) {
+      throw new AppError(404, 'NO_ACTIVE_TICKET', 'No active queue ticket found');
+    }
+
+    let waitingAhead = 0;
+    if (activeTicket.status === TicketStatus.WAITING) {
+      waitingAhead = await prisma.queueTicket.count({
+        where: {
+          seriesId: activeTicket.seriesId,
+          queueDate: activeTicket.queueDate,
+          status: TicketStatus.WAITING,
+          queueNumber: {
+            lt: activeTicket.queueNumber,
+          },
+        },
+      });
+    }
+
+    return {
+      ticket: {
+        id: activeTicket.id,
+        displayNumber: activeTicket.displayNumber,
+        queueNumber: activeTicket.queueNumber,
+        status: activeTicket.status,
+        waitingAhead,
+        series: {
+          id: activeTicket.series.id,
+          code: activeTicket.series.code,
+          name: activeTicket.series.name,
+        },
+        createdAt: activeTicket.createdAt.toISOString(),
+        calledAt: activeTicket.calledAt?.toISOString() ?? null,
+        startedAt: activeTicket.startedAt?.toISOString() ?? null,
+      },
+    };
+  }
+
+  /**
+   * Retrieves ticket details by ID with strict ownership and scope verification (AC-36..38, FR-06)
+   */
+  async getTicketById(
+    ticketId: string,
+    user: TicketUserIdentity,
+  ): Promise<TicketDetailResult> {
+    // 1. Minimal select to check existence (404) and ownership/scope (403) before loading details
+    const minimal = await prisma.queueTicket.findUnique({
+      where: { id: ticketId },
+      select: {
+        id: true,
+        userId: true,
+        seriesId: true,
+      },
+    });
+
+    if (!minimal) {
+      throw new AppError(404, 'RESOURCE_NOT_FOUND', 'Ticket not found');
+    }
+
+    // 2. Ownership / Series Scope Guard
+    if (user.role === Role.COLLECTOR) {
+      if (minimal.userId !== user.id) {
+        throw new AppError(
+          403,
+          'FORBIDDEN_OWNERSHIP',
+          'Forbidden: You do not have permission to view this ticket',
+        );
+      }
+    } else if (user.role === Role.BOX_MASTER) {
+      const assignment = await prisma.staffSeriesAssignment.findUnique({
+        where: {
+          staffId_seriesId: {
+            staffId: user.id,
+            seriesId: minimal.seriesId,
+          },
+        },
+      });
+
+      if (!assignment) {
+        throw new AppError(
+          403,
+          'FORBIDDEN_SERIES',
+          'Forbidden: Ticket belongs to a series outside your assignment',
+        );
+      }
+    }
+
+    // 3. Authorized: Load full details with series and user
+    const ticket = await prisma.queueTicket.findUniqueOrThrow({
+      where: { id: ticketId },
+      include: {
+        series: {
+          select: {
+            id: true,
+            code: true,
+            name: true,
+          },
+        },
+        user: {
+          select: {
+            fullName: true,
+          },
+        },
+      },
+    });
+
+    const result: TicketDetailResult = {
+      id: ticket.id,
+      displayNumber: ticket.displayNumber,
+      status: ticket.status,
+      series: {
+        id: ticket.series.id,
+        code: ticket.series.code,
+        name: ticket.series.name,
+      },
+      createdAt: ticket.createdAt.toISOString(),
+      calledAt: ticket.calledAt?.toISOString() ?? null,
+      startedAt: ticket.startedAt?.toISOString() ?? null,
+      completedAt: ticket.completedAt?.toISOString() ?? null,
+    };
+
+    if (user.role === Role.BOX_MASTER) {
+      result.userFullName = ticket.user.fullName;
+    }
+
+    return result;
+  }
 }
 
 export const ticketService = new TicketService();
+

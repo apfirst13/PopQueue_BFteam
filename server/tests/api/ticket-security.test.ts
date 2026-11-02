@@ -13,9 +13,6 @@ describe('F-04 Ticket Security & Ownership: GET /api/tickets/:id (TEST-37, TEST-
   let staffLabToken: string;
 
   let collector1User: { id: string; fullName: string };
-  let collector2User: { id: string };
-  let staffCryUser: { id: string };
-  let staffLabUser: { id: string };
   let crySeries: { id: string; code: string; name: string };
 
   beforeAll(async () => {
@@ -26,9 +23,6 @@ describe('F-04 Ticket Security & Ownership: GET /api/tickets/:id (TEST-37, TEST-
     const series = await prisma.series.findUniqueOrThrow({ where: { code: 'CRY' } });
 
     collector1User = c1;
-    collector2User = c2;
-    staffCryUser = staffCry;
-    staffLabUser = staffLab;
     crySeries = series;
 
     collector1Token = signTestToken(c1.id, Role.COLLECTOR, c1.tokenVersion);
