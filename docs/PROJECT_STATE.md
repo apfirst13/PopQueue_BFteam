@@ -18,8 +18,8 @@
 | **I-04** | F-04: Ticket Inspection & Ownership | My-ticket, ticket by ID, 403 ownership guard (AC-34..38) | **Merged** | `feature/i04-ticket` | PR #15 (Merged) |
 | **I-05** | F-03: Staff Counter & Call Next | Queue list, Call next (SKIP LOCKED, STAFF_BUSY) (AC-21..25, 31, 32) | **Merged** | `feature/i05-staff-call` | PR #17 (Merged) |
 | **I-06** | F-03: Start Unboxing & Complete | State transition machine, handler ownership guard (AC-26..30) | **Merged** | `feature/i06-staff-state` | PR #18 (Merged) |
-| **I-07** | Web UI (React + Vite) | 4 Screens: Login, Series, My Ticket, Staff Counter (AC-19, 20, 33) | **Implemented** | `feature/i07-web-ui` | PR Ready |
-| **I-08** | E2E, Persistence & Release | Playwright tests, persistence script, release PR & tag `v0.1.0-sprint1` | Todo | `feature/i08-release` | - |
+| **I-07** | Web UI (React + Vite) | 4 Screens: Login, Series, My Ticket, Staff Counter (AC-19, 20, 33) | **Merged** | `feature/i07-web-ui` | PR #20 (Merged) |
+| **I-08** | E2E, Persistence & Evidence | Playwright tests (TEST-19, 20, 33), persistence script (TEST-39), Part F evidence | **Implemented** | `feature/i08-e2e-persistence` | Ready for Review |
 
 ## Feature & Acceptance Criteria Status
 * Full Contract & STS for F-01..F-04 with AC-01..AC-39 is defined in `docs/PopQueue_Deliverable_1_Master.md`.
@@ -56,4 +56,4 @@
 3. Short Polling (3s) for real-time updates without WebSockets/SSE.
 
 ## Next Step for the Team / Agent
-* Open Pull Request for **Issue I-07** (`feature/i07-web-ui` -> `sprint-1-staging`) with UI demonstration screenshots. Next issue is **Issue I-08** (E2E Playwright Automation, DB Persistence & Final Sprint 1 Release).
+* Complete code review for **Issue I-08 Part A** (`feature/i08-e2e-persistence` -> `sprint-1-staging`). Next step is Part B: Release steps (Release PR `sprint-1-staging` -> `main`, create tag `v0.1.0-sprint1`, and compile self-contained Deliverable 1 PDF).

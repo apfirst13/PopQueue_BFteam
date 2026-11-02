@@ -79,13 +79,32 @@ All seeded accounts use passwords defined in `SEED_COLLECTOR_PASSWORD` and `SEED
 
 ---
 
-## Available Root Scripts
-
 * `npm run lint` — Lint all workspaces with ESLint
 * `npm run typecheck` — Run TypeScript compiler check (`tsc --noEmit`) across all workspaces
 * `npm test` — Run unit and integration tests across all workspaces via Vitest
+* `npm run test:e2e` — Run Playwright E2E journey, responsive, and access control tests
+* `npm run test:persistence` — Run database container restart persistence verification (`node scripts/test-persistence.mjs`, AC-39 / TEST-39)
 * `npm run build` — Compile and build all workspaces
 * `npm run dev` — Start the backend development server with hot-reload
 * `npm run db:migrate` — Run Prisma migrations against PostgreSQL (`prisma migrate dev`)
 * `npm run db:seed` — Run idempotent database seed script (`prisma db seed`)
 * `npm run db:reset-demo` — Reset database cleanly, apply all migrations (including partial indexes), and re-seed 9 accounts + 3 series
+
+---
+
+## E2E Testing & Database Persistence Verification (Issue I-08)
+
+### 1. Playwright E2E Journey Tests (AC-19, AC-20, AC-33)
+The E2E suite runs automated browser tests across separate browser contexts (Collector & Box Master) verifying live 3s polling, state transitions, mobile 375px viewport responsiveness, and route security:
+```bash
+# Run all Playwright E2E test suites
+npm run test:e2e
+```
+
+### 2. Database Container Restart Persistence Check (AC-39 / TEST-39)
+Verifies that ticket records across all statuses (`WAITING`, `CALLED`, `COMPLETED`) survive a container restart (`docker compose restart db`), and atomic ticket numbering resumes consecutively with zero gaps or data loss:
+```bash
+# Execute persistence check script against isolated popqueue_test database
+npm run test:persistence
+```
+

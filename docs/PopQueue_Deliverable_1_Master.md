@@ -1112,37 +1112,37 @@ FR-05, FR-06, BR-04, NFR-02, NFR-05 | Dependencies: F-01, F-02 (ตั๋ว), F
 | AC-06 | TEST-06 | Integration | `tests/api/auth.test.ts` / returns profile and assignedSeries | Pass | `d8d300e` |
 | AC-07 | TEST-07 | Security / Characterization | `tests/security/password-hash.test.ts` / bcrypt cost >= 10 | Pass | `d8d300e` |
 | AC-08 | TEST-08U | Unit | `tests/unit/role-guard.test.ts` / requireRole 403 FORBIDDEN_ROLE & 401 | Pass | `d8d300e` |
-| AC-09 | TEST-09 | Integration | `tests/api/series.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-10 | TEST-10 | Integration | `tests/api/join.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-11 | TEST-11 | Integration | `tests/api/join.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-12 | TEST-12 | Integration | `tests/api/join.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-13 | TEST-13 | Integration | `tests/api/join.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-14 | TEST-14 | Integration | `tests/api/join.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-15 | TEST-15 | Concurrency | `tests/concurrency/numbering.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-16 | TEST-16 | Concurrency | `tests/concurrency/duplicate.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-17 | TEST-17U, TEST-17 | Unit + Integration | `tests/unit/queue-date.test.ts`, `tests/api/queue-reset.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-18 | TEST-18 | Integration | `tests/api/join.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-19 | TEST-19 | E2E | `e2e/join-queue.spec.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-20 | TEST-20 | E2E | `e2e/responsive.spec.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-21 | TEST-21 | Integration | `tests/api/staff-list.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-22 | TEST-22 | Integration | `tests/api/staff-call.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-23 | TEST-23 | Integration | `tests/api/staff-call.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-24 | TEST-24 | Integration | `tests/api/staff-call.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-25 | TEST-25 | Integration | `tests/api/unauthorized-queue.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
+| AC-09 | TEST-09 | Integration | `tests/api/series.test.ts` / returns all series with accurate waitingCount of today without requiring authentication | Pass | `a35aff3` |
+| AC-10 | TEST-10 | Integration | `tests/api/join.test.ts` / creates first ticket CRY-001 with status WAITING and queueNumber 1 | Pass | `a35aff3` |
+| AC-11 | TEST-11 | Integration | `tests/api/join.test.ts` / rejects join with 409 DUPLICATE_ACTIVE_QUEUE when user already has an active ticket | Pass | `a35aff3` |
+| AC-12 | TEST-12 | Integration | `tests/api/join.test.ts` / rejects join with 409 SERIES_CLOSED when series is inactive | Pass | `a35aff3` |
+| AC-13 | TEST-13 | Integration | `tests/api/join.test.ts` / rejects join with 404 RESOURCE_NOT_FOUND or 400 VALIDATION_ERROR | Pass | `a35aff3` |
+| AC-14 | TEST-14 | Integration | `tests/api/join.test.ts` / rejects join when unauthenticated (401) or forbidden role (403 FORBIDDEN_ROLE) | Pass | `a35aff3` |
+| AC-15 | TEST-15 | Concurrency | `tests/concurrency/numbering.test.ts` / 50 concurrent distinct collectors receive sequential numbers 1..50 with zero gaps and zero duplicates | Pass | `a35aff3` |
+| AC-16 | TEST-16 | Concurrency | `tests/concurrency/duplicate.test.ts` / 10 concurrent join requests by same collector produces exactly one 201 and 9 409 DUPLICATE_ACTIVE_QUEUE | Pass | `a35aff3` |
+| AC-17 | TEST-17U, TEST-17 | Unit + Integration | `tests/unit/queue-date.test.ts`, `tests/api/queue-reset.test.ts` / Bangkok timezone date boundary check and queue sequence reset across midnight | Pass | `a35aff3` |
+| AC-18 | TEST-18 | Integration | `tests/api/join.test.ts` / non-reusable queue number after previous ticket is completed | Pass | `a35aff3` |
+| AC-19 | TEST-19 | E2E | `e2e/join-queue.spec.ts` / collector logs in, joins CRY queue, verifies WAITING ticket, and verifies duplicate rejection | Pass | `815e962` |
+| AC-20 | TEST-20 | E2E | `e2e/responsive.spec.ts` / verifies no horizontal overflow (scrollWidth <= clientWidth) across all Sprint 1 screens | Pass | `815e962` |
+| AC-21 | TEST-21 | Integration | `tests/api/staff-tickets.test.ts` / returns assigned series queues for staff_crybaby and staff_labubu without cross-series leakage | Pass | `7ab4032` |
+| AC-22 | TEST-22 | Integration | `tests/api/call-next.test.ts` / calls lowest WAITING ticket (FIFO), sets status=CALLED, handledByStaffId, and calledAt | Pass | `7ab4032` |
+| AC-23 | TEST-23 | Integration | `tests/api/call-next.test.ts` / returns 404 EMPTY_QUEUE when no WAITING tickets exist | Pass | `7ab4032` |
+| AC-24 | TEST-24 | Integration | `tests/api/call-next.test.ts` / returns 409 STAFF_BUSY when staff already has an active serving ticket | Pass | `7ab4032` |
+| AC-25 | TEST-25 | Integration | `tests/api/call-next.test.ts` / returns 403 FORBIDDEN_SERIES when staff calls next for a series not assigned to them | Pass | `7ab4032` |
 | AC-26 | TEST-26 | Integration | `tests/api/staff-transition.test.ts` / valid path CALLED -> UNBOXING (start) -> COMPLETED | Pass | `013a631` |
 | AC-27 | TEST-27 | Integration | `tests/api/staff-transition.test.ts` / valid path CALLED -> UNBOXING (start) -> COMPLETED | Pass | `013a631` |
 | AC-28 | TEST-28, TEST-28U | Integration + Unit | `tests/api/staff-transition.test.ts`, `tests/unit/state-machine.test.ts` / invalid state transitions rejected with 400 | Pass | `013a631` |
 | AC-29 | TEST-29 | Integration | `tests/api/staff-transition.test.ts` / rejects staff assigned to another series with 403 FORBIDDEN_SERIES | Pass | `013a631` |
 | AC-30 | TEST-30 | Integration | `tests/api/staff-transition.test.ts` / rejects staff assigned to same series but not handler with 403 FORBIDDEN_NOT_HANDLER | Pass | `013a631` |
-| AC-31 | TEST-31 | Integration | `tests/api/permissions.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-32 | TEST-32a, TEST-32b | Concurrency | `tests/concurrency/call-next.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-33 | TEST-33 | E2E | `e2e/full-journey.spec.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-34 | TEST-34 | Integration | `tests/api/my-ticket.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-35 | TEST-35 | Integration | `tests/api/my-ticket.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-36 | TEST-36 | Integration | `tests/api/ticket-detail.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-37 | TEST-37 | Integration | `tests/api/ticket-security.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-38 | TEST-38 | Integration | `tests/api/ticket-security.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-39 | TEST-39 | Infra script | `scripts/test-persistence.mjs` / `[TBD]` | `[TBD]` | `[TBD]` |
+| AC-31 | TEST-31 | Integration | `tests/api/call-next.test.ts` / rejects collector tokens with 403 FORBIDDEN_ROLE when calling staff endpoints | Pass | `7ab4032` |
+| AC-32 | TEST-32a, TEST-32b | Concurrency | `tests/concurrency/call-next-concurrency.test.ts` / 2 distinct staff receive distinct tickets & same staff concurrency returns 1 200 and 4 409 STAFF_BUSY | Pass | `7ab4032` |
+| AC-33 | TEST-33 | E2E | `e2e/full-journey.spec.ts` / Demo 1: Normal Domain Journey across Collector and Staff browser contexts with 3s polling | Pass | `815e962` |
+| AC-34 | TEST-34 | Integration | `tests/api/my-ticket.test.ts` / returns active ticket with waitingAhead count and updates when status changes | Pass | `9e12341` |
+| AC-35 | TEST-35 | Integration | `tests/api/my-ticket.test.ts` / returns 404 NO_ACTIVE_TICKET when collector has no active ticket or ticket completed, 403 for staff | Pass | `9e12341` |
+| AC-36 | TEST-36 | Integration | `tests/api/ticket-detail.test.ts` / owner retrieves completed ticket with full status and timestamps | Pass | `9e12341` |
+| AC-37 | TEST-37 | Integration | `tests/api/ticket-security.test.ts` / rejects access to other collector's ticket with 403 FORBIDDEN_OWNERSHIP without leaking info | Pass | `9e12341` |
+| AC-38 | TEST-38 | Integration | `tests/api/ticket-security.test.ts` / role and boundary checks on GET /tickets/:id | Pass | `9e12341` |
+| AC-39 | TEST-39 | Infra script | `scripts/test-persistence.mjs` / Database container restart persistence check across WAITING/CALLED/COMPLETED | Pass | `815e962` |
 
 **Manual checks (เสริม ไม่ใช้แทน Automated):** `[TBD – เช่น ตรวจ UI ด้วยตา, บันทึกผล]` | **Test ที่ Fail / Skip:** `[TBD – ระบุชื่อและเหตุผล หรือ "ไม่มี"]`
 
