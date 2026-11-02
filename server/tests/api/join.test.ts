@@ -5,7 +5,7 @@ import { prisma } from '../../src/config/db.js';
 import { resetQueueState } from '../helpers/queue-helper.js';
 import { signTestToken } from '../helpers/auth-helper.js';
 import { getQueueDateAsDate } from '../../src/utils/clock.js';
-import { Role, TicketStatus } from '@prisma/client';
+import { TicketStatus } from '@prisma/client';
 
 describe('Safe Queue Joining API: POST /api/tickets/join (F-02, AC-10..14, AC-18)', () => {
   beforeEach(async () => {

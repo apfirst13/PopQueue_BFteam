@@ -1,8 +1,7 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
+import { seriesController } from '../controllers/series.controller.js';
 
 export const seriesRouter = Router();
 
-// Stub for GET /api/series (F-02, AC-09)
-seriesRouter.get('/', (_req: Request, res: Response) => {
-  res.status(501).json({ error: { code: 'NOT_IMPLEMENTED', message: 'Not implemented', statusCode: 501 } });
-});
+// GET /api/series - Queue Discovery (F-02, AC-09)
+seriesRouter.get('/', (req, res, next) => seriesController.getSeries(req, res, next));
