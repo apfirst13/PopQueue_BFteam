@@ -13,4 +13,11 @@ export interface ProtectedRouteDef {
 export const protectedRoutes: ProtectedRouteDef[] = [
   { method: 'POST', path: '/api/auth/logout', description: 'Logout endpoint', addedInIssue: 'I-02' },
   { method: 'GET', path: '/api/auth/me', description: 'Get current user profile', addedInIssue: 'I-02' },
+  {
+    method: 'POST',
+    path: '/api/tickets/join',
+    description: 'Join queue for a series',
+    body: { seriesId: '00000000-0000-0000-0000-000000000000' },
+    addedInIssue: 'I-03',
+  },
 ];

@@ -13,15 +13,42 @@ export const SEED_COLLECTOR_PASSWORD =
 export const SEED_STAFF_PASSWORD =
   process.env.SEED_STAFF_PASSWORD || 'staff_dev_password123';
 
+/**
+ * Signs a test JWT with HS256 algorithm.
+ * Supports both object payload and positional arguments:
+ * - signTestToken(payload, expiresIn?)
+ * - signTestToken(sub, role, tokenVersion, expiresIn?)
+ */
 export function signTestToken(
-  payload: TestJwtPayload,
-  expiresIn: string = '8h',
+  subOrPayload: string | TestJwtPayload,
+  roleOrExpiresIn?: Role | string,
+  tokenVersion?: number,
+  expiresIn?: string,
 ): string {
+  let payload: TestJwtPayload;
+  let exp = '8h';
+
+  if (typeof subOrPayload === 'string') {
+    payload = {
+      sub: subOrPayload,
+      role: (roleOrExpiresIn as Role) || Role.COLLECTOR,
+      tokenVersion: tokenVersion ?? 0,
+    };
+    exp = expiresIn || '8h';
+  } else {
+    payload = subOrPayload;
+    exp = (roleOrExpiresIn as string) || '8h';
+  }
+
   const options: SignOptions = {
     algorithm: 'HS256',
-    expiresIn: expiresIn as SignOptions['expiresIn'],
+    expiresIn: exp as SignOptions['expiresIn'],
   };
   return jwt.sign(payload, config.JWT_SECRET, options);
+}
+
+export function getAuthHeader(token: string): { Authorization: string } {
+  return { Authorization: `Bearer ${token}` };
 }
 
 export function signExpiredTestToken(payload: TestJwtPayload): string {
@@ -46,8 +73,4 @@ export function signAlgorithmConfusionToken(payload: TestJwtPayload): string {
   };
   // Sign using HS512 instead of HS256
   return jwt.sign(payload, config.JWT_SECRET, options);
-}
-
-export function getAuthHeader(token: string): { Authorization: string } {
-  return { Authorization: `Bearer ${token}` };
 }

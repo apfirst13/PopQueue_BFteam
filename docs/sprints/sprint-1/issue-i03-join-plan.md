@@ -1,7 +1,7 @@
-# แผนการพัฒนา Issue I-03: F-02 Queue Discovery & Safe Joining (ฉบับปรับปรุง v1.2)
+# แผนการพัฒนา Issue I-03: F-02 Queue Discovery & Safe Joining (ฉบับปรับปรุง v1.4)
 **โครงการ PopQueue – Art Toy Live Unboxing Queue Management System**  
 **CPE 334 Introduction to Software Engineering in the Age of AI Agents (Semester 1/2026)**  
-**เวอร์ชันเอกสาร:** v1.2 | **สถานะ:** เสนอเพื่อขออนุมัติและเริ่มขั้นตอน TDD  
+**เวอร์ชันเอกสาร:** v1.4 | **สถานะ:** เสนอเพื่อขออนุมัติและเริ่มขั้นตอน TDD  
 **ผู้จัดทำ:** นายธีรวัฒญ์ รุ่งสว่าง (67070507206) & นายอภิวัชร์ ปัณฐธนาพัฒน์ (67070507209)  
 **เอกสารอ้างอิงหลัก:**
 - [`docs/PopQueue_Deliverable_1_Master.md`](../../PopQueue_Deliverable_1_Master.md) (Part A §5–§8, Part B §1–§2, Part C §1–§6, Part E §2, Part F §3–§5)
@@ -17,7 +17,9 @@
 | :---: | :---: | :--- | :--- |
 | **v1.0** | 2026-11-02 | ร่างแผนการทำงาน F-02 ครอบคลุม AC-09..18, Raw SQL Atomic Increment, และ STS | Theerawat |
 | **v1.1** | 2026-11-02 | ปรับปรุงมาตรการ Concurrency, ย้ายการดักจับ P2002 นอก Transaction, ตัด Application Pre-check, และปรับลำดับ TDD Log | Theerawat (AI-assisted plan review – บันทึกใน AI-use declaration) |
-| **v1.2** | 2026-11-02 | **ปรับปรุงตามข้อสังเกตเชิงลึกก่อนเริ่มการทำงาน (CHG-09):**<br/>1. ระบุที่มาใน Revision History อย่างโปร่งใสว่าเป็น AI-assisted review (เตรียมลงใน AI-use declaration)<br/>2. กำหนดให้ Commit CHG-09 ลงใน `docs/PopQueue_Deliverable_1_Master.md` (Part B ตาราง CHG, Part E §0 และ STS) บน Branch ก่อนเริ่ม Red Commit ตามหลักการ Contract-First SDD<br/>3. แก้ไขคำสั่งเซฟ Log บน Windows ให้ตั้ง `$env:NO_COLOR='1'` และส่งผ่าน `Out-File -Encoding utf8 -Append` ดักจับทั้ง stdout + stderr (`2>&1`) ป้องกันปัญหา Mixed Encoding และ ANSI garbage<br/>4. ยืนยันการคง `export const app = createApp()` ใน `app.ts` และรัน Regression Test ชุดเดิม 38 ตัวให้เขียวทั้งหมดก่อนเขียน Red Test เพื่อ Clean Red Isolation<br/>5. ปรับ `connection_limit=20` ใน `DATABASE_URL_TEST` เพื่อไม่ให้ชนเพดาน `max_connections` (100) ของ PostgreSQL<br/>6. ระบุ Fixture ของ TEST-09 ให้สร้างตั๋ว 3 ใบจากผู้ใช้ 3 คนต่างกัน (`collector1..3`) ตาม BR-02<br/>7. เพิ่มสคริปต์คำสั่งรัน Concurrency 5 รอบต่อเนื่อง ปราศจาก retry (`retry: 0`)<br/>8. ปรับถ้อยคำเรื่อง Prisma upsert ใน §2.1 เป็น "อาจใช้ select-then-write ในบางเงื่อนไข จึงไม่รับประกัน" ตาม Decision D-10 | Theerawat (AI-assisted plan review) |
+| **v1.2** | 2026-11-02 | ปรับปรุง STS ใน Master Doc (CHG-09 ก่อน Red Commit), แนะนำการเซฟ Log UTF-8, คง export app, และตั้ง connection_limit=20 | Theerawat (AI-assisted plan review) |
+| **v1.3** | 2026-11-02 | ปรับปรุง Safety Guards และความถูกต้องของการรันจริง (CHG-09 Final) | Theerawat (AI-assisted plan review) |
+| **v1.4** | 2026-11-02 | **แก้ไขลำดับ Stability Log และ Safety Guard ให้รัดกุม (CHG-09 Strict Alignment):**<br/>1. ย้ายการรัน Stability Test 5 รอบไปไว้ **หลัง** Green Commit เพื่อให้ SHA ใน `i03-stability-log.txt` ตรงกับ Commit ที่ผ่านการทดสอบจริงตาม Handout §4.2 และ Master §2.11<br/>2. ปรับ Safety Guard ใน `resetQueueState()` ให้แกะ `pathname` ผ่าน `new URL()` และตรวจเฉพาะ `endsWith('_test')` พร้อมพิมพ์เฉพาะชื่อฐานข้อมูล ป้องกัน Credential Leak ลงใน Log/PDF ตาม Handout §4.4 | Theerawat (AI-assisted plan review) |
 
 ---
 
@@ -262,10 +264,22 @@ sequenceDiagram
 ### 5.1 การตัดปัญหาการแย่งฐานข้อมูล (State Isolation & File Parallelism)
 * **ปัญหา:** ค่าปริยายของ Vitest จะรันแต่ละ Test File พร้อมกัน (Concurrency across files) ทำให้ตาราง `QueueTicket` และ `QueueCounter` ชนกัน
 * **การแก้ไข:**
-  1. ใน `server/vitest.config.ts`: เพิ่ม `fileParallelism: false` และขยาย `testTimeout: 30000`
-  2. ใน `server/tests/helpers/queue-helper.ts`: สร้างฟังก์ชัน `resetQueueState()`:
+  1. ใน `server/vitest.config.ts`: เพิ่ม `fileParallelism: false`, `testTimeout: 30000`, และ `retry: 0`
+  2. ใน `server/tests/helpers/queue-helper.ts`: สร้างฟังก์ชัน `resetQueueState()` พร้อม Safety Guard:
      ```typescript
      export async function resetQueueState(): Promise<void> {
+       const dbUrl = process.env.DATABASE_URL ?? '';
+       let dbName = '';
+       try {
+         dbName = new URL(dbUrl).pathname.replace('/', '');
+       } catch {
+         throw new Error('resetQueueState() refused: invalid or missing DATABASE_URL');
+       }
+
+       if (!dbName.endsWith('_test')) {
+         throw new Error(`resetQueueState() refused: database "${dbName}" is not a test database`);
+       }
+
        await prisma.queueTicket.deleteMany({});
        await prisma.queueCounter.deleteMany({});
        await prisma.user.deleteMany({
@@ -283,12 +297,20 @@ sequenceDiagram
    *(ตั้ง `connection_limit=20` ปลอดภัยต่อเพดาน `max_connections` ของ PostgreSQL)*
 2. ใน `server/src/services/ticket.service.ts`: กำหนด `{ maxWait: 10000, timeout: 15000 }` ใน `$transaction`
 3. ใน `server/tests/concurrency/numbering.test.ts`: สร้าง Token ทั้ง 50 บัญชีด้วยฟังก์ชัน `signTestToken` ของ `auth-helper.ts` (ลงนาม JWT โดยตรง ไม่ผ่าน HTTP Login ซ้ำ 50 ครั้ง เพื่อไม่ให้ติด Bcrypt CPU bottleneck)
-4. **คำสั่งรัน Concurrency Stability 5 รอบ (PowerShell):**
+4. **คำสั่งรัน Concurrency Stability 5 รอบ พร้อมบันทึกผลลง Evidence (PowerShell + cmd):**
    ```powershell
+   # กำหนด Header SHA สำหรับไฟล์หลักฐาน Stability (อ้างอิง Green Commit SHA)
+   git rev-parse HEAD | Out-File -Encoding utf8 docs/evidence/i03-stability-log.txt
+   
    1..5 | ForEach-Object {
-     Write-Host "--- Concurrency Run #$_ ---" -ForegroundColor Cyan
-     npx vitest run tests/concurrency --no-color
-     if ($LASTEXITCODE -ne 0) { throw "Concurrency run failed on iteration $_" }
+     $iteration = $_
+     Write-Host "--- Concurrency Run #$iteration ---" -ForegroundColor Cyan
+     "=== RUN ITERATION $iteration ===" | Out-File -Encoding utf8 -Append docs/evidence/i03-stability-log.txt
+     
+     cmd /c "set NO_COLOR=1 && npx vitest run tests/concurrency >> docs\evidence\i03-stability-log.txt 2>&1"
+     if ($LASTEXITCODE -ne 0) {
+       throw "Concurrency run failed on iteration $iteration (logged in docs/evidence/i03-stability-log.txt)"
+     }
    }
    ```
 
@@ -304,10 +326,12 @@ flowchart TD
     S2 --> S2A["Git Commit Red: test(join): add failing tests for F-02 AC-09..18 [RED]"]
     S2A --> S2B["Capture Red Log with Commit SHA (docs/evidence/i03-red-test-log.txt)"]
     S2B --> S3["Step 3: Implement Services, Raw SQL & Controller (Green Phase)"]
-    S3 --> S4["Step 4: Verification & Multi-Run Stability Tests (Green Phase)"]
-    S4 --> S4A["Git Commit Green: feat(join): implement F-02 queue discovery & safe joining [GREEN]"]
-    S4A --> S4B["Capture Green Log with Commit SHA (docs/evidence/i03-green-test-log.txt)"]
-    S4B --> S5["Step 5: Code Excerpt 1 Preparation & Clean Push to feature/i03-join"]
+    S3 --> S4A["Step 4A: Local Verification (npm test, build, lint)"]
+    S4A --> S4B["Step 4B: Git Commit Green: feat(join): implement F-02 queue discovery & safe joining [GREEN]"]
+    S4B --> S4C["Step 4C: Capture Green Log with Tested Commit SHA (docs/evidence/i03-green-test-log.txt)"]
+    S4C --> S4D["Step 4D: Multi-Run Stability Tests 5x with Tested Commit SHA (docs/evidence/i03-stability-log.txt)"]
+    S4D --> S4E["Step 4E: Git Commit Evidence Logs (docs(i03): capture green test and stability evidence)"]
+    S4E --> S5["Step 5: Code Excerpt 1 Preparation & Clean Push to feature/i03-join"]
     S5 --> S6["Step 6: Open PR & Request Peer Review"]
 ```
 
@@ -334,10 +358,10 @@ flowchart TD
      addedInIssue: 'I-03'
    }
    ```
-2. สร้าง Helper `server/tests/helpers/queue-helper.ts` สำหรับ `resetQueueState()`
+2. สร้าง Helper `server/tests/helpers/queue-helper.ts` สำหรับ `resetQueueState()` พร้อม Safety Guard
 3. สร้าง Stubs ใน `server/src/routes/series.routes.ts` และ `ticket.routes.ts` (ส่ง 501 Not Implemented)
 4. อัปเดต `server/src/app.ts` ให้รับ `AppOptions { clock?: Clock }` โดย **คง `export const app = createApp()`** ไว้
-5. **รัน Regression Check:** รัน `npm test` เพื่อยืนยันว่าเทสต์เดิมทั้ง 38 ตัวของ I-01 และ I-02 ยังเป็นสีเขียว 100% ก่อนเริ่มเขียน Red Test ใหม่
+5. **รัน Regression Check:** รัน `npm test` เพื่อยืนยันว่าชุดเทสต์เดิมทั้งหมดตามผลรันจริงบนสภาพแวดล้อมยังเป็นสีเขียว 100% ก่อนเริ่มเขียน Red Test ใหม่
 
 #### ขั้นที่ 2: การเขียนชุดทดสอบที่ล้มเหลว (Red Phase)
 1. สร้างไฟล์ทดสอบครบทุกหมวด:
@@ -349,14 +373,13 @@ flowchart TD
    - `server/tests/api/queue-reset.test.ts` (TEST-17)
 2. ทำการ Commit Git ในสถานะ Red:
    `test(join): add failing tests for F-02 AC-09..18 (TEST-09..18) [RED]`
-3. รันคำสั่งทดสอบ `npm test` เพื่อตรวจสอบว่าล้มเหลวแบบ Assertion Failure (501 แทน 200/201) และบันทึก Log ที่มี Commit SHA กำกับบรรทัดแรกอย่างปลอดภัย:
+3. รันคำสั่งทดสอบ `npm test` เพื่อตรวจสอบว่าล้มเหลวแบบ Assertion Failure (501 แทน 200/201) และบันทึก Log ที่มี Commit SHA กำกับบรรทัดแรกอย่างปลอดภัยปราศจาก PowerShell noise:
    ```powershell
-   $env:NO_COLOR='1'
-   $headSha = git rev-parse HEAD
-   $headSha | Out-File -Encoding utf8 docs/evidence/i03-red-test-log.txt
-   npm test 2>&1 | Out-File -Encoding utf8 -Append docs/evidence/i03-red-test-log.txt
+   git rev-parse HEAD | Out-File -Encoding utf8 docs/evidence/i03-red-test-log.txt
+   cmd /c "set NO_COLOR=1 && npm test >> docs\evidence\i03-red-test-log.txt 2>&1"
    ```
-4. Commit ไฟล์ Log:
+4. ตรวจสอบไฟล์ `docs/evidence/i03-red-test-log.txt` ว่าอ่านได้สะอาดตาและบันทึก Commit SHA
+5. Commit ไฟล์ Log:
    `docs(i03): capture red test execution evidence for F-02`
 
 #### ขั้นที่ 3: การพัฒนาฟังก์ชันการทำงานจริง (Green Phase)
@@ -367,21 +390,26 @@ flowchart TD
 3. **Controller & Route Layer:**
    - สร้าง `series.controller.ts` และ `ticket.controller.ts` ผูก Role Guard `requireRole(['COLLECTOR'])`
 
-#### ขั้นที่ 4: การตรวจสอบความถูกต้องและเสถียรภาพ (Green Verification)
+#### ขั้นที่ 4: การตรวจสอบความถูกต้องและเสถียรภาพ (Green Verification & Stability)
 1. รันคำสั่งทดสอบ `npm test` เพื่อตรวจสอบว่าผ่าน 100%
-2. **Multi-Run Stability Check:** รัน Concurrency Test 5 รอบต่อเนื่อง
-3. ตรวจสอบ Typecheck (`npm run build`) และ Lint (`npm run lint`) ปราศจาก Warning/Error
-4. ทำการ Commit Git ในสถานะ Green:
+2. ตรวจสอบ Typecheck (`npm run build`) และ Lint (`npm run lint`) ปราศจาก Warning/Error
+3. ทำการ Commit Git ในสถานะ Green (Tested Commit):
    `feat(join): implement F-02 queue discovery & safe joining [GREEN]`
-5. บันทึก Log เขียวที่มี Commit SHA กำกับบรรทัดแรก:
+4. บันทึก Log เขียวที่มี Tested Commit SHA กำกับบรรทัดแรก:
    ```powershell
-   $env:NO_COLOR='1'
-   $headSha = git rev-parse HEAD
-   $headSha | Out-File -Encoding utf8 docs/evidence/i03-green-test-log.txt
-   npm test 2>&1 | Out-File -Encoding utf8 -Append docs/evidence/i03-green-test-log.txt
+   git rev-parse HEAD | Out-File -Encoding utf8 docs/evidence/i03-green-test-log.txt
+   cmd /c "set NO_COLOR=1 && npm test >> docs\evidence\i03-green-test-log.txt 2>&1"
    ```
-6. Commit ไฟล์ Log เขียว:
-   `docs(i03): capture green test execution evidence for F-02`
+5. **Multi-Run Stability Check (5 รอบ):** รัน Concurrency Test 5 รอบต่อเนื่อง พร้อมบันทึกลง `docs/evidence/i03-stability-log.txt` (บรรทัดแรกกำกับด้วย Tested Commit SHA เดียวกัน):
+   ```powershell
+   git rev-parse HEAD | Out-File -Encoding utf8 docs/evidence/i03-stability-log.txt
+   1..5 | ForEach-Object {
+     "=== RUN ITERATION $_ ===" | Out-File -Encoding utf8 -Append docs/evidence/i03-stability-log.txt
+     cmd /c "set NO_COLOR=1 && npx vitest run tests/concurrency >> docs\evidence\i03-stability-log.txt 2>&1"
+   }
+   ```
+6. Commit ไฟล์ Log เขียวและ Stability Log:
+   `docs(i03): capture green test and stability evidence for F-02`
 
 #### ขั้นที่ 5: การจัดเตรียมหลักฐานและการเปิด Pull Request
 1. คัดลอกโค้ดส่วน Setup และ Assertion ของ `tests/concurrency/duplicate.test.ts` สำหรับเตรียมใส่ใน **Part F §4 Excerpt 1**
@@ -393,7 +421,7 @@ flowchart TD
 ตามข้อกำหนดใน **Master Part E §2.11**:
 
 - [ ] **Automated Test Coverage:** ทุกข้อกำหนด AC-09 ถึง AC-18 มีชุดทดสอบที่ผ่านการทดสอบจริง (TEST-09 ถึง TEST-18 รวม 17U)
-- [ ] **Concurrency Stability:** TEST-15 (50 Users) และ TEST-16 (Single-user 10 duplicate) รันซ้ำอย่างน้อย 5 รอบผ่านฉลุย ปราศจาก Flaky Behavior
+- [ ] **Concurrency Stability:** TEST-15 (50 Users) และ TEST-16 (Single-user 10 duplicate) รันซ้ำอย่างน้อย 5 รอบผ่านฉลุย ปราศจาก Flaky Behavior พร้อมบันทึกผลใน `docs/evidence/i03-stability-log.txt`
 - [ ] **TDD Evidence:** มี Commit แดง (Red) บันทึก Log ล้มเหลว และ Commit เขียว (Green) บันทึก Log ผ่าน ชัดเจนสำหรับ **AC-11** และ **AC-15** ใน `docs/evidence/`
 - [ ] **Database Integrity & Migration:** Migration `0002_partial_unique_indexes` มีอยู่และทดสอบรันบนฐานข้อมูลว่างสำเร็จ
 - [ ] **No Gaps & Rollback Verification:** พิสูจน์ได้ว่าไม่มีเลขคิวซ้ำหรือข้าม และเมื่อตั๋วชนดัชนี ค่า `lastNumber` จะไม่ขยับ (Rollback สมบูรณ์)
