@@ -20,4 +20,16 @@ export const protectedRoutes: ProtectedRouteDef[] = [
     body: { seriesId: '00000000-0000-0000-0000-000000000000' },
     addedInIssue: 'I-03',
   },
+  {
+    method: 'GET',
+    path: '/api/tickets/my-ticket',
+    description: 'Get collector active queue ticket',
+    addedInIssue: 'I-04',
+  },
+  {
+    method: 'GET',
+    path: '/api/tickets/00000000-0000-0000-0000-000000000000',
+    description: 'Get ticket details by ID',
+    addedInIssue: 'I-04',
+  },
 ];

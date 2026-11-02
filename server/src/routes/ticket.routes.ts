@@ -12,3 +12,20 @@ ticketRouter.post(
   requireRole([Role.COLLECTOR]),
   (req, res, next) => ticketController.joinQueue(req, res, next),
 );
+
+// GET /api/tickets/my-ticket - Active Ticket Inspection (F-04, AC-34, AC-35)
+ticketRouter.get(
+  '/my-ticket',
+  authenticateToken,
+  requireRole([Role.COLLECTOR]),
+  (req, res, next) => ticketController.getMyTicket(req, res, next),
+);
+
+// GET /api/tickets/:id - Ticket Details by ID (F-04, AC-36..38)
+ticketRouter.get(
+  '/:id',
+  authenticateToken,
+  requireRole([Role.COLLECTOR, Role.BOX_MASTER]),
+  (req, res, next) => ticketController.getTicketById(req, res, next),
+);
+
