@@ -13,8 +13,8 @@
 |:---:|---|---|:---:|---|:---:|
 | **I-00** | Contract Baseline & Master Specification | Part A–E Master Spec (v0.2) | **Merged** | `feature/i00-baseline-docs` | PR #1 (Merged) |
 | **I-01** | Scaffold, DB, Migrations & Seed | Express + TS + Prisma + 2 Partial Indexes + Seed 9 accounts | **Merged** | `feature/i01-scaffold` | PR #12 (Merged) |
-| **I-02** | F-01: Auth & Role Identity | Login, Logout, Me, Auth/Role middleware, Bcrypt (AC-01..08) | **Implemented** | `feature/i02-auth` | PR (Ready for Review) |
-| **I-03** | F-02: Queue Discovery & Safe Join | Series list, Raw SQL atomic join, 50-user concurrency (AC-09..18) | Todo | `feature/i03-join` | - |
+| **I-02** | F-01: Auth & Role Identity | Login, Logout, Me, Auth/Role middleware, Bcrypt (AC-01..08) | **Merged** | `feature/i02-auth` | PR #13 (Merged) |
+| **I-03** | F-02: Queue Discovery & Safe Join | Series list, Raw SQL atomic join, 50-user concurrency (AC-09..18) | **Implemented** | `feature/i03-join` | PR (Ready for Review) |
 | **I-04** | F-04: Ticket Inspection & Ownership | My-ticket, ticket by ID, 403 ownership guard (AC-34..38) | Todo | `feature/i04-ticket` | - |
 | **I-05** | F-03: Staff Counter & Call Next | Queue list, Call next (SKIP LOCKED, STAFF_BUSY) (AC-21..25, 31, 32) | Todo | `feature/i05-staff-call` | - |
 | **I-06** | F-03: Start Unboxing & Complete | State transition machine, handler ownership guard (AC-26..30) | Todo | `feature/i06-staff-state` | - |
