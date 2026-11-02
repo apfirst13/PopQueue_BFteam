@@ -16,8 +16,8 @@
 | **I-02** | F-01: Auth & Role Identity | Login, Logout, Me, Auth/Role middleware, Bcrypt (AC-01..08) | **Merged** | `feature/i02-auth` | PR #13 (Merged) |
 | **I-03** | F-02: Queue Discovery & Safe Join | Series list, Raw SQL atomic join, 50-user concurrency (AC-09..18) | **Merged** | `feature/i03-join` | PR #14 (Merged) |
 | **I-04** | F-04: Ticket Inspection & Ownership | My-ticket, ticket by ID, 403 ownership guard (AC-34..38) | **Merged** | `feature/i04-ticket` | PR #15 (Merged) |
-| **I-05** | F-03: Staff Counter & Call Next | Queue list, Call next (SKIP LOCKED, STAFF_BUSY) (AC-21..25, 31, 32) | **Implemented** | `feature/i05-staff-call` | PR (Ready for Review) |
-| **I-06** | F-03: Start Unboxing & Complete | State transition machine, handler ownership guard (AC-26..30) | Todo | `feature/i06-staff-state` | - |
+| **I-05** | F-03: Staff Counter & Call Next | Queue list, Call next (SKIP LOCKED, STAFF_BUSY) (AC-21..25, 31, 32) | **Merged** | `feature/i05-staff-call` | PR #17 (Merged) |
+| **I-06** | F-03: Start Unboxing & Complete | State transition machine, handler ownership guard (AC-26..30) | **Implemented** | `feature/i06-staff-state` | PR (Ready for Review) |
 | **I-07** | Web UI (React + Vite) | 4 Screens: Login, Series, My Ticket, Staff Counter (AC-19, 20, 33) | Todo | `feature/i07-web-ui` | - |
 | **I-08** | E2E, Persistence & Release | Playwright tests, persistence script, release PR & tag `v0.1.0-sprint1` | Todo | `feature/i08-release` | - |
 
@@ -55,4 +55,4 @@
 3. Short Polling (3s) for real-time updates without WebSockets/SSE.
 
 ## Next Step for the Team / Agent
-* Complete review and merge of **Issue I-04** (F-04: Queue Ticket Inspection & Ownership Security, PR #15). Next issue is **Issue I-05** (F-03: Staff Counter & Call Next).
+* Complete review and merge of **Issue I-06** (F-03: Start Unboxing & Complete, PR for `feature/i06-staff-state`). Next issue is **Issue I-07** (Web UI: React + Vite, 4 Screens: Login, Series, My Ticket, Staff Counter).

@@ -1129,11 +1129,11 @@ FR-05, FR-06, BR-04, NFR-02, NFR-05 | Dependencies: F-01, F-02 (ตั๋ว), F
 | AC-23 | TEST-23 | Integration | `tests/api/staff-call.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
 | AC-24 | TEST-24 | Integration | `tests/api/staff-call.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
 | AC-25 | TEST-25 | Integration | `tests/api/unauthorized-queue.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-26 | TEST-26 | Integration | `tests/api/staff-transition.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-27 | TEST-27 | Integration | `tests/api/staff-transition.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-28 | TEST-28, TEST-28U | Integration + Unit | `tests/api/state-transition.test.ts`, `tests/unit/state-machine.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-29 | TEST-29 | Integration | `tests/api/unauthorized-queue.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
-| AC-30 | TEST-30 | Integration | `tests/api/not-handler.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
+| AC-26 | TEST-26 | Integration | `tests/api/staff-transition.test.ts` / valid path CALLED -> UNBOXING (start) -> COMPLETED | Pass | `013a631` |
+| AC-27 | TEST-27 | Integration | `tests/api/staff-transition.test.ts` / valid path CALLED -> UNBOXING (start) -> COMPLETED | Pass | `013a631` |
+| AC-28 | TEST-28, TEST-28U | Integration + Unit | `tests/api/staff-transition.test.ts`, `tests/unit/state-machine.test.ts` / invalid state transitions rejected with 400 | Pass | `013a631` |
+| AC-29 | TEST-29 | Integration | `tests/api/staff-transition.test.ts` / rejects staff assigned to another series with 403 FORBIDDEN_SERIES | Pass | `013a631` |
+| AC-30 | TEST-30 | Integration | `tests/api/staff-transition.test.ts` / rejects staff assigned to same series but not handler with 403 FORBIDDEN_NOT_HANDLER | Pass | `013a631` |
 | AC-31 | TEST-31 | Integration | `tests/api/permissions.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
 | AC-32 | TEST-32a, TEST-32b | Concurrency | `tests/concurrency/call-next.test.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
 | AC-33 | TEST-33 | E2E | `e2e/full-journey.spec.ts` / `[TBD]` | `[TBD]` | `[TBD]` |
@@ -1168,7 +1168,7 @@ FR-05, FR-06, BR-04, NFR-02, NFR-05 | Dependencies: F-01, F-02 (ตั๋ว), F
 | :--- | :--- | :--- | :--- | :--- |
 | TEST-01..06, 08U / AC-01..06, AC-08 (F-01) | `e3a0a63` – 2026-11-02 | `docs/evidence/i02-red-test-log.txt` (19 failed / 2 passed) | `d8d300e` – 2026-11-02 | `docs/evidence/i02-green-test-log.txt` (38 passed / 38 passed) |
 | TEST-16 / AC-16 | `[TBD]` | `[TBD]` | `[TBD]` | `[TBD]` |
-| TEST-25 หรือ TEST-30 / AC-25, AC-30 | `[TBD]` | `[TBD]` | `[TBD]` | `[TBD]` |
+| TEST-25 หรือ TEST-30 / AC-25, AC-30 | `5bd6ee2` – 2026-11-02 | `docs/evidence/i06-red-test-log.txt` (16 failed / 129 passed) | `013a631` – 2026-11-02 | `docs/evidence/i06-green-test-log.txt` (145 passed / 145 passed) |
 | TEST-37 / AC-37 | `[TBD]` | `[TBD]` | `[TBD]` | `[TBD]` |
 
 ---
