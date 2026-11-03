@@ -21,7 +21,7 @@ dotenv.config();
 
 const testDbUrl =
   process.env.DATABASE_URL_TEST ||
-  'postgresql://popqueue:popqueue_dev_password@localhost:5435/popqueue_test?connection_limit=20';
+  'postgresql://popqueue:popqueue_dev_password@localhost:5432/popqueue_test?connection_limit=20';
 
 // Safety Guard: Database URL validation
 let dbName = '';

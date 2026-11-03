@@ -1,8 +1,13 @@
 import { defineConfig, devices } from '@playwright/test';
+import dotenv from 'dotenv';
+import path from 'path';
+
+// Read from root .env file if present
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const testDatabaseUrl =
   process.env.DATABASE_URL_TEST ||
-  'postgresql://popqueue:popqueue_dev_password@localhost:5435/popqueue_test?connection_limit=20';
+  'postgresql://popqueue:popqueue_dev_password@localhost:5432/popqueue_test?connection_limit=20';
 
 export default defineConfig({
   testDir: './',
