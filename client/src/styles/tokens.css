@@ -1,0 +1,64 @@
+:root {
+  /* Brand & Base Colors */
+  --color-primary: #BE123C;
+  --color-primary-hover: #9F1239;
+  --color-primary-soft: #FFE4EC;
+  --color-text: #0F172A;
+  --color-muted: #475569;
+  --color-bg: #FFF7FA;
+  --color-card: #FFFFFF;
+  --color-border: #F3D5DF;
+
+  /* Status Colors */
+  --color-waiting-bg: #DBEAFE;
+  --color-waiting-text: #1D4ED8;
+  --color-warning-bg: #FFEDD5;
+  --color-warning: #9A3412;
+  --color-unboxing-bg: #EDE9FE;
+  --color-unboxing-text: #6D28D9;
+  --color-success-bg: #DCFCE7;
+  --color-success: #166534;
+  --color-error-bg: #FEF2F2;
+  --color-error: #B91C1C;
+
+  /* Series Colors */
+  --series-cry-bg: #FFE4EC;
+  --series-cry-accent: #BE123C;
+  --series-lab-bg: #FFEDD5;
+  --series-lab-accent: #C2410C;
+  --series-skp-bg: #EDE9FE;
+  --series-skp-accent: #6D28D9;
+
+  /* Typography */
+  --font-display: 'Fredoka', 'Kanit', system-ui, sans-serif;
+  --font-body: 'Noto Sans Thai Looped', 'Noto Sans Thai', 'Segoe UI', system-ui, sans-serif;
+
+  /* Type Scale */
+  --fs-display: clamp(2.75rem, 10vw, 4.5rem);
+  --fs-h1: clamp(1.75rem, 5vw, 2.5rem);
+  --fs-h2: clamp(1.25rem, 3.5vw, 1.625rem);
+  --fs-body: 1rem;
+  --fs-small: 0.875rem;
+  --fs-badge: 0.8125rem;
+
+  /* Spacing Grid (4px) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* Radius */
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
+  --radius-pill: 999px;
+
+  /* Shadow & Highlights */
+  --shadow-card: 0 10px 25px -8px rgba(190, 18, 60, 0.15);
+  --shadow-pop: 0 14px 30px -8px rgba(190, 18, 60, 0.28);
+  --vinyl-highlight: inset 0 2px 0 rgba(255, 255, 255, 0.45);
+}

@@ -6,6 +6,13 @@ import { ErrorAlert } from '../components/ErrorAlert.js';
 import { LoadingSkeleton } from '../components/LoadingSkeleton.js';
 import { usePolling } from '../hooks/usePolling.js';
 import { ApiError } from '../api/client.js';
+import {
+  ToyBoxIcon,
+  BellIcon,
+  CheckIcon,
+  ClockIcon,
+  UserIcon,
+} from '../components/icons.js';
 
 export function StaffCounterPage(): React.JSX.Element {
   const [seriesList, setSeriesList] = useState<StaffSeriesQueueDto[]>([]);
@@ -112,163 +119,284 @@ export function StaffCounterPage(): React.JSX.Element {
 
   return (
     <div>
-      <div style={{ marginBottom: '16px' }}>
-        <h2 style={{ fontSize: '1.25rem', fontWeight: 700 }}>
-          เคาน์เตอร์บริการ (Staff Counter)
-        </h2>
-        <p style={{ color: 'var(--color-muted)', fontSize: '0.875rem' }}>
+      {/* Header */}
+      <div style={{ marginBottom: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+          <div style={{ color: 'var(--color-primary)' }} aria-hidden="true">
+            <ToyBoxIcon size={24} />
+          </div>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', fontWeight: 700 }}>
+            เคาน์เตอร์บริการ (Staff Counter)
+          </h2>
+        </div>
+        <p style={{ color: 'var(--color-muted)', fontSize: '0.9rem' }}>
           จัดการเรียกคิวและให้บริการ Unboxing สดประจำซีรีส์
         </p>
       </div>
 
       {actionError && (
-        <div style={{ marginBottom: '16px' }}>
+        <div style={{ marginBottom: '18px' }}>
           <ErrorAlert code={actionError.code} message={actionError.message} />
         </div>
       )}
 
       {seriesList.length === 0 ? (
-        <div className="card" style={{ textAlign: 'center', padding: '32px' }}>
-          <p style={{ color: 'var(--color-muted)' }}>
+        <div className="card" style={{ textAlign: 'center', padding: '48px 20px' }}>
+          <p style={{ color: 'var(--color-muted)', fontSize: '1rem' }}>
             คุณยังไม่ได้รับมอบหมายให้ประจำการซีรีส์ใด
           </p>
         </div>
       ) : (
-        <>
-          <SeriesSelector
-            seriesList={seriesList}
-            selectedSeriesId={selectedSeriesId}
-            onSelect={setSelectedSeriesId}
-          />
+        <div className="staff-counter-grid">
+          {/* Left Column (~60% on Desktop): Controls & Serving */}
+          <div>
+            <SeriesSelector
+              seriesList={seriesList}
+              selectedSeriesId={selectedSeriesId}
+              onSelect={setSelectedSeriesId}
+            />
 
-          {/* Current Serving Section */}
-          <div className="card" style={{ marginBottom: '16px', borderLeft: '4px solid var(--color-primary)' }}>
-            <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '8px' }}>
-              กำลังให้บริการ (Current Serving)
-            </h3>
-
-            {currentSeries?.activeServing ? (
-              <div>
-                <div
-                  style={{
-                    fontSize: '2rem',
-                    fontWeight: 800,
-                    color: 'var(--color-primary)',
-                    margin: '6px 0',
-                  }}
-                >
-                  {currentSeries.activeServing.displayNumber}
-                </div>
-                <div style={{ marginBottom: '12px' }}>
-                  <span
-                    className={`badge ${
-                      currentSeries.activeServing.status === 'CALLED'
-                        ? 'badge-called'
-                        : 'badge-unboxing'
-                    }`}
-                  >
-                    {currentSeries.activeServing.status}
-                  </span>
-                </div>
-
-                <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
-                  {currentSeries.activeServing.status === 'CALLED' && (
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      onClick={handleStartUnboxing}
-                      disabled={isActing}
-                      style={{ width: '100%' }}
-                    >
-                      Verify & Start Unboxing
-                    </button>
-                  )}
-
-                  {currentSeries.activeServing.status === 'UNBOXING' && (
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      onClick={handleComplete}
-                      disabled={isActing}
-                      style={{ width: '100%' }}
-                    >
-                      เสร็จสิ้น (Complete)
-                    </button>
-                  )}
-                </div>
-              </div>
-            ) : (
-              <p style={{ color: 'var(--color-muted)', fontSize: '0.9rem' }}>
-                ยังไม่มีคิวที่กำลังให้บริการ
-              </p>
-            )}
-          </div>
-
-          {/* Action Call Next */}
-          <div style={{ marginBottom: '16px' }}>
-            <button
-              type="button"
-              className="btn btn-primary"
-              style={{ width: '100%' }}
-              disabled={isActing || currentSeries?.activeServing !== null}
-              onClick={handleCallNext}
+            {/* Current Serving Card */}
+            <div
+              className="card staff-serving-card"
+              style={{
+                marginBottom: '16px',
+                padding: '24px 20px',
+              }}
             >
-              เรียกคิวถัดไป (Call Next)
-            </button>
-            {currentSeries?.activeServing !== null && (
               <div
                 style={{
-                  fontSize: '0.75rem',
-                  color: 'var(--color-muted)',
-                  marginTop: '4px',
-                  textAlign: 'center',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  marginBottom: '12px',
                 }}
               >
-                * ต้องเสร็จสิ้นคิวปัจจุบันก่อนจึงจะเรียกคิวถัดไปได้
+                <div style={{ color: 'var(--color-primary)' }} aria-hidden="true">
+                  <ToyBoxIcon size={20} />
+                </div>
+                <h3
+                  style={{
+                    fontFamily: 'var(--font-display)',
+                    fontSize: '1.15rem',
+                    fontWeight: 700,
+                  }}
+                >
+                  กำลังให้บริการ (Current Serving)
+                </h3>
               </div>
-            )}
+
+              {currentSeries?.activeServing ? (
+                <div className="pop-in">
+                  <div
+                    className="tabular-nums"
+                    style={{
+                      fontFamily: 'var(--font-display)',
+                      fontSize: '2.5rem',
+                      fontWeight: 800,
+                      color: 'var(--color-primary)',
+                      lineHeight: 1.1,
+                      margin: '10px 0',
+                    }}
+                  >
+                    {currentSeries.activeServing.displayNumber}
+                  </div>
+
+                  <div style={{ marginBottom: '18px' }}>
+                    <span
+                      className={`badge ${
+                        currentSeries.activeServing.status === 'CALLED'
+                          ? 'badge-called'
+                          : 'badge-unboxing'
+                      }`}
+                      style={{ fontSize: '0.875rem', padding: '6px 14px' }}
+                    >
+                      {currentSeries.activeServing.status === 'CALLED' && <BellIcon size={14} />}
+                      {currentSeries.activeServing.status === 'UNBOXING' && <ToyBoxIcon size={14} />}
+                      <span>{currentSeries.activeServing.status}</span>
+                    </span>
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '10px', marginTop: '16px' }}>
+                    {currentSeries.activeServing.status === 'CALLED' && (
+                      <button
+                        type="button"
+                        className="btn btn-primary staff-action-btn"
+                        onClick={handleStartUnboxing}
+                        disabled={isActing}
+                        style={{ width: '100%' }}
+                      >
+                        <ToyBoxIcon size={20} />
+                        <span>Verify & Start Unboxing</span>
+                      </button>
+                    )}
+
+                    {currentSeries.activeServing.status === 'UNBOXING' && (
+                      <button
+                        type="button"
+                        className="btn btn-primary staff-action-btn"
+                        onClick={handleComplete}
+                        disabled={isActing}
+                        style={{ width: '100%', backgroundColor: 'var(--color-success)', borderColor: 'var(--color-success)' }}
+                      >
+                        <CheckIcon size={20} />
+                        <span>เสร็จสิ้น (Complete)</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <p style={{ color: 'var(--color-muted)', fontSize: '0.95rem', padding: '12px 0' }}>
+                  ยังไม่มีคิวที่กำลังให้บริการ
+                </p>
+              )}
+            </div>
+
+            {/* Action Call Next Button */}
+            <div style={{ marginBottom: '16px' }}>
+              <button
+                type="button"
+                className="btn btn-primary staff-action-btn"
+                style={{ width: '100%' }}
+                disabled={isActing || currentSeries?.activeServing !== null}
+                onClick={handleCallNext}
+              >
+                <BellIcon size={22} />
+                <span>เรียกคิวถัดไป (Call Next)</span>
+              </button>
+              {currentSeries?.activeServing !== null && (
+                <div
+                  style={{
+                    fontSize: '0.85rem',
+                    color: 'var(--color-muted)',
+                    marginTop: '8px',
+                    textAlign: 'center',
+                    fontWeight: 500,
+                  }}
+                >
+                  * ต้องเสร็จสิ้นคิวปัจจุบันก่อนจึงจะเรียกคิวถัดไปได้
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Waiting Queue List */}
-          <div className="card">
-            <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '12px' }}>
-              รายการคิวรอ ({currentSeries?.waitingQueue.length || 0} คิว)
-            </h3>
+          {/* Right Column (~40% on Desktop): Waiting Queue List */}
+          <div className="card" style={{ padding: '20px' }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '16px',
+                borderBottom: '2px solid var(--color-border)',
+                paddingBottom: '10px',
+              }}
+            >
+              <h3
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: '1.1rem',
+                  fontWeight: 700,
+                }}
+              >
+                รายการคิวรอ ({currentSeries?.waitingQueue.length || 0} คิว)
+              </h3>
+              <span
+                style={{
+                  fontSize: '0.8rem',
+                  fontWeight: 600,
+                  color: 'var(--color-muted)',
+                  backgroundColor: 'var(--color-bg)',
+                  padding: '2px 8px',
+                  borderRadius: 'var(--radius-pill)',
+                }}
+              >
+                FIFO Queue
+              </span>
+            </div>
 
             {currentSeries?.waitingQueue.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: '16px', color: 'var(--color-muted)' }}>
-                ยังไม่มีคิวรอรับบริการ
+              <div
+                style={{
+                  textAlign: 'center',
+                  padding: '36px 16px',
+                  color: 'var(--color-muted)',
+                  fontSize: '0.95rem',
+                }}
+              >
+                <div style={{ marginBottom: '8px', opacity: 0.7 }}>
+                  <ClockIcon size={28} />
+                </div>
+                <div>ยังไม่มีคิวรอรับบริการ</div>
               </div>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {currentSeries?.waitingQueue.map((t) => (
+              <div className="waiting-queue-scroll">
+                {currentSeries?.waitingQueue.map((t, index) => (
                   <div
                     key={t.id}
                     style={{
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
-                      padding: '10px 12px',
-                      backgroundColor: '#F8FAFC',
+                      padding: '12px 14px',
+                      backgroundColor: index === 0 ? 'var(--color-primary-soft)' : 'var(--color-bg)',
                       borderRadius: 'var(--radius-sm)',
-                      border: '1px solid var(--color-border)',
+                      border: index === 0 ? '1.5px solid var(--color-primary)' : '1px solid var(--color-border)',
+                      transition: 'all 0.2s ease',
                     }}
                   >
                     <div>
-                      <span style={{ fontWeight: 700, fontSize: '1.05rem', marginRight: '8px' }}>
-                        {t.displayNumber}
-                      </span>
-                      <span style={{ fontSize: '0.85rem', color: 'var(--color-muted)' }}>
-                        ({t.userFullName})
-                      </span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span
+                          className="tabular-nums"
+                          style={{
+                            fontWeight: 700,
+                            fontSize: '1.1rem',
+                            fontFamily: 'var(--font-display)',
+                            color: index === 0 ? 'var(--color-primary)' : 'var(--color-text)',
+                          }}
+                        >
+                          {t.displayNumber}
+                        </span>
+                        {index === 0 && (
+                          <span
+                            style={{
+                              fontSize: '0.7rem',
+                              fontWeight: 700,
+                              backgroundColor: 'var(--color-primary)',
+                              color: '#FFFFFF',
+                              padding: '2px 6px',
+                              borderRadius: 'var(--radius-pill)',
+                            }}
+                          >
+                            คิวถัดไป
+                          </span>
+                        )}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: '0.875rem',
+                          color: 'var(--color-muted)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          marginTop: '2px',
+                        }}
+                      >
+                        <UserIcon size={14} />
+                        <span>({t.userFullName})</span>
+                      </div>
                     </div>
-                    <span className="badge badge-waiting">WAITING</span>
+                    <span className="badge badge-waiting">
+                      <ClockIcon size={12} />
+                      <span>WAITING</span>
+                    </span>
                   </div>
                 ))}
               </div>
             )}
           </div>
-        </>
+        </div>
       )}
     </div>
   );
