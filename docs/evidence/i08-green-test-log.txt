@@ -1,0 +1,10 @@
+Running 6 tests using 1 worker
+
+  ok 1 [chromium] › full-journey.spec.ts:19:7 › TEST-33 / AC-33: Multi-Context Full Journey & Live Polling Transition › Demo 1: Normal Domain Journey across Collector and Staff browser contexts with 3s polling (11.4s)
+  ok 2 [chromium] › full-journey.spec.ts:191:7 › TEST-33 / AC-33: Multi-Context Full Journey & Live Polling Transition › Demo 2: Business-Rule Rejections (Duplicate active ticket & closed series in UI) (726ms)
+  ok 3 [chromium] › full-journey.spec.ts:242:7 › TEST-33 / AC-33: Multi-Context Full Journey & Live Polling Transition › Demo 3: Access Control Guard and Logout Session Revocation (595ms)
+  ok 4 [chromium] › join-queue.spec.ts:17:7 › TEST-19 / AC-19: Collector Queue Join & Duplicate Active Queue Rejection › collector logs in, joins CRY queue, verifies WAITING ticket, and verifies duplicate rejection (695ms)
+  ok 5 [chromium] › responsive.spec.ts:22:7 › TEST-20 / AC-20: Mobile Viewport 375x667 Responsive Verification › verifies no horizontal overflow (scrollWidth <= clientWidth) across all Sprint 1 screens (821ms)
+  ok 6 [chromium] › smoke.spec.ts:11:7 › Home Page Smoke Test (Placeholder) › smoke test: placeholder home page loads successfully (177ms)
+
+  6 passed (21.6s)

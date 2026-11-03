@@ -1,0 +1,151 @@
+﻿
+Running 5 tests using 5 workers
+
+  x  4 [chromium] › responsive.spec.ts:21:7 › TEST-20 / AC-20: Mobile Viewport 375x667 Responsive Verification › verifies no horizontal overflow (scrollWidth <= clientWidth) across all Sprint 1 screens (7.1s)
+  x  1 [chromium] › full-journey.spec.ts:170:7 › TEST-33 / AC-33: Multi-Context Full Journey & Live Polling Transition › Demo 2: Business-Rule Rejections (Duplicate active ticket & closed series in UI) (7.0s)
+  x  5 [chromium] › full-journey.spec.ts:18:7 › TEST-33 / AC-33: Multi-Context Full Journey & Live Polling Transition › Demo 1: Normal Domain Journey across Collector and Staff browser contexts with 3s polling (6.9s)
+  x  3 [chromium] › join-queue.spec.ts:13:7 › TEST-19 / AC-19: Collector Queue Join & Duplicate Active Queue Rejection › collector logs in, joins CRY queue, verifies WAITING ticket, and verifies duplicate rejection (7.0s)
+  x  2 [chromium] › full-journey.spec.ts:221:7 › TEST-33 / AC-33: Multi-Context Full Journey & Live Polling Transition › Demo 3: Access Control Guard and Logout Session Revocation (7.0s)
+
+
+  1) [chromium] › full-journey.spec.ts:18:7 › TEST-33 / AC-33: Multi-Context Full Journey & Live Polling Transition › Demo 1: Normal Domain Journey across Collector and Staff browser contexts with 3s polling 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/series/
+    Received string:  "http://localhost:3000/login"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        14 × locator resolved to <html lang="en">…</html>
+           - unexpected value "http://localhost:3000/login"
+
+
+      31 |     await collectorPage.click('button[type="submit"]');
+      32 |
+    > 33 |     await expect(collectorPage).toHaveURL(/\/series/);
+         |                                 ^
+      34 |
+      35 |     // 2. Join Crybaby Queue
+      36 |     const cryJoinBtn = collectorPage.locator('.card[data-series="CRY"] button', {
+        at D:\University\Y3\sem1\cpe334 se\group_project\qdrive-license-queue\e2e\full-journey.spec.ts:33:33
+
+    Error Context: test-results\full-journey-TEST-33-AC-33-9c845-er-contexts-with-3s-polling-chromium\error-context.md
+
+    Error Context: test-results\full-journey-TEST-33-AC-33-9c845-er-contexts-with-3s-polling-chromium\error-context.md
+
+  2) [chromium] › full-journey.spec.ts:170:7 › TEST-33 / AC-33: Multi-Context Full Journey & Live Polling Transition › Demo 2: Business-Rule Rejections (Duplicate active ticket & closed series in UI) 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/series/
+    Received string:  "http://localhost:3000/login"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        14 × locator resolved to <html lang="en">…</html>
+           - unexpected value "http://localhost:3000/login"
+
+
+      177 |     await page.click('button[type="submit"]');
+      178 |
+    > 179 |     await expect(page).toHaveURL(/\/series/);
+          |                        ^
+      180 |
+      181 |     const cryJoinBtn = page.locator('.card[data-series="CRY"] button', {
+      182 |       hasText: 'เข้าคิว (Join Queue)',
+        at D:\University\Y3\sem1\cpe334 se\group_project\qdrive-license-queue\e2e\full-journey.spec.ts:179:24
+
+    Error Context: test-results\full-journey-TEST-33-AC-33-8deb7-ticket-closed-series-in-UI--chromium\error-context.md
+
+    Error Context: test-results\full-journey-TEST-33-AC-33-8deb7-ticket-closed-series-in-UI--chromium\error-context.md
+
+  3) [chromium] › full-journey.spec.ts:221:7 › TEST-33 / AC-33: Multi-Context Full Journey & Live Polling Transition › Demo 3: Access Control Guard and Logout Session Revocation 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/series/
+    Received string:  "http://localhost:3000/login"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        14 × locator resolved to <html lang="en">…</html>
+           - unexpected value "http://localhost:3000/login"
+
+
+      228 |     await page.click('button[type="submit"]');
+      229 |
+    > 230 |     await expect(page).toHaveURL(/\/series/);
+          |                        ^
+      231 |
+      232 |     // 2. Collector attempts to access staff protected route /staff/counter
+      233 |     await page.goto('/staff/counter');
+        at D:\University\Y3\sem1\cpe334 se\group_project\qdrive-license-queue\e2e\full-journey.spec.ts:230:24
+
+    Error Context: test-results\full-journey-TEST-33-AC-33-f4f3d-d-Logout-Session-Revocation-chromium\error-context.md
+
+    Error Context: test-results\full-journey-TEST-33-AC-33-f4f3d-d-Logout-Session-Revocation-chromium\error-context.md
+
+  4) [chromium] › join-queue.spec.ts:13:7 › TEST-19 / AC-19: Collector Queue Join & Duplicate Active Queue Rejection › collector logs in, joins CRY queue, verifies WAITING ticket, and verifies duplicate rejection 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/series/
+    Received string:  "http://localhost:3000/login"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        14 × locator resolved to <html lang="en">…</html>
+           - unexpected value "http://localhost:3000/login"
+
+
+      24 |
+      25 |     // 3. Should navigate to /series because collector has no active ticket
+    > 26 |     await expect(page).toHaveURL(/\/series/);
+         |                        ^
+      27 |     await expect(page.locator('h2')).toContainText('รายการซีรีส์');
+      28 |
+      29 |     // 4. Locate Crybaby series card and join queue
+        at D:\University\Y3\sem1\cpe334 se\group_project\qdrive-license-queue\e2e\join-queue.spec.ts:26:24
+
+    Error Context: test-results\join-queue-TEST-19-AC-19-C-8913b-erifies-duplicate-rejection-chromium\error-context.md
+
+    Error Context: test-results\join-queue-TEST-19-AC-19-C-8913b-erifies-duplicate-rejection-chromium\error-context.md
+
+  5) [chromium] › responsive.spec.ts:21:7 › TEST-20 / AC-20: Mobile Viewport 375x667 Responsive Verification › verifies no horizontal overflow (scrollWidth <= clientWidth) across all Sprint 1 screens 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/series/
+    Received string:  "http://localhost:3000/login"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        14 × locator resolved to <html lang="en">…</html>
+           - unexpected value "http://localhost:3000/login"
+
+
+      46 |     await page.fill('#password-input', COLLECTOR_PASSWORD);
+      47 |     await page.click('button[type="submit"]');
+    > 48 |     await expect(page).toHaveURL(/\/series/);
+         |                        ^
+      49 |     await assertNoHorizontalOverflow('/series');
+      50 |     await page.screenshot({
+      51 |       path: 'docs/evidence/screenshots/ac20-responsive-375px-series.png',
+        at D:\University\Y3\sem1\cpe334 se\group_project\qdrive-license-queue\e2e\responsive.spec.ts:48:24
+
+    Error Context: test-results\responsive-TEST-20-AC-20-M-62e56-across-all-Sprint-1-screens-chromium\error-context.md
+
+    Error Context: test-results\responsive-TEST-20-AC-20-M-62e56-across-all-Sprint-1-screens-chromium\error-context.md
+
+  5 failed
+    [chromium] › full-journey.spec.ts:18:7 › TEST-33 / AC-33: Multi-Context Full Journey & Live Polling Transition › Demo 1: Normal Domain Journey across Collector and Staff browser contexts with 3s polling 
+    [chromium] › full-journey.spec.ts:170:7 › TEST-33 / AC-33: Multi-Context Full Journey & Live Polling Transition › Demo 2: Business-Rule Rejections (Duplicate active ticket & closed series in UI) 
+    [chromium] › full-journey.spec.ts:221:7 › TEST-33 / AC-33: Multi-Context Full Journey & Live Polling Transition › Demo 3: Access Control Guard and Logout Session Revocation 
+    [chromium] › join-queue.spec.ts:13:7 › TEST-19 / AC-19: Collector Queue Join & Duplicate Active Queue Rejection › collector logs in, joins CRY queue, verifies WAITING ticket, and verifies duplicate rejection 
+    [chromium] › responsive.spec.ts:21:7 › TEST-20 / AC-20: Mobile Viewport 375x667 Responsive Verification › verifies no horizontal overflow (scrollWidth <= clientWidth) across all Sprint 1 screens 

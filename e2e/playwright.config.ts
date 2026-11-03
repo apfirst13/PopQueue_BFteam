@@ -1,15 +1,25 @@
 import { defineConfig, devices } from '@playwright/test';
+import dotenv from 'dotenv';
+import path from 'path';
+
+// Read from root .env file if present
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
+
+const testDatabaseUrl =
+  process.env.DATABASE_URL_TEST ||
+  'postgresql://popqueue:popqueue_dev_password@localhost:5432/popqueue_test?connection_limit=20';
 
 export default defineConfig({
   testDir: './',
-  fullyParallel: true,
+  fullyParallel: false,
+  workers: 1,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  retries: 0,
   reporter: 'list',
   use: {
     baseURL: process.env.CLIENT_URL || 'http://localhost:3000',
-    trace: 'on-first-retry',
+    trace: 'off',
+    video: 'off',
   },
   projects: [
     {
@@ -17,10 +27,27 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
   ],
-  webServer: {
-    command: 'npm run dev --workspace=client',
-    url: 'http://localhost:3000',
-    reuseExistingServer: !process.env.CI,
-    timeout: 30000,
-  },
+  webServer: [
+    {
+      command: 'npm run dev --workspace=server',
+      url: 'http://localhost:4000/api/v1/health',
+      reuseExistingServer: !process.env.CI,
+      timeout: 30000,
+      env: {
+        NODE_ENV: 'test',
+        PORT: '4000',
+        DATABASE_URL: testDatabaseUrl,
+        CORS_ORIGIN: 'http://localhost:3000',
+      },
+    },
+    {
+      command: 'npm run dev --workspace=client',
+      url: 'http://localhost:3000',
+      reuseExistingServer: !process.env.CI,
+      timeout: 30000,
+      env: {
+        VITE_API_URL: 'http://localhost:4000',
+      },
+    },
+  ],
 });
