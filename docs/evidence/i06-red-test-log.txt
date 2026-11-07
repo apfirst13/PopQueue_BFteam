@@ -1,0 +1,302 @@
+
+> popqueue-monorepo@0.1.0 test
+> npm run test --workspaces --if-present
+
+
+> server@0.1.0 test
+> vitest run
+
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+
+[1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90mD:/University/Y3/sem1/cpe334 se/group_project/qdrive-license-queue/server[39m
+
+ [31m❯[39m tests/api/staff-transition.test.ts [2m([22m[2m15 tests[22m[2m | [22m[31m13 failed[39m[2m)[22m[33m 365[2mms[22m[39m
+[31m   [31m×[31m Staff Ticket State Transitions: Start Unboxing & Complete (F-03, AC-26..30, AC-31)[2m > [22mTEST-26 & TEST-27: valid path CALLED -> UNBOXING (start) -> COMPLETED with injectable clock timestamps and DB verification[90m 100[2mms[22m[31m[39m
+[31m     → expected 501 to be 200 // Object.is equality[39m
+[31m   [31m×[31m Staff Ticket State Transitions: Start Unboxing & Complete (F-03, AC-26..30, AC-31)[2m > [22mTEST-28 (AC-28, BR-03): invalid state transitions rejected with 400 INVALID_STATE_TRANSITION[2m > [22mrejects 'start on WAITING' with 400 INVALID_STATE_TRANSITION and preserves DB[90m 19[2mms[22m[31m[39m
+[31m     → expected 501 to be 400 // Object.is equality[39m
+[31m   [31m×[31m Staff Ticket State Transitions: Start Unboxing & Complete (F-03, AC-26..30, AC-31)[2m > [22mTEST-28 (AC-28, BR-03): invalid state transitions rejected with 400 INVALID_STATE_TRANSITION[2m > [22mrejects 'complete on CALLED' with 400 INVALID_STATE_TRANSITION and preserves DB[90m 17[2mms[22m[31m[39m
+[31m     → expected 501 to be 400 // Object.is equality[39m
+[31m   [31m×[31m Staff Ticket State Transitions: Start Unboxing & Complete (F-03, AC-26..30, AC-31)[2m > [22mTEST-28 (AC-28, BR-03): invalid state transitions rejected with 400 INVALID_STATE_TRANSITION[2m > [22mrejects 'complete on WAITING' with 400 INVALID_STATE_TRANSITION and preserves DB[90m 15[2mms[22m[31m[39m
+[31m     → expected 501 to be 400 // Object.is equality[39m
+[31m   [31m×[31m Staff Ticket State Transitions: Start Unboxing & Complete (F-03, AC-26..30, AC-31)[2m > [22mTEST-28 (AC-28, BR-03): invalid state transitions rejected with 400 INVALID_STATE_TRANSITION[2m > [22mrejects 'start on UNBOXING (start twice)' with 400 INVALID_STATE_TRANSITION and preserves DB[90m 14[2mms[22m[31m[39m
+[31m     → expected 501 to be 400 // Object.is equality[39m
+[31m   [31m×[31m Staff Ticket State Transitions: Start Unboxing & Complete (F-03, AC-26..30, AC-31)[2m > [22mTEST-28 (AC-28, BR-03): invalid state transitions rejected with 400 INVALID_STATE_TRANSITION[2m > [22mrejects 'complete on COMPLETED (complete twice)' with 400 INVALID_STATE_TRANSITION and preserves DB[90m 16[2mms[22m[31m[39m
+[31m     → expected 501 to be 400 // Object.is equality[39m
+[31m   [31m×[31m Staff Ticket State Transitions: Start Unboxing & Complete (F-03, AC-26..30, AC-31)[2m > [22mTEST-28 (AC-28, BR-03): invalid state transitions rejected with 400 INVALID_STATE_TRANSITION[2m > [22mrejects 'start on COMPLETED' with 400 INVALID_STATE_TRANSITION and preserves DB[90m 13[2mms[22m[31m[39m
+[31m     → expected 501 to be 400 // Object.is equality[39m
+[31m   [31m×[31m Staff Ticket State Transitions: Start Unboxing & Complete (F-03, AC-26..30, AC-31)[2m > [22mAuthorization, Scope & Validation (TEST-29, TEST-30, TEST-31, 400, 404)[2m > [22mTEST-29 (AC-29, BR-05): rejects staff assigned to another series with 403 FORBIDDEN_SERIES and preserves DB[90m 17[2mms[22m[31m[39m
+[31m     → expected 501 to be 403 // Object.is equality[39m
+[31m   [31m×[31m Staff Ticket State Transitions: Start Unboxing & Complete (F-03, AC-26..30, AC-31)[2m > [22mAuthorization, Scope & Validation (TEST-29, TEST-30, TEST-31, 400, 404)[2m > [22mTEST-30 (AC-30, BR-07): rejects staff assigned to same series but not handler with 403 FORBIDDEN_NOT_HANDLER and preserves DB[90m 16[2mms[22m[31m[39m
+[31m     → expected 501 to be 403 // Object.is equality[39m
+[31m   [31m×[31m Staff Ticket State Transitions: Start Unboxing & Complete (F-03, AC-26..30, AC-31)[2m > [22mAuthorization, Scope & Validation (TEST-29, TEST-30, TEST-31, 400, 404)[2m > [22mreturns 404 RESOURCE_NOT_FOUND for unknown ticket id[90m 8[2mms[22m[31m[39m
+[31m     → expected 501 to be 404 // Object.is equality[39m
+[31m   [31m×[31m Staff Ticket State Transitions: Start Unboxing & Complete (F-03, AC-26..30, AC-31)[2m > [22mAuthorization, Scope & Validation (TEST-29, TEST-30, TEST-31, 400, 404)[2m > [22mreturns 400 VALIDATION_ERROR for malformed ticket id param[90m 10[2mms[22m[31m[39m
+[31m     → expected 501 to be 400 // Object.is equality[39m
+[31m   [31m×[31m Staff Ticket State Transitions: Start Unboxing & Complete (F-03, AC-26..30, AC-31)[2m > [22mConcurrency & Partial Unique Index Verification[2m > [22msimultaneous start-unboxing requests on the same ticket: exactly one succeeds and one is rejected[90m 26[2mms[22m[31m[39m
+[31m     → expected [ 501, 501 ] to deeply equal [ 200, 400 ][39m
+[31m   [31m×[31m Staff Ticket State Transitions: Start Unboxing & Complete (F-03, AC-26..30, AC-31)[2m > [22mConcurrency & Partial Unique Index Verification[2m > [22msimultaneous complete requests on the same ticket: exactly one succeeds and one is rejected[90m 23[2mms[22m[31m[39m
+[31m     → expected [ 501, 501 ] to deeply equal [ 200, 400 ][39m
+ [32m✓[39m tests/api/auth.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 639[2mms[22m[39m
+ [32m✓[39m tests/api/join.test.ts [2m([22m[2m6 tests[22m[2m)[22m[90m 241[2mms[22m[39m
+ [32m✓[39m tests/api/call-next.test.ts [2m([22m[2m7 tests[22m[2m)[22m[90m 200[2mms[22m[39m
+[90mstdout[2m | tests/db-schema-and-seed.test.ts[2m > [22m[2mDatabase Schema, Models, Partial Indexes & Seed Verification (Issue I-01)
+[22m[39mSeeding completed successfully: 9 Users, 3 Series, 3 Assignments.
+
+[90mstdout[2m | tests/db-schema-and-seed.test.ts[2m > [22m[2mDatabase Schema, Models, Partial Indexes & Seed Verification (Issue I-01)[2m > [22m[2mSeed script is idempotent (can run multiple times without duplicating)
+[22m[39mSeeding completed successfully: 9 Users, 3 Series, 3 Assignments.
+
+ [32m✓[39m tests/db-schema-and-seed.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 927[2mms[22m[39m
+   [33m[2m✓[22m[39m Database Schema, Models, Partial Indexes & Seed Verification (Issue I-01)[2m > [22mSeeds 9 users with valid bcrypt cost >= 10 and correct roles (NFR-01, AC-07) [33m525[2mms[22m[39m
+ [32m✓[39m tests/api/my-ticket.test.ts [2m([22m[2m5 tests[22m[2m)[22m[90m 134[2mms[22m[39m
+ [32m✓[39m tests/concurrency/call-next-concurrency.test.ts [2m([22m[2m2 tests[22m[2m)[22m[90m 151[2mms[22m[39m
+ [32m✓[39m tests/api/ticket-security.test.ts [2m([22m[2m5 tests[22m[2m)[22m[90m 130[2mms[22m[39m
+ [32m✓[39m tests/api/staff-tickets.test.ts [2m([22m[2m1 test[22m[2m)[22m[90m 101[2mms[22m[39m
+ [32m✓[39m tests/security/unauthenticated.test.ts [2m([22m[2m54 tests[22m[2m)[22m[90m 183[2mms[22m[39m
+ [32m✓[39m tests/concurrency/numbering.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 438[2mms[22m[39m
+   [33m[2m✓[22m[39m Concurrency: Safe Sequential Numbering (TEST-15, AC-15, BR-01, NFR-03)[2m > [22mTEST-15: 50 concurrent distinct collectors receive sequential numbers 1..50 with zero gaps and zero duplicates [33m431[2mms[22m[39m
+ [32m✓[39m tests/api/series.test.ts [2m([22m[2m1 test[22m[2m)[22m[90m 79[2mms[22m[39m
+ [32m✓[39m tests/api/ticket-detail.test.ts [2m([22m[2m1 test[22m[2m)[22m[90m 64[2mms[22m[39m
+ [32m✓[39m tests/api/queue-reset.test.ts [2m([22m[2m1 test[22m[2m)[22m[90m 103[2mms[22m[39m
+ [32m✓[39m tests/unit/role-guard.test.ts [2m([22m[2m3 tests[22m[2m)[22m[90m 5[2mms[22m[39m
+ [32m✓[39m tests/concurrency/duplicate.test.ts [2m([22m[2m1 test[22m[2m)[22m[90m 179[2mms[22m[39m
+ [32m✓[39m tests/clock.test.ts [2m([22m[2m4 tests[22m[2m)[22m[90m 14[2mms[22m[39m
+ [32m✓[39m tests/error-handler.test.ts [2m([22m[2m2 tests[22m[2m)[22m[90m 30[2mms[22m[39m
+ [31m❯[39m tests/unit/state-machine.test.ts [2m([22m[2m18 tests[22m[2m | [22m[31m3 failed[39m[2m)[22m[90m 10[2mms[22m[39m
+[31m   [31m×[31m State Machine Unit: canTransition (TEST-28U, AC-28, BR-03)[2m > [22mreturns true for allowed transition 'WAITING' -> 'CALL_NEXT'[90m 7[2mms[22m[31m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m State Machine Unit: canTransition (TEST-28U, AC-28, BR-03)[2m > [22mreturns true for allowed transition 'CALLED' -> 'START_UNBOXING'[90m 1[2mms[22m[31m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m State Machine Unit: canTransition (TEST-28U, AC-28, BR-03)[2m > [22mreturns true for allowed transition 'UNBOXING' -> 'COMPLETE'[90m 0[2mms[22m[31m[39m
+[31m     → expected false to be true // Object.is equality[39m
+ [32m✓[39m tests/security/password-hash.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 574[2mms[22m[39m
+   [33m[2m✓[22m[39m Security: Password Hash Characterization (TEST-07, AC-07, NFR-01)[2m > [22mverifies that all seeded accounts have secure bcrypt password hashes with cost >= 10 [33m541[2mms[22m[39m
+ [32m✓[39m tests/env.test.ts [2m([22m[2m4 tests[22m[2m)[22m[90m 5[2mms[22m[39m
+ [32m✓[39m tests/unit/queue-date.test.ts [2m([22m[2m1 test[22m[2m)[22m[90m 15[2mms[22m[39m
+ [32m✓[39m tests/health.test.ts [2m([22m[2m1 test[22m[2m)[22m[90m 27[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[1m[7m Failed Tests 16 [27m[22m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[31m[1m[7m FAIL [27m[22m[39m tests/api/staff-transition.test.ts[2m > [22mStaff Ticket State Transitions: Start Unboxing & Complete (F-03, AC-26..30, AC-31)[2m > [22mTEST-26 & TEST-27: valid path CALLED -> UNBOXING (start) -> COMPLETED with injectable clock timestamps and DB verification
+[31m[1mAssertionError[22m: expected 501 to be 200 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 200[39m
+[31m+ 501[39m
+
+[36m [2m❯[22m tests/api/staff-transition.test.ts:[2m58:29[22m[39m
+    [90m 56| [39m      [33m.[39m[35mset[39m([32m'Authorization'[39m[33m,[39m [32m`Bearer [39m[36m${[39mtoken[36m}[39m[32m`[39m)[33m;[39m
+    [90m 57| [39m
+    [90m 58| [39m    [34mexpect[39m(startRes[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m200[39m)[33m;[39m
+    [90m   | [39m                            [31m^[39m
+    [90m 59| [39m    [34mexpect[39m(startRes[33m.[39mbody)[33m.[39m[34mtoHaveProperty[39m([32m'data'[39m)[33m;[39m
+    [90m 60| [39m    [34mexpect[39m(startRes[33m.[39mbody[33m.[39mdata)[33m.[39m[34mtoEqual[39m({
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/16]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m tests/api/staff-transition.test.ts[2m > [22mStaff Ticket State Transitions: Start Unboxing & Complete (F-03, AC-26..30, AC-31)[2m > [22mTEST-28 (AC-28, BR-03): invalid state transitions rejected with 400 INVALID_STATE_TRANSITION[2m > [22mrejects 'start on WAITING' with 400 INVALID_STATE_TRANSITION and preserves DB
+[31m[1m[7m FAIL [27m[22m[39m tests/api/staff-transition.test.ts[2m > [22mStaff Ticket State Transitions: Start Unboxing & Complete (F-03, AC-26..30, AC-31)[2m > [22mTEST-28 (AC-28, BR-03): invalid state transitions rejected with 400 INVALID_STATE_TRANSITION[2m > [22mrejects 'complete on CALLED' with 400 INVALID_STATE_TRANSITION and preserves DB
+[31m[1m[7m FAIL [27m[22m[39m tests/api/staff-transition.test.ts[2m > [22mStaff Ticket State Transitions: Start Unboxing & Complete (F-03, AC-26..30, AC-31)[2m > [22mTEST-28 (AC-28, BR-03): invalid state transitions rejected with 400 INVALID_STATE_TRANSITION[2m > [22mrejects 'complete on WAITING' with 400 INVALID_STATE_TRANSITION and preserves DB
+[31m[1m[7m FAIL [27m[22m[39m tests/api/staff-transition.test.ts[2m > [22mStaff Ticket State Transitions: Start Unboxing & Complete (F-03, AC-26..30, AC-31)[2m > [22mTEST-28 (AC-28, BR-03): invalid state transitions rejected with 400 INVALID_STATE_TRANSITION[2m > [22mrejects 'start on UNBOXING (start twice)' with 400 INVALID_STATE_TRANSITION and preserves DB
+[31m[1m[7m FAIL [27m[22m[39m tests/api/staff-transition.test.ts[2m > [22mStaff Ticket State Transitions: Start Unboxing & Complete (F-03, AC-26..30, AC-31)[2m > [22mTEST-28 (AC-28, BR-03): invalid state transitions rejected with 400 INVALID_STATE_TRANSITION[2m > [22mrejects 'complete on COMPLETED (complete twice)' with 400 INVALID_STATE_TRANSITION and preserves DB
+[31m[1m[7m FAIL [27m[22m[39m tests/api/staff-transition.test.ts[2m > [22mStaff Ticket State Transitions: Start Unboxing & Complete (F-03, AC-26..30, AC-31)[2m > [22mTEST-28 (AC-28, BR-03): invalid state transitions rejected with 400 INVALID_STATE_TRANSITION[2m > [22mrejects 'start on COMPLETED' with 400 INVALID_STATE_TRANSITION and preserves DB
+[31m[1mAssertionError[22m: expected 501 to be 400 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 400[39m
+[31m+ 501[39m
+
+[36m [2m❯[22m tests/api/staff-transition.test.ts:[2m162:26[22m[39m
+    [90m160| [39m        [33m.[39m[35mset[39m([32m'Authorization'[39m[33m,[39m [32m`Bearer [39m[36m${[39mtoken[36m}[39m[32m`[39m)[33m;[39m
+    [90m161| [39m
+    [90m162| [39m      [34mexpect[39m(res[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m400[39m)[33m;[39m
+    [90m   | [39m                         [31m^[39m
+    [90m163| [39m      [34mexpect[39m(res[33m.[39mbody[33m.[39merror)[33m.[39m[34mtoEqual[39m({
+    [90m164| [39m        code[33m:[39m [32m'INVALID_STATE_TRANSITION'[39m[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/16]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m tests/api/staff-transition.test.ts[2m > [22mStaff Ticket State Transitions: Start Unboxing & Complete (F-03, AC-26..30, AC-31)[2m > [22mAuthorization, Scope & Validation (TEST-29, TEST-30, TEST-31, 400, 404)[2m > [22mTEST-29 (AC-29, BR-05): rejects staff assigned to another series with 403 FORBIDDEN_SERIES and preserves DB
+[31m[1mAssertionError[22m: expected 501 to be 403 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 403[39m
+[31m+ 501[39m
+
+[36m [2m❯[22m tests/api/staff-transition.test.ts:[2m242:31[22m[39m
+    [90m240| [39m        [33m.[39m[35mset[39m([32m'Authorization'[39m[33m,[39m [32m`Bearer [39m[36m${[39mlabubuToken[36m}[39m[32m`[39m)[33m;[39m
+    [90m241| [39m
+    [90m242| [39m      [34mexpect[39m(startRes[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m403[39m)[33m;[39m
+    [90m   | [39m                              [31m^[39m
+    [90m243| [39m      [34mexpect[39m(startRes[33m.[39mbody[33m.[39merror)[33m.[39m[34mtoEqual[39m({
+    [90m244| [39m        code[33m:[39m [32m'FORBIDDEN_SERIES'[39m[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/16]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m tests/api/staff-transition.test.ts[2m > [22mStaff Ticket State Transitions: Start Unboxing & Complete (F-03, AC-26..30, AC-31)[2m > [22mAuthorization, Scope & Validation (TEST-29, TEST-30, TEST-31, 400, 404)[2m > [22mTEST-30 (AC-30, BR-07): rejects staff assigned to same series but not handler with 403 FORBIDDEN_NOT_HANDLER and preserves DB
+[31m[1mAssertionError[22m: expected 501 to be 403 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 403[39m
+[31m+ 501[39m
+
+[36m [2m❯[22m tests/api/staff-transition.test.ts:[2m289:31[22m[39m
+    [90m287| [39m        [33m.[39m[35mset[39m([32m'Authorization'[39m[33m,[39m [32m`Bearer [39m[36m${[39mcrybaby2Token[36m}[39m[32m`[39m)[33m;[39m
+    [90m288| [39m
+    [90m289| [39m      [34mexpect[39m(startRes[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m403[39m)[33m;[39m
+    [90m   | [39m                              [31m^[39m
+    [90m290| [39m      [34mexpect[39m(startRes[33m.[39mbody[33m.[39merror)[33m.[39m[34mtoEqual[39m({
+    [90m291| [39m        code[33m:[39m [32m'FORBIDDEN_NOT_HANDLER'[39m[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/16]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m tests/api/staff-transition.test.ts[2m > [22mStaff Ticket State Transitions: Start Unboxing & Complete (F-03, AC-26..30, AC-31)[2m > [22mAuthorization, Scope & Validation (TEST-29, TEST-30, TEST-31, 400, 404)[2m > [22mreturns 404 RESOURCE_NOT_FOUND for unknown ticket id
+[31m[1mAssertionError[22m: expected 501 to be 404 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 404[39m
+[31m+ 501[39m
+
+[36m [2m❯[22m tests/api/staff-transition.test.ts:[2m326:26[22m[39m
+    [90m324| [39m        [33m.[39m[35mset[39m([32m'Authorization'[39m[33m,[39m [32m`Bearer [39m[36m${[39mtoken[36m}[39m[32m`[39m)[33m;[39m
+    [90m325| [39m
+    [90m326| [39m      [34mexpect[39m(res[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m404[39m)[33m;[39m
+    [90m   | [39m                         [31m^[39m
+    [90m327| [39m      [34mexpect[39m(res[33m.[39mbody[33m.[39merror)[33m.[39m[34mtoEqual[39m({
+    [90m328| [39m        code[33m:[39m [32m'RESOURCE_NOT_FOUND'[39m[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/16]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m tests/api/staff-transition.test.ts[2m > [22mStaff Ticket State Transitions: Start Unboxing & Complete (F-03, AC-26..30, AC-31)[2m > [22mAuthorization, Scope & Validation (TEST-29, TEST-30, TEST-31, 400, 404)[2m > [22mreturns 400 VALIDATION_ERROR for malformed ticket id param
+[31m[1mAssertionError[22m: expected 501 to be 400 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 400[39m
+[31m+ 501[39m
+
+[36m [2m❯[22m tests/api/staff-transition.test.ts:[2m342:26[22m[39m
+    [90m340| [39m        [33m.[39m[35mset[39m([32m'Authorization'[39m[33m,[39m [32m`Bearer [39m[36m${[39mtoken[36m}[39m[32m`[39m)[33m;[39m
+    [90m341| [39m
+    [90m342| [39m      [34mexpect[39m(res[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m400[39m)[33m;[39m
+    [90m   | [39m                         [31m^[39m
+    [90m343| [39m      [34mexpect[39m(res[33m.[39mbody[33m.[39merror)[33m.[39m[34mtoEqual[39m({
+    [90m344| [39m        code[33m:[39m [32m'VALIDATION_ERROR'[39m[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/16]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m tests/api/staff-transition.test.ts[2m > [22mStaff Ticket State Transitions: Start Unboxing & Complete (F-03, AC-26..30, AC-31)[2m > [22mConcurrency & Partial Unique Index Verification[2m > [22msimultaneous start-unboxing requests on the same ticket: exactly one succeeds and one is rejected
+[31m[1mAssertionError[22m: expected [ 501, 501 ] to deeply equal [ 200, 400 ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  Array [[22m
+[32m-   200,[39m
+[32m-   400,[39m
+[31m+   501,[39m
+[31m+   501,[39m
+[2m  ][22m
+
+[36m [2m❯[22m tests/api/staff-transition.test.ts:[2m373:24[22m[39m
+    [90m371| [39m
+    [90m372| [39m      [35mconst[39m statuses [33m=[39m [res1[33m.[39mstatus[33m,[39m res2[33m.[39mstatus][33m.[39m[34msort[39m()[33m;[39m
+    [90m373| [39m      [34mexpect[39m(statuses)[33m.[39m[34mtoEqual[39m([[34m200[39m[33m,[39m [34m400[39m])[33m;[39m
+    [90m   | [39m                       [31m^[39m
+    [90m374| [39m
+    [90m375| [39m      [35mconst[39m successRes [33m=[39m res1[33m.[39mstatus [33m===[39m [34m200[39m [33m?[39m res1 [33m:[39m res2[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/16]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m tests/api/staff-transition.test.ts[2m > [22mStaff Ticket State Transitions: Start Unboxing & Complete (F-03, AC-26..30, AC-31)[2m > [22mConcurrency & Partial Unique Index Verification[2m > [22msimultaneous complete requests on the same ticket: exactly one succeeds and one is rejected
+[31m[1mAssertionError[22m: expected [ 501, 501 ] to deeply equal [ 200, 400 ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  Array [[22m
+[32m-   200,[39m
+[32m-   400,[39m
+[31m+   501,[39m
+[31m+   501,[39m
+[2m  ][22m
+
+[36m [2m❯[22m tests/api/staff-transition.test.ts:[2m407:24[22m[39m
+    [90m405| [39m
+    [90m406| [39m      [35mconst[39m statuses [33m=[39m [res1[33m.[39mstatus[33m,[39m res2[33m.[39mstatus][33m.[39m[34msort[39m()[33m;[39m
+    [90m407| [39m      [34mexpect[39m(statuses)[33m.[39m[34mtoEqual[39m([[34m200[39m[33m,[39m [34m400[39m])[33m;[39m
+    [90m   | [39m                       [31m^[39m
+    [90m408| [39m
+    [90m409| [39m      [35mconst[39m successRes [33m=[39m res1[33m.[39mstatus [33m===[39m [34m200[39m [33m?[39m res1 [33m:[39m res2[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/16]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m tests/unit/state-machine.test.ts[2m > [22mState Machine Unit: canTransition (TEST-28U, AC-28, BR-03)[2m > [22mreturns true for allowed transition 'WAITING' -> 'CALL_NEXT'
+[31m[1m[7m FAIL [27m[22m[39m tests/unit/state-machine.test.ts[2m > [22mState Machine Unit: canTransition (TEST-28U, AC-28, BR-03)[2m > [22mreturns true for allowed transition 'CALLED' -> 'START_UNBOXING'
+[31m[1m[7m FAIL [27m[22m[39m tests/unit/state-machine.test.ts[2m > [22mState Machine Unit: canTransition (TEST-28U, AC-28, BR-03)[2m > [22mreturns true for allowed transition 'UNBOXING' -> 'COMPLETE'
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m tests/unit/state-machine.test.ts:[2m26:43[22m[39m
+    [90m 24| [39m    [32m'returns true for allowed transition $from -> $action'[39m[33m,[39m
+    [90m 25| [39m    ({ [35mfrom[39m[33m,[39m action }) [33m=>[39m {
+    [90m 26| [39m      [34mexpect[39m([34mcanTransition[39m([35mfrom[39m[33m,[39m action))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                                          [31m^[39m
+    [90m 27| [39m    }[33m,[39m
+    [90m 28| [39m  )[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/16]⎯[22m[39m
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m21 passed[39m[22m[90m (23)[39m
+[2m      Tests [22m [1m[31m16 failed[39m[22m[2m | [22m[1m[32m129 passed[39m[22m[90m (145)[39m
+[2m   Start at [22m 20:09:36
+[2m   Duration [22m 15.41s[2m (transform 354ms, setup 284ms, collect 6.27s, tests 4.62s, environment 4ms, prepare 1.60s)[22m
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path D:\University\Y3\sem1\cpe334 se\group_project\qdrive-license-queue\server
+npm error workspace server@0.1.0
+npm error location D:\University\Y3\sem1\cpe334 se\group_project\qdrive-license-queue\server
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run
+
+
+> client@0.1.0 test
+> vitest run
+
+
+[1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90mD:/University/Y3/sem1/cpe334 se/group_project/qdrive-license-queue/client[39m
+
+ [32m✓[39m src/App.test.tsx [2m([22m[2m1 test[22m[2m)[22m[90m 65[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m   Start at [22m 20:09:52
+[2m   Duration [22m 1.77s[2m (transform 53ms, setup 209ms, collect 183ms, tests 65ms, environment 956ms, prepare 116ms)[22m
+
+
+> e2e@0.1.0 test
+> playwright test
+
+
+Running 1 test using 1 worker
+
+  ok 1 [chromium] › smoke.spec.ts:11:7 › Home Page Smoke Test (Placeholder) › smoke test: placeholder home page loads successfully (584ms)
+
+  1 passed (5.0s)

@@ -1,14 +1,23 @@
-# Dev database only. The full app image comes in Lab 5.
+# PopQueue Local Development Database
+# Dev PostgreSQL 16 database only. Full application multi-stage image & CI/CD come in Lab 5.
+
 services:
   db:
     image: postgres:16
+    container_name: popqueue_db
     environment:
-      POSTGRES_USER: app
-      POSTGRES_PASSWORD: app_dev_password   # dev value only
-      POSTGRES_DB: app
+      POSTGRES_USER: popqueue
+      POSTGRES_PASSWORD: popqueue_dev_password   # dev value only - overridden by .env in staging
+      POSTGRES_DB: popqueue
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT:-5432}:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - popqueue_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U popqueue -d popqueue"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
 volumes:
-  pgdata:
+  popqueue_pgdata:

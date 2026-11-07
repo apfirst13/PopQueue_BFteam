@@ -1,0 +1,10 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "moduleResolution": "NodeNext",
+    "module": "NodeNext",
+    "lib": ["ESNext", "DOM"],
+    "noEmit": true
+  },
+  "include": ["**/*.ts"]
+}

@@ -1,0 +1,74 @@
+
+> popqueue-monorepo@0.1.0 test
+> npm run test --workspaces --if-present
+
+
+> server@0.1.0 test
+> vitest run
+
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+
+[1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90mD:/University/Y3/sem1/cpe334 se/group_project/qdrive-license-queue/server[39m
+
+ [32m✓[39m tests/api/staff-transition.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 398[2mms[22m[39m
+ [32m✓[39m tests/api/auth.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 627[2mms[22m[39m
+ [32m✓[39m tests/api/join.test.ts [2m([22m[2m6 tests[22m[2m)[22m[90m 204[2mms[22m[39m
+ [32m✓[39m tests/api/call-next.test.ts [2m([22m[2m7 tests[22m[2m)[22m[90m 201[2mms[22m[39m
+[90mstdout[2m | tests/db-schema-and-seed.test.ts[2m > [22m[2mDatabase Schema, Models, Partial Indexes & Seed Verification (Issue I-01)
+[22m[39mSeeding completed successfully: 9 Users, 3 Series, 3 Assignments.
+
+[90mstdout[2m | tests/db-schema-and-seed.test.ts[2m > [22m[2mDatabase Schema, Models, Partial Indexes & Seed Verification (Issue I-01)[2m > [22m[2mSeed script is idempotent (can run multiple times without duplicating)
+[22m[39mSeeding completed successfully: 9 Users, 3 Series, 3 Assignments.
+
+ [32m✓[39m tests/db-schema-and-seed.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 915[2mms[22m[39m
+   [33m[2m✓[22m[39m Database Schema, Models, Partial Indexes & Seed Verification (Issue I-01)[2m > [22mSeeds 9 users with valid bcrypt cost >= 10 and correct roles (NFR-01, AC-07) [33m516[2mms[22m[39m
+ [32m✓[39m tests/api/my-ticket.test.ts [2m([22m[2m5 tests[22m[2m)[22m[90m 117[2mms[22m[39m
+ [32m✓[39m tests/concurrency/call-next-concurrency.test.ts [2m([22m[2m2 tests[22m[2m)[22m[90m 161[2mms[22m[39m
+ [32m✓[39m tests/api/ticket-security.test.ts [2m([22m[2m5 tests[22m[2m)[22m[90m 115[2mms[22m[39m
+ [32m✓[39m tests/api/staff-tickets.test.ts [2m([22m[2m1 test[22m[2m)[22m[90m 118[2mms[22m[39m
+ [32m✓[39m tests/security/unauthenticated.test.ts [2m([22m[2m54 tests[22m[2m)[22m[90m 157[2mms[22m[39m
+ [32m✓[39m tests/concurrency/numbering.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 434[2mms[22m[39m
+   [33m[2m✓[22m[39m Concurrency: Safe Sequential Numbering (TEST-15, AC-15, BR-01, NFR-03)[2m > [22mTEST-15: 50 concurrent distinct collectors receive sequential numbers 1..50 with zero gaps and zero duplicates [33m425[2mms[22m[39m
+ [32m✓[39m tests/api/series.test.ts [2m([22m[2m1 test[22m[2m)[22m[90m 70[2mms[22m[39m
+ [32m✓[39m tests/api/ticket-detail.test.ts [2m([22m[2m1 test[22m[2m)[22m[90m 70[2mms[22m[39m
+ [32m✓[39m tests/api/queue-reset.test.ts [2m([22m[2m1 test[22m[2m)[22m[90m 106[2mms[22m[39m
+ [32m✓[39m tests/unit/role-guard.test.ts [2m([22m[2m3 tests[22m[2m)[22m[90m 5[2mms[22m[39m
+ [32m✓[39m tests/concurrency/duplicate.test.ts [2m([22m[2m1 test[22m[2m)[22m[90m 151[2mms[22m[39m
+ [32m✓[39m tests/clock.test.ts [2m([22m[2m4 tests[22m[2m)[22m[90m 15[2mms[22m[39m
+ [32m✓[39m tests/error-handler.test.ts [2m([22m[2m2 tests[22m[2m)[22m[90m 26[2mms[22m[39m
+ [32m✓[39m tests/unit/state-machine.test.ts [2m([22m[2m18 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m tests/security/password-hash.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 537[2mms[22m[39m
+   [33m[2m✓[22m[39m Security: Password Hash Characterization (TEST-07, AC-07, NFR-01)[2m > [22mverifies that all seeded accounts have secure bcrypt password hashes with cost >= 10 [33m511[2mms[22m[39m
+ [32m✓[39m tests/env.test.ts [2m([22m[2m4 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m tests/unit/queue-date.test.ts [2m([22m[2m1 test[22m[2m)[22m[90m 14[2mms[22m[39m
+ [32m✓[39m tests/health.test.ts [2m([22m[2m1 test[22m[2m)[22m[90m 20[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m23 passed[39m[22m[90m (23)[39m
+[2m      Tests [22m [1m[32m145 passed[39m[22m[90m (145)[39m
+[2m   Start at [22m 20:15:15
+[2m   Duration [22m 14.52s[2m (transform 288ms, setup 245ms, collect 5.85s, tests 4.47s, environment 3ms, prepare 1.49s)[22m
+
+
+> client@0.1.0 test
+> vitest run
+
+
+[1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90mD:/University/Y3/sem1/cpe334 se/group_project/qdrive-license-queue/client[39m
+
+ [32m✓[39m src/App.test.tsx [2m([22m[2m1 test[22m[2m)[22m[90m 54[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m   Start at [22m 20:15:29
+[2m   Duration [22m 1.48s[2m (transform 45ms, setup 147ms, collect 154ms, tests 54ms, environment 831ms, prepare 111ms)[22m
+
+
+> e2e@0.1.0 test
+> playwright test
+
+
+Running 1 test using 1 worker
+
+  ok 1 [chromium] › smoke.spec.ts:11:7 › Home Page Smoke Test (Placeholder) › smoke test: placeholder home page loads successfully (457ms)
+
+  1 passed (2.6s)

@@ -1,0 +1,1694 @@
+﻿Tested Commit: 292fc6efd104bde5c73cb6af7b27ec23832e029f
+
+
+> client@0.1.0 test
+> vitest run
+
+
+[1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90mC:/!KMUTT/Year 3/Semeter 1/SE/Project/Project SE/qdrive-license-queue/client[39m
+
+ [32mΓ£ô[39m src/tests/polling.test.ts [2m([22m[2m3 tests[22m[2m)[22m[90m 37[2mms[22m[39m
+ [32mΓ£ô[39m src/App.test.tsx [2m([22m[2m1 test[22m[2m)[22m[90m 161[2mms[22m[39m
+node.exe : [90mstderr[2m | src/tests/auth.test.tsx[2m > [22m[2mAuthentication & Route Guard Component Tests[2m > 
+[22m[2mapiClient: 401 UNAUTHENTICATED clears localStorage and redirects to /login
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([90mstderr[2m...rects to /login:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[22m[39mError: Not implemented: navigation (except hash changes)
+    at module.exports (C:\!KMUTT\Year 3\Semeter 1\SE\Project\Project 
+SE\qdrive-license-queue\node_modules\jsdom\lib\jsdom\browser\not-implemented.js:9:17)
+    at navigateFetch (C:\!KMUTT\Year 3\Semeter 1\SE\Project\Project 
+SE\qdrive-license-queue\node_modules\jsdom\lib\jsdom\living\window\navigation.js:77:3)
+    at exports.navigate (C:\!KMUTT\Year 3\Semeter 1\SE\Project\Project 
+SE\qdrive-license-queue\node_modules\jsdom\lib\jsdom\living\window\navigation.js:55:3)
+    at LocationImpl._locationObjectNavigate (C:\!KMUTT\Year 3\Semeter 1\SE\Project\Project 
+SE\qdrive-license-queue\node_modules\jsdom\lib\jsdom\living\window\Location-impl.js:31:5)
+    at LocationImpl._locationObjectSetterNavigate (C:\!KMUTT\Year 3\Semeter 1\SE\Project\Project 
+SE\qdrive-license-queue\node_modules\jsdom\lib\jsdom\living\window\Location-impl.js:25:17)
+    at LocationImpl.set href [as href] (C:\!KMUTT\Year 3\Semeter 1\SE\Project\Project 
+SE\qdrive-license-queue\node_modules\jsdom\lib\jsdom\living\window\Location-impl.js:47:10)
+    at Location.set href [as href] (C:\!KMUTT\Year 3\Semeter 1\SE\Project\Project 
+SE\qdrive-license-queue\node_modules\jsdom\lib\jsdom\living\generated\Location.js:125:37)
+    at Module.apiClient (C:\!KMUTT\Year 3\Semeter 1\SE\Project\Project 
+SE\qdrive-license-queue\client\src\api\client.ts:62:27)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at C:\!KMUTT\Year 3\Semeter 1\SE\Project\Project SE\qdrive-license-queue\client\src\tests\auth.test.tsx:274:5 
+[90mundefined[39m
+
+ [31mΓ¥»[39m src/tests/auth.test.tsx [2m([22m[2m10 tests[22m[2m | [22m[31m7 failed[39m[2m)[22m[90m 209[2mms[22m[39m
+[31m   [31m├ù[31m Authentication & Route Guard Component Tests[2m > [22mrenders login form with username, password, and sign in button[90m 61[2mms[22m[31m[39m
+[31m     ΓåÆ Unable to find a label with the text of: /α╕èα╕╖α╣êα╕¡α╕£α╕╣α╣ëα╣âα╕èα╣ë|username/i
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"app-container"[31m
+    [36m>[31m
+      [36m<header[31m
+        [33mclass[31m=[32m"header"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"header-brand"[31m
+        [36m>[31m
+          [36m<h1>[31m
+            [0mPopQueue[0m
+          [36m</h1>[31m
+          [36m<p>[31m
+            [0mArt Toy Live Unboxing Queue Management System[0m
+          [36m</p>[31m
+        [36m</div>[31m
+      [36m</header>[31m
+      [36m<main[31m
+        [33mclass[31m=[32m"main-content"[31m
+      [36m>[31m
+        [36m<div>[31m
+          [0mLoginPage Stub (Not Implemented)[0m
+        [36m</div>[31m
+      [36m</main>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[31m   [31m├ù[31m Authentication & Route Guard Component Tests[2m > [22mshows validation error when fields are empty[90m 70[2mms[22m[31m[39m
+[31m     ΓåÆ Unable to find an accessible element with the role "button" and name `/α╣Çα╕éα╣ëα╕▓α╕¬α╕╣α╣êα╕úα╕░α╕Üα╕Ü|sign in/i`
+
+Here are the accessible roles:
+
+  banner:
+
+  Name "":
+  [36m<header[31m
+    [33mclass[31m=[32m"header"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  heading:
+
+  Name "PopQueue":
+  [36m<h1 />[31m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p />[31m
+
+  --------------------------------------------------
+  main:
+
+  Name "":
+  [36m<main[31m
+    [33mclass[31m=[32m"main-content"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"app-container"[31m
+    [36m>[31m
+      [36m<header[31m
+        [33mclass[31m=[32m"header"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"header-brand"[31m
+        [36m>[31m
+          [36m<h1>[31m
+            [0mPopQueue[0m
+          [36m</h1>[31m
+          [36m<p>[31m
+            [0mArt Toy Live Unboxing Queue Management System[0m
+          [36m</p>[31m
+        [36m</div>[31m
+      [36m</header>[31m
+      [36m<main[31m
+        [33mclass[31m=[32m"main-content"[31m
+      [36m>[31m
+        [36m<div>[31m
+          [0mLoginPage Stub (Not Implemented)[0m
+        [36m</div>[31m
+      [36m</main>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[31m   [31m├ù[31m Authentication & Route Guard Component Tests[2m > [22mdisplays Invalid username or password error on 401 INVALID_CREDENTIALS[90m 4[2mms[22m[31m[39m
+[31m     ΓåÆ Unable to find a label with the text of: /α╕èα╕╖α╣êα╕¡α╕£α╕╣α╣ëα╣âα╕èα╣ë|username/i
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"app-container"[31m
+    [36m>[31m
+      [36m<header[31m
+        [33mclass[31m=[32m"header"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"header-brand"[31m
+        [36m>[31m
+          [36m<h1>[31m
+            [0mPopQueue[0m
+          [36m</h1>[31m
+          [36m<p>[31m
+            [0mArt Toy Live Unboxing Queue Management System[0m
+          [36m</p>[31m
+        [36m</div>[31m
+      [36m</header>[31m
+      [36m<main[31m
+        [33mclass[31m=[32m"main-content"[31m
+      [36m>[31m
+        [36m<div>[31m
+          [0mLoginPage Stub (Not Implemented)[0m
+        [36m</div>[31m
+      [36m</main>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[31m   [31m├ù[31m Authentication & Route Guard Component Tests[2m > [22mcollector login without active ticket redirects to /series[90m 5[2mms[22m[31m[39m
+[31m     ΓåÆ Unable to find a label with the text of: /α╕èα╕╖α╣êα╕¡α╕£α╕╣α╣ëα╣âα╕èα╣ë|username/i
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"app-container"[31m
+    [36m>[31m
+      [36m<header[31m
+        [33mclass[31m=[32m"header"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"header-brand"[31m
+        [36m>[31m
+          [36m<h1>[31m
+            [0mPopQueue[0m
+          [36m</h1>[31m
+          [36m<p>[31m
+            [0mArt Toy Live Unboxing Queue Management System[0m
+          [36m</p>[31m
+        [36m</div>[31m
+      [36m</header>[31m
+      [36m<main[31m
+        [33mclass[31m=[32m"main-content"[31m
+      [36m>[31m
+        [36m<div>[31m
+          [0mLoginPage Stub (Not Implemented)[0m
+        [36m</div>[31m
+      [36m</main>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[31m   [31m├ù[31m Authentication & Route Guard Component Tests[2m > [22mcollector login with active ticket redirects directly to /my-ticket[90m 5[2mms[22m[31m[39m
+[31m     ΓåÆ Unable to find a label with the text of: /α╕èα╕╖α╣êα╕¡α╕£α╕╣α╣ëα╣âα╕èα╣ë|username/i
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"app-container"[31m
+    [36m>[31m
+      [36m<header[31m
+        [33mclass[31m=[32m"header"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"header-brand"[31m
+        [36m>[31m
+          [36m<h1>[31m
+            [0mPopQueue[0m
+          [36m</h1>[31m
+          [36m<p>[31m
+            [0mArt Toy Live Unboxing Queue Management System[0m
+          [36m</p>[31m
+        [36m</div>[31m
+      [36m</header>[31m
+      [36m<main[31m
+        [33mclass[31m=[32m"main-content"[31m
+      [36m>[31m
+        [36m<div>[31m
+          [0mLoginPage Stub (Not Implemented)[0m
+        [36m</div>[31m
+      [36m</main>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[31m   [31m├ù[31m Authentication & Route Guard Component Tests[2m > [22mbox master login redirects to /staff/counter[90m 4[2mms[22m[31m[39m
+[31m     ΓåÆ Unable to find a label with the text of: /α╕èα╕╖α╣êα╕¡α╕£α╕╣α╣ëα╣âα╕èα╣ë|username/i
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"app-container"[31m
+    [36m>[31m
+      [36m<header[31m
+        [33mclass[31m=[32m"header"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"header-brand"[31m
+        [36m>[31m
+          [36m<h1>[31m
+            [0mPopQueue[0m
+          [36m</h1>[31m
+          [36m<p>[31m
+            [0mArt Toy Live Unboxing Queue Management System[0m
+          [36m</p>[31m
+        [36m</div>[31m
+      [36m</header>[31m
+      [36m<main[31m
+        [33mclass[31m=[32m"main-content"[31m
+      [36m>[31m
+        [36m<div>[31m
+          [0mLoginPage Stub (Not Implemented)[0m
+        [36m</div>[31m
+      [36m</main>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[31m   [31m├ù[31m Authentication & Route Guard Component Tests[2m > [22mroute guard: unauthenticated access to /series redirects to /login[90m 23[2mms[22m[31m[39m
+[31m     ΓåÆ Unable to find an accessible element with the role "button" and name `/α╣Çα╕éα╣ëα╕▓α╕¬α╕╣α╣êα╕úα╕░α╕Üα╕Ü|sign in/i`
+
+Here are the accessible roles:
+
+  banner:
+
+  Name "":
+  [36m<header[31m
+    [33mclass[31m=[32m"header"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  heading:
+
+  Name "PopQueue":
+  [36m<h1 />[31m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p />[31m
+
+  --------------------------------------------------
+  main:
+
+  Name "":
+  [36m<main[31m
+    [33mclass[31m=[32m"main-content"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"app-container"[31m
+    [36m>[31m
+      [36m<header[31m
+        [33mclass[31m=[32m"header"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"header-brand"[31m
+        [36m>[31m
+          [36m<h1>[31m
+            [0mPopQueue[0m
+          [36m</h1>[31m
+          [36m<p>[31m
+            [0mArt Toy Live Unboxing Queue Management System[0m
+          [36m</p>[31m
+        [36m</div>[31m
+      [36m</header>[31m
+      [36m<main[31m
+        [33mclass[31m=[32m"main-content"[31m
+      [36m>[31m
+        [36m<div>[31m
+          [0mLoginPage Stub (Not Implemented)[0m
+        [36m</div>[31m
+      [36m</main>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+ [31mΓ¥»[39m src/tests/series.test.tsx [2m([22m[2m5 tests[22m[2m | [22m[31m5 failed[39m[2m)[22m[33m 5111[2mms[22m[39m
+[31m   [31m├ù[31m SeriesPage Component Tests (AC-19, Master ┬º2.6)[2m > [22mrenders series list with codes, names, and waiting counts[33m 1052[2mms[22m[31m[39m
+[31m     ΓåÆ Unable to find an element with the text: /Crybaby Sunset Concert/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mSeriesPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mSeriesPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[31m   [31m├ù[31m SeriesPage Component Tests (AC-19, Master ┬º2.6)[2m > [22mclosed series shows α╕¢α╕┤α╕öα╕úα╕▒α╕Üα╕äα╕┤α╕º and button is disabled[33m 1016[2mms[22m[31m[39m
+[31m     ΓåÆ Unable to find an element with the text: /α╕¢α╕┤α╕öα╕úα╕▒α╕Üα╕äα╕┤α╕º/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mSeriesPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mSeriesPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[31m   [31m├ù[31m SeriesPage Component Tests (AC-19, Master ┬º2.6)[2m > [22mjoin queue on CRY shows loading and navigates to /my-ticket on 201[33m 1013[2mms[22m[31m[39m
+[31m     ΓåÆ Unable to find an element with the text: /Crybaby Sunset Concert/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mSeriesPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mSeriesPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[31m   [31m├ù[31m SeriesPage Component Tests (AC-19, Master ┬º2.6)[2m > [22mshows error banner when join returns 409 DUPLICATE_ACTIVE_QUEUE[33m 1011[2mms[22m[31m[39m
+[31m     ΓåÆ Unable to find an element with the text: /Crybaby Sunset Concert/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mSeriesPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mSeriesPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[31m   [31m├ù[31m SeriesPage Component Tests (AC-19, Master ┬º2.6)[2m > [22mshows empty state when series list is empty[33m 1018[2mms[22m[31m[39m
+[31m     ΓåÆ Unable to find an element with the text: /α╣äα╕íα╣êα╕íα╕╡α╕úα╕▓α╕óα╕üα╕▓α╕úα╕ïα╕╡α╕úα╕╡α╕¬α╣îα╣Çα╕¢α╕┤α╕öα╣âα╕½α╣ëα╕Üα╕úα╕┤α╕üα╕▓α╕úα╣âα╕Öα╕éα╕ôα╕░α╕Öα╕╡α╣ë/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mSeriesPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mSeriesPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+ [31mΓ¥»[39m src/tests/ticket.test.tsx [2m([22m[2m5 tests[22m[2m | [22m[31m5 failed[39m[2m)[22m[33m 5125[2mms[22m[39m
+[31m   [31m├ù[31m MyTicketPage Component Tests (AC-19, AC-33, Master ┬º4.3, ┬º4.6)[2m > [22mshows empty state with link to /series when 404 NO_ACTIVE_TICKET is returned[33m 1058[2mms[22m[31m[39m
+[31m     ΓåÆ Unable to find an element with the text: /α╕óα╕▒α╕çα╣äα╕íα╣êα╕íα╕╡α╕Üα╕▒α╕òα╕úα╕äα╕┤α╕º/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mMyTicketPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mMyTicketPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[31m   [31m├ù[31m MyTicketPage Component Tests (AC-19, AC-33, Master ┬º4.3, ┬º4.6)[2m > [22mrenders active ticket: CRY-003, WAITING status, and α╣Çα╕½α╕Ñα╕╖α╕¡α╕¡α╕╡α╕ü 2 α╕äα╕┤α╕ºα╕üα╣êα╕¡α╕Öα╕½α╕Öα╣ëα╕▓[33m 1017[2mms[22m[31m[39m
+[31m     ΓåÆ Unable to find an element with the text: /CRY-003/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mMyTicketPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mMyTicketPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[31m   [31m├ù[31m MyTicketPage Component Tests (AC-19, AC-33, Master ┬º4.3, ┬º4.6)[2m > [22mdisplays orange warning banner with α╕ûα╕╢α╕çα╕äα╕┤α╕ºα╣üα╕Ñα╣ëα╕º α╕üα╕úα╕╕α╕ôα╕▓α╕íα╕▓α╕ùα╕╡α╣êα╣Çα╕äα╕▓α╕Öα╣îα╣Çα╕òα╕¡α╕úα╣î and countdown when CALLED[33m 1013[2mms[22m[31m[39m
+[31m     ΓåÆ Unable to find an element with the text: /α╕ûα╕╢α╕çα╕äα╕┤α╕ºα╣üα╕Ñα╣ëα╕º α╕üα╕úα╕╕α╕ôα╕▓α╕íα╕▓α╕ùα╕╡α╣êα╣Çα╕äα╕▓α╕Öα╣îα╣Çα╕òα╕¡α╕úα╣î/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mMyTicketPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mMyTicketPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[31m   [31m├ù[31m MyTicketPage Component Tests (AC-19, AC-33, Master ┬º4.3, ┬º4.6)[2m > [22mdisplays α╕üα╕│α╕Ñα╕▒α╕çα╣âα╕½α╣ëα╕Üα╕úα╕┤α╕üα╕▓α╕ú when status is UNBOXING[33m 1011[2mms[22m[31m[39m
+[31m     ΓåÆ Unable to find an element with the text: /α╕üα╕│α╕Ñα╕▒α╕çα╣âα╕½α╣ëα╕Üα╕úα╕┤α╕üα╕▓α╕ú/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mMyTicketPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mMyTicketPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[31m   [31m├ù[31m MyTicketPage Component Tests (AC-19, AC-33, Master ┬º4.3, ┬º4.6)[2m > [22mdisplays retry button on error and re-fetches when clicked[33m 1023[2mms[22m[31m[39m
+[31m     ΓåÆ Unable to find role="button" and name `/α╕Ñα╕¡α╕çα╣âα╕½α╕íα╣ê/i`
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mMyTicketPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mMyTicketPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+ [31mΓ¥»[39m src/tests/staff.test.tsx [2m([22m[2m6 tests[22m[2m | [22m[31m6 failed[39m[2m)[22m[33m 6113[2mms[22m[39m
+[31m   [31m├ù[31m StaffCounterPage Component Tests (Master ┬º3.6)[2m > [22mrenders series selector when staff is assigned multiple series[33m 1049[2mms[22m[31m[39m
+[31m     ΓåÆ Unable to find role="combobox" and name `/α╣Çα╕Ñα╕╖α╕¡α╕üα╕ïα╕╡α╕úα╕╡α╕¬α╣î/i`
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mStaffCounterPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mStaffCounterPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[31m   [31m├ù[31m StaffCounterPage Component Tests (Master ┬º3.6)[2m > [22mdisplays waiting queue with queue numbers and customer full names[33m 1016[2mms[22m[31m[39m
+[31m     ΓåÆ Unable to find an element with the text: /CRY-001/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mStaffCounterPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mStaffCounterPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[31m   [31m├ù[31m StaffCounterPage Component Tests (Master ┬º3.6)[2m > [22mshows α╕óα╕▒α╕çα╣äα╕íα╣êα╕íα╕╡α╕äα╕┤α╕ºα╕úα╕¡α╕úα╕▒α╕Üα╕Üα╕úα╕┤α╕üα╕▓α╕ú when waiting queue is empty[33m 1012[2mms[22m[31m[39m
+[31m     ΓåÆ Unable to find an element with the text: /α╕óα╕▒α╕çα╣äα╕íα╣êα╕íα╕╡α╕äα╕┤α╕ºα╕úα╕¡α╕úα╕▒α╕Üα╕Üα╕úα╕┤α╕üα╕▓α╕ú/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mStaffCounterPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mStaffCounterPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[31m   [31m├ù[31m StaffCounterPage Component Tests (Master ┬º3.6)[2m > [22mcall next button sends seriesId and transitions to CALLED[33m 1011[2mms[22m[31m[39m
+[31m     ΓåÆ Unable to find role="button" and name `/α╣Çα╕úα╕╡α╕óα╕üα╕äα╕┤α╕ºα╕ûα╕▒α╕öα╣äα╕¢|call next/i`
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mStaffCounterPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mStaffCounterPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[31m   [31m├ù[31m StaffCounterPage Component Tests (Master ┬º3.6)[2m > [22mverify & start unboxing button calls API and complete button appears[33m 1018[2mms[22m[31m[39m
+[31m     ΓåÆ Unable to find role="button" and name `/verify & start|α╣Çα╕úα╕┤α╣êα╕íα╣Çα╕¢α╕┤α╕öα╕üα╕Ñα╣êα╕¡α╕ç/i`
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mStaffCounterPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mStaffCounterPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[31m   [31m├ù[31m StaffCounterPage Component Tests (Master ┬º3.6)[2m > [22mdisplays error banner when call-next fails with STAFF_BUSY[33m 1005[2mms[22m[31m[39m
+[31m     ΓåÆ Unable to find role="button" and name `/α╣Çα╕úα╕╡α╕óα╕üα╕äα╕┤α╕ºα╕ûα╕▒α╕öα╣äα╕¢|call next/i`
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mStaffCounterPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mStaffCounterPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+
+[31mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[1m[7m Failed Tests 23 [27m[22mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/auth.test.tsx[2m > [22mAuthentication & Route Guard Component Tests[2m 
+> [22mrenders login form with username, password, and sign in button
+[31m[1mTestingLibraryElementError[22m: Unable to find a label with the text of: 
+/α╕èα╕╖α╣êα╕¡α╕£α╕╣α╣ëα╣âα╕èα╣ë|username/i
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"app-container"[31m
+    [36m>[31m
+      [36m<header[31m
+        [33mclass[31m=[32m"header"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"header-brand"[31m
+        [36m>[31m
+          [36m<h1>[31m
+            [0mPopQueue[0m
+          [36m</h1>[31m
+          [36m<p>[31m
+            [0mArt Toy Live Unboxing Queue Management System[0m
+          [36m</p>[31m
+        [36m</div>[31m
+      [36m</header>[31m
+      [36m<main[31m
+        [33mclass[31m=[32m"main-content"[31m
+      [36m>[31m
+        [36m<div>[31m
+          [0mLoginPage Stub (Not Implemented)[0m
+        [36m</div>[31m
+      [36m</main>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2mΓ¥»[22m Object.getElementError ../node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2mΓ¥»[22m getAllByLabelText 
+../node_modules/@testing-library/dom/dist/queries/label-text.js:[2m111:38[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2mΓ¥»[22m src/tests/auth.test.tsx:[2m66:19[22m[39m
+    [90m 64| [39m  [34mit[39m([32m'renders login form with username, password, and sign in 
+button'[39m[33m,[39mΓÇª
+    [90m 65| [39m    [34mrenderWithRouter[39m([32m'/login'[39m)[33m;[39m
+    [90m 66| [39m    [34mexpect[39m(screen[33m.[39m[34mgetByLabelText[39m([36m/α╕èα╕╖α╣êα╕¡α╕£α╕╣α╣ëα╣âα╕èα╣ë|
+username/i[39m))[33m.[39m[34mtoBeInTheDoc[39mΓÇª
+    [90m   | [39m                  [31m^[39m
+    [90m 67| [39m    [34mexpect[39m(screen[33m.[39m[34mgetByLabelText[39m([36m/α╕úα╕½α╕▒α╕¬α╕£α╣êα╕▓α╕Ö|passwo
+rd/i[39m))[33m.[39m[34mtoBeInTheDocum[39mΓÇª
+    [90m 68| [39m    [34mexpect[39m(screen[33m.[39m[34mgetByRole[39m([32m'button'[39m[33m,[39m { 
+name[33m:[39m [36m/α╣Çα╕éα╣ëα╕▓α╕¬α╕╣α╣êα╕úα╕░α╕Üα╕Ü|sign in/i[39m }ΓÇª
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[1/23]ΓÄ»[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/auth.test.tsx[2m > [22mAuthentication & Route Guard Component Tests[2m 
+> [22mshows validation error when fields are empty
+[31m[1mTestingLibraryElementError[22m: Unable to find an accessible element with the role "button" and name 
+`/α╣Çα╕éα╣ëα╕▓α╕¬α╕╣α╣êα╕úα╕░α╕Üα╕Ü|sign in/i`
+
+Here are the accessible roles:
+
+  banner:
+
+  Name "":
+  [36m<header[31m
+    [33mclass[31m=[32m"header"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  heading:
+
+  Name "PopQueue":
+  [36m<h1 />[31m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p />[31m
+
+  --------------------------------------------------
+  main:
+
+  Name "":
+  [36m<main[31m
+    [33mclass[31m=[32m"main-content"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"app-container"[31m
+    [36m>[31m
+      [36m<header[31m
+        [33mclass[31m=[32m"header"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"header-brand"[31m
+        [36m>[31m
+          [36m<h1>[31m
+            [0mPopQueue[0m
+          [36m</h1>[31m
+          [36m<p>[31m
+            [0mArt Toy Live Unboxing Queue Management System[0m
+          [36m</p>[31m
+        [36m</div>[31m
+      [36m</header>[31m
+      [36m<main[31m
+        [33mclass[31m=[32m"main-content"[31m
+      [36m>[31m
+        [36m<div>[31m
+          [0mLoginPage Stub (Not Implemented)[0m
+        [36m</div>[31m
+      [36m</main>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2mΓ¥»[22m Object.getElementError ../node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2mΓ¥»[22m src/tests/auth.test.tsx:[2m75:30[22m[39m
+    [90m 73| [39m    [34mrenderWithRouter[39m([32m'/login'[39m)[33m;[39m
+    [90m 74| [39m
+    [90m 75| [39m    [35mconst[39m submitBtn [33m=[39m 
+screen[33m.[39m[34mgetByRole[39m([32m'button'[39m[33m,[39m { name[33m:[39m 
+[36m/α╣Çα╕éα╣ëα╕▓α╕¬α╕╣α╣êα╕úα╕░α╕Üα╕Ü|[39mΓÇª
+    [90m   | [39m                             [31m^[39m
+    [90m 76| [39m    [35mawait[39m user[33m.[39m[34mclick[39m(submitBtn)[33m;[39m
+    [90m 77| [39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[2/23]ΓÄ»[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/auth.test.tsx[2m > [22mAuthentication & Route Guard Component Tests[2m 
+> [22mdisplays Invalid username or password error on 401 INVALID_CREDENTIALS
+[31m[1mTestingLibraryElementError[22m: Unable to find a label with the text of: 
+/α╕èα╕╖α╣êα╕¡α╕£α╕╣α╣ëα╣âα╕èα╣ë|username/i
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"app-container"[31m
+    [36m>[31m
+      [36m<header[31m
+        [33mclass[31m=[32m"header"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"header-brand"[31m
+        [36m>[31m
+          [36m<h1>[31m
+            [0mPopQueue[0m
+          [36m</h1>[31m
+          [36m<p>[31m
+            [0mArt Toy Live Unboxing Queue Management System[0m
+          [36m</p>[31m
+        [36m</div>[31m
+      [36m</header>[31m
+      [36m<main[31m
+        [33mclass[31m=[32m"main-content"[31m
+      [36m>[31m
+        [36m<div>[31m
+          [0mLoginPage Stub (Not Implemented)[0m
+        [36m</div>[31m
+      [36m</main>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2mΓ¥»[22m Object.getElementError ../node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2mΓ¥»[22m getAllByLabelText 
+../node_modules/@testing-library/dom/dist/queries/label-text.js:[2m111:38[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2mΓ¥»[22m src/tests/auth.test.tsx:[2m93:28[22m[39m
+    [90m 91| [39m    [34mrenderWithRouter[39m([32m'/login'[39m)[33m;[39m
+    [90m 92| [39m
+    [90m 93| [39m    [35mawait[39m user[33m.[39m[34mtype[39m(screen[33m.[39m[34mgetByLabelText[39m([36m/α╕
+èα╕╖α╣êα╕¡α╕£α╕╣α╣ëα╣âα╕èα╣ë|username/i[39m)[33m,[39m [32m'wr[39mΓÇª
+    [90m   | [39m                           [31m^[39m
+    [90m 94| [39m    [35mawait[39m user[33m.[39m[34mtype[39m(screen[33m.[39m[34mgetByLabelText[39m([36m/α╕
+úα╕½α╕▒α╕¬α╕£α╣êα╕▓α╕Ö|password/i[39m)[33m,[39m [32m'wron[39mΓÇª
+    [90m 95| [39m    [35mawait[39m 
+user[33m.[39m[34mclick[39m(screen[33m.[39m[34mgetByRole[39m([32m'button'[39m[33m,[39m { name[33m:[39m 
+[36m/α╣Çα╕éα╣ëα╕▓α╕¬α╕╣α╣êα╕úα╕░α╕Üα╕Ü|s[39mΓÇª
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[3/23]ΓÄ»[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/auth.test.tsx[2m > [22mAuthentication & Route Guard Component Tests[2m 
+> [22mcollector login without active ticket redirects to /series
+[31m[1mTestingLibraryElementError[22m: Unable to find a label with the text of: 
+/α╕èα╕╖α╣êα╕¡α╕£α╕╣α╣ëα╣âα╕èα╣ë|username/i
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"app-container"[31m
+    [36m>[31m
+      [36m<header[31m
+        [33mclass[31m=[32m"header"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"header-brand"[31m
+        [36m>[31m
+          [36m<h1>[31m
+            [0mPopQueue[0m
+          [36m</h1>[31m
+          [36m<p>[31m
+            [0mArt Toy Live Unboxing Queue Management System[0m
+          [36m</p>[31m
+        [36m</div>[31m
+      [36m</header>[31m
+      [36m<main[31m
+        [33mclass[31m=[32m"main-content"[31m
+      [36m>[31m
+        [36m<div>[31m
+          [0mLoginPage Stub (Not Implemented)[0m
+        [36m</div>[31m
+      [36m</main>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2mΓ¥»[22m Object.getElementError ../node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2mΓ¥»[22m getAllByLabelText 
+../node_modules/@testing-library/dom/dist/queries/label-text.js:[2m111:38[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2mΓ¥»[22m src/tests/auth.test.tsx:[2m132:28[22m[39m
+    [90m130| [39m    [34mrenderWithRouter[39m([32m'/login'[39m)[33m;[39m
+    [90m131| [39m
+    [90m132| [39m    [35mawait[39m user[33m.[39m[34mtype[39m(screen[33m.[39m[34mgetByLabelText[39m([36m/α╕
+èα╕╖α╣êα╕¡α╕£α╕╣α╣ëα╣âα╕èα╣ë|username/i[39m)[33m,[39m [32m'co[39mΓÇª
+    [90m   | [39m                           [31m^[39m
+    [90m133| [39m    [35mawait[39m user[33m.[39m[34mtype[39m(screen[33m.[39m[34mgetByLabelText[39m([36m/α╕
+úα╕½α╕▒α╕¬α╕£α╣êα╕▓α╕Ö|password/i[39m)[33m,[39m [32m'coll[39mΓÇª
+    [90m134| [39m    [35mawait[39m 
+user[33m.[39m[34mclick[39m(screen[33m.[39m[34mgetByRole[39m([32m'button'[39m[33m,[39m { name[33m:[39m 
+[36m/α╣Çα╕éα╣ëα╕▓α╕¬α╕╣α╣êα╕úα╕░α╕Üα╕Ü|s[39mΓÇª
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[4/23]ΓÄ»[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/auth.test.tsx[2m > [22mAuthentication & Route Guard Component Tests[2m 
+> [22mcollector login with active ticket redirects directly to /my-ticket
+[31m[1mTestingLibraryElementError[22m: Unable to find a label with the text of: 
+/α╕èα╕╖α╣êα╕¡α╕£α╕╣α╣ëα╣âα╕èα╣ë|username/i
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"app-container"[31m
+    [36m>[31m
+      [36m<header[31m
+        [33mclass[31m=[32m"header"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"header-brand"[31m
+        [36m>[31m
+          [36m<h1>[31m
+            [0mPopQueue[0m
+          [36m</h1>[31m
+          [36m<p>[31m
+            [0mArt Toy Live Unboxing Queue Management System[0m
+          [36m</p>[31m
+        [36m</div>[31m
+      [36m</header>[31m
+      [36m<main[31m
+        [33mclass[31m=[32m"main-content"[31m
+      [36m>[31m
+        [36m<div>[31m
+          [0mLoginPage Stub (Not Implemented)[0m
+        [36m</div>[31m
+      [36m</main>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2mΓ¥»[22m Object.getElementError ../node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2mΓ¥»[22m getAllByLabelText 
+../node_modules/@testing-library/dom/dist/queries/label-text.js:[2m111:38[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2mΓ¥»[22m src/tests/auth.test.tsx:[2m179:28[22m[39m
+    [90m177| [39m    [34mrenderWithRouter[39m([32m'/login'[39m)[33m;[39m
+    [90m178| [39m
+    [90m179| [39m    [35mawait[39m user[33m.[39m[34mtype[39m(screen[33m.[39m[34mgetByLabelText[39m([36m/α╕
+èα╕╖α╣êα╕¡α╕£α╕╣α╣ëα╣âα╕èα╣ë|username/i[39m)[33m,[39m [32m'co[39mΓÇª
+    [90m   | [39m                           [31m^[39m
+    [90m180| [39m    [35mawait[39m user[33m.[39m[34mtype[39m(screen[33m.[39m[34mgetByLabelText[39m([36m/α╕
+úα╕½α╕▒α╕¬α╕£α╣êα╕▓α╕Ö|password/i[39m)[33m,[39m [32m'coll[39mΓÇª
+    [90m181| [39m    [35mawait[39m 
+user[33m.[39m[34mclick[39m(screen[33m.[39m[34mgetByRole[39m([32m'button'[39m[33m,[39m { name[33m:[39m 
+[36m/α╣Çα╕éα╣ëα╕▓α╕¬α╕╣α╣êα╕úα╕░α╕Üα╕Ü|s[39mΓÇª
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[5/23]ΓÄ»[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/auth.test.tsx[2m > [22mAuthentication & Route Guard Component Tests[2m 
+> [22mbox master login redirects to /staff/counter
+[31m[1mTestingLibraryElementError[22m: Unable to find a label with the text of: 
+/α╕èα╕╖α╣êα╕¡α╕£α╕╣α╣ëα╣âα╕èα╣ë|username/i
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"app-container"[31m
+    [36m>[31m
+      [36m<header[31m
+        [33mclass[31m=[32m"header"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"header-brand"[31m
+        [36m>[31m
+          [36m<h1>[31m
+            [0mPopQueue[0m
+          [36m</h1>[31m
+          [36m<p>[31m
+            [0mArt Toy Live Unboxing Queue Management System[0m
+          [36m</p>[31m
+        [36m</div>[31m
+      [36m</header>[31m
+      [36m<main[31m
+        [33mclass[31m=[32m"main-content"[31m
+      [36m>[31m
+        [36m<div>[31m
+          [0mLoginPage Stub (Not Implemented)[0m
+        [36m</div>[31m
+      [36m</main>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2mΓ¥»[22m Object.getElementError ../node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2mΓ¥»[22m getAllByLabelText 
+../node_modules/@testing-library/dom/dist/queries/label-text.js:[2m111:38[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2mΓ¥»[22m src/tests/auth.test.tsx:[2m223:28[22m[39m
+    [90m221| [39m    [34mrenderWithRouter[39m([32m'/login'[39m)[33m;[39m
+    [90m222| [39m
+    [90m223| [39m    [35mawait[39m user[33m.[39m[34mtype[39m(screen[33m.[39m[34mgetByLabelText[39m([36m/α╕
+èα╕╖α╣êα╕¡α╕£α╕╣α╣ëα╣âα╕èα╣ë|username/i[39m)[33m,[39m [32m'st[39mΓÇª
+    [90m   | [39m                           [31m^[39m
+    [90m224| [39m    [35mawait[39m user[33m.[39m[34mtype[39m(screen[33m.[39m[34mgetByLabelText[39m([36m/α╕
+úα╕½α╕▒α╕¬α╕£α╣êα╕▓α╕Ö|password/i[39m)[33m,[39m [32m'staf[39mΓÇª
+    [90m225| [39m    [35mawait[39m 
+user[33m.[39m[34mclick[39m(screen[33m.[39m[34mgetByRole[39m([32m'button'[39m[33m,[39m { name[33m:[39m 
+[36m/α╣Çα╕éα╣ëα╕▓α╕¬α╕╣α╣êα╕úα╕░α╕Üα╕Ü|s[39mΓÇª
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[6/23]ΓÄ»[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/auth.test.tsx[2m > [22mAuthentication & Route Guard Component Tests[2m 
+> [22mroute guard: unauthenticated access to /series redirects to /login
+[31m[1mTestingLibraryElementError[22m: Unable to find an accessible element with the role "button" and name 
+`/α╣Çα╕éα╣ëα╕▓α╕¬α╕╣α╣êα╕úα╕░α╕Üα╕Ü|sign in/i`
+
+Here are the accessible roles:
+
+  banner:
+
+  Name "":
+  [36m<header[31m
+    [33mclass[31m=[32m"header"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  heading:
+
+  Name "PopQueue":
+  [36m<h1 />[31m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p />[31m
+
+  --------------------------------------------------
+  main:
+
+  Name "":
+  [36m<main[31m
+    [33mclass[31m=[32m"main-content"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"app-container"[31m
+    [36m>[31m
+      [36m<header[31m
+        [33mclass[31m=[32m"header"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"header-brand"[31m
+        [36m>[31m
+          [36m<h1>[31m
+            [0mPopQueue[0m
+          [36m</h1>[31m
+          [36m<p>[31m
+            [0mArt Toy Live Unboxing Queue Management System[0m
+          [36m</p>[31m
+        [36m</div>[31m
+      [36m</header>[31m
+      [36m<main[31m
+        [33mclass[31m=[32m"main-content"[31m
+      [36m>[31m
+        [36m<div>[31m
+          [0mLoginPage Stub (Not Implemented)[0m
+        [36m</div>[31m
+      [36m</main>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2mΓ¥»[22m Object.getElementError ../node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2mΓ¥»[22m src/tests/auth.test.tsx:[2m234:19[22m[39m
+    [90m232| [39m  [34mit[39m([32m'route guard: unauthenticated access to /series redirects to /log[39mΓÇª
+    [90m233| [39m    [34mrenderWithRouter[39m([32m'/series'[39m)[33m;[39m
+    [90m234| [39m    [34mexpect[39m(screen[33m.[39m[34mgetByRole[39m([32m'button'[39m[33m,[39m { 
+name[33m:[39m [36m/α╣Çα╕éα╣ëα╕▓α╕¬α╕╣α╣êα╕úα╕░α╕Üα╕Ü|sign in/i[39m }ΓÇª
+    [90m   | [39m                  [31m^[39m
+    [90m235| [39m  })[33m;[39m
+    [90m236| [39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[7/23]ΓÄ»[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/series.test.tsx[2m > [22mSeriesPage Component Tests (AC-19, Master 
+┬º2.6)[2m > [22mrenders series list with codes, names, and waiting counts
+[31m[1mTestingLibraryElementError[22m: Unable to find an element with the text: /Crybaby Sunset Concert/i. This 
+could be because the text is broken up by multiple elements. In this case, you can provide a function for your text 
+matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mSeriesPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mSeriesPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2mΓ¥»[22m waitForWrapper ../node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m86:33[22m[39m
+[36m [2mΓ¥»[22m src/tests/series.test.tsx:[2m52:25[22m[39m
+    [90m 50| [39m    [34mrenderSeries[39m()[33m;[39m
+    [90m 51| [39m
+    [90m 52| [39m    [34mexpect[39m([35mawait[39m screen[33m.[39m[34mfindByText[39m([36m/Crybaby Sunset 
+Concert/i[39m))[33m.[39m[34mtoBeInT[39mΓÇª
+    [90m   | [39m                        [31m^[39m
+    [90m 53| [39m    [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([36m/Labubu 
+Macaron/i[39m))[33m.[39m[34mtoBeInTheDocument[39m()[33m;[39m
+    [90m 54| [39m    [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([36m/Skullpanda Closed 
+Demo/i[39m))[33m.[39m[34mtoBeInTheDocum[39mΓÇª
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[8/23]ΓÄ»[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/series.test.tsx[2m > [22mSeriesPage Component Tests (AC-19, Master 
+┬º2.6)[2m > [22mclosed series shows α╕¢α╕┤α╕öα╕úα╕▒α╕Üα╕äα╕┤α╕º and button is disabled
+[31m[1mTestingLibraryElementError[22m: Unable to find an element with the text: /α╕¢α╕┤α╕öα╕úα╕▒α╕Üα╕äα╕┤α╕º/i. 
+This could be because the text is broken up by multiple elements. In this case, you can provide a function for your 
+text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mSeriesPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mSeriesPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2mΓ¥»[22m waitForWrapper ../node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m86:33[22m[39m
+[36m [2mΓ¥»[22m src/tests/series.test.tsx:[2m67:38[22m[39m
+    [90m 65| [39m    [34mrenderSeries[39m()[33m;[39m
+    [90m 66| [39m
+    [90m 67| [39m    [35mconst[39m closedBadge [33m=[39m [35mawait[39m 
+screen[33m.[39m[34mfindByText[39m([36m/α╕¢α╕┤α╕öα╕úα╕▒α╕Üα╕äα╕┤α╕º/i[39m)[33m;[39m
+    [90m   | [39m                                     [31m^[39m
+    [90m 68| [39m    [34mexpect[39m(closedBadge)[33m.[39m[34mtoBeInTheDocument[39m()[33m;[39m
+    [90m 69| [39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[9/23]ΓÄ»[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/series.test.tsx[2m > [22mSeriesPage Component Tests (AC-19, Master 
+┬º2.6)[2m > [22mjoin queue on CRY shows loading and navigates to /my-ticket on 201
+[31m[1mTestingLibraryElementError[22m: Unable to find an element with the text: /Crybaby Sunset Concert/i. This 
+could be because the text is broken up by multiple elements. In this case, you can provide a function for your text 
+matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mSeriesPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mSeriesPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2mΓ¥»[22m waitForWrapper ../node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m86:33[22m[39m
+[36m [2mΓ¥»[22m src/tests/series.test.tsx:[2m128:18[22m[39m
+    [90m126| [39m    [34mrenderSeries[39m()[33m;[39m
+    [90m127| [39m
+    [90m128| [39m    [35mawait[39m screen[33m.[39m[34mfindByText[39m([36m/Crybaby Sunset 
+Concert/i[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m129| [39m
+    [90m130| [39m    [35mconst[39m cryCard [33m=[39m screen[33m.[39m[34mgetByText[39m([36m/Crybaby Sunset 
+Concert/i[39m)[33m.[39m[34mcloses[39mΓÇª
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[10/23]ΓÄ»[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/series.test.tsx[2m > [22mSeriesPage Component Tests (AC-19, Master 
+┬º2.6)[2m > [22mshows error banner when join returns 409 DUPLICATE_ACTIVE_QUEUE
+[31m[1mTestingLibraryElementError[22m: Unable to find an element with the text: /Crybaby Sunset Concert/i. This 
+could be because the text is broken up by multiple elements. In this case, you can provide a function for your text 
+matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mSeriesPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mSeriesPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2mΓ¥»[22m waitForWrapper ../node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m86:33[22m[39m
+[36m [2mΓ¥»[22m src/tests/series.test.tsx:[2m165:18[22m[39m
+    [90m163| [39m    [34mrenderSeries[39m()[33m;[39m
+    [90m164| [39m
+    [90m165| [39m    [35mawait[39m screen[33m.[39m[34mfindByText[39m([36m/Crybaby Sunset 
+Concert/i[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m166| [39m
+    [90m167| [39m    [35mconst[39m cryCard [33m=[39m screen[33m.[39m[34mgetByText[39m([36m/Crybaby Sunset 
+Concert/i[39m)[33m.[39m[34mcloses[39mΓÇª
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[11/23]ΓÄ»[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/series.test.tsx[2m > [22mSeriesPage Component Tests (AC-19, Master 
+┬º2.6)[2m > [22mshows empty state when series list is empty
+[31m[1mTestingLibraryElementError[22m: Unable to find an element with the text: 
+/α╣äα╕íα╣êα╕íα╕╡α╕úα╕▓α╕óα╕üα╕▓α╕úα╕ïα╕╡α╕úα╕╡α╕¬α╣îα╣Çα╕¢α╕┤α╕öα╣âα╕½α╣ëα╕Üα╕úα╕┤α╕üα╕▓α╕úα╣âα╕Öα╕éα╕ôα╕░α╕Öα╕╡α╣ë/i. 
+This could be because the text is broken up by multiple elements. In this case, you can provide a function for your 
+text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mSeriesPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mSeriesPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2mΓ¥»[22m waitForWrapper ../node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m86:33[22m[39m
+[36m [2mΓ¥»[22m src/tests/series.test.tsx:[2m185:20[22m[39m
+    [90m183| [39m
+    [90m184| [39m    [34mexpect[39m(
+    [90m185| [39m      [35mawait[39m screen[33m.[39m[34mfindByText[39m([36m/α╣äα╕íα╣êα╕íα╕╡α╕úα╕▓α╕óα╕üα╕▓α╕úα
+╕ïα╕╡α╕úα╕╡α╕¬α╣îα╣Çα╕¢α╕┤α╕öα╣âα╕½α╣ëα╕Üα╕úα╕┤α╕üα╕▓α╕úα╣âα╕Öα╕éα╕ôα╕░α╕Öα╕╡α╣ë/i[39m)[33m,[39m
+    [90m   | [39m                   [31m^[39m
+    [90m186| [39m    )[33m.[39m[34mtoBeInTheDocument[39m()[33m;[39m
+    [90m187| [39m  })[33m;[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[12/23]ΓÄ»[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/staff.test.tsx[2m > [22mStaffCounterPage Component Tests (Master 
+┬º3.6)[2m > [22mrenders series selector when staff is assigned multiple series
+[31m[1mTestingLibraryElementError[22m: Unable to find role="combobox" and name 
+`/α╣Çα╕Ñα╕╖α╕¡α╕üα╕ïα╕╡α╕úα╕╡α╕¬α╣î/i`
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mStaffCounterPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mStaffCounterPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2mΓ¥»[22m waitForWrapper ../node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m86:33[22m[39m
+[36m [2mΓ¥»[22m src/tests/staff.test.tsx:[2m81:25[22m[39m
+    [90m 79| [39m    [34mrenderStaff[39m()[33m;[39m
+    [90m 80| [39m
+    [90m 81| [39m    [34mexpect[39m([35mawait[39m 
+screen[33m.[39m[34mfindByRole[39m([32m'combobox'[39m[33m,[39m { name[33m:[39m 
+[36m/α╣Çα╕Ñα╕╖α╕¡α╕üα╕ïα╕╡α╕úα╕╡α╕¬α╣î/i[39m ΓÇª
+    [90m   | [39m                        [31m^[39m
+    [90m 82| [39m    [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([36m/CRY - 
+Crybaby/i[39m))[33m.[39m[34mtoBeInTheDocument[39m()[33m;[39m
+    [90m 83| [39m  })[33m;[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[13/23]ΓÄ»[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/staff.test.tsx[2m > [22mStaffCounterPage Component Tests (Master 
+┬º3.6)[2m > [22mdisplays waiting queue with queue numbers and customer full names
+[31m[1mTestingLibraryElementError[22m: Unable to find an element with the text: /CRY-001/i. This could be because 
+the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make 
+your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mStaffCounterPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mStaffCounterPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2mΓ¥»[22m waitForWrapper ../node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m86:33[22m[39m
+[36m [2mΓ¥»[22m src/tests/staff.test.tsx:[2m94:25[22m[39m
+    [90m 92| [39m    [34mrenderStaff[39m()[33m;[39m
+    [90m 93| [39m
+    [90m 94| [39m    [34mexpect[39m([35mawait[39m 
+screen[33m.[39m[34mfindByText[39m([36m/CRY-001/i[39m))[33m.[39m[34mtoBeInTheDocument[39m()[33m;[39m
+    [90m   | [39m                        [31m^[39m
+    [90m 95| [39m    [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([36m/Collector 
+1/i[39m))[33m.[39m[34mtoBeInTheDocument[39m()[33m;[39m
+    [90m 96| [39m    [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([36m/CRY-002/i[39m))[33m.[39m[34mtoBe
+InTheDocument[39m()[33m;[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[14/23]ΓÄ»[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/staff.test.tsx[2m > [22mStaffCounterPage Component Tests (Master 
+┬º3.6)[2m > [22mshows α╕óα╕▒α╕çα╣äα╕íα╣êα╕íα╕╡α╕äα╕┤α╕ºα╕úα╕¡α╕úα╕▒α╕Üα╕Üα╕úα╕┤α╕üα╕▓α╕ú when waiting queue is empty
+[31m[1mTestingLibraryElementError[22m: Unable to find an element with the text: 
+/α╕óα╕▒α╕çα╣äα╕íα╣êα╕íα╕╡α╕äα╕┤α╕ºα╕úα╕¡α╕úα╕▒α╕Üα╕Üα╕úα╕┤α╕üα╕▓α╕ú/i. This could be because the text is broken up by 
+multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mStaffCounterPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mStaffCounterPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2mΓ¥»[22m waitForWrapper ../node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m86:33[22m[39m
+[36m [2mΓ¥»[22m src/tests/staff.test.tsx:[2m123:25[22m[39m
+    [90m121| [39m    [34mrenderStaff[39m()[33m;[39m
+    [90m122| [39m
+    [90m123| [39m    [34mexpect[39m([35mawait[39m screen[33m.[39m[34mfindByText[39m([36m/α╕óα╕▒α╕çα╣äα╕íα╣êα
+╕íα╕╡α╕äα╕┤α╕ºα╕úα╕¡α╕úα╕▒α╕Üα╕Üα╕úα╕┤α╕üα╕▓α╕ú/i[39m))[33m.[39m[34mtoBeInT[39mΓÇª
+    [90m   | [39m                        [31m^[39m
+    [90m124| [39m  })[33m;[39m
+    [90m125| [39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[15/23]ΓÄ»[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/staff.test.tsx[2m > [22mStaffCounterPage Component Tests (Master 
+┬º3.6)[2m > [22mcall next button sends seriesId and transitions to CALLED
+[31m[1mTestingLibraryElementError[22m: Unable to find role="button" and name 
+`/α╣Çα╕úα╕╡α╕óα╕üα╕äα╕┤α╕ºα╕ûα╕▒α╕öα╣äα╕¢|call next/i`
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mStaffCounterPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mStaffCounterPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2mΓ¥»[22m waitForWrapper ../node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m86:33[22m[39m
+[36m [2mΓ¥»[22m src/tests/staff.test.tsx:[2m176:38[22m[39m
+    [90m174| [39m    [34mrenderStaff[39m()[33m;[39m
+    [90m175| [39m
+    [90m176| [39m    [35mconst[39m callNextBtn [33m=[39m [35mawait[39m 
+screen[33m.[39m[34mfindByRole[39m([32m'button'[39m[33m,[39m { name[33m:[39m [36m/α╣Çα╕úα╕╡[39mΓÇª
+    [90m   | [39m                                     [31m^[39m
+    [90m177| [39m    [34mexpect[39m(callNextBtn)[33m.[39m[34mtoBeEnabled[39m()[33m;[39m
+    [90m178| [39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[16/23]ΓÄ»[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/staff.test.tsx[2m > [22mStaffCounterPage Component Tests (Master 
+┬º3.6)[2m > [22mverify & start unboxing button calls API and complete button appears
+[31m[1mTestingLibraryElementError[22m: Unable to find role="button" and name `/verify & 
+start|α╣Çα╕úα╕┤α╣êα╕íα╣Çα╕¢α╕┤α╕öα╕üα╕Ñα╣êα╕¡α╕ç/i`
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mStaffCounterPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mStaffCounterPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2mΓ¥»[22m waitForWrapper ../node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m86:33[22m[39m
+[36m [2mΓ¥»[22m src/tests/staff.test.tsx:[2m254:35[22m[39m
+    [90m252| [39m    [34mrenderStaff[39m()[33m;[39m
+    [90m253| [39m
+    [90m254| [39m    [35mconst[39m startBtn [33m=[39m [35mawait[39m 
+screen[33m.[39m[34mfindByRole[39m([32m'button'[39m[33m,[39m { name[33m:[39m [36m/verify[39mΓÇª
+    [90m   | [39m                                  [31m^[39m
+    [90m255| [39m    [35mawait[39m user[33m.[39m[34mclick[39m(startBtn)[33m;[39m
+    [90m256| [39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[17/23]ΓÄ»[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/staff.test.tsx[2m > [22mStaffCounterPage Component Tests (Master 
+┬º3.6)[2m > [22mdisplays error banner when call-next fails with STAFF_BUSY
+[31m[1mTestingLibraryElementError[22m: Unable to find role="button" and name 
+`/α╣Çα╕úα╕╡α╕óα╕üα╕äα╕┤α╕ºα╕ûα╕▒α╕öα╣äα╕¢|call next/i`
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mStaffCounterPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mStaffCounterPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2mΓ¥»[22m waitForWrapper ../node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m86:33[22m[39m
+[36m [2mΓ¥»[22m src/tests/staff.test.tsx:[2m283:38[22m[39m
+    [90m281| [39m    [34mrenderStaff[39m()[33m;[39m
+    [90m282| [39m
+    [90m283| [39m    [35mconst[39m callNextBtn [33m=[39m [35mawait[39m 
+screen[33m.[39m[34mfindByRole[39m([32m'button'[39m[33m,[39m { name[33m:[39m [36m/α╣Çα╕úα╕╡[39mΓÇª
+    [90m   | [39m                                     [31m^[39m
+    [90m284| [39m    [35mawait[39m user[33m.[39m[34mclick[39m(callNextBtn)[33m;[39m
+    [90m285| [39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[18/23]ΓÄ»[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/ticket.test.tsx[2m > [22mMyTicketPage Component Tests (AC-19, AC-33, 
+Master ┬º4.3, ┬º4.6)[2m > [22mshows empty state with link to /series when 404 NO_ACTIVE_TICKET is returned
+[31m[1mTestingLibraryElementError[22m: Unable to find an element with the text: 
+/α╕óα╕▒α╕çα╣äα╕íα╣êα╕íα╕╡α╕Üα╕▒α╕òα╕úα╕äα╕┤α╕º/i. This could be because the text is broken up by multiple elements. In 
+this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mMyTicketPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mMyTicketPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2mΓ¥»[22m waitForWrapper ../node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m86:33[22m[39m
+[36m [2mΓ¥»[22m src/tests/ticket.test.tsx:[2m48:25[22m[39m
+    [90m 46| [39m    [34mrenderTicket[39m()[33m;[39m
+    [90m 47| [39m
+    [90m 48| [39m    [34mexpect[39m([35mawait[39m screen[33m.[39m[34mfindByText[39m([36m/α╕óα╕▒α╕çα╣äα╕íα╣êα
+╕íα╕╡α╕Üα╕▒α╕òα╕úα╕äα╕┤α╕º/i[39m))[33m.[39m[34mtoBeInTheDocument[39m()[33m;[39m
+    [90m   | [39m                        [31m^[39m
+    [90m 49| [39m    [35mconst[39m seriesLink [33m=[39m 
+screen[33m.[39m[34mgetByRole[39m([32m'link'[39m[33m,[39m { name[33m:[39m 
+[36m/α╣Çα╕Ñα╕╖α╕¡α╕üα╕ïα╕╡α╕úα╕╡α╕¬α╣î|α╕ú[39mΓÇª
+    [90m 50| [39m    [34mexpect[39m(seriesLink)[33m.[39m[34mtoHaveAttribute[39m([32m'href'[39m[33m,[39m 
+[32m'/series'[39m)[33m;[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[19/23]ΓÄ»[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/ticket.test.tsx[2m > [22mMyTicketPage Component Tests (AC-19, AC-33, 
+Master ┬º4.3, ┬º4.6)[2m > [22mrenders active ticket: CRY-003, WAITING status, and α╣Çα╕½α╕Ñα╕╖α╕¡α╕¡α╕╡α╕ü 2 
+α╕äα╕┤α╕ºα╕üα╣êα╕¡α╕Öα╕½α╕Öα╣ëα╕▓
+[31m[1mTestingLibraryElementError[22m: Unable to find an element with the text: /CRY-003/i. This could be because 
+the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make 
+your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mMyTicketPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mMyTicketPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2mΓ¥»[22m waitForWrapper ../node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m86:33[22m[39m
+[36m [2mΓ¥»[22m src/tests/ticket.test.tsx:[2m76:25[22m[39m
+    [90m 74| [39m    [34mrenderTicket[39m()[33m;[39m
+    [90m 75| [39m
+    [90m 76| [39m    [34mexpect[39m([35mawait[39m 
+screen[33m.[39m[34mfindByText[39m([36m/CRY-003/i[39m))[33m.[39m[34mtoBeInTheDocument[39m()[33m;[39m
+    [90m   | [39m                        [31m^[39m
+    [90m 77| [39m    [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([36m/WAITING/i[39m))[33m.[39m[34mtoBe
+InTheDocument[39m()[33m;[39m
+    [90m 78| [39m    [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([36m/α╣Çα╕½α╕Ñα╕╖α╕¡α╕¡α╕╡α╕ü 2 
+α╕äα╕┤α╕ºα╕üα╣êα╕¡α╕Öα╕½α╕Öα╣ëα╕▓/i[39m))[33m.[39m[34mtoBeInTheDocument[39m()[33m;[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[20/23]ΓÄ»[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/ticket.test.tsx[2m > [22mMyTicketPage Component Tests (AC-19, AC-33, 
+Master ┬º4.3, ┬º4.6)[2m > [22mdisplays orange warning banner with α╕ûα╕╢α╕çα╕äα╕┤α╕ºα╣üα╕Ñα╣ëα╕º 
+α╕üα╕úα╕╕α╕ôα╕▓α╕íα╕▓α╕ùα╕╡α╣êα╣Çα╕äα╕▓α╕Öα╣îα╣Çα╕òα╕¡α╕úα╣î and countdown when CALLED
+[31m[1mTestingLibraryElementError[22m: Unable to find an element with the text: /α╕ûα╕╢α╕çα╕äα╕┤α╕ºα╣üα╕Ñα╣ëα╕º 
+α╕üα╕úα╕╕α╕ôα╕▓α╕íα╕▓α╕ùα╕╡α╣êα╣Çα╕äα╕▓α╕Öα╣îα╣Çα╕òα╕¡α╕úα╣î/i. This could be because the text is broken up by 
+multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mMyTicketPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[2m Test Files [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[31m23 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (30)[39m
+[2m   Start at [22m 21:27:45
+[2m   Duration [22m 9.40s[2m (transform 479ms, setup 2.24s, collect 3.47s, tests 16.76s, environment 10.06s, prepare 1.38s)[22m
+
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mMyTicketPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2mΓ¥»[22m waitForWrapper ../node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m86:33[22m[39m
+[36m [2mΓ¥»[22m src/tests/ticket.test.tsx:[2m104:25[22m[39m
+    [90m102| [39m    [34mrenderTicket[39m()[33m;[39m
+    [90m103| [39m
+    [90m104| [39m    [34mexpect[39m([35mawait[39m 
+screen[33m.[39m[34mfindByText[39m([36m/α╕ûα╕╢α╕çα╕äα╕┤α╕ºα╣üα╕Ñα╣ëα╕º 
+α╕üα╕úα╕╕α╕ôα╕▓α╕íα╕▓α╕ùα╕╡α╣êα╣Çα╕äα╕▓α╕Öα╣îα╣Çα╕òα╕¡α╕úα╣î/i[39m)ΓÇª
+    [90m   | [39m                        [31m^[39m
+    [90m105| [39m    [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([36m/CALLED/i[39m))[33m.[39m[34mtoBeI
+nTheDocument[39m()[33m;[39m
+    [90m106| [39m    [90m// Countdown format 02:00 or similar[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[21/23]ΓÄ»[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/ticket.test.tsx[2m > [22mMyTicketPage Component Tests (AC-19, AC-33, 
+Master ┬º4.3, ┬º4.6)[2m > [22mdisplays α╕üα╕│α╕Ñα╕▒α╕çα╣âα╕½α╣ëα╕Üα╕úα╕┤α╕üα╕▓α╕ú when status is UNBOXING
+[31m[1mTestingLibraryElementError[22m: Unable to find an element with the text: 
+/α╕üα╕│α╕Ñα╕▒α╕çα╣âα╕½α╣ëα╕Üα╕úα╕┤α╕üα╕▓α╕ú/i. This could be because the text is broken up by multiple elements. In 
+this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mMyTicketPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mMyTicketPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2mΓ¥»[22m waitForWrapper ../node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m86:33[22m[39m
+[36m [2mΓ¥»[22m src/tests/ticket.test.tsx:[2m133:25[22m[39m
+    [90m131| [39m    [34mrenderTicket[39m()[33m;[39m
+    [90m132| [39m
+    [90m133| [39m    [34mexpect[39m([35mawait[39m screen[33m.[39m[34mfindByText[39m([36m/α╕üα╕│α╕Ñα╕▒α╕çα╣âα
+╕½α╣ëα╕Üα╕úα╕┤α╕üα╕▓α╕ú/i[39m))[33m.[39m[34mtoBeInTheDocument[39m()[33m;[39m
+    [90m   | [39m                        [31m^[39m
+    [90m134| [39m    [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([36m/UNBOXING/i[39m))[33m.[39m[34mtoB
+eInTheDocument[39m()[33m;[39m
+    [90m135| [39m  })[33m;[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[22/23]ΓÄ»[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/ticket.test.tsx[2m > [22mMyTicketPage Component Tests (AC-19, AC-33, 
+Master ┬º4.3, ┬º4.6)[2m > [22mdisplays retry button on error and re-fetches when clicked
+[31m[1mTestingLibraryElementError[22m: Unable to find role="button" and name `/α╕Ñα╕¡α╕çα╣âα╕½α╕íα╣ê/i`
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mMyTicketPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div>[31m
+      [0mMyTicketPage Stub (Not Implemented)[0m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2mΓ¥»[22m waitForWrapper ../node_modules/@testing-library/dom/dist/wait-for.js:[2m163:27[22m[39m
+[90m [2mΓ¥»[22m ../node_modules/@testing-library/dom/dist/query-helpers.js:[2m86:33[22m[39m
+[36m [2mΓ¥»[22m src/tests/ticket.test.tsx:[2m170:35[22m[39m
+    [90m168| [39m    [34mrenderTicket[39m()[33m;[39m
+    [90m169| [39m
+    [90m170| [39m    [35mconst[39m retryBtn [33m=[39m [35mawait[39m 
+screen[33m.[39m[34mfindByRole[39m([32m'button'[39m[33m,[39m { name[33m:[39m [36m/α╕Ñα╕¡α╕çα╣âα╕½α╕í[39mΓÇª
+    [90m   | [39m                                  [31m^[39m
+    [90m171| [39m    [35mawait[39m user[33m.[39m[34mclick[39m(retryBtn)[33m;[39m
+    [90m172| [39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[23/23]ΓÄ»[22m[39m
+
+npm error Lifecycle script `test` failed with error:
+npm error code 1
+npm error path C:\!KMUTT\Year 3\Semeter 1\SE\Project\Project SE\qdrive-license-queue\client
+npm error workspace client@0.1.0
+npm error location C:\!KMUTT\Year 3\Semeter 1\SE\Project\Project SE\qdrive-license-queue\client
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c vitest run
