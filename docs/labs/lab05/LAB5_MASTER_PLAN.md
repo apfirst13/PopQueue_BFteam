@@ -1,4 +1,4 @@
-# PopQueue — Lab 5 Master Execution & Deployment Plan (v2.1 Final)
+# PopQueue — Lab 5 Master Execution & Deployment Plan (v2.2 Final)
 ## Cloud Deployment and CI/CD Pipeline on Google Cloud Platform (GCP)
 
 **Course:** CPE 334 Introduction to Software Engineering in the Age of AI Agents (Semester 1/2026, KMUTT)  
@@ -26,7 +26,7 @@ To enforce **R-09 (author cannot approve own PR)** and **R-11 (shared participat
 
 | Issue / Topic | Handout Episode | Primary Author (Implementer) | Required Reviewer (Approver) | Scope & Collaboration |
 |:---:|:---:|:---:|:---:|---|
-| **Issue 1** | Ep. 1 | `@apfirst13` | `@Theerawat82` | GCP Project Setup (`popqueue-lab5` or unique suffix), $5 Budget Alert, Enable APIs, **Add `@Theerawat82` as IAM Editor (Handout 4.4)**. |
+| **Issue 1** | Ep. 1 | `@apfirst13` | `@Theerawat82` | GCP Project Setup (`popqueue-lab5` or unique suffix), $5 Budget Alert, Enable APIs, **Add `@Theerawat82` as IAM Editor (Handout 4.4)**. *(Today's Target, 9 Nov)* |
 | **Issues 2 & 3** | Ep. 2 & 3 | `@Theerawat82` | `@apfirst13` | Cloud Readiness, `.env.example`, Multi-stage Dockerfile, Compose, Health endpoints (PR #26). `@apfirst13` conducts comprehensive file-by-file code review. |
 | **Issue 4** | Ep. 4 | `@apfirst13` | `@Theerawat82` | CI Pipeline on PRs (`ci-docker.yml`) using **Node 24**, **PostgreSQL service container**, and `prisma migrate deploy`. Green PR demonstration (**C-01**). |
 | **Issue 5** | Ep. 5 | `@Theerawat82` | `@apfirst13` | First Cloud Shell deployment (`deploy/deploy.sh`), Cloud SQL (`popqueue-pg`), Create runtime SA `popqueue-sa`, Cloud Run Job with **Idempotent DB Seeding**, Secret Manager. |
@@ -37,38 +37,40 @@ To enforce **R-09 (author cannot approve own PR)** and **R-11 (shared participat
 
 ---
 
-## 2. Project Timeline & Delivery Milestones
+## 2. Adjusted Project Timeline & Delivery Milestones
+
+Per team agreement, **Today (9 Nov) is dedicated exclusively to Issue 1** (GCP Setup, Budget Alert & IAM Team Access) to establish a rock-solid cloud foundation without rushing. Subsequent issues follow in a clean, manageable sequence:
 
 ```
-[9 Nov: Issues 1, 2, 3, PR #26, C-03, Issue 4]
+[9 Nov (Today): Issue 1 — GCP Free Trial, Project Setup, $5 Budget Alert, IAM Editor]
        |
        v
-[10 Nov: Issue 5 (Cloud Shell Deploy & Seed -> Public URL Ready)]  <-- Lab 6 Session 1
+[10 Nov (Tue): Issues 2 & 3 — Substantive Review & Merge PR #26, C-03 Clean Clone Demo, Start Issue 4]
        |
        v
-[11 Nov: Issue 6 (WIF, Branch Rulesets, C-02 Demo)]
+[11 Nov (Wed): Issue 5 — Cloud Shell Deploy, Cloud SQL, popqueue-sa IAM, Idempotent Seed -> Public URL Live]
        |
        v
-[12 Nov: Issue 7 (Automated CD Pipeline, Visible Change Release)]  <-- Lab 6 Session 2 (UAT Ready)
+[12 Nov (Thu): Issue 6 — WIF, Branch Rulesets, C-02 Demo + Issue 7 — CD Pipeline & Visible Change (C-06 Execution)]
+       |  (Ready for Lab 6 Partner Team UAT)
+       v
+[13 Nov (Fri): Issue 8 — C-04 Domain Workflow, C-05 Persistence Test, C-06 Verification]
        |
        v
-[13 Nov: Issue 8 (C-04 Workflow, C-05 Persistence, C-06 Verification)]
+[14 Nov (Sat): Issue 9 — Finalize docs/labs/lab05/deployment.md, Compile lab5_sec1_BFteam.pdf]
        |
        v
-[14 Nov: Issue 9 (Finalize Docs, Compile lab5_sec1_BFteam.pdf)]
-       |
-       v
-[15 Nov: Final Review, Tag v0.2.0-lab5 on main, Submit to LEB2 before 23:59]
+[15 Nov (Sun): Final Review against Rubric, Tag v0.2.0-lab5 on main, Submit to LEB2 before 23:59]
 ```
 
-| Date | Planned Execution Milestone | Lab 6 Alignment & Key Outputs |
+| Date | Planned Execution Milestone | Focus Scope & Key Outputs |
 |:---:|---|---|
-| **Mon 9 Nov (Today)** | Issue 1 (GCP & Budget Alert) $\rightarrow$ Merge PR #26 $\rightarrow$ **C-03 (Clean clone demo)** $\rightarrow$ Issue 4 (CI on PR with Node 24 & Postgres container, **C-01 demo**). | Staging baseline verified; CI quality gate active on PRs. |
-| **Tue 10 Nov** | Issue 5: Cloud Shell deployment (`deploy/deploy.sh`), Cloud SQL setup, `popqueue-sa` IAM, and Idempotent DB seed. | **Public URL live and operational** in time for Lab 6 first session. |
-| **Wed 11 Nov** | Issue 6: Workload Identity Federation (WIF) setup, Branch Rulesets on `main` and `lab5-staging`, **C-02 (Failing PR demo)**. | Keyless CD auth configured; branch protection enforced. |
-| **Thu 12 Nov** | Issue 7: Automated CD pipeline (`deploy.yml`), Read-only smoke test, Release visible change (UI footer commit SHA) via PR to `main` (**C-06 execution**). | Automated delivery pipeline active; **ready for Lab 6 partner team UAT**. |
-| **Fri 13 Nov** | Issue 8: **C-04 (Public domain workflow screenshots)**, **C-05 (Persistence test across scale-down & Cloud SQL restart)**, **C-06 (Live SHA verification)**. | All 6 required demonstration checks captured with complete evidence. |
-| **Sat 14 Nov** | Issue 9: Finalize `docs/labs/lab05/deployment.md`, compile PDF report (`lab5_sec1_BFteam.pdf`, Parts 0–4). | Report draft complete; peer review of evidence. |
+| **Mon 9 Nov (Today)** | **Issue 1 exclusively:** Setup GCP Project (`popqueue-lab5`), $5 Budget Alert, enable 5 required APIs, grant `@Theerawat82` IAM Editor role. | Cloud infrastructure foundation established; zero code changes to `main`. |
+| **Tue 10 Nov** | **Issues 2 & 3:** `@apfirst13` conducts substantive code review on PR #26 $\rightarrow$ merge to `lab5-staging` $\rightarrow$ execute **C-03 (Clean clone demo)**. Then `@apfirst13` implements **Issue 4** (CI on PR with Node 24 & Postgres container, **C-01 demo**). | Staging baseline merged; CI gate enforced on PRs. |
+| **Wed 11 Nov** | **Issue 5:** `@Theerawat82` executes first deployment via Cloud Shell (`deploy/deploy.sh`), Cloud SQL setup, `popqueue-sa` IAM, and Idempotent DB seed verification. | **Public GCP URL live and operational** for domain testing. |
+| **Thu 12 Nov** | **Issue 6:** Pair work sets up WIF (with `serviceAccountUser`), branch rulesets on `main` and `lab5-staging`, execute **C-02 (Failing PR demo)**.<br>**Issue 7:** `@apfirst13` sets up automated CD pipeline (`deploy.yml`), read-only smoke test, releases visible change (commit SHA in UI footer) via PR to `main` (**C-06 execution**). | Automated CD active; **ready for Lab 6 partner team UAT**. |
+| **Fri 13 Nov** | **Issue 8:** Execute **C-04 (Public domain workflow screenshots with browser URL bar)**, **C-05 (Persistence test across scale-down & Cloud SQL restart)**, and **C-06 (Live SHA verification)**. | All 6 required demonstration checks captured with complete evidence. |
+| **Sat 14 Nov** | **Issue 9:** Finalize `docs/labs/lab05/deployment.md`, compile PDF report (`lab5_sec1_BFteam.pdf`, Parts 0–4), peer review against rubric. | Report draft complete; peer review of evidence. |
 | **Sun 15 Nov** | Final buffer, review against rubric, create Git release tag `v0.2.0-lab5` on `main`, submit PDF to LEB2 before 23:59. | **Final Submission Complete.** Service left running for grading. |
 
 ---
@@ -185,6 +187,7 @@ Total: 100 Points
 ### Issue 1 (Episode 1): GCP Project Setup, Budget Alert ($5 Threshold) & IAM Team Access
 * **GitHub Issue:** `Lab 5 Issue 1: Setup GCP Project, Budget Alert ($5 threshold) & IAM Team Access` (Issue #24)
 * **Author:** `@apfirst13` | **Reviewer:** `@Theerawat82` | **Label:** `lab5`
+* **Target Execution Date:** **Monday, 9 November 2026 (Today's Dedicated Focus)**
 * **Tasks:**
   1. Create Google Cloud Project: `popqueue-lab5` (if project ID exists, append unique suffix e.g. `popqueue-lab5-bfteam`).
   2. Set Region: `asia-southeast1` (Singapore).
@@ -202,6 +205,7 @@ Total: 100 Points
 ### Issues 2 & 3 (Episodes 2 & 3): Cloud Readiness, Multi-Stage Dockerfile & Local Parity (PR #26)
 * **GitHub Issue:** `Lab 5 Issues 2 & 3: Cloud Readiness, Docker Containerization & Local Verification` (Issue #25)
 * **Author:** `@Theerawat82` | **Reviewer:** `@apfirst13` | **Label:** `lab5`
+* **Target Execution Date:** **Tuesday, 10 November 2026**
 * **Handling Existing PR #26 (Preserving R-10):**
   - PR #26 currently contains foundational Dockerfile, docker-compose, health checks, deploy scripts, and initial CI workflow.
   - Per **R-10 (no rewriting git history)**, PR #26 will NOT be deleted or rebased.
@@ -224,6 +228,7 @@ Total: 100 Points
 ### Issue 4 (Episode 4): CI Pipeline on Pull Requests with Automated Testing & Docker Build Gate
 * **GitHub Issue:** `Lab 5 Issue 4: CI Pipeline on Pull Requests with PostgreSQL Service Container & Docker Build Gate`
 * **Author:** `@apfirst13` | **Reviewer:** `@Theerawat82` | **Label:** `lab5`
+* **Target Execution Date:** **Tuesday, 10 November 2026**
 * **Branch:** `feature/lab5-ci-workflow` $\rightarrow$ PR to `lab5-staging`
 * **Tasks:**
   1. Configure `.github/workflows/ci-docker.yml` running on pull requests targeting `lab5-staging` and `main`.
@@ -243,6 +248,7 @@ Total: 100 Points
 ### Issue 5 (Episode 5): First Manual Deployment to Cloud Run & Cloud SQL via Cloud Shell
 * **GitHub Issue:** `Lab 5 Issue 5: First Manual Deployment to Cloud Run & Cloud SQL via Cloud Shell`
 * **Author:** `@Theerawat82` | **Reviewer:** `@apfirst13` | **Label:** `lab5`
+* **Target Execution Date:** **Wednesday, 11 November 2026**
 * **Branch:** `feature/lab5-cloud-deploy` $\rightarrow$ PR to `lab5-staging`
 * **Tasks:**
   1. Create Runtime Service Account `popqueue-sa`:
@@ -283,6 +289,7 @@ Total: 100 Points
 ### Issue 6 (Episode 6): Workload Identity Federation (WIF) & Branch Protection Rulesets
 * **GitHub Issue:** `Lab 5 Issue 6: Workload Identity Federation & Branch Protection Rulesets on Staging and Main`
 * **Collaboration:** **Pair Work** (`@apfirst13` & `@Theerawat82`) | **Label:** `lab5`
+* **Target Execution Date:** **Thursday, 12 November 2026**
 * **Branch:** `feature/lab5-wif-ruleset` $\rightarrow$ PR to `lab5-staging`
 * **PR Content:** Documentation of WIF setup, IAM roles, GitHub Environment bindings, and ruleset screenshots. `@Theerawat82` authors PR, `@apfirst13` reviews and approves.
 * **Tasks:**
@@ -316,6 +323,7 @@ Total: 100 Points
 ### Issue 7 (Episode 7): Automated Continuous Delivery (CD) Pipeline & Smoke Testing
 * **GitHub Issue:** `Lab 5 Issue 7: Automated CD Pipeline on Main Merge, Read-Only Smoke Test & Commit SHA Traceability`
 * **Author:** `@apfirst13` | **Reviewer:** `@Theerawat82` | **Label:** `lab5`
+* **Target Execution Date:** **Thursday, 12 November 2026**
 * **Branch:** `feature/lab5-cd-pipeline` $\rightarrow$ PR to `lab5-staging`
 * **Tasks:**
   1. Configure `.github/workflows/deploy.yml`:
@@ -345,6 +353,7 @@ Total: 100 Points
 ### Issue 8 (Episode 8): Live Domain Workflow & Cloud SQL Persistence Verification
 * **GitHub Issue:** `Lab 5 Issue 8: Live Domain Workflow, Data Persistence across Scale-Down & DB Restart, and Live SHA Traceability`
 * **Author:** `@Theerawat82` | **Reviewer:** `@apfirst13` | **Label:** `lab5`
+* **Target Execution Date:** **Friday, 13 November 2026**
 * **Branch:** `feature/lab5-persistence-verify` $\rightarrow$ PR to `lab5-staging`
 * **Tasks:**
   1. **Execute Verification Check C-04 (Public Domain Workflow):**
@@ -370,6 +379,7 @@ Total: 100 Points
 ### Issue 9 (Episode 9): Deployment Documentation, Release Tag & Deliverable PDF Report
 * **GitHub Issue:** `Lab 5 Issue 9: Finalize Deployment Docs, Release Tag v0.2.0-lab5 & Deliverable PDF Report`
 * **Collaboration:** **Pair Work** (`@Theerawat82` & `@apfirst13`) | **Label:** `lab5`
+* **Target Execution Date:** **Saturday, 14 November & Sunday, 15 November 2026**
 * **Tasks:**
   1. Finalize Documentation:
      - Set `docs/labs/lab05/deployment.md` as the canonical document.
@@ -401,17 +411,17 @@ Total: 100 Points
 - [x] Move and archive Sprint 1 documentation into `docs/sprints/sprint-1/`
 - [x] Implement multi-stage `Dockerfile`, health checks, Express static serving (PR #26)
 - [x] Verify repository is Public and has `lab5` label (R-10, R-12)
-- [ ] User approval of Final Master Plan (`LAB5_MASTER_PLAN.md` v2.1)
-- [ ] **Issue 1 (9 Nov):** `@apfirst13` sets up GCP project, $5 Budget Alert, and grants `@Theerawat82` IAM Editor role
-- [ ] **Issues 2 & 3 (9 Nov):** `@apfirst13` reviews PR #26 with substantive file-level comments; merge into `lab5-staging`
-- [ ] **Issue 3 (9 Nov):** Execute and capture **Check C-03** (Clean clone local build and run from `.env.example`)
-- [ ] **Issue 4 (9 Nov):** `@apfirst13` creates CI workflow PR with Node 24 and Postgres container; verify **Check C-01** (Green PR)
-- [ ] **Issue 5 (10 Nov):** `@Theerawat82` deploys Cloud SQL, creates `popqueue-sa`, runs idempotent seed; verify public URL
-- [ ] **Issue 6 (11 Nov):** Pair work sets up WIF (with `serviceAccountUser` on `popqueue-sa`) and Branch Rulesets on `main` and `lab5-staging`
-- [ ] **Issue 6 (11 Nov):** Execute and capture **Check C-02** (Failing PR from temporary branch blocked from merging; leave closed)
-- [ ] **Issue 7 (12 Nov):** `@apfirst13` creates CD workflow with read-only smoke test and visible commit SHA; release via PR to `main` (**Check C-06 Execution**)
-- [ ] **Issue 8 (13 Nov):** Execute and capture **Check C-04** (Public domain workflow with browser URL bar visible, masked passwords)
-- [ ] **Issue 8 (13 Nov):** Execute and capture **Check C-05** (Data persistence across scale-down and Cloud SQL restart)
-- [ ] **Issue 8 (13 Nov):** Execute and capture **Check C-06 Verification** (Commit SHA traceability on live site matching release commit)
-- [ ] **Issue 9 (14–15 Nov):** Pair work synchronizes `docs/labs/lab05/deployment.md`, creates tag `v0.2.0-lab5`, compiles `lab5_sec1_BFteam.pdf` (Parts 0–4), and submits to LEB2 before 23:59
+- [ ] User approval of Final Master Plan (`LAB5_MASTER_PLAN.md` v2.2)
+- [ ] **Issue 1 (Mon 9 Nov - TODAY'S FOCUS):** `@apfirst13` sets up GCP project, $5 Budget Alert, and grants `@Theerawat82` IAM Editor role
+- [ ] **Issues 2 & 3 (Tue 10 Nov):** `@apfirst13` reviews PR #26 with substantive file-level comments; merge into `lab5-staging`
+- [ ] **Issue 3 (Tue 10 Nov):** Execute and capture **Check C-03** (Clean clone local build and run from `.env.example`)
+- [ ] **Issue 4 (Tue 10 Nov):** `@apfirst13` creates CI workflow PR with Node 24 and Postgres container; verify **Check C-01** (Green PR)
+- [ ] **Issue 5 (Wed 11 Nov):** `@Theerawat82` deploys Cloud SQL, creates `popqueue-sa`, runs idempotent seed; verify public URL live
+- [ ] **Issue 6 (Thu 12 Nov):** Pair work sets up WIF (with `serviceAccountUser`) and Branch Rulesets on `main` and `lab5-staging`
+- [ ] **Issue 6 (Thu 12 Nov):** Execute and capture **Check C-02** (Failing PR from temporary branch blocked from merging; leave closed)
+- [ ] **Issue 7 (Thu 12 Nov):** `@apfirst13` creates CD workflow with read-only smoke test and visible commit SHA; release via PR to `main` (**Check C-06 Execution**)
+- [ ] **Issue 8 (Fri 13 Nov):** Execute and capture **Check C-04** (Public domain workflow with browser URL bar visible, masked passwords)
+- [ ] **Issue 8 (Fri 13 Nov):** Execute and capture **Check C-05** (Data persistence across scale-down and Cloud SQL restart)
+- [ ] **Issue 8 (Fri 13 Nov):** Execute and capture **Check C-06 Verification** (Commit SHA traceability on live site matching release commit)
+- [ ] **Issue 9 (Sat 14 – Sun 15 Nov):** Pair work synchronizes `docs/labs/lab05/deployment.md`, creates tag `v0.2.0-lab5`, compiles `lab5_sec1_BFteam.pdf` (Parts 0–4), and submits to LEB2 before 23:59
 - [ ] Keep service running for Lab 6 UAT; pause Cloud SQL only during extended idle periods
