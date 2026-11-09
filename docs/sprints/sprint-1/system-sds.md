@@ -7,7 +7,7 @@
 
 ## 📌 Master Document Reference
 สถาปัตยกรรมระบบฉบับสมบูรณ์จัดเก็บไว้ที่:  
-👉 **[docs/PopQueue_Deliverable_1_Master.md (Part C)](../../PopQueue_Deliverable_1_Master.md#part-c-system-level-software-design-specification-sds-15-คะแนน)**
+👉 **[PopQueue_Deliverable_1_Master.md (Part C)](PopQueue_Deliverable_1_Master.md#part-c-system-level-software-design-specification-sds-15-คะแนน)**
 
 ---
 

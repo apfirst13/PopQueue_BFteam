@@ -1,7 +1,7 @@
 # Issue I-02: F-01 Authentication & Role Identity – Detailed Plan & Specification (v1.2 Revised)
 
 **Sprint:** 1 | **Feature:** F-01 | **Branch:** `feature/i02-auth` | **Target Branch:** `sprint-1-staging`  
-**Master Specification Link:** [Part E §1 Feature Contract F-01](../../PopQueue_Deliverable_1_Master.md#1-feature-contract-f-01--authentication--role-identity)  
+**Master Specification Link:** [Part E §1 Feature Contract F-01](PopQueue_Deliverable_1_Master.md#1-feature-contract-f-01--authentication--role-identity)  
 **Governing Change Record:** **CHG-08** (v0.2.2 – บันทึกใน Part B §2.3 และ Part E §0 ของ Master Specification)  
 **Linked Requirements:** FR-01, FR-02, BR-04 (ส่วน Role Guard), NFR-01, NFR-02  
 **Acceptance Criteria:** AC-01 to AC-08  
