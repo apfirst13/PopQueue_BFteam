@@ -1,23 +1,73 @@
-# PopQueue Local Development Database
-# Dev PostgreSQL 16 database only. Full application multi-stage image & CI/CD come in Lab 5.
-
 services:
   db:
-    image: postgres:16
-    container_name: popqueue_db
+    image: postgres:16-alpine
+    container_name: popqueue-db
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: popqueue
-      POSTGRES_PASSWORD: popqueue_dev_password   # dev value only - overridden by .env in staging
-      POSTGRES_DB: popqueue
+      POSTGRES_USER: ${POSTGRES_USER:-popqueue}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-popqueue_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-popqueue}
     ports:
-      - "${POSTGRES_PORT:-5432}:5432"
+      - "5432:5432"
     volumes:
       - popqueue_pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U popqueue -d popqueue"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-popqueue} -d ${POSTGRES_DB:-popqueue}"]
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 10
+
+  migrate:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: popqueue-migrate
+    restart: "no"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-popqueue}:${POSTGRES_PASSWORD:-popqueue_dev_password}@db:5432/${POSTGRES_DB:-popqueue}?schema=public
+      JWT_SECRET: ${JWT_SECRET:-popqueue-super-secret-jwt-key-at-least-32-chars-long}
+      SEED_COLLECTOR_PASSWORD: ${SEED_COLLECTOR_PASSWORD:-collector_dev_password123}
+      SEED_STAFF_PASSWORD: ${SEED_STAFF_PASSWORD:-staff_dev_password123}
+    command: ["sh", "-c", "npx prisma migrate deploy && npm run db:seed"]
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: popqueue-server
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    environment:
+      NODE_ENV: production
+      TZ: Asia/Bangkok
+      PORT: 3000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-popqueue}:${POSTGRES_PASSWORD:-popqueue_dev_password}@db:5432/${POSTGRES_DB:-popqueue}?schema=public
+      JWT_SECRET: ${JWT_SECRET:-popqueue-super-secret-jwt-key-at-least-32-chars-long}
+      SEED_COLLECTOR_PASSWORD: ${SEED_COLLECTOR_PASSWORD:-collector_dev_password123}
+      SEED_STAFF_PASSWORD: ${SEED_STAFF_PASSWORD:-staff_dev_password123}
+    ports:
+      - "3000:3000"
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ""
+    container_name: popqueue-client
+    restart: unless-stopped
+    depends_on:
+      - server
+    ports:
+      - "5173:80"
 
 volumes:
   popqueue_pgdata:

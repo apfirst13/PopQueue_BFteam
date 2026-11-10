@@ -22,18 +22,18 @@
 | **I-08** | E2E, Persistence & Evidence | Playwright tests (TEST-19, 20, 33), persistence script (TEST-39), Part F evidence | **Implemented** | `feature/i08-e2e-persistence` | Ready for Review |
 
 ## Feature & Acceptance Criteria Status
-* Full Contract & STS for F-01..F-04 with AC-01..AC-39 is defined in `docs/PopQueue_Deliverable_1_Master.md`.
+* Full Contract & STS for F-01..F-04 with AC-01..AC-39 is defined in `PopQueue_Deliverable_1_Master.md`.
 * Automated test results will be populated in Part F upon test execution on the release commit.
 
 ## Key Design Decisions
-* **D-01 to D-14:** Documented in Part A §8 of `docs/PopQueue_Deliverable_1_Master.md`.
+* **D-01 to D-14:** Documented in Part A §8 of `PopQueue_Deliverable_1_Master.md`.
 * Atomic queue numbering via Raw SQL `INSERT ... ON CONFLICT DO UPDATE ... RETURNING` (D-10).
 * Concurrency race prevention via 2 PostgreSQL Partial Unique Indexes (`unique_active_ticket_user`, `unique_active_staff_ticket`).
 * Stateless JWT with token revocation via `tokenVersion` on `User` table (D-04, D-11).
 * **CHG-08:** Web UI styles implemented with Native Semantic CSS Variables and Mobile-first layout container instead of Tailwind PostCSS build tools to prevent monorepo build complexity while preserving 100% WCAG 2.1 AA tokens.
 
 ## Checklist: Places to Update When Stack Changes (จุดที่ต้องอัปเดตเมื่อมีการเปลี่ยนเทคโนโลยี/Stack)
-1. **Master Specification (`docs/PopQueue_Deliverable_1_Master.md`):**
+1. **Master Specification (`PopQueue_Deliverable_1_Master.md`):**
    - § ข้อมูลการส่งมอบและหน้าปก (Repository URL, Project Details)
    - Part B §2.3 ตาราง Approved / Recorded Changes (เพิ่ม Change ID เช่น `CHG-xx`)
    - Part C §1 Architecture Diagram, Layer Table, Repository Structure

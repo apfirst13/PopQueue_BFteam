@@ -31,3 +31,12 @@ Thumbs.db
 
 # agent local state (commit AGENTS.md only)
 .claude/settings.local.json
+
+# Deliverable 1 doc generation scratch scripts
+docs/*.py
+docs/*.json
+docs/Part_A*
+docs/PopQueue_Part_A.docx
+
+__pycache__/
+*.pyc

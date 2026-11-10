@@ -15,7 +15,10 @@ export class ApiError extends Error {
 }
 
 const getBaseUrl = (): string => {
-  return (import.meta.env?.VITE_API_URL as string) || 'http://localhost:4000';
+  if (import.meta.env && typeof import.meta.env.VITE_API_URL === 'string') {
+    return import.meta.env.VITE_API_URL;
+  }
+  return 'http://localhost:4000';
 };
 
 export async function apiClient<T>(
