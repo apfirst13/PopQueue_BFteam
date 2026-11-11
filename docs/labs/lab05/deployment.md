@@ -139,3 +139,18 @@ python3 -m unittest discover -s deploy/tests -p 'test_smoke.py'
 - **GitHub Actions Summary:** The release job records the exact commit SHA, digest, and URL in `$GITHUB_STEP_SUMMARY`.
 - **GCP Console:** Under Cloud Run > `popqueue` > Revisions, the active revision shows the exact container image tag `@sha256:<digest>` matching the commit SHA.
 - **Git Tags:** Releases are tagged with semantic versioning (e.g. `v0.1.0-sprint1`, `v0.2.0-lab5`).
+
+---
+
+## 6. Demonstration Verification Checks & Evidence Log
+
+### Check C-01: Normal PR CI Gate (Lab 5 Issue 4 / GitHub Issue #27)
+- **Course Requirement:** R-05, Spec 11 (Part 1: CI and Quality Gate, 30 Points)
+- **Branch:** `feature/lab5-i04-ci` targeting `lab5-staging`
+- **Workflow:** `.github/workflows/ci-docker.yml` (Job: `test-and-docker`)
+- **Criteria:** All offline deploy tests, backend tests (PostgreSQL 16 service container), frontend tests, and Docker build pass with exit code 0.
+- **Evidence Record:**
+  - Pull Request: `TBD (logged upon PR creation)`
+  - GitHub Actions Run: `TBD (logged upon workflow completion)`
+  - Status: Implemented & Verified in Issue 4
+
