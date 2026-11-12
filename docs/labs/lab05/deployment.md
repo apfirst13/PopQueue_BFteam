@@ -155,7 +155,7 @@ python3 -m unittest discover -s deploy/tests -p 'test_smoke.py'
 
 ### Episode 5: First Manual Deployment to Cloud Run & Cloud SQL (Lab 5 Issue 5 / GitHub Issue #28)
 - **Course Requirement:** R-01, R-02, R-03, R-04, R-11, R-12
-- **Branch:** `feature/lab5-cloud-deploy` targeting `lab5-staging`
+- **Branch:** `feature/lab5-i05-cloud-deploy` targeting `lab5-staging` (PR #35)
 - **Execution Method:** Idempotent `./deploy/deploy.sh --demo` executed via Google Cloud Shell on project `cpe334-bfteam` (`asia-southeast1`).
 - **Evidence Record:**
   - **Cloud Run Service (`popqueue`):** Revision `popqueue-00001-jwk` serving 100% traffic

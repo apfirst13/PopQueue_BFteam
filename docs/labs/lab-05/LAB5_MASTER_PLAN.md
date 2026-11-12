@@ -231,6 +231,7 @@ Total: 100 Points
 * **GitHub Issue:** `Lab 5 Issues 2 & 3: Cloud Readiness, Docker Containerization & Local Verification` (Issue #25)
 * **Author:** `@Theerawat82` | **Reviewer:** `@apfirst13` | **Label:** `lab5`
 * **Target Execution Date:** **Tuesday, 10 November 2026**
+* **Branch:** `feature/lab5-i02-docker-setup` $\rightarrow$ PR to `lab5-staging` (PR #26, PR #33)
 * **Handling Existing PR #26 (Preserving R-10):**
   - PR #26 currently contains candidate implementations of Dockerfile, docker-compose, health checks, deploy scripts, and initial CI workflow.
   - Per **R-10 (no rewriting git history)**, PR #26 will NOT be deleted or rebased.
@@ -257,7 +258,7 @@ Total: 100 Points
 * **GitHub Issue:** `Lab 5 Issue 4: CI Pipeline on Pull Requests with PostgreSQL Service Container & Docker Build Gate`
 * **Author:** `@apfirst13` | **Reviewer:** `@Theerawat82` | **Label:** `lab5`
 * **Target Execution Date:** **Tuesday, 10 November 2026**
-* **Branch:** `feature/lab5-ci-workflow` $\rightarrow$ PR to `lab5-staging`
+* **Branch:** `feature/lab5-i04-ci` $\rightarrow$ PR to `lab5-staging` (PR #34)
 * **Tasks:**
   1. Configure `.github/workflows/ci-docker.yml` running on pull requests targeting `lab5-staging` and `main`.
   2. Align Node version: Use **Node.js 24** (matching production Docker container runtime).
@@ -277,7 +278,7 @@ Total: 100 Points
 * **GitHub Issue:** `Lab 5 Issue 5: First Manual Deployment to Cloud Run & Cloud SQL via Cloud Shell`
 * **Author:** `@Theerawat82` | **Reviewer:** `@apfirst13` | **Label:** `lab5`
 * **Target Execution Date:** **Wednesday, 11 November 2026**
-* **Branch:** `feature/lab5-cloud-deploy` $\rightarrow$ PR to `lab5-staging`
+* **Branch:** `feature/lab5-i05-cloud-deploy` $\rightarrow$ PR to `lab5-staging` (PR #35)
 * **Tasks:**
   1. Create Artifact Registry Repository `popqueue`:
      ```bash
@@ -340,7 +341,7 @@ Total: 100 Points
 * **GitHub Issue:** `Lab 5 Issue 6: Workload Identity Federation & Branch Protection Rulesets on Staging and Main`
 * **Author:** `@Theerawat82` | **Reviewer:** `@apfirst13` | **Label:** `lab5`
 * **Target Execution Date:** **Thursday, 12 November 2026**
-* **Branch:** `feature/lab5-wif-ruleset` $\rightarrow$ PR to `lab5-staging`
+* **Branch:** `feature/lab5-i06-wif-ruleset` $\rightarrow$ PR to `lab5-staging`
 * **PR Content:** Documentation of WIF setup, IAM roles, GitHub Environment bindings, and ruleset screenshots. `@Theerawat82` authors PR, `@apfirst13` reviews and approves.
 * **Tasks:**
   1. Workload Identity Federation (WIF) Setup:
@@ -396,7 +397,7 @@ Total: 100 Points
 * **GitHub Issue:** `Lab 5 Issue 7: Automated CD Pipeline on Main Merge, Read-Only Smoke Test & Commit SHA Traceability`
 * **Author:** `@apfirst13` | **Reviewer:** `@Theerawat82` | **Label:** `lab5`
 * **Target Execution Date:** **Thursday, 12 November 2026**
-* **Branch:** `feature/lab5-cd-pipeline` $\rightarrow$ PR to `lab5-staging`
+* **Branch:** `feature/lab5-i07-cd-pipeline` $\rightarrow$ PR to `lab5-staging`
 * **Tasks:**
   1. Configure `.github/workflows/deploy.yml`:
      - Triggers: Push to `main` (resulting from merged release PR) and **`workflow_dispatch`** (enabling manual redeploy for repeatable pipeline evidence R-07).
@@ -432,7 +433,7 @@ Total: 100 Points
 * **GitHub Issue:** `Lab 5 Issue 8: Live Domain Workflow, Data Persistence across Scale-Down, DB Restart & Redeploy, and Live SHA Traceability`
 * **Author:** `@Theerawat82` | **Reviewer:** `@apfirst13` | **Label:** `lab5`
 * **Target Execution Date:** **Friday, 13 November 2026**
-* **Branch:** `feature/lab5-persistence-verify` $\rightarrow$ PR to `lab5-staging`
+* **Branch:** `feature/lab5-i08-persistence-verify` $\rightarrow$ PR to `lab5-staging`
 * **Tasks:**
   1. **Execute Verification Check C-04 (Public Domain Workflow):**
      - Open live public URL in browser.
@@ -459,6 +460,7 @@ Total: 100 Points
 * **GitHub Issue:** `Lab 5 Issue 9: Finalize Deployment Docs, Release Tag v0.2.0-lab5 & Deliverable PDF Report`
 * **Collaboration:** **Pair Work** (`@Theerawat82` & `@apfirst13`) | **Label:** `lab5`
 * **Target Execution Date:** **Saturday, 14 November & Sunday, 15 November 2026**
+* **Branch:** `feature/lab5-i09-docs-evidence` $\rightarrow$ PR to `lab5-staging`
 * **Tasks:**
   1. Finalize Documentation:
      - Canonical document is maintained exclusively at `docs/labs/lab05/deployment.md`.
@@ -494,11 +496,11 @@ Total: 100 Points
 - [x] Implement multi-stage `Dockerfile`, health checks, Express static serving (PR #26)
 - [x] Verify repository is Public and has `lab5` label (R-10, R-12)
 - [ ] User approval of Final Master Plan (`LAB5_MASTER_PLAN.md` v2.4) *(Team joint decision to check)*
-- [ ] **Issue 1 (Mon 9 Nov - TODAY'S FOCUS):** `@apfirst13` sets up GCP project, $5 Budget Alert, enables 8 required APIs (Cloud Build, STS, IAM Credentials), grants `@Theerawat82` IAM Editor role via personal Gmail, enables Secret Scanning Push Protection
-- [ ] **Issues 2 & 3 (Tue 10 Nov):** `@apfirst13` reviews PR #26 with substantive file-level comments (auditing Prisma CLI in production container); merge into `lab5-staging`
-- [ ] **Issue 3 (Tue 10 Nov):** Execute and capture **Check C-03** (Clean clone local build and run from `.env.example`, compose server from root Dockerfile)
-- [ ] **Issue 4 (Tue 10 Nov):** `@apfirst13` creates CI workflow PR with Node 24 and Postgres container; verify **Check C-01** (Green PR)
-- [ ] **Issue 5 (Wed 11 Nov):** `@Theerawat82` creates Artifact Registry repo `popqueue`, deploys Cloud SQL, creates `popqueue-sa`, creates and runs `popqueue-migrate` job with mounted seed secrets and idempotent seed; verify public URL live
+- [x] **Issue 1 (Mon 9 Nov):** `@apfirst13` sets up GCP project, $5 Budget Alert, enables 8 required APIs (Cloud Build, STS, IAM Credentials), grants `@Theerawat82` IAM Editor role via personal Gmail, enables Secret Scanning Push Protection
+- [x] **Issues 2 & 3 (Tue 10 Nov):** `@apfirst13` reviews PR #26 with substantive file-level comments (auditing Prisma CLI in production container); merge into `lab5-staging`
+- [x] **Issue 3 (Tue 10 Nov):** Execute and capture **Check C-03** (Clean clone local build and run from `.env.example`, compose server from root Dockerfile)
+- [x] **Issue 4 (Tue 10 Nov):** `@apfirst13` creates CI workflow PR with Node 24 and Postgres container; verify **Check C-01** (Green PR)
+- [x] **Issue 5 (Wed 11 Nov):** `@Theerawat82` creates Artifact Registry repo `popqueue`, deploys Cloud SQL, creates `popqueue-sa`, creates and runs `popqueue-migrate` job with mounted seed secrets and idempotent seed; verify public URL live
 - [ ] **Issue 6 (Thu 12 Nov):** Pair work sets up WIF (with `workloadIdentityUser` and `serviceAccountUser` on `popqueue-sa`) and Branch Rulesets on `main` and `lab5-staging`
 - [ ] **Issue 6 (Thu 12 Nov):** Execute and capture **Check C-02** (Failing PR from temporary branch blocked from merging; leave closed)
 - [ ] **Issue 7 (Thu 12 Nov):** `@apfirst13` creates CD workflow with `workflow_dispatch`, updates migration job image before execute, read-only smoke test, and visible commit SHA; release via PR to `main` (**Check C-06 Execution**)
