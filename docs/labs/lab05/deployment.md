@@ -172,4 +172,104 @@ python3 -m unittest discover -s deploy/tests -p 'test_smoke.py'
     - `docs/labs/lab05/evidence/ep05-deploy-completed.png`
     - `docs/labs/lab05/evidence/ep05-migrate-idempotency.png`
 
+---
+
+### Episode 6: Workload Identity Federation, Branch Protection Rulesets & Check C-02 (Lab 5 Issue 6 / GitHub Issue #29)
+- **Course Requirement:** R-05, R-06, R-09, R-10, R-11
+- **Branch:** `feature/lab5-i06-wif-ruleset` targeting `lab5-staging`
+- **Authors & Reviewers:** Configured in pair collaboration (@Theerawat82 as GCP Project Owner for WIF creation; @apfirst13 configuring GitHub Environment, Rulesets, and Check C-02)
+
+#### 1. Workload Identity Federation (WIF) Architecture (R-10, R-11)
+To eliminate long-lived, high-risk static JSON service account keys in GitHub repository secrets, PopQueue uses keyless **Google Cloud Workload Identity Federation (OIDC)**:
+- **Workload Identity Pool:** `github-actions` (`projects/902539659249/locations/global/workloadIdentityPools/github-actions`)
+- **OIDC Provider:** `github-main` (`https://token.actions.githubusercontent.com`)
+- **Attribute Mapping:**
+  - `google.subject` = `assertion.sub`
+  - `attribute.repository_id` = `assertion.repository_id`
+- **CEL Security Attribute Condition:**
+  Strictly restricts token issuance to only the immutable GitHub repository ID, owner ID, `main` branch, `deploy.yml` workflow, and `demo` environment:
+  ```cel
+  assertion.repository_id == '1441119685' && 
+  assertion.repository_owner_id == '137395434' && 
+  assertion.ref == 'refs/heads/main' && 
+  assertion.workflow_ref == 'apfirst13/PopQueue_BFteam/.github/workflows/deploy.yml@refs/heads/main' && 
+  assertion.sub == 'repo:apfirst13:137395434/PopQueue_BFteam:1441119685:environment:demo'
+  ```
+- **Deployer Service Account:** `popqueue-deployer@cpe334-bfteam.iam.gserviceaccount.com`
+- **Least-Privilege IAM Bindings:**
+  - `roles/run.developer` on project `cpe334-bfteam`
+  - `roles/artifactregistry.writer` on repository `popqueue`
+  - `roles/iam.serviceAccountUser` on runtime service account `popqueue-runner`
+  - `roles/iam.workloadIdentityUser` bound to principal set `principalSet://iam.googleapis.com/projects/902539659249/locations/global/workloadIdentityPools/github-actions/attribute.repository_id/1441119685`
+- **Keyless Audit:** Verification via `gcloud iam service-accounts keys list --iam-account=popqueue-deployer@... --managed-by=user` confirms **`Listed 0 items.`** (100% keyless).
+- **Archived Screenshots:**
+  - `docs/labs/lab05/evidence/ep06-wif-setup-commands.png`
+  - `docs/labs/lab05/evidence/ep06-wif-setup-key-audit.png`
+
+#### 2. GitHub Environment `demo` (R-10, R-11)
+- **Environment Name:** `demo`
+- **Deployment Branch Policy:** Selected branches only -> `main`
+- **Environment Secrets:** None (Zero static keys or secrets stored in GitHub)
+- **Environment Variables:**
+  - `GCP_PROJECT_ID`: `cpe334-bfteam`
+  - `GCP_REGION`: `asia-southeast1`
+  - `WIF_PROVIDER`: `projects/902539659249/locations/global/workloadIdentityPools/github-actions/providers/github-main`
+  - `WIF_SERVICE_ACCOUNT`: `popqueue-deployer@cpe334-bfteam.iam.gserviceaccount.com`
+- **Archived Screenshot:**
+  - `docs/labs/lab05/evidence/ep06-github-env-demo.png`
+
+#### 3. Branch Protection Rulesets (R-05, Check C-02)
+Configured under GitHub Repository **Settings > Rules > Rulesets**:
+- **Ruleset 1: `protect-staging`**
+  - **Enforcement Status:** Active
+  - **Target Branch:** `lab5-staging`
+  - **Rules Enforced:**
+    - Restrict deletions
+    - Require pull request before merging (1 approving review required; author cannot approve own PR)
+    - Require status checks to pass before merging:
+      - Required status check: `test-and-docker` (from GitHub Actions `ci-docker.yml`)
+      - Require branches to be up to date before merging
+    - Empty bypass list (rules apply strictly to all collaborators and administrators)
+- **Ruleset 2: `protect-main`**
+  - **Enforcement Status:** Active
+  - **Target Branch:** `main`
+  - **Rules Enforced:**
+    - Restrict deletions
+    - Require pull request before merging (1 approving review required)
+    - Require status checks to pass before merging:
+      - Required status check: `test-and-docker`
+      - Require branches to be up to date before merging
+    - Empty bypass list
+- **Archived Screenshots:**
+  - `docs/labs/lab05/evidence/ep06-ruleset-staging.png`
+  - `docs/labs/lab05/evidence/ep06-ruleset-main.png`
+
+#### 4. Verification Check C-02: Failing PR Merge Block Demonstration (R-06, Check C-02)
+- **Requirement:** Course Rubric Part 1 (CI and Quality Gate, 30 Points) & Handout Spec 5.3, 10
+- **Temporary Branch:** `temp/c02-failing-check` (branched from `lab5-staging`)
+- **Pull Request:** [PR #36: `test(c-02): demonstrate failing PR merge block via required status check`](https://github.com/apfirst13/PopQueue_BFteam/pull/36)
+- **Deliberate Failure Injected:** Added `expect(1).toBe(2);` in `client/src/App.test.tsx` (Commit: `597c95c`)
+- **CI Test Failure Observation:**
+  - Workflow: `.github/workflows/ci-docker.yml` (Run #14)
+  - Result: Failed in 50 seconds on Vitest test runner:
+    ```
+    FAIL src/App.test.tsx > App Component > renders the PopQueue header brand and initial login route
+    AssertionError: expected 1 to be 2 // Object.is equality
+    - Expected: 2
+    + Received: 1
+    ```
+- **Ruleset Enforcement Verification:**
+  - Status Check: `test-and-docker` reported `failure`
+  - GitHub Ruleset evaluated PR state: `mergeStateStatus: BLOCKED`
+  - UI State: GitHub displayed **"Required checks failing: Fix the failing required checks."** and the green **"Merge pull request" button was completely disabled/grayed out**, preventing any merge into `lab5-staging`.
+- **Safe Closing & Permanent Audit Trail:**
+  - PR #36 was safely closed with state `Closed` (purple badge) without merging.
+  - Per Course Rubric, the PR is **NOT deleted**, ensuring the instructor can inspect the live GitHub link, workflow run log, and ruleset enforcement directly.
+- **Archived Screenshots:**
+  - `docs/labs/lab05/evidence/ep06-c02-deliberate-failure.png`
+  - `docs/labs/lab05/evidence/ep06-c02-action-failed.png`
+  - `docs/labs/lab05/evidence/ep06-c02-merge-blocked.png`
+  - `docs/labs/lab05/evidence/ep06-c02-pr-closed.png`
+
+
 
