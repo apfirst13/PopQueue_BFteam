@@ -1,13 +1,18 @@
 # ##############################################################################
-# CI — "CI & Docker Build"
+# CI — "CI & Docker Build" (Lab 5 Issue 4 — Check C-01, Requirement R-05)
 # ##############################################################################
 # WHAT THIS WORKFLOW DOES
-#   Runs the project's checks and is used in two ways:
-#     1) directly on every pull request to `main` and `lab5-staging`, and
+#   Implements the automated CI pipeline on pull requests per Lab 5 Episode 4
+#   (GitHub Issue #27). Runs on every PR targeting `main` and `lab5-staging`.
+#   Used in two ways:
+#     1) directly on every pull request to `main` and `lab5-staging` (Check C-01),
 #     2) as a REUSABLE workflow called by deploy.yml (`workflow_call`) so the
 #        deploy only starts after these checks pass.
-#   Steps: offline deploy-script tests -> backend tests (real PostgreSQL service)
-#          -> frontend tests + build -> verify the production Dockerfile builds.
+#   Quality Gate Steps:
+#     1) Deploy scripts: offline stub tests + syntax check
+#     2) Backend: real PostgreSQL 16 service container + migrate deploy + seed + tests
+#     3) Frontend: tests + production build
+#     4) Production Docker image build check
 #   It does NOT deploy anything.
 # ##############################################################################
 
