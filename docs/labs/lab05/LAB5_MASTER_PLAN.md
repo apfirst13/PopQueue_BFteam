@@ -501,8 +501,8 @@ Total: 100 Points
 - [x] **Issue 3 (Tue 10 Nov):** Execute and capture **Check C-03** (Clean clone local build and run from `.env.example`, compose server from root Dockerfile)
 - [x] **Issue 4 (Tue 10 Nov):** `@apfirst13` creates CI workflow PR with Node 24 and Postgres container; verify **Check C-01** (Green PR)
 - [x] **Issue 5 (Wed 11 Nov):** `@Theerawat82` creates Artifact Registry repo `popqueue`, deploys Cloud SQL, creates `popqueue-sa`, creates and runs `popqueue-migrate` job with mounted seed secrets and idempotent seed; verify public URL live
-- [ ] **Issue 6 (Thu 12 Nov):** Pair work sets up WIF (with `workloadIdentityUser` and `serviceAccountUser` on `popqueue-sa`) and Branch Rulesets on `main` and `lab5-staging`
-- [ ] **Issue 6 (Thu 12 Nov):** Execute and capture **Check C-02** (Failing PR from temporary branch blocked from merging; leave closed)
+- [x] **Issue 6 (Thu 12 Nov):** Pair work sets up WIF (with `workloadIdentityUser` and `serviceAccountUser` on `popqueue-sa`) and Branch Rulesets on `main` and `lab5-staging`
+- [x] **Issue 6 (Thu 12 Nov):** Execute and capture **Check C-02** (Failing PR from temporary branch blocked from merging; leave closed)
 - [ ] **Issue 7 (Thu 12 Nov):** `@apfirst13` creates CD workflow with `workflow_dispatch`, updates migration job image before execute, read-only smoke test, and visible commit SHA; release via PR to `main` (**Check C-06 Execution**)
 - [ ] **Issue 8 (Fri 13 Nov):** Execute and capture **Check C-04** (Public domain workflow with browser URL bar visible, masked passwords)
 - [ ] **Issue 8 (Fri 13 Nov):** Execute and capture **Check C-05** (Data persistence across scale-down, Cloud SQL restart, and redeploy)
