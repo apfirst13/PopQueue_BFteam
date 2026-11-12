@@ -144,6 +144,8 @@ run_cmd gcloud services enable \
   cloudbuild.googleapis.com \
   secretmanager.googleapis.com \
   iam.googleapis.com \
+  iamcredentials.googleapis.com \
+  sts.googleapis.com \
   --project "$PROJECT_ID"
 
 # ==============================================================================

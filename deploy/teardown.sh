@@ -62,6 +62,7 @@ SA_NAME="popqueue-runner"
 SA_EMAIL="${SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
 
 SECRET_DB_URL="popqueue-database-url"
+SECRET_JWT="popqueue-jwt-secret"
 SECRET_ADMIN_PASS="popqueue-admin-password"
 SECRET_DEMO_PASS="popqueue-demo-password"
 
@@ -97,6 +98,7 @@ run_cmd gcloud run jobs delete "$MIGRATE_JOB_NAME" --region "$REGION" --project 
 run_cmd gcloud sql instances delete "$SQL_INSTANCE" --project "$PROJECT_ID" --quiet || true
 run_cmd gcloud artifacts repositories delete "$REPO_NAME" --location "$REGION" --project "$PROJECT_ID" --quiet || true
 run_cmd gcloud secrets delete "$SECRET_DB_URL" --project "$PROJECT_ID" --quiet || true
+run_cmd gcloud secrets delete "$SECRET_JWT" --project "$PROJECT_ID" --quiet || true
 run_cmd gcloud secrets delete "$SECRET_ADMIN_PASS" --project "$PROJECT_ID" --quiet || true
 run_cmd gcloud secrets delete "$SECRET_DEMO_PASS" --project "$PROJECT_ID" --quiet || true
 run_cmd gcloud iam service-accounts delete "$SA_EMAIL" --project "$PROJECT_ID" --quiet || true
