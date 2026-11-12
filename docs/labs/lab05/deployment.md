@@ -96,15 +96,15 @@ python3 -m unittest discover -s deploy/tests -p 'test_smoke.py'
 
 | Resource | Target GCP Name | Configuration Details |
 |---|---|---|
-| **GCP Project** | `popqueue-cpe334` (or team project) | Free Trial ($300 credit) |
+| **GCP Project** | `cpe334-bfteam` (Project No. `902539659249`) | Free Trial ($300 credit), Budget Alert set ($5 threshold) |
 | **Region** | `asia-southeast1` (Singapore) | Proximity to Bangkok users |
-| **Artifact Registry** | `popqueue` | Docker format, `asia-southeast1-docker.pkg.dev/$PROJECT_ID/popqueue/popqueue` |
+| **Artifact Registry** | `popqueue` | Docker format, `asia-southeast1-docker.pkg.dev/cpe334-bfteam/popqueue/popqueue` |
 | **Cloud SQL Instance** | `popqueue-pg` | PostgreSQL 16, tier `db-f1-micro`, `--edition=enterprise`, 10GB SSD |
 | **Database Name / User** | `popqueue` / `popqueue` | Dedicated application database and user |
-| **Runtime Service Account** | `popqueue-runner` | `popqueue-runner@$PROJECT_ID.iam.gserviceaccount.com`, roles: `roles/cloudsql.client`, specific secret accessor on app secrets |
+| **Runtime Service Account** | `popqueue-runner` | `popqueue-runner@cpe334-bfteam.iam.gserviceaccount.com`, roles: `roles/cloudsql.client`, specific secret accessor on app secrets |
 | **Deployer Service Account** | `popqueue-deployer` | Keyless Workload Identity Federation (WIF) for GitHub Actions |
-| **Cloud Run Migration Job** | `popqueue-migrate` | Executed prior to service rollout: `npx prisma migrate deploy && npm run db:seed` |
-| **Cloud Run Service** | `popqueue` | Min 0, Max 3 instances, 512MiB memory, 1 vCPU, port 3000, public HTTPS |
+| **Cloud Run Migration Job** | `popqueue-migrate` | Executed prior to service rollout: `npx prisma migrate deploy && npm run prisma:seed` |
+| **Cloud Run Service** | `popqueue` | Min 0, Max 3 instances, 512MiB memory, 1 vCPU, port 3000, public HTTPS (`https://popqueue-5now4hkvsa-as.a.run.app`) |
 
 ---
 
@@ -150,7 +150,26 @@ python3 -m unittest discover -s deploy/tests -p 'test_smoke.py'
 - **Workflow:** `.github/workflows/ci-docker.yml` (Job: `test-and-docker`)
 - **Criteria:** All offline deploy tests, backend tests (PostgreSQL 16 service container), frontend tests, and Docker build pass with exit code 0.
 - **Evidence Record:**
-  - Pull Request: `TBD (logged upon PR creation)`
-  - GitHub Actions Run: `TBD (logged upon workflow completion)`
+  - Pull Request: PR #34 (Merged into `lab5-staging`)
   - Status: Implemented & Verified in Issue 4
+
+### Episode 5: First Manual Deployment to Cloud Run & Cloud SQL (Lab 5 Issue 5 / GitHub Issue #28)
+- **Course Requirement:** R-01, R-02, R-03, R-04, R-11, R-12
+- **Branch:** `feature/lab5-cloud-deploy` targeting `lab5-staging`
+- **Execution Method:** Idempotent `./deploy/deploy.sh --demo` executed via Google Cloud Shell on project `cpe334-bfteam` (`asia-southeast1`).
+- **Evidence Record:**
+  - **Cloud Run Service (`popqueue`):** Revision `popqueue-00001-jwk` serving 100% traffic
+  - **Public Service URLs:**
+    - Primary URL: `https://popqueue-5now4hkvsa-as.a.run.app`
+    - Regional URL: `https://popqueue-902539659249.asia-southeast1.run.app`
+    - Health Endpoint: `https://popqueue-5now4hkvsa-as.a.run.app/api/health`
+    - Readiness Endpoint: `https://popqueue-5now4hkvsa-as.a.run.app/api/ready`
+  - **Cloud Run Migration Job (`popqueue-migrate`):**
+    - Execution 1 (Initial Migrate + Seed): `popqueue-migrate-998zv` (Completed, 1/1 succeeded)
+    - Execution 2 (Idempotency Verification): `popqueue-migrate-qwzsf` (Completed in 6.69s, 1/1 succeeded, zero duplicate records)
+  - **Archived Screenshots:**
+    - `docs/labs/lab05/evidence/ep05-cloudshell-clone.png`
+    - `docs/labs/lab05/evidence/ep05-deploy-completed.png`
+    - `docs/labs/lab05/evidence/ep05-migrate-idempotency.png`
+
 
