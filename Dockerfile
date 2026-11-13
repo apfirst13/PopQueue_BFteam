@@ -17,10 +17,12 @@
 # Stage 1: Build Frontend (React + TypeScript + Vite)
 # ============================================================================
 FROM node:24-alpine AS client-builder
+ARG GIT_SHA="development"
 WORKDIR /app/client
 COPY client/package*.json ./
 RUN npm ci
 COPY client/ ./
+ENV VITE_GIT_SHA=$GIT_SHA
 ENV VITE_API_URL=""
 RUN npm run build
 
@@ -54,6 +56,8 @@ COPY --from=client-builder /app/client/dist /app/client/dist
 RUN chmod +x ./docker-entrypoint.sh
 
 # --- Runtime configuration ----------------------------------------------------
+ARG GIT_SHA="development"
+ENV GIT_SHA=$GIT_SHA
 ENV NODE_ENV=production
 ENV TZ=Asia/Bangkok
 ENV PORT=3000

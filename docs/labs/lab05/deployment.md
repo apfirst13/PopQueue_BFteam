@@ -271,5 +271,24 @@ Configured under GitHub Repository **Settings > Rules > Rulesets**:
   - `docs/labs/lab05/evidence/ep06-c02-merge-blocked.png`
   - `docs/labs/lab05/evidence/ep06-c02-pr-closed.png`
 
+---
+
+### Episode 7: Automated Continuous Delivery (CD) Pipeline, Smoke Testing & Commit SHA Traceability (Lab 5 Issue 7 / GitHub Issue #30)
+- **Course Requirement:** R-07, R-08, R-09, R-11, Check C-06
+- **Branch:** `feature/lab5-i07-cd-pipeline` targeting `lab5-staging`
+- **Authors & Reviewers:** Lead: `@apfirst13` / Reviewer: `@Theerawat82`
+- **CD Pipeline Mechanism:**
+  - Automated deployment workflow configured at `.github/workflows/deploy.yml` triggered on push to `main` (resulting from merged release PR) and on-demand via `workflow_dispatch`.
+  - Reusable CI quality gate (`test-and-docker`) strictly required before deployment begins.
+  - Keyless Google Cloud authentication using Workload Identity Federation (WIF).
+  - Docker container image built with build-argument `GIT_SHA=$IMAGE_TAG` and pushed to Artifact Registry (`popqueue/popqueue:$IMAGE_TAG`).
+  - Idempotent database migrations executed via Cloud Run Job `popqueue-migrate` before updating the live service (`release.sh`).
+  - Cloud Run Service updated with immutable container image digest (`@sha256:...`) and revision label `commit-sha=$IMAGE_TAG`.
+  - Automated read-only smoke test (`deploy/smoke_test.py`) validating `/api/health`, `/api/ready`, `/`, and `/api/series` without mutating production data.
+- **Commit SHA Traceability (Check C-06, R-08):**
+  - **API Endpoint:** `GET /api/health` returns `{ "status": "ok", "commit": "<git-sha>" }`.
+  - **Web UI Footer:** Responsive badge displaying `PopQueue v0.2.0-lab5` and `<code data-testid="git-sha-badge">` showing the release Git commit SHA.
+
+
 
 
