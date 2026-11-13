@@ -16,7 +16,7 @@ spec.loader.exec_module(smoke)
 class SmokeTests(unittest.TestCase):
     def response(self, base, path, data=None, token=None):
         return {
-            '/api/health': b'{"status":"ok"}',
+            '/api/health': b'{"status":"ok","commit":"65f828c"}',
             '/api/ready': b'{"db":"connected"}',
             '/': b'<html></html>',
             '/api/series': b'{"data":[{"id":1}]}',
@@ -30,6 +30,14 @@ class SmokeTests(unittest.TestCase):
         with patch.object(smoke, 'request', side_effect=self.response) as req:
             smoke.check('https://demo.test')
             self.assertEqual(req.call_count, 4)
+
+    @patch.dict('os.environ', {}, clear=True)
+    def test_health_missing_commit_sha_fails(self):
+        def no_commit(base, path, **kwargs):
+            return b'{"status":"ok"}' if path == '/api/health' else self.response(base, path)
+        with patch.object(smoke, 'request', side_effect=no_commit), patch.object(smoke.time, 'sleep'):
+            with self.assertRaisesRegex(RuntimeError, '/api/health'):
+                smoke.check('https://demo.test')
 
     @patch.dict('os.environ', {}, clear=True)
     def test_db_not_ready_fails_even_when_http_responds(self):

@@ -8,7 +8,7 @@ WHAT THIS SCRIPT DOES
     tolerate Cloud Run cold starts.
 
     Checks (in order)
-      1. GET /api/health      -> {"status": "ok"}
+      1. GET /api/health      -> {"status": "ok", "commit": "<sha>"}
       2. GET /api/ready       -> {"db": "connected"}   (proves the DB works)
       3. GET /                -> HTML page (the built React app is served)
       4. GET /api/series      -> non-empty list (migration + seed worked)
@@ -45,7 +45,7 @@ def request(base, path, data=None, token=None):
 def check(base):
     # --- Public checks -------------------------------------------------------
     for path, predicate in (
-        ('/api/health', lambda b: json.loads(b).get('status') == 'ok'),
+        ('/api/health', lambda b: json.loads(b).get('status') == 'ok' and isinstance(json.loads(b).get('commit'), str) and len(json.loads(b)['commit']) > 0),
         ('/api/ready', lambda b: json.loads(b).get('db') == 'connected'),
         ('/', lambda b: b'<html' in b.lower()),
         ('/api/series', lambda b: isinstance(json.loads(b).get('data'), list) and len(json.loads(b)['data']) > 0),
