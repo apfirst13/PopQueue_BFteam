@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>lab5_sec1_BFteam — CPE 334 Lab 5 Submission Report</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 13mm 14mm 15mm 14mm;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Noto Sans Thai", Arial, sans-serif;
+      font-size: 9.6pt;
+      line-height: 1.45;
+      color: #1e293b;
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+    }
+    a {
+      color: #0f4c81;
+      text-decoration: underline;
+      word-break: break-word;
+    }
+    code, pre {
+      font-family: "Cascadia Code", Consolas, "Courier New", monospace;
+      font-size: 8.4pt;
+    }
+    code {
+      background: #f1f5f9;
+      padding: 1px 4px;
+      border-radius: 3px;
+      color: #0f172a;
+    }
+    pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 8px 10px;
+      border-radius: 5px;
+      overflow-x: hidden;
+      white-space: pre-wrap;
+      word-break: break-word;
+      line-height: 1.35;
+      margin: 6px 0 10px 0;
+      break-inside: avoid;
+    }
+    .cover-banner {
+      border-top: 5px solid #9f1239;
+      border-bottom: 1px solid #cbd5e1;
+      padding: 10px 0 10px 0;
+      margin-bottom: 12px;
+    }
+    .cover-kicker {
+      font-size: 8.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #9f1239;
+      margin-bottom: 3px;
+    }
+    .cover-title {
+      font-size: 16pt;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0 0 4px 0;
+    }
+    .cover-sub {
+      font-size: 9.5pt;
+      color: #475569;
+      margin: 0;
+    }
+    h1.part-heading {
+      font-size: 13pt;
+      font-weight: 700;
+      color: #ffffff;
+      background: #0f172a;
+      padding: 6px 10px;
+      border-left: 5px solid #e11d48;
+      border-radius: 3px;
+      margin: 14px 0 8px 0;
+      break-after: avoid;
+    }
+    .page-break {
+      break-before: page;
+    }
+    h2 {
+      font-size: 10.6pt;
+      font-weight: 700;
+      color: #0f172a;
+      border-bottom: 1.5px solid #e2e8f0;
+      padding-bottom: 2px;
+      margin: 10px 0 6px 0;
+      break-after: avoid;
+    }
+    p { margin: 4px 0 7px 0; }
+    ul, ol { margin: 4px 0 8px 18px; padding: 0; }
+    li { margin-bottom: 2.5px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 6px 0 10px 0;
+      font-size: 8.5pt;
+    }
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 4.5px 6px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #f8fafc;
+      color: #0f172a;
+      font-weight: 700;
+    }
+    tr {
+      break-inside: avoid;
+    }
+    .callout {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 4px solid #0f4c81;
+      padding: 6px 9px;
+      margin: 6px 0 9px 0;
+      border-radius: 3px;
+      break-inside: avoid;
+    }
+    .callout-warn {
+      background: #fff1f2;
+      border-color: #fecdd3;
+      border-left-color: #e11d48;
+    }
+    .badge {
+      display: inline-block;
+      padding: 1px 5px;
+      font-size: 7.8pt;
+      font-weight: 700;
+      border-radius: 3px;
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+    .badge-ok { background: #dcfce7; color: #166534; }
+    .badge-warn { background: #fee2e2; color: #991b1b; }
+    figure {
+      margin: 7px 0 11px 0;
+      padding: 6px;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      background: #ffffff;
+      break-inside: avoid;
+    }
+    figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 155mm;
+      object-fit: contain;
+      border: 1px solid #e2e8f0;
+    }
+    figcaption {
+      margin-top: 5px;
+      font-size: 8.5pt;
+      color: #334155;
+      line-height: 1.35;
+    }
+    .two-col {
+      display: flex;
+      gap: 8px;
+      break-inside: avoid;
+    }
+    .two-col > figure {
+      flex: 1;
+      margin: 4px 0 9px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cover-banner">
+    <div class="cover-kicker">CPE 334 Introduction to Software Engineering in the Age of AI Agents — Lab 5 Deliverable</div>
+    <h1 class="cover-title">PopQueue: Cloud Deployment, CI/CD &amp; Release Evidence Report</h1>
+    <p class="cover-sub">Section 1 &bull; Group <strong>BFteam</strong> (Theme 9: Art Toy Live Unboxing Virtual Queue Management System) &bull; Target Submission: Before Sun 15 Nov 2026, 23:59</p>
+  </div>
+
+  <!-- =================================================================== -->
+  <!-- ANSWER PART 0 -->
+  <!-- =================================================================== -->
+  <h1 class="part-heading">Answer Part 0 — Team and Evidence Index</h1>
+
+  <h2>0.1 Project, Release &amp; Live Deployment Metadata</h2>
+  <table>
+    <tbody>
+      <tr>
+        <th style="width: 28%;">Course &amp; Group</th>
+        <td>CPE 334 (Section 1) &bull; Group <strong>BFteam</strong> &bull; Project: <strong>PopQueue</strong> (Theme 9)</td>
+      </tr>
+      <tr>
+        <th>Public GitHub Repository (<code>R-12</code>)</th>
+        <td><a href="https://github.com/apfirst13/PopQueue_BFteam">https://github.com/apfirst13/PopQueue_BFteam</a> (Visibility: Public, Push Protection: On)</td>
+      </tr>
+      <tr>
+        <th>Target Accepted Tag (<code>R-08</code>)</th>
+        <td><code>v0.2.0-lab5</code> &rarr; <a href="https://github.com/apfirst13/PopQueue_BFteam/releases/tag/v0.2.0-lab5">https://github.com/apfirst13/PopQueue_BFteam/releases/tag/v0.2.0-lab5</a> <em>(Issued upon Issue #32 Release PR merge to <code>main</code>)</em></td>
+      </tr>
+      <tr>
+        <th>Verified Production Commit (<code>main</code>)</th>
+        <td>Code Release PR #39: <code>e010e192299067368c0f7101d6d7e7aeff442876</code> (<a href="https://github.com/apfirst13/PopQueue_BFteam/commit/e010e192299067368c0f7101d6d7e7aeff442876"><code>e010e19</code></a>) &bull; Docs Release PR: <em>Issue #32 PR (in review)</em></td>
+      </tr>
+      <tr>
+        <th>Public Cloud Run URLs (<code>R-03</code>)</th>
+        <td>
+          Primary: <a href="https://popqueue-5now4hkvsa-as.a.run.app">https://popqueue-5now4hkvsa-as.a.run.app</a><br/>
+          Health: <a href="https://popqueue-5now4hkvsa-as.a.run.app/api/health">/api/health</a> &bull;
+          Readiness: <a href="https://popqueue-5now4hkvsa-as.a.run.app/api/ready">/api/ready</a> &bull;
+          Regional: <a href="https://popqueue-902539659249.asia-southeast1.run.app">https://popqueue-902539659249.asia-southeast1.run.app</a>
+        </td>
+      </tr>
+      <tr>
+        <th>GCP Project &amp; Database</th>
+        <td>Project: <code>cpe334-bfteam</code> (No. <code>902539659249</code>) &bull; Region: <code>asia-southeast1</code> &bull; Cloud SQL: <code>popqueue-pg</code> (PostgreSQL 16.15 Enterprise, 10 GB SSD)</td>
+      </tr>
+      <tr>
+        <th>Canonical Specification (<code>R-02, §4.3</code>)</th>
+        <td>
+          <a href="https://github.com/apfirst13/PopQueue_BFteam/blob/lab5-staging/docs/labs/lab05/deployment.md"><code>docs/labs/lab05/deployment.md</code></a> &amp;
+          <a href="https://github.com/apfirst13/PopQueue_BFteam/blob/lab5-staging/docs/labs/lab-05/deployment.md"><code>docs/labs/lab-05/deployment.md</code></a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>0.2 Team Members &amp; Role-Swapped Contribution Matrix (<code>R-09, R-10, R-11</code>)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 28%;">Student ID &amp; Full Name</th>
+        <th style="width: 15%; white-space: nowrap;">GitHub Username</th>
+        <th>Lab 5 Responsibilities &amp; Owned Issues</th>
+        <th style="width: 8%;">Share</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>67070507206</code> — Theerawat Rungsawang<br/>(นายธีรวัฒญ์ รุ่งสว่าง)</td>
+        <td><a href="https://github.com/Theerawat82">@Theerawat82</a></td>
+        <td>GCP Project Owner (<code>cpe334-bfteam</code>), Budget &amp; APIs (<a href="https://github.com/apfirst13/PopQueue_BFteam/issues/24">#24</a>), Multi-stage Docker &amp; Compose (<a href="https://github.com/apfirst13/PopQueue_BFteam/issues/25">#25</a>), First Cloud Run/SQL Deploy (<a href="https://github.com/apfirst13/PopQueue_BFteam/issues/28">#28</a>), WIF setup &amp; CD Pipeline (<a href="https://github.com/apfirst13/PopQueue_BFteam/issues/30">#30</a>), Peer Reviewer (<a href="https://github.com/apfirst13/PopQueue_BFteam/pull/34">PR #34</a>, <a href="https://github.com/apfirst13/PopQueue_BFteam/pull/37">PR #37</a>, <a href="https://github.com/apfirst13/PopQueue_BFteam/pull/39">PR #39</a>, <a href="https://github.com/apfirst13/PopQueue_BFteam/pull/40">PR #40</a>)</td>
+        <td><strong>50%</strong></td>
+      </tr>
+      <tr>
+        <td><code>67070507209</code> — Aphiwat Panthathanaphat<br/>(นายอภิวัชร์ ปัณฐธนาพัฒน์)</td>
+        <td><a href="https://github.com/apfirst13">@apfirst13</a></td>
+        <td>GitHub Repo Owner, GCP IAM Editor, CI Quality Gate (<a href="https://github.com/apfirst13/PopQueue_BFteam/issues/27">#27</a>), Rulesets &amp; C-02 Merge Block (<a href="https://github.com/apfirst13/PopQueue_BFteam/issues/29">#29</a>), Live Domain/Persistence/SHA Verification (<a href="https://github.com/apfirst13/PopQueue_BFteam/issues/31">#31</a>), Release PR #39, Peer Reviewer (<a href="https://github.com/apfirst13/PopQueue_BFteam/pull/26">PR #26</a>, <a href="https://github.com/apfirst13/PopQueue_BFteam/pull/33">PR #33</a>, <a href="https://github.com/apfirst13/PopQueue_BFteam/pull/35">PR #35</a>, <a href="https://github.com/apfirst13/PopQueue_BFteam/pull/38">PR #38</a>)</td>
+        <td><strong>50%</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>0.3 Master Evidence Index (Checks <code>C-01</code>–<code>C-06</code> &amp; Requirements <code>R-01</code>–<code>R-12</code>)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Part</th>
+        <th>Check / Req</th>
+        <th>Primary Evidence Links (GitHub / GCP / Live URL)</th>
+        <th>Commit / Run / Revision</th>
+        <th style="width: 11%;">Page(s)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Part 0</td>
+        <td><code>R-09, R-10, §4.3, §5</code></td>
+        <td>Team matrix, Architectural Decision Evidence (<code>D-01</code>–<code>D-11</code>), PR Review Decision Trail</td>
+        <td>Issues #24–#32, PRs #26, #33–#40</td>
+        <td>pp. 1–2</td>
+      </tr>
+      <tr>
+        <td>Part 1</td>
+        <td><code>R-05, C-01</code></td>
+        <td><a href="https://github.com/apfirst13/PopQueue_BFteam/blob/main/.github/workflows/ci-docker.yml"><code>.github/workflows/ci-docker.yml</code></a>, <a href="https://github.com/apfirst13/PopQueue_BFteam/pull/34">PR #34</a>, <a href="https://github.com/apfirst13/PopQueue_BFteam/pull/38">PR #38</a></td>
+        <td><a href="https://github.com/apfirst13/PopQueue_BFteam/actions/runs/43050323811">Run #43050323811</a>, <a href="https://github.com/apfirst13/PopQueue_BFteam/actions/runs/43368438027">Run #43368438027</a></td>
+        <td>p. 3</td>
+      </tr>
+      <tr>
+        <td>Part 1</td>
+        <td><code>R-06, C-02</code></td>
+        <td>Rulesets (<code>protect-staging</code>, <code>protect-main</code>), closed <a href="https://github.com/apfirst13/PopQueue_BFteam/pull/36">PR #36</a> (<code>temp/c02-failing-check</code>)</td>
+        <td>Commit <code>597c95c</code>, <a href="https://github.com/apfirst13/PopQueue_BFteam/actions/runs/43254466119">Run #43254466119</a></td>
+        <td>pp. 3–5</td>
+      </tr>
+      <tr>
+        <td>Part 2</td>
+        <td><code>R-01, R-02, R-12, C-03</code></td>
+        <td><a href="https://github.com/apfirst13/PopQueue_BFteam/blob/main/Dockerfile"><code>Dockerfile</code></a>, <a href="https://github.com/apfirst13/PopQueue_BFteam/blob/main/docker-compose.yml"><code>docker-compose.yml</code></a>, <a href="https://github.com/apfirst13/PopQueue_BFteam/blob/main/.env.example"><code>.env.example</code></a>, <a href="https://github.com/apfirst13/PopQueue_BFteam/pull/26">PR #26</a></td>
+        <td>Commit <code>61e77b4</code>, <code>c03-clean-clone-log.txt</code></td>
+        <td>pp. 6–7</td>
+      </tr>
+      <tr>
+        <td>Part 3</td>
+        <td><code>R-03, R-11, C-04</code></td>
+        <td><a href="https://popqueue-5now4hkvsa-as.a.run.app">popqueue-5now4hkvsa-as.a.run.app</a>, <a href="https://github.com/apfirst13/PopQueue_BFteam/pull/33">PR #33</a>, <a href="https://github.com/apfirst13/PopQueue_BFteam/pull/35">PR #35</a>, <a href="https://github.com/apfirst13/PopQueue_BFteam/pull/40">PR #40</a></td>
+        <td>Rev <code>popqueue-00001-jwk</code>, Ticket <code>CRY-001</code></td>
+        <td>pp. 8–11</td>
+      </tr>
+      <tr>
+        <td>Part 3</td>
+        <td><code>R-04, C-05</code></td>
+        <td>Cloud SQL <code>popqueue-pg</code> restart, cold start &amp; CD redeploy persistence (<a href="https://github.com/apfirst13/PopQueue_BFteam/pull/40">PR #40</a>)</td>
+        <td>Restart <code>12:40:44 PM</code>, <a href="https://github.com/apfirst13/PopQueue_BFteam/actions/runs/43373875178">Run #43373875178</a></td>
+        <td>pp. 11–13</td>
+      </tr>
+      <tr>
+        <td>Part 4</td>
+        <td><code>R-07, R-08, C-06</code></td>
+        <td>Keyless WIF (<a href="https://github.com/apfirst13/PopQueue_BFteam/pull/37">PR #37</a>), <a href="https://github.com/apfirst13/PopQueue_BFteam/blob/main/.github/workflows/deploy.yml"><code>deploy.yml</code></a>, <a href="https://github.com/apfirst13/PopQueue_BFteam/pull/39">PR #39</a>, live badge &amp; Pause Policy</td>
+        <td><a href="https://github.com/apfirst13/PopQueue_BFteam/actions/runs/43370798180">Run #43370798180</a>, Commit <code>e010e19</code></td>
+        <td>pp. 14–16</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="page-break">0.4 Decision Evidence Summary (Handout §4.3, §5 &amp; <code>R-09</code> Compliance)</h2>
+  <p>Per Handout §4.3 &amp; §5 (<em>&ldquo;If your team chooses differently, write the choice and the reason in <code>deployment.md</code>&rdquo;</em>), every divergence from the generic TokTickIT reference starter kit is documented with justification in <code>docs/labs/lab05/deployment.md</code> §7:</p>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 8%;">ID</th>
+        <th style="width: 24%;">Choice Area</th>
+        <th>Team Decision &amp; Engineering Reason (Detailed in <code>deployment.md</code> §7)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>D-01</strong></td><td>Container Topology</td><td><strong>4-container <code>docker-compose.yml</code></strong> (<code>db</code>, <code>migrate</code>, <code>server</code>, <code>client</code> Nginx proxy) locally + <strong>unified 3-stage root <code>Dockerfile</code></strong> (Express serves <code>/app/client/dist</code> on <code>:3000</code> as <code>USER node</code>) in CI/Cloud Run &rarr; eliminates CORS overhead and halves Cloud Run cold starts.</td></tr>
+      <tr><td><strong>D-02</strong></td><td>Runtime Port</td><td><code>PORT=4000</code> in local Node dev (Vite proxy) vs. <code>PORT=3000</code> in Docker &amp; Cloud Run &rarr; preserves dev workflow while matching Cloud Run container contract.</td></tr>
+      <tr><td><strong>D-03</strong></td><td>Budget Alert Policy</td><td><strong>฿250 THB (~$7 USD) Alerts-only</strong> at <strong>10%/20%/50%/90% Actual spend</strong> (<code>ep01-budget-alert.png</code>) instead of hard billing cutoff &rarr; early cost warning without crashing the grading service.</td></tr>
+      <tr><td><strong>D-04</strong></td><td>Branch &amp; Ruleset Model</td><td>Dedicated <strong><code>lab5-staging</code></strong> branch + active GitHub Rulesets on <strong>both <code>lab5-staging</code> and <code>main</code></strong> (empty bypass list) &rarr; stops broken/unreviewed PRs before reaching production triggers.</td></tr>
+      <tr><td><strong>D-05</strong></td><td>Database-Backed CI</td><td>CI runs against real <code>postgres:16-alpine</code> container + <code>prisma migrate deploy && prisma:seed</code> &rarr; tests atomic concurrency queue logic realistically without mocks.</td></tr>
+      <tr><td><strong>D-06</strong></td><td>WIF Immutable CEL</td><td>Keyless OIDC with immutable <code>repository_id</code>/<code>repository_owner_id</code>, GitHub <code>@</code> syntax in <code>assertion.sub</code>, <code>roles/run.developer</code>, and per-SA <code>serviceAccountUser</code> (<code>0</code> JSON keys).</td></tr>
+      <tr><td><strong>D-07</strong></td><td>Cloud SQL Tier</td><td><code>db-f1-micro</code>, <code>--edition=enterprise</code>, PostgreSQL <code>16.15</code>, fixed <code>10 GB SSD</code> in <code>asia-southeast1</code> &rarr; lowest cost within $300 trial credit with durable restart/redeploy state.</td></tr>
+      <tr><td><strong>D-08</strong></td><td>Seed &amp; Secret Parity</td><td>Kept <code>deploy.sh</code> starter-kit secrets (<code>popqueue-admin/demo-password</code>) alongside core DB/JWT secrets while <code>seed.ts</code> uses <code>SEED_*_PASSWORD</code> &rarr; preserves stub compatibility cleanly.</td></tr>
+      <tr><td><strong>D-09</strong></td><td>4-Layer SHA Traceability</td><td>Injected <code>GIT_SHA</code> at build time to both Stage 1 (<code>VITE_GIT_SHA</code> footer badge) and Stage 3 (<code>/api/health</code> <code>commit</code>) + Cloud Run label <code>commit-sha</code> + <code>smoke_test.py</code> check (<code>PR #38</code> review resolution).</td></tr>
+      <tr><td><strong>D-10</strong></td><td>Pause / No Live Teardown</td><td>Tested <code>teardown.sh</code> strictly with <code>DRY_RUN=1</code>; kept GCP live (<code>min-instances=0</code>) for grading &amp; Lab 6 UAT, adopting Episode 9 Pause/Resume only for post-grading idle breaks.</td></tr>
+      <tr><td><strong>D-11</strong></td><td>Cross-Platform Shell EOL</td><td>Fresh Windows clean-clone C-03 verification failed initially in <code>popqueue-migrate</code> (<code>exec ./docker-entrypoint.sh: no such file or directory</code>) due to CRLF checkout. Added <a href="https://github.com/apfirst13/PopQueue_BFteam/blob/lab5-staging/.gitattributes"><code>.gitattributes</code></a> (<code>*.sh text eol=lf</code>, <code>server/docker-entrypoint.sh text eol=lf</code>) and <code>sed -i 's/\r$//'</code> in <a href="https://github.com/apfirst13/PopQueue_BFteam/blob/lab5-staging/server/Dockerfile"><code>server/Dockerfile</code></a> before <code>chmod +x</code> so Compose runs identically across OSes.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>0.5 Substantive Peer-Review Decision Trail (<code>R-09</code>)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 14%;">PR (#Issue)</th>
+        <th style="width: 21%;">Author &rarr; Reviewer</th>
+        <th>Specific Review Check, Finding, or Approval Rationale (Observed on GitHub)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><a href="https://github.com/apfirst13/PopQueue_BFteam/pull/26">PR #26</a> (#25)</td><td>@Theerawat82 &rarr; @apfirst13</td><td>Verified <code>Dockerfile:19-66</code> (<code>USER node</code>), <code>/api/ready</code> 503 handler, 30 client tests &amp; Run <code>42570690110</code>; noted local Docker daemon was stopped at review time.</td></tr>
+      <tr><td><a href="https://github.com/apfirst13/PopQueue_BFteam/pull/33">PR #33</a> (#24)</td><td>@Theerawat82 &rarr; @apfirst13</td><td>Audited masked personal emails in <code>ep01-*.png</code> (<code>R-12</code>), 10%–90% budget thresholds, and <code>lab5</code> label attachment (<code>R-10</code>).</td></tr>
+      <tr><td><a href="https://github.com/apfirst13/PopQueue_BFteam/pull/34">PR #34</a> (#27)</td><td>@apfirst13 &rarr; @Theerawat82</td><td>Audited pinned 40-char action SHAs, Node 24 parity, <code>postgres:16-alpine</code> health check, <code>prisma migrate deploy</code>, and green Run <code>43050323811</code>.</td></tr>
+      <tr><td><a href="https://github.com/apfirst13/PopQueue_BFteam/pull/35">PR #35</a> (#28)</td><td>@Theerawat82 &rarr; @apfirst13</td><td>Probed live Cloud Run <code>/api/health</code>, <code>/api/ready</code>, <code>/api/series</code>, verified idempotent <code>popqueue-migrate-qwzsf</code> &amp; <code>teardown.sh</code> JWT cleanup.</td></tr>
+      <tr><td><a href="https://github.com/apfirst13/PopQueue_BFteam/pull/37">PR #37</a> (#29)</td><td>@apfirst13 &rarr; @Theerawat82</td><td>Verified WIF CEL condition (<code>@</code> claim format), <code>Listed 0 items.</code> key audit, active rulesets, blocked PR #36, and flagged <code>:</code> vs <code>@</code> doc typo for Issue 9 fix.</td></tr>
+      <tr><td><a href="https://github.com/apfirst13/PopQueue_BFteam/pull/38">PR #38</a> (#30)</td><td>@Theerawat82 &rarr; @apfirst13</td><td><strong><code>CHANGES_REQUESTED</code> &rarr; <code>APPROVED</code>:</strong> Caught 3 C-06 gaps (missing <code>/api/health</code> <code>commit</code>, <code>--build-arg GIT_SHA</code>, UI footer badge); resolved in <code>b8922ae</code> + <code>test_smoke.py</code> unit test.</td></tr>
+      <tr><td><a href="https://github.com/apfirst13/PopQueue_BFteam/pull/39">PR #39</a> (#30,#31)</td><td>@apfirst13 &rarr; @Theerawat82</td><td>Audited <code>lab5-staging &rarr; main</code> release diff, <code>id-token: write</code> scope, immutable <code>@sha256</code> digest rollout, and <code>--wait</code> migration gate before production trigger.</td></tr>
+      <tr><td><a href="https://github.com/apfirst13/PopQueue_BFteam/pull/40">PR #40</a> (#31)</td><td>@apfirst13 &rarr; @Theerawat82</td><td><strong><code>CHANGES_REQUESTED</code> (x2) &rarr; <code>APPROVED</code>:</strong> Caught duplicate PNGs, missing URL bar on <code>c04-step1</code>, Console vs CLI restart doc mismatch, role-swap note, &amp; client countdown reset query; fixed in <code>7cc44d5</code>.</td></tr>
+    </tbody>
+  </table>
+
+  <!-- =================================================================== -->
+  <!-- ANSWER PART 1 -->
+  <!-- =================================================================== -->
+  <h1 class="part-heading page-break">Answer Part 1 — CI and Quality Gate (30 Points)</h1>
+  <p><strong>Covers Requirements:</strong> <code>R-05</code>, <code>R-06</code>, <code>R-09</code>, <code>R-10</code>, <strong>Check <code>C-01</code></strong>, <strong>Check <code>C-02</code></strong>.</p>
+
+  <h2>1.1 CI Pipeline Architecture (<a href="https://github.com/apfirst13/PopQueue_BFteam/blob/main/.github/workflows/ci-docker.yml"><code>.github/workflows/ci-docker.yml</code></a>)</h2>
+  <ul>
+    <li><strong>Triggers:</strong> Runs automatically via job <code>test-and-docker</code> on Pull Requests to <code>lab5-staging</code> and <code>main</code>, and is reused via <code>workflow_call</code> by <code>deploy.yml</code> before any production rollout.</li>
+    <li><strong>Environment &amp; Database Service (Decision <code>D-05</code>):</strong> Uses Node.js <code>24</code>, Python <code>3.14</code>, pinned third-party action commit SHAs, least-privilege <code>permissions: contents: read</code>, and a live <code>postgres:16-alpine</code> service container health-checked via <code>pg_isready</code>.</li>
+    <li><strong>Executed Quality Checks:</strong> (1) <code>bash -n</code> syntax + offline stub/smoke tests (<code>test_deploy_stub.sh</code>, <code>test_release_stub.sh</code>, <code>test_smoke.py</code>); (2) <code>npx prisma migrate deploy &amp;&amp; npm run prisma:seed</code> + backend Vitest suite; (3) frontend Vitest suite + production Vite build; (4) unified root <code>docker build -t popqueue:latest .</code>.</li>
+  </ul>
+
+  <h2>1.2 Check C-01 — Normal PR CI Gate Passing Results (<code>R-05</code>)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Pull Request &amp; Commit</th>
+        <th>CI Workflow Run</th>
+        <th>Observed Suite &amp; Build Results (Verified Live)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a href="https://github.com/apfirst13/PopQueue_BFteam/pull/34">PR #34</a> (<code>feature/lab5-i04-ci</code> &rarr; <code>lab5-staging</code>)<br/>Head SHA: <code>28ff862</code></td>
+        <td><a href="https://github.com/apfirst13/PopQueue_BFteam/actions/runs/43050323811">Run #43050323811</a><br/><span class="badge badge-ok">SUCCESS</span> (1m 14s)</td>
+        <td>Established CI gate: offline deploy stub tests + 147 backend tests + 30 frontend tests + Vite production build + <code>popqueue:latest</code> Docker build passed.</td>
+      </tr>
+      <tr>
+        <td><a href="https://github.com/apfirst13/PopQueue_BFteam/pull/38">PR #38</a> (<code>feature/lab5-i07-cd-pipeline</code> &rarr; <code>lab5-staging</code>)<br/>Commit: <code>b8922ae</code></td>
+        <td><a href="https://github.com/apfirst13/PopQueue_BFteam/actions/runs/43368438027">Run #43368438027</a><br/><span class="badge badge-ok">SUCCESS</span> (1m 28s)</td>
+        <td><strong>23 backend files / 148 Vitest tests passed</strong> (12.46s), <strong>6 frontend files / 31 Vitest tests passed</strong> (3.34s), Vite built in 1.10s, <code>test_deploy_stub.sh</code> (6 PASS), <code>test_release_stub.sh</code> (5 PASS), <code>test_smoke.py</code> (4 ok), Docker build <code>popqueue:latest</code> passed.</td>
+      </tr>
+      <tr>
+        <td><a href="https://github.com/apfirst13/PopQueue_BFteam/pull/40">PR #40</a> (<code>feature/lab5-i08-persistence-verify</code> &rarr; <code>lab5-staging</code>)<br/>Commit: <code>7cc44d5</code></td>
+        <td><a href="https://github.com/apfirst13/PopQueue_BFteam/actions/runs/43389963671">Run #43389963671</a><br/><span class="badge badge-ok">SUCCESS</span> (1m 15s)</td>
+        <td>Full regression parity confirmed prior to Issue 9: <strong>148 backend tests passed</strong> (10.14s), <strong>31 frontend tests passed</strong> (2.65s), 4 smoke unit tests passed (0.004s), Docker build passed.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>1.3 Branch Protection Rulesets &amp; Check C-02 Merge Block (<code>R-06, R-09</code>)</h2>
+  <p>Active GitHub Rulesets protect both <code>lab5-staging</code> (<code>protect-staging</code>) and <code>main</code> (<code>protect-main</code>) with empty bypass lists, deletion blocks, 1 required non-author approval, and required status check <code>test-and-docker</code> (up-to-date branch required). For <strong>Check C-02</strong>, temporary branch <code>temp/c02-failing-check</code> added a deliberate assertion failure (<code>expect(1).toBe(2)</code>) in <a href="https://github.com/apfirst13/PopQueue_BFteam/pull/36">PR #36</a>; CI failed, GitHub blocked merging (<code>mergeStateStatus: BLOCKED</code>), and PR #36 remains permanently closed without merge or deletion.</p>
+
+  <div class="two-col">
+    <figure>
+      <img src="evidence/ep06-ruleset-staging.png" alt="Ruleset protect-staging" />
+      <figcaption><strong>Figure 1. R-06 / Decision D-04:</strong> Active GitHub Ruleset <code>protect-staging</code> targeting <code>lab5-staging</code> requiring PR approval, up-to-date branch, and status check <code>test-and-docker</code> (<a href="https://github.com/apfirst13/PopQueue_BFteam/pull/37">PR #37</a>).</figcaption>
+    </figure>
+    <figure>
+      <img src="evidence/ep06-ruleset-main.png" alt="Ruleset protect-main" />
+      <figcaption><strong>Figure 2. R-06 / Decision D-04:</strong> Active GitHub Ruleset <code>protect-main</code> targeting <code>main</code> with identical merge gates and empty bypass list (<a href="https://github.com/apfirst13/PopQueue_BFteam/pull/37">PR #37</a>).</figcaption>
+    </figure>
+  </div>
+
+  <figure>
+    <img src="evidence/ep06-c02-deliberate-failure.png" alt="C-02 deliberate failing assertion" />
+    <figcaption><strong>Figure 3. Check C-02 (R-06):</strong> Deliberate failure assertion <code>expect(1).toBe(2)</code> in <code>client/src/App.test.tsx</code> on temporary branch <code>temp/c02-failing-check</code> in <a href="https://github.com/apfirst13/PopQueue_BFteam/pull/36">PR #36</a> (Commit <code>597c95c</code>).</figcaption>
+  </figure>
+
+  <figure>
+    <img src="evidence/ep06-c02-action-failed.png" alt="C-02 action failed" />
+    <figcaption><strong>Figure 4. Check C-02 (R-06):</strong> GitHub Actions workflow <code>CI &amp; Docker Build #14</code> (<a href="https://github.com/apfirst13/PopQueue_BFteam/actions/runs/43254466119">Run #43254466119</a>) failed in 50s on <a href="https://github.com/apfirst13/PopQueue_BFteam/pull/36">PR #36</a>.</figcaption>
+  </figure>
+
+  <figure>
+    <img src="evidence/ep06-c02-merge-blocked.png" alt="C-02 merge blocked" />
+    <figcaption><strong>Figure 5. Check C-02 (R-06):</strong> <a href="https://github.com/apfirst13/PopQueue_BFteam/pull/36">PR #36</a> blocked from merging into <code>lab5-staging</code> with <em>&ldquo;Required checks failing: Fix the failing required checks.&rdquo;</em> and disabled Merge button.</figcaption>
+  </figure>
+
+  <figure>
+    <img src="evidence/ep06-c02-pr-closed.png" alt="C-02 PR closed without merge" />
+    <figcaption><strong>Figure 6. Check C-02 (R-06):</strong> <a href="https://github.com/apfirst13/PopQueue_BFteam/pull/36">PR #36</a> closed unmerged (<code>Closed</code> badge) and retained in repository history for permanent TA inspection.</figcaption>
+  </figure>
+
+  <!-- =================================================================== -->
+  <!-- ANSWER PART 2 -->
+  <!-- =================================================================== -->
+  <h1 class="part-heading page-break">Answer Part 2 — Docker and Reproducible Configuration (20 Points)</h1>
+  <p><strong>Covers Requirements:</strong> <code>R-01</code>, <code>R-02</code>, <code>R-12</code>, <strong>Check <code>C-03</code></strong>.</p>
+
+  <h2>2.1 Containerization Files &amp; Topology (<code>R-01</code>, Decision <code>D-01</code>)</h2>
+  <ul>
+    <li><a href="https://github.com/apfirst13/PopQueue_BFteam/blob/main/Dockerfile"><code>Dockerfile</code></a> (root multi-stage, <a href="https://github.com/apfirst13/PopQueue_BFteam/pull/26">PR #26</a>): Stage 1 (<code>client-builder</code>) compiles React + Vite SPA with <code>ARG GIT_SHA</code> &rarr; <code>ENV VITE_GIT_SHA</code>; Stage 2 (<code>server-builder</code>) compiles TypeScript &amp; generates Prisma client; Stage 3 (<code>production</code>) ships Express + <code>/app/client/dist</code> + Prisma CLI for Cloud Run migration jobs and runs under non-root <code>USER node</code> on port <code>3000</code>.</li>
+    <li><a href="https://github.com/apfirst13/PopQueue_BFteam/blob/main/docker-compose.yml"><code>docker-compose.yml</code></a> + <a href="https://github.com/apfirst13/PopQueue_BFteam/blob/main/.dockerignore"><code>.dockerignore</code></a>: Launches 4 services for local parity: <code>popqueue-db</code> (<code>postgres:16-alpine</code> with <code>pg_isready</code> health check), <code>popqueue-migrate</code> (<code>npx prisma migrate deploy &amp;&amp; npm run db:seed</code>), <code>popqueue-server</code> (<code>:3000</code>), and <code>popqueue-client</code> (Nginx SPA on <code>:5173</code>).</li>
+  </ul>
+
+  <h2>2.2 Environment Variable Contract &amp; Secret Hygiene (<code>R-02, R-12</code>)</h2>
+  <p>All runtime configuration is supplied via environment variables or GCP Secret Manager — zero credentials, tokens, or connection strings exist in Git (<a href="https://github.com/apfirst13/PopQueue_BFteam/blob/main/.env.example"><code>.env.example</code></a>, <a href="https://github.com/apfirst13/PopQueue_BFteam/blob/main/docs/labs/lab05/deployment.md"><code>docs/labs/lab05/deployment.md</code> §2</a>).</p>
+  <table>
+    <thead>
+      <tr><th>Variable</th><th>Purpose</th><th>Secret?</th><th><code>.env.example</code> / Local Default</th><th>GCP Production Source</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>NODE_ENV</code>, <code>TZ</code>, <code>PORT</code></td><td>Runtime mode, Bangkok timezone, HTTP port</td><td>No</td><td><code>development</code>, <code>Asia/Bangkok</code>, <code>4000</code>/<code>3000</code></td><td>Cloud Run env vars (<code>production</code>, <code>Asia/Bangkok</code>, <code>3000</code>)</td></tr>
+      <tr><td><code>DATABASE_URL</code></td><td>PostgreSQL DSN (Prisma)</td><td><strong>Yes</strong></td><td><code>postgresql://popqueue:...@localhost:5432/popqueue</code></td><td>Secret Manager: <code>popqueue-database-url</code> (Cloud SQL socket)</td></tr>
+      <tr><td><code>JWT_SECRET</code></td><td>JWT HMAC signing key (&ge; 32 chars)</td><td><strong>Yes</strong></td><td><code>your-super-secret-jwt-key-at-least-32-chars-long</code></td><td>Secret Manager: <code>popqueue-jwt-secret</code> (64-char hex)</td></tr>
+      <tr><td><code>JWT_EXPIRES_IN</code>, <code>BCRYPT_COST</code></td><td>Token TTL &amp; bcrypt rounds</td><td>No</td><td><code>8h</code>, <code>10</code></td><td>App defaults in <code>server/src/config/env.ts</code></td></tr>
+      <tr><td><code>GIT_SHA</code>, <code>VITE_GIT_SHA</code></td><td>Release commit SHA (API &amp; UI footer)</td><td>No</td><td><code>development</code> (build <code>ARG</code> fallback)</td><td>Docker <code>--build-arg GIT_SHA=$IMAGE_TAG</code> in <code>deploy.yml</code></td></tr>
+      <tr><td><code>SEED_COLLECTOR_PASSWORD</code>, <code>SEED_STAFF_PASSWORD</code></td><td>Demo user seed passwords (<code>seed.ts</code>)</td><td>Demo</td><td><code>collector_dev_password123</code>, <code>staff_dev_password123</code></td><td>Idempotent seed in <code>popqueue-migrate</code> (D-08 note in §2)</td></tr>
+    </tbody>
+  </table>
+
+  <figure>
+    <img src="evidence/ep01-push-protection.png" alt="GitHub Secret Scanning Push Protection" />
+    <figcaption><strong>Figure 7. R-12 / Episode 1:</strong> GitHub repository security settings confirming <strong>Secret Protection</strong> and <strong>Push protection</strong> are enabled (<code>On</code>) on <code>apfirst13/PopQueue_BFteam</code> (<a href="https://github.com/apfirst13/PopQueue_BFteam/pull/33">PR #33</a>).</figcaption>
+  </figure>
+
+  <div style="break-inside: avoid;">
+    <h2>2.3 Check C-03 — Clean Clone Local Build &amp; Run Verification (<code>R-01, R-02</code>)</h2>
+    <p>Verified in an isolated clean directory cloned from GitHub using only <code>cp .env.example .env</code> (zero host workspace secrets copied). During initial testing on Windows, clean checkout converted <code>server/docker-entrypoint.sh</code> to CRLF (Decision <strong>D-11</strong>); after adding <code>.gitattributes</code> (<code>*.sh text eol=lf</code>) and stripping CR in <code>server/Dockerfile</code>, the clean-clone stack built, migrated, seeded <code>9 Users, 3 Series, 3 Assignments</code>, served all health/readiness/API/UI endpoints, and tore down cleanly. Full redacted log archived at <a href="https://github.com/apfirst13/PopQueue_BFteam/blob/lab5-staging/docs/labs/lab05/evidence/c03-clean-clone-log.txt"><code>docs/labs/lab05/evidence/c03-clean-clone-log.txt</code></a>.</p>
+    <pre>$ git clone --branch lab5-staging --depth 1 https://github.com/apfirst13/PopQueue_BFteam.git popqueue-c03-verify
+$ cp .env.example .env &amp;&amp; docker compose up --build -d
+# popqueue-migrate logs:
+All migrations have been successfully applied.
+Seeding completed successfully: 9 Users, 3 Series, 3 Assignments.
+
+$ docker compose ps -a --format "table {{.Name}}\t{{.Service}}\t{{.Status}}\t{{.Ports}}"
+popqueue-db        db        Up 8 seconds (healthy)   0.0.0.0:5432->5432/tcp
+popqueue-migrate   migrate   Exited (0) 2 seconds ago
+popqueue-server    server    Up 3 seconds             0.0.0.0:3000->3000/tcp
+popqueue-client    client    Up 2 seconds             0.0.0.0:5173->80/tcp
+
+$ curl -i http://localhost:3000/api/health  # -> HTTP/1.1 200 OK {"status":"ok","commit":"dev"}
+$ curl -i http://localhost:3000/api/ready   # -> HTTP/1.1 200 OK {"db":"connected"}
+$ curl -s http://localhost:3000/api/series  # -> CRY (Crybaby), LAB (Labubu), SKP (Skullpanda)
+$ curl -I http://localhost:5173             # -> HTTP/1.1 200 OK (nginx/1.30.6)
+$ docker compose down -v                    # Clean container and volume teardown</pre>
+  </div>
+
+  <!-- =================================================================== -->
+  <!-- ANSWER PART 3 -->
+  <!-- =================================================================== -->
+  <h1 class="part-heading page-break">Answer Part 3 — GCP Deployment and Persistence (35 Points)</h1>
+  <p><strong>Covers Requirements:</strong> <code>R-03</code>, <code>R-04</code>, <code>R-11</code>, <strong>Check <code>C-04</code></strong>, <strong>Check <code>C-05</code></strong>.</p>
+
+  <h2>3.1 GCP Project, Budget Controls &amp; Initial Cloud Run/SQL Provisioning (<code>R-03, R-04, R-11</code>)</h2>
+  <p>Project <code>cpe334-bfteam</code> (No. <code>902539659249</code>) in <code>asia-southeast1</code> runs Cloud Run service <code>popqueue</code> (<code>min-instances=0</code>, <code>max-instances=3</code>, <code>512Mi</code>, <code>1 vCPU</code>, port <code>3000</code>), Cloud SQL PostgreSQL 16.15 Enterprise instance <code>popqueue-pg</code> (<code>db-f1-micro</code>, 10 GB SSD), Secret Manager secrets, and Cloud Run migration job <code>popqueue-migrate</code> (<a href="https://github.com/apfirst13/PopQueue_BFteam/pull/33">PR #33</a>, <a href="https://github.com/apfirst13/PopQueue_BFteam/pull/35">PR #35</a>).</p>
+
+  <figure>
+    <img src="evidence/ep01-billing-enabled-true.png" alt="GCP Billing Enabled True" />
+    <figcaption><strong>Figure 8. Episode 1 (R-11):</strong> Cloud Shell command <code>gcloud billing projects describe cpe334-bfteam --format='value(billingEnabled)'</code> confirming <code>True</code> (<a href="https://github.com/apfirst13/PopQueue_BFteam/pull/33">PR #33</a>).</figcaption>
+  </figure>
+
+  <div class="two-col">
+    <figure>
+      <img src="evidence/ep01-budget-alert.png" alt="GCP Budget Alert" />
+      <figcaption><strong>Figure 9. Episode 1 / Decision D-03:</strong> Alerts-only budget set to <code>฿250 THB (~$7 USD)</code> triggering Actual spend alerts at <code>10% (฿25)</code>, <code>20% (฿50)</code>, <code>50% (฿125)</code>, and <code>90% (฿225)</code> (<a href="https://github.com/apfirst13/PopQueue_BFteam/pull/33">PR #33</a>).</figcaption>
+    </figure>
+    <figure>
+      <img src="evidence/ep01-iam-editor.png" alt="GCP IAM Team Access" />
+      <figcaption><strong>Figure 10. Episode 1 (R-11):</strong> GCP IAM permissions granting teammate <code>Editor</code> access alongside Project <code>Owner</code> with personal emails masked (<a href="https://github.com/apfirst13/PopQueue_BFteam/pull/33">PR #33</a>).</figcaption>
+    </figure>
+  </div>
+
+  <figure>
+    <img src="evidence/ep05-deploy-completed.png" alt="Initial Cloud Run deploy completed" />
+    <figcaption><strong>Figure 11. Episode 5 (R-03, R-04):</strong> Idempotent <code>./deploy/deploy.sh --demo</code> completion showing migration execution <code>popqueue-migrate-998zv</code>, Cloud Run revision <code>popqueue-00001-jwk</code>, and live URL <code>https://popqueue-5now4hkvsa-as.a.run.app</code> (<a href="https://github.com/apfirst13/PopQueue_BFteam/pull/35">PR #35</a>).</figcaption>
+  </figure>
+
+  <figure>
+    <img src="evidence/ep05-migrate-idempotency.png" alt="Migration job idempotency" />
+    <figcaption><strong>Figure 12. Episode 5 (R-04):</strong> Second manual execution <code>popqueue-migrate-qwzsf</code> completing <code>1 / 1 complete</code> in <code>6.69s</code> with zero duplicate seed records (<a href="https://github.com/apfirst13/PopQueue_BFteam/pull/35">PR #35</a>).</figcaption>
+  </figure>
+
+  <h2>3.2 Check C-04 — Core Domain Workflow on Public Cloud Run URL (<code>R-03</code>)</h2>
+  <p>End-to-end PopQueue workflow verified live on <a href="https://popqueue-5now4hkvsa-as.a.run.app">https://popqueue-5now4hkvsa-as.a.run.app</a> (<a href="https://github.com/apfirst13/PopQueue_BFteam/pull/40">PR #40</a>): Collector login (masked password), ticket issuance (<code>CRY-001</code>), Box Master staff counter call (<code>CALLED</code>), and duplicate queue join rejection (HTTP 409 <code>[DUPLICATE_ACTIVE_QUEUE]</code>).</p>
+
+  <figure>
+    <img src="evidence/c04-step0-login-masked.png" alt="C-04 masked login" />
+    <figcaption><strong>Figure 13. Check C-04 (R-03):</strong> Collector sign-in on public domain <code>popqueue-5now4hkvsa-as.a.run.app/login</code> showing browser address bar and masked password input (<a href="https://github.com/apfirst13/PopQueue_BFteam/pull/40">PR #40</a>).</figcaption>
+  </figure>
+
+  <figure>
+    <img src="evidence/c04-step1-collector-join.png" alt="C-04 collector joins CRY queue" />
+    <figcaption><strong>Figure 14. Check C-04 (R-03):</strong> Collector joins <code>CRY</code> series at <code>popqueue-5now4hkvsa-as.a.run.app/my-ticket</code> and receives virtual ticket <strong><code>CRY-001</code></strong> in <code>WAITING</code> state (<a href="https://github.com/apfirst13/PopQueue_BFteam/pull/40">PR #40</a>).</figcaption>
+  </figure>
+
+  <figure>
+    <img src="evidence/c04-step2-staff-call.png" alt="C-04 staff calls CRY-001" />
+    <figcaption><strong>Figure 15. Check C-04 (R-03):</strong> Staff (<code>staff_crybaby</code>) calls next ticket at <code>popqueue-5now4hkvsa-as.a.run.app/staff/counter</code>, transitioning <strong><code>CRY-001</code></strong> to <code>CALLED</code> (<a href="https://github.com/apfirst13/PopQueue_BFteam/pull/40">PR #40</a>).</figcaption>
+  </figure>
+
+  <figure>
+    <img src="evidence/c04-step3-duplicate-rejection.png" alt="C-04 duplicate join rejection" />
+    <figcaption><strong>Figure 16. Check C-04 (R-03):</strong> Duplicate active queue join rejected on <code>popqueue-5now4hkvsa-as.a.run.app/series</code> with banner <code>[DUPLICATE_ACTIVE_QUEUE] User already has an active queue ticket</code> (<a href="https://github.com/apfirst13/PopQueue_BFteam/pull/40">PR #40</a>).</figcaption>
+  </figure>
+
+  <h2>3.3 Check C-05 — Database Persistence Across Scale-Down, DB Restart &amp; Redeploy (<code>R-04</code>)</h2>
+  <p>Ticket <strong><code>CRY-001</code></strong> (<code>CALLED</code>) persisted cleanly in Cloud SQL <code>popqueue-pg</code> across all three resilience tests (<a href="https://github.com/apfirst13/PopQueue_BFteam/pull/40">PR #40</a>). <em>Clarification (PR #40 review):</em> UI persistence screens were re-captured cleanly with cropped taskbars and visible browser URL bars after the <code>12:40:44 PM</code> DB restart and <code>05:43:29Z</code> CD redeploy; the client countdown initializes at <code>02:00</code> upon page load (<code>CountdownTimer.tsx</code>).</p>
+
+  <figure>
+    <img src="evidence/c05-test1-scale-down-persistence.png" alt="C-05 scale-to-zero persistence" />
+    <figcaption><strong>Figure 17. Check C-05 Test 1 (R-04):</strong> Ticket <strong><code>CRY-001</code></strong> remains intact in <code>CALLED</code> state on <code>popqueue-5now4hkvsa-as.a.run.app/my-ticket</code> after Cloud Run scales to zero and serves a fresh request (<a href="https://github.com/apfirst13/PopQueue_BFteam/pull/40">PR #40</a>).</figcaption>
+  </figure>
+
+  <figure>
+    <img src="evidence/c05-test2-gcp-db-restart.png" alt="C-05 GCP Cloud SQL restart console" />
+    <figcaption><strong>Figure 18. Check C-05 Test 2 (R-04):</strong> Google Cloud Console confirming <code>popqueue-pg</code> (<code>PostgreSQL 16.15 Enterprise</code>, <code>cpe334-bfteam</code>) completed manual restart (<em>&ldquo;Restarted popqueue-pg 12:40:44 PM GMT+7&rdquo;</em>).</figcaption>
+  </figure>
+
+  <figure>
+    <img src="evidence/c05-test2-db-restart-persistence.png" alt="C-05 UI after Cloud SQL restart" />
+    <figcaption><strong>Figure 19. Check C-05 Test 2 (R-04):</strong> Live UI at <code>popqueue-5now4hkvsa-as.a.run.app/my-ticket</code> showing ticket <strong><code>CRY-001</code></strong> (<code>CALLED</code>) preserved intact after Cloud SQL restart (<a href="https://github.com/apfirst13/PopQueue_BFteam/pull/40">PR #40</a>).</figcaption>
+  </figure>
+
+  <figure>
+    <img src="evidence/c05-test3-redeploy-cli.png" alt="C-05 CD redeploy trigger and /api/ready" />
+    <figcaption><strong>Figure 20. Check C-05 Test 3 (R-04):</strong> On-demand CD redeploy triggered via <code>gh workflow run deploy.yml --ref main</code> (<a href="https://github.com/apfirst13/PopQueue_BFteam/actions/runs/43373875178">Run #43373875178</a>) followed by <code>GET /api/ready</code> returning <code>{"db":"connected"}</code>.</figcaption>
+  </figure>
+
+  <figure>
+    <img src="evidence/c05-test3-redeploy-persistence.png" alt="C-05 UI after CD redeploy" />
+    <figcaption><strong>Figure 21. Check C-05 Test 3 (R-04):</strong> Live UI confirming ticket <strong><code>CRY-001</code></strong> (<code>CALLED</code>) survived the new Cloud Run revision rollout via GitHub Actions CD (<a href="https://github.com/apfirst13/PopQueue_BFteam/pull/40">PR #40</a>).</figcaption>
+  </figure>
+
+  <!-- =================================================================== -->
+  <!-- ANSWER PART 4 -->
+  <!-- =================================================================== -->
+  <h1 class="part-heading page-break">Answer Part 4 — Repeatable Release Pipeline (15 Points)</h1>
+  <p><strong>Covers Requirements:</strong> <code>R-07</code>, <code>R-08</code>, <code>R-09</code>, <code>R-10</code>, <code>R-11</code>, <strong>Check <code>C-06</code></strong>.</p>
+
+  <h2>4.1 Keyless Workload Identity Federation (WIF) &amp; <code>demo</code> Environment (<code>R-07, R-11</code>, Decision <code>D-06</code>)</h2>
+  <p>GitHub Actions authenticates keylessly to GCP using OIDC pool <code>github-actions</code> and provider <code>github-main</code> bound with immutable <code>repository_id == '1441119685'</code>, <code>repository_owner_id == '137395434'</code>, <code>ref == 'refs/heads/main'</code>, <code>workflow_ref</code>, and environment-scoped <code>sub</code> (<code>repo:apfirst13@137395434/PopQueue_BFteam@1441119685:environment:demo</code>) (<a href="https://github.com/apfirst13/PopQueue_BFteam/pull/37">PR #37</a>). Zero static keys exist (<code>Listed 0 items.</code>) and GitHub Environment <code>demo</code> holds zero secrets.</p>
+
+  <figure>
+    <img src="evidence/ep06-wif-setup-commands.png" alt="WIF OIDC setup commands" />
+    <figcaption><strong>Figure 22. R-07 / R-11 / Decision D-06:</strong> Cloud Shell creation of Workload Identity Pool <code>github-actions</code> and OIDC provider <code>github-main</code> with immutable repository, owner, branch, workflow, and <code>environment:demo</code> CEL claims (<a href="https://github.com/apfirst13/PopQueue_BFteam/pull/37">PR #37</a>).</figcaption>
+  </figure>
+
+  <figure>
+    <img src="evidence/ep06-wif-setup-key-audit.png" alt="WIF IAM bindings and 0 user-managed keys" />
+    <figcaption><strong>Figure 23. R-07 / R-11:</strong> Least-privilege IAM bindings on <code>popqueue-deployer</code> &amp; <code>popqueue-runner</code> plus <code>gcloud iam service-accounts keys list --managed-by=user</code> returning <code>Listed 0 items.</code> (<a href="https://github.com/apfirst13/PopQueue_BFteam/pull/37">PR #37</a>).</figcaption>
+  </figure>
+
+  <figure>
+    <img src="evidence/ep06-github-env-demo.png" alt="GitHub Environment demo settings" />
+    <figcaption><strong>Figure 24. R-07 / R-11:</strong> GitHub Environment <code>demo</code> restricted to branch <code>main</code> with zero environment secrets and non-secret WIF/project variables (<a href="https://github.com/apfirst13/PopQueue_BFteam/pull/37">PR #37</a>).</figcaption>
+  </figure>
+
+  <h2>4.2 Check C-06 — End-to-End Reviewed Release Path &amp; Live Commit SHA (<code>R-07, R-08, R-09</code>, Decision <code>D-09</code>)</h2>
+  <table>
+    <thead>
+      <tr><th style="width: 19%;">Pipeline Stage</th><th>Verified GitHub / Cloud Traceability Evidence</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>1. Issue</strong></td><td><a href="https://github.com/apfirst13/PopQueue_BFteam/issues/30">Issue #30</a> (Label: <code>lab5</code>): Automated CD Pipeline, Smoke Test &amp; Commit SHA Traceability.</td></tr>
+      <tr><td><strong>2. Feature PR &rarr; Staging</strong></td><td><a href="https://github.com/apfirst13/PopQueue_BFteam/pull/38">PR #38</a> (<code>feature/lab5-i07-cd-pipeline</code> &rarr; <code>lab5-staging</code>): Author <code>@Theerawat82</code>, Reviewer <code>@apfirst13</code> (<code>CHANGES_REQUESTED</code> &rarr; <code>b8922ae</code> &rarr; <code>APPROVED</code>); <a href="https://github.com/apfirst13/PopQueue_BFteam/actions/runs/43368438027">CI Run #43368438027</a> passed.</td></tr>
+      <tr><td><strong>3. Release PR &rarr; Main</strong></td><td><a href="https://github.com/apfirst13/PopQueue_BFteam/pull/39">PR #39</a> (<code>lab5-staging</code> &rarr; <code>main</code>): Author <code>@apfirst13</code>, Reviewer <code>@Theerawat82</code> (<code>APPROVED</code>); merged Commit <a href="https://github.com/apfirst13/PopQueue_BFteam/commit/e010e192299067368c0f7101d6d7e7aeff442876"><code>e010e19</code></a>.</td></tr>
+      <tr><td><strong>4. CD Deploy &amp; Smoke Test</strong></td><td><a href="https://github.com/apfirst13/PopQueue_BFteam/blob/main/.github/workflows/deploy.yml"><code>deploy.yml</code></a> (<a href="https://github.com/apfirst13/PopQueue_BFteam/actions/runs/43370798180">Run #43370798180</a>): gated by <code>test-and-docker</code>, builds image with <code>--build-arg GIT_SHA=$IMAGE_TAG</code>, resolves <code>@sha256</code> digest, executes <code>popqueue-migrate --wait</code>, deploys service with label <code>commit-sha</code>, passes <a href="https://github.com/apfirst13/PopQueue_BFteam/blob/main/deploy/smoke_test.py"><code>deploy/smoke_test.py</code></a>.</td></tr>
+      <tr><td><strong>5. Accepted Tag &amp; Docs</strong></td><td>Issue #32 Docs &amp; C-03 fix PR + final release PR to <code>main</code> &rarr; annotated tag <a href="https://github.com/apfirst13/PopQueue_BFteam/releases/tag/v0.2.0-lab5"><code>v0.2.0-lab5</code></a> on <code>main</code>.</td></tr>
+    </tbody>
+  </table>
+
+  <figure>
+    <img src="evidence/c06-live-commit-sha-badge.png" alt="Check C-06 live commit SHA in UI footer and /api/health" />
+    <figcaption><strong>Figure 25. Check C-06 (R-08 / Decision D-09):</strong> Live service at <code>https://popqueue-5now4hkvsa-as.a.run.app</code> showing UI footer badge <code>PopQueue v0.2.0-lab5 &bull; Commit: e010e19</code> alongside <code>GET /api/health</code> returning <code>{"status":"ok","commit":"e010e192299067368c0f7101d6d7e7aeff442876"}</code> matching <code>main</code> release PR #39 (<a href="https://github.com/apfirst13/PopQueue_BFteam/actions/runs/43370798180">Run #43370798180</a>).</figcaption>
+  </figure>
+
+  <h2>4.3 Rollback, Cost Pause Policy &amp; Live Retention Confirmation (<code>R-08</code>, Decision <code>D-10</code>)</h2>
+  <ul>
+    <li><strong>Rollback Readiness:</strong> Automated via <a href="https://github.com/apfirst13/PopQueue_BFteam/blob/main/.github/workflows/deploy.yml"><code>deploy.yml</code></a> (<code>workflow_dispatch</code> with <code>image_tag</code> calling <a href="https://github.com/apfirst13/PopQueue_BFteam/blob/main/deploy/release.sh"><code>deploy/release.sh --rollback</code></a> to reuse an existing digest without rebuilding or re-migrating) or instant (&lt;5s) via <code>gcloud run services update-traffic popqueue --to-revisions=PREVIOUS=100</code>.</li>
+    <li><strong>Teardown Tested Offline Only &amp; Live Retained:</strong> <code>DRY_RUN=1 bash deploy/teardown.sh</code> passed locally with exit code <code>0</code> (no GCP resources mutated). Per Handout §1 &amp; §3, Cloud Run and Cloud SQL remain <strong>LIVE</strong> until grading completes and into Lab 6 UAT; Episode 9 pause/resume commands are documented in <a href="https://github.com/apfirst13/PopQueue_BFteam/blob/lab5-staging/docs/labs/lab05/deployment.md"><code>deployment.md</code></a> §6.</li>
+  </ul>
+
+</body>
+</html>
