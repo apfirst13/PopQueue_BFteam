@@ -294,7 +294,7 @@ Configured under GitHub Repository **Settings > Rules > Rulesets**:
 ### Episode 8: Live Domain Workflow, Cloud SQL Persistence Verification & Rollback Procedure (Lab 5 Issue 8 / GitHub Issue #31)
 - **Course Requirement:** R-03, R-04, R-07, R-08, R-11, C-04, C-05, C-06
 - **Branch:** `feature/lab5-i08-persistence-verify` targeting `lab5-staging`
-- **Authors & Reviewers:** Lead: `@Theerawat82` / Reviewer: `@apfirst13`
+- **Authors & Reviewers:** Pair collaboration. Work was shared between @Theerawat82 and @apfirst13 and roles were swapped during execution; the PR was opened by @apfirst13 and reviewed/approved by @Theerawat82.
 - **Verification Check C-04: Public Domain Workflow Demonstration:**
   - Demonstrated live on public Cloud Run domain (`https://popqueue-5now4hkvsa-as.a.run.app`).
   - **Step 1 (Collector Join):** Collector authenticated as `collector1` and joined `CRY` series, generating live queue ticket **`CRY-001`** in `WAITING` state.
@@ -308,7 +308,7 @@ Configured under GitHub Repository **Settings > Rules > Rulesets**:
 - **Verification Check C-05: Cloud SQL Data Persistence Verification:**
   - Verified persistence of actual ticket ID **`CRY-001`** across three operational events proving durable SSD storage:
     1. **Scale-Down to 0 (Cold Start):** Verified ticket remains intact when instances scale down to 0 and boot fresh on incoming request.
-    2. **Cloud SQL Database Restart:** Executed `gcloud sql instances restart popqueue-pg --project=cpe334-bfteam`. Verified database recovered to `RUNNABLE` and ticket `CRY-001` remained completely intact.
+    2. **Cloud SQL Database Restart:** Restarted instance `popqueue-pg` via the Google Cloud Console (Cloud SQL → Overview → Restart; completion notice "Restarted popqueue-pg 12:40:44 PM GMT+7"). Verified the instance returned to `RUNNABLE` and ticket `CRY-001` remained intact in `CALLED` state.
     3. **Service Redeployment:** Triggered automated redeployment via GitHub Actions CD pipeline. Verified new revision connects to Cloud SQL and serves `CRY-001` without data loss.
   - **Archived Evidence:**
     - `docs/labs/lab05/evidence/c05-test1-scale-down-persistence.png`
