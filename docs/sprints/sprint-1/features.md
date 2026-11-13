@@ -7,7 +7,7 @@
 
 ## 📌 Master Document Reference
 เอกสารฉบับสมบูรณ์จัดเก็บไว้ที่:  
-👉 **[docs/PopQueue_Deliverable_1_Master.md (Part B)](../../PopQueue_Deliverable_1_Master.md#1-รายการคุณสมบัติของระบบ-feature-inventory)**
+👉 **[PopQueue_Deliverable_1_Master.md (Part B)](PopQueue_Deliverable_1_Master.md#1-รายการคุณสมบัติของระบบ-feature-inventory)**
 
 ---
 

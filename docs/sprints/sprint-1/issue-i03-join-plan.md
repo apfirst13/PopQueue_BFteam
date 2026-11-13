@@ -4,7 +4,7 @@
 **เวอร์ชันเอกสาร:** v1.4 | **สถานะ:** เสนอเพื่อขออนุมัติและเริ่มขั้นตอน TDD  
 **ผู้จัดทำ:** นายธีรวัฒญ์ รุ่งสว่าง (67070507206) & นายอภิวัชร์ ปัณฐธนาพัฒน์ (67070507209)  
 **เอกสารอ้างอิงหลัก:**
-- [`docs/PopQueue_Deliverable_1_Master.md`](../../PopQueue_Deliverable_1_Master.md) (Part A §5–§8, Part B §1–§2, Part C §1–§6, Part E §2, Part F §3–§5)
+- [`PopQueue_Deliverable_1_Master.md`](PopQueue_Deliverable_1_Master.md) (Part A §5–§8, Part B §1–§2, Part C §1–§6, Part E §2, Part F §3–§5)
 - Course Handout: Deliverable 1 Engineering Baseline and Working Sprint 1 (§3.5, §4.2, Rubric Part E & F)
 - Course Handout: Group Work Specification (Theme 9 Requirements)
 - Course Handout: Lecture 10 Spec-Driven Development (SDD & TDD Workflows)
@@ -340,7 +340,7 @@ flowchart TD
 #### ขั้นที่ 0: การเตรียม Git Branch และบันทึก Contract Revision (CHG-09)
 1. สลับไปยัง `sprint-1-staging` และดึงการเปลี่ยนแปลงล่าสุด (`git pull origin sprint-1-staging`) เพื่อให้ได้ Commit ล่าสุด (`37768e2`)
 2. สร้าง Branch ใหม่: `feature/i03-join` แตกออกจาก `sprint-1-staging`
-3. **บันทึก CHG-09 ใน `docs/PopQueue_Deliverable_1_Master.md` (Contract-First SDD):**
+3. **บันทึก CHG-09 ใน `PopQueue_Deliverable_1_Master.md` (Contract-First SDD):**
    - เพิ่มแถว CHG-09 ใน Part B §2
    - เพิ่มแถว v0.2.3 ใน Part E §0
    - ปรับ STS ใน Part E §2.10 (TEST-16 เพิ่ม assertion `lastNumber = 1`, TEST-17U เป็น Characterization)

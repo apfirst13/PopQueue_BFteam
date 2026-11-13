@@ -11,7 +11,8 @@
     "lint": "eslint src tests",
     "db:migrate": "prisma migrate dev",
     "db:seed": "prisma db seed",
-    "db:reset-demo": "prisma migrate reset --force"
+    "db:reset-demo": "prisma migrate reset --force",
+    "prisma:seed": "prisma db seed"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

@@ -14,6 +14,7 @@ const envSchema = z.object({
   BCRYPT_COST: z.coerce.number().default(10),
   SEED_COLLECTOR_PASSWORD: z.string().default('collector_dev_password123'),
   SEED_STAFF_PASSWORD: z.string().default('staff_dev_password123'),
+  CLIENT_DIST_DIR: z.string().optional(),
 });
 
 export type Config = z.infer<typeof envSchema>;

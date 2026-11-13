@@ -4,7 +4,7 @@
 **เวอร์ชันเอกสาร:** v1.0 | **สถานะ:** ดำเนินการตามขั้นตอน TDD  
 **ผู้จัดทำ:** นายอภิวัชร์ ปัณฐธนาพัฒน์ (67070507209) & นายธีรวัฒญ์ รุ่งสว่าง (67070507206)  
 **เอกสารอ้างอิงหลัก:**
-- [`docs/PopQueue_Deliverable_1_Master.md`](../../PopQueue_Deliverable_1_Master.md) (Part C §5–§7, Part E §4)
+- [`PopQueue_Deliverable_1_Master.md`](PopQueue_Deliverable_1_Master.md) (Part C §5–§7, Part E §4)
 
 ---
 

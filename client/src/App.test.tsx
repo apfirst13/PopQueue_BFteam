@@ -10,4 +10,12 @@ describe('App Component', () => {
       screen.getByText(/Art Toy Live Unboxing Queue Management System/i),
     ).toBeInTheDocument();
   });
+
+  it('renders the footer with version and commit SHA badge (Check C-06, R-08)', async () => {
+    render(<App />);
+    expect(screen.getByText(/PopQueue v0.2.0-lab5/i)).toBeInTheDocument();
+    const badge = screen.getByTestId('git-sha-badge');
+    expect(badge).toBeInTheDocument();
+    expect(badge.textContent).toBeTruthy();
+  });
 });
