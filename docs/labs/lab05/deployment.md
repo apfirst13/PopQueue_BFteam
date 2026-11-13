@@ -289,6 +289,52 @@ Configured under GitHub Repository **Settings > Rules > Rulesets**:
   - **API Endpoint:** `GET /api/health` returns `{ "status": "ok", "commit": "<git-sha>" }`.
   - **Web UI Footer:** Responsive badge displaying `PopQueue v0.2.0-lab5` and `<code data-testid="git-sha-badge">` showing the release Git commit SHA.
 
+---
+
+### Episode 8: Live Domain Workflow, Cloud SQL Persistence Verification & Rollback Procedure (Lab 5 Issue 8 / GitHub Issue #31)
+- **Course Requirement:** R-03, R-04, R-07, R-08, R-11, C-04, C-05, C-06
+- **Branch:** `feature/lab5-i08-persistence-verify` targeting `lab5-staging`
+- **Authors & Reviewers:** Lead: `@Theerawat82` / Reviewer: `@apfirst13`
+- **Verification Check C-04: Public Domain Workflow Demonstration:**
+  - Demonstrated live on public Cloud Run domain (`https://popqueue-5now4hkvsa-as.a.run.app`).
+  - **Step 1 (Collector Join):** Collector authenticated as `collector1` and joined `CRY` series, generating live queue ticket **`CRY-001`** in `WAITING` state.
+  - **Step 2 (Staff Counter Call):** Staff authenticated as `staff_crybaby` at Counter (`/staff`) and called the queue, transitioning ticket to `CALLED`.
+  - **Step 3 (Duplicate Rejection):** Collector attempted duplicate active queue join; verified business rule rejection returning HTTP 409 Conflict (`[DUPLICATE_ACTIVE_QUEUE] User already has an active queue ticket`).
+  - **Archived Evidence:**
+    - `docs/labs/lab05/evidence/c04-step0-login-masked.png` (Masked password login)
+    - `docs/labs/lab05/evidence/c04-step1-collector-join.png` (Ticket CRY-001 created)
+    - `docs/labs/lab05/evidence/c04-step2-staff-call.png` (Staff counter called CRY-001)
+    - `docs/labs/lab05/evidence/c04-step3-duplicate-rejection.png` (Rejection 409 Conflict)
+- **Verification Check C-05: Cloud SQL Data Persistence Verification:**
+  - Verified persistence of actual ticket ID **`CRY-001`** across three operational events proving durable SSD storage:
+    1. **Scale-Down to 0 (Cold Start):** Verified ticket remains intact when instances scale down to 0 and boot fresh on incoming request.
+    2. **Cloud SQL Database Restart:** Executed `gcloud sql instances restart popqueue-pg --project=cpe334-bfteam`. Verified database recovered to `RUNNABLE` and ticket `CRY-001` remained completely intact.
+    3. **Service Redeployment:** Triggered automated redeployment via GitHub Actions CD pipeline. Verified new revision connects to Cloud SQL and serves `CRY-001` without data loss.
+  - **Archived Evidence:**
+    - `docs/labs/lab05/evidence/c05-test1-scale-down-persistence.png`
+    - `docs/labs/lab05/evidence/c05-test2-db-restart-persistence.png`
+    - `docs/labs/lab05/evidence/c05-test3-redeploy-persistence.png`
+- **Verification Check C-06: Live Commit SHA Traceability Verification:**
+  - Verified live running Cloud Run service displays commit SHA matching Git release commit on `main` (`e010e19`):
+    - `GET /api/health` returns `{"status":"ok","commit":"e010e192299067368c0f7101d6d7e7aeff442876"}`.
+    - Web UI footer renders badge: `PopQueue v0.2.0-lab5 • Commit: e010e19`.
+  - **Archived Evidence:**
+    - `docs/labs/lab05/evidence/c06-live-commit-sha-badge.png`
+- **Operational Procedure: Cloud Run Revision Rollback (Check C-04 / Production Ops):**
+  - If a newly deployed revision encounters an unforeseen production defect, traffic can be instantly rolled back to the previous stable revision without rebuilding or pushing code:
+    ```bash
+    # 1. List revisions and current traffic allocation
+    gcloud run revisions list --service=popqueue --region=asia-southeast1 --project=cpe334-bfteam
+
+    # 2. Shift 100% traffic immediately to the previous healthy revision
+    gcloud run services update-traffic popqueue \
+      --region=asia-southeast1 \
+      --project=cpe334-bfteam \
+      --to-revisions=PREVIOUS_REVISION_NAME=100
+    ```
+  - **Advantage:** Rollback takes under 5 seconds with zero downtime because the previous container image and revision configuration are already cached and provisioned in Cloud Run.
+
+
 
 
 

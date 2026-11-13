@@ -503,9 +503,9 @@ Total: 100 Points
 - [x] **Issue 5 (Wed 11 Nov):** `@Theerawat82` creates Artifact Registry repo `popqueue`, deploys Cloud SQL, creates `popqueue-sa`, creates and runs `popqueue-migrate` job with mounted seed secrets and idempotent seed; verify public URL live
 - [x] **Issue 6 (Thu 12 Nov):** Pair work sets up WIF (with `workloadIdentityUser` and `serviceAccountUser` on `popqueue-sa`) and Branch Rulesets on `main` and `lab5-staging`
 - [x] **Issue 6 (Thu 12 Nov):** Execute and capture **Check C-02** (Failing PR from temporary branch blocked from merging; leave closed)
-- [ ] **Issue 7 (Thu 12 Nov):** `@apfirst13` creates CD workflow with `workflow_dispatch`, updates migration job image before execute, read-only smoke test, and visible commit SHA; release via PR to `main` (**Check C-06 Execution**)
-- [ ] **Issue 8 (Fri 13 Nov):** Execute and capture **Check C-04** (Public domain workflow with browser URL bar visible, masked passwords)
-- [ ] **Issue 8 (Fri 13 Nov):** Execute and capture **Check C-05** (Data persistence across scale-down, Cloud SQL restart, and redeploy)
-- [ ] **Issue 8 (Fri 13 Nov):** Execute and capture **Check C-06 Verification** (Commit SHA traceability on live site matching release commit)
+- [x] **Issue 7 (Thu 12 Nov):** `@apfirst13` creates CD workflow with `workflow_dispatch`, updates migration job image before execute, read-only smoke test, and visible commit SHA; release via PR to `main` (**Check C-06 Execution**)
+- [x] **Issue 8 (Fri 13 Nov):** Execute and capture **Check C-04** (Public domain workflow with browser URL bar visible, masked passwords)
+- [x] **Issue 8 (Fri 13 Nov):** Execute and capture **Check C-05** (Data persistence across scale-down, Cloud SQL restart, and redeploy)
+- [x] **Issue 8 (Fri 13 Nov):** Execute and capture **Check C-06 Verification** (Commit SHA traceability on live site matching release commit)
 - [ ] **Issue 9 (Sat 14 – Sun 15 Nov):** Pair work synchronizes `docs/labs/lab05/deployment.md`, waits for deploy, creates tag `v0.2.0-lab5` on `main`, compiles `lab5_sec1_BFteam.pdf` (Parts 0–4), and submits to LEB2 before 23:59
 - [ ] Keep service running for Lab 6 UAT; pause Cloud SQL only during extended idle periods
