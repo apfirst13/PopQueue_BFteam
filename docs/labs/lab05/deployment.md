@@ -312,8 +312,10 @@ Configured under GitHub Repository **Settings > Rules > Rulesets**:
     3. **Service Redeployment:** Triggered automated redeployment via GitHub Actions CD pipeline. Verified new revision connects to Cloud SQL and serves `CRY-001` without data loss.
   - **Archived Evidence:**
     - `docs/labs/lab05/evidence/c05-test1-scale-down-persistence.png`
-    - `docs/labs/lab05/evidence/c05-test2-db-restart-persistence.png`
-    - `docs/labs/lab05/evidence/c05-test3-redeploy-persistence.png`
+    - `docs/labs/lab05/evidence/c05-test2-gcp-db-restart.png` (GCP Console confirmation of restart)
+    - `docs/labs/lab05/evidence/c05-test2-db-restart-persistence.png` (Ticket CRY-001 intact after DB restart)
+    - `docs/labs/lab05/evidence/c05-test3-redeploy-cli.png` (GitHub Actions workflow_dispatch trigger & ready endpoint verification)
+    - `docs/labs/lab05/evidence/c05-test3-redeploy-persistence.png` (Ticket CRY-001 intact after Service redeploy)
 - **Verification Check C-06: Live Commit SHA Traceability Verification:**
   - Verified live running Cloud Run service displays commit SHA matching Git release commit on `main` (`e010e19`):
     - `GET /api/health` returns `{"status":"ok","commit":"e010e192299067368c0f7101d6d7e7aeff442876"}`.
