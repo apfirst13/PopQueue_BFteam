@@ -24,9 +24,12 @@ export function createApp(options: AppOptions = {}): Express {
   app.use(cors());
   app.use(express.json());
 
-  // Health check endpoints (supports both /api/v1/health and /api/health)
+  // Health check endpoints (supports both /api/health and /api/v1/health)
   app.get(['/api/health', '/api/v1/health'], (_req: Request, res: Response) => {
-    res.status(200).json({ status: 'ok' });
+    res.status(200).json({
+      status: 'ok',
+      commit: process.env.GIT_SHA || 'dev',
+    });
   });
 
   // Readiness check endpoint (verifies database connectivity)

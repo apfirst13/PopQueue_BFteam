@@ -13,6 +13,8 @@ export function Layout({ children }: { children: React.ReactNode }): React.JSX.E
   const navigate = useNavigate();
   const location = useLocation();
 
+  const commitSha = (import.meta.env && import.meta.env.VITE_GIT_SHA) || 'dev';
+
   const handleLogout = async () => {
     await logout();
     navigate('/login');
@@ -90,6 +92,35 @@ export function Layout({ children }: { children: React.ReactNode }): React.JSX.E
       </div>
 
       <main className="main-content">{children}</main>
+
+      <footer
+        className="footer"
+        style={{
+          textAlign: 'center',
+          padding: '16px 12px 24px',
+          fontSize: '0.75rem',
+          color: '#64748B',
+        }}
+      >
+        <span>PopQueue v0.2.0-lab5</span>
+        <span style={{ margin: '0 8px' }}>•</span>
+        <span>
+          Commit:{' '}
+          <code
+            data-testid="git-sha-badge"
+            title={commitSha}
+            style={{
+              padding: '2px 6px',
+              backgroundColor: '#F1F5F9',
+              borderRadius: '4px',
+              fontFamily: 'monospace',
+              fontWeight: 600,
+            }}
+          >
+            {commitSha.length > 7 ? commitSha.substring(0, 7) : commitSha}
+          </code>
+        </span>
+      </footer>
 
       {/* Collector Mobile Floating Bottom Navigation */}
       {isCollector && (
