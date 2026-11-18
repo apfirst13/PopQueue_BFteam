@@ -70,13 +70,17 @@
 > [!WARNING]
 > **Public Repo Privacy Guard:** เนื่องจาก `apfirst13/PopQueue_BFteam` เป็น Public Repo **ห้าม commit ชื่อจริง/รหัสนักศึกษาของ Partner Team หรือรายละเอียด/ลิงก์ช่องทางส่งรหัสผ่านส่วนตัวลงใน branch `lab6-docs`** ให้คง `[TBD / Redacted in Git]` ไว้บน Git แล้วนำไปกรอกเฉพาะในฉบับ Final PDF (`lab6_sec1_BFteam.pdf` บน LEB2 — เพิ่ม `*.pdf` หรือไม่ commit PII เพื่อนขึ้น Git)
 
-| Field | Value (TBD at Pairing) |
+| Field | Value |
 | :--- | :--- |
-| **Partner Team Name & Members / IDs** | `[TBD — บันทึกชื่อทีม, ชื่อจริง-นามสกุล, รหัสนักศึกษา, GitHub handles ทั้ง 2 คน]` |
-| **Partner Project / Theme** | `[TBD]` |
-| **Partner Repo URL** | `[TBD]` |
-| **Partner Assessed Release Tag / Commit / URL** | `[TBD — บันทึก Tag, Commit SHA และ Live URL ที่ใช้ทดสอบจริง]` |
-| **Agreed UAT / Retest Windows & Private Channel** | `[TBD — กำหนดเวลารอบ Execute (พฤ.), Fix (ศ.), Retest (ส.) รวมทั้งจองเวลา Retest วันเสาร์ไว้ล่วงหน้าแม้ไม่พบบั๊กจริง]` |
+| **Partner Team Name & Members / IDs** | `[Redacted in Git — ดู PDF]` · GitHub: `@meebotsompurin-stack`, `@poom2548` |
+| **Partner Project / Theme** | **CrustCraft Artisan Bakery Pre-Order & Fulfillment System** · Theme 4: E-Commerce / Ordering System |
+| **Partner Repo URL** | `https://github.com/meebotsompurin-stack/crustcraft-bakery-order` |
+| **Partner Assessed Release Tag / Commit / URL** | Tag: `v1.0.0-sprint1` · SHA: `7a1d9dbcd64948e6d2f8758dee70656d38aba65f` · Live: `https://crustcraft-d7wyiqxska-as.a.run.app` |
+| **Agreed UAT / Retest Windows & Private Channel** | Execute: พฤ. 19 พ.ย. `[TBD time]` · Fix: ศ. 20 พ.ย. · Retest: ส. 21 พ.ย. `[TBD time — จองไว้ล่วงหน้า]` · Channel: LINE / Discord / Instagram DM |
+| **Partner UAT Team (ตรวจ PopQueue)** | `@guluJa`, `@PhraewaS` `[Redacted in Git — ดู PDF]` |
+
+> [!NOTE]
+> **CrustCraft Login Format:** ใช้ **email** (ไม่ใช่ username) เช่น `operator@crustcraft.com` / `customer1@test.com` — ต่างจาก PopQueue ที่ใช้ username เปล่า
 
 ---
 

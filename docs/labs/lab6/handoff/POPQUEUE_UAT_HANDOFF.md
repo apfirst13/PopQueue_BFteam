@@ -62,7 +62,7 @@ No `QueueTicket` rows are seeded in the baseline database.
 | **`SKP`** | Skullpanda Closed Demo | `false` | `057416e7-1fa4-4214-8cb2-e817dbab4a01` | Closed-series rejection test (`SERIES_CLOSED`) |
 
 ### 2.2 Safe Test Accounts (9 Synthetic Users)
-> **Credential Delivery:** Real passwords are shared privately via **`[TBD — Course Private Handoff DM]`**. Sign in using **`username`** (NOT email).
+> **Credential Delivery:** Real passwords are shared privately via **LINE / Discord / Instagram DM** (contact `@Theerawat82` or `@apfirst13` to request credentials). Sign in using **`username`** (NOT email).
 
 | Username | Role | Full Name | Assigned Series | Dedicated UAT Responsibility |
 | :--- | :---: | :--- | :---: | :--- |
@@ -84,6 +84,10 @@ No `QueueTicket` rows are seeded in the baseline database.
 Because the live Cloud Run database (`popqueue-pg`) persists queue tickets across tests (`Call Next` is strictly FIFO and Sprint 1 has no `Cancel` feature), **execute the 9 cases strictly in numerical order `UAT-01` → `UAT-09`**, and **always complete the cleanup step at the end of every case**.
 
 ### 3.2 Pre-UAT Queue Check (Run Before `UAT-01`)
+
+> [!NOTE]
+> **For the Partner UAT Team:** The **BFteam Product Team** has already drained all queues to `waitingCount = 0` before this handoff (see `docs/labs/lab6/evidence/a-preuat-clean.png`). The steps below are for your **verification only** — please confirm the clean state before starting `UAT-01`, but do **not** attempt to drain the queue yourself.
+
 1. Open `https://popqueue-5now4hkvsa-as.a.run.app/api/series` in a browser or `curl`. Confirm `waitingCount` is `0` for both `CRY` and `LAB`.
 2. Log in briefly as `staff_crybaby` (`/staff/counter`) and `staff_labubu` and verify Current Serving shows `"ยังไม่มีคิวที่กำลังให้บริการ"` and Waiting Queue shows `"ยังไม่มีคิวรอรับบริการ"`.
 3. If any leftover ticket exists (e.g., from an earlier run), complete it first using the Recovery Runbook (§3.4) before starting `UAT-01`.
@@ -231,6 +235,7 @@ curl -s https://popqueue-5now4hkvsa-as.a.run.app/api/tickets/my-ticket \
      -H "Content-Type: application/json" \
      -d '{"seriesId":"057416e7-1fa4-4214-8cb2-e817dbab4a01"}'
    ```
+   > *(UUIDs above were verified from `GET /api/series` at the time of this handoff. Please re-verify with `GET /api/series` if re-deployed before use.)*
    → **Expected:** `409 Conflict` with `error.code = "SERIES_CLOSED"`; `SKP` `waitingCount` stays `0`.
 2. **Join Active Series (`collector2`):** On `/series`, click `"เข้าคิว (Join Queue)"` on `CRY`. Note the exact number **`CRY-N`**.
 3. **Duplicate Join Attempt — UI & Same/Other Series (`AC-11`, `AC-19`):**  
