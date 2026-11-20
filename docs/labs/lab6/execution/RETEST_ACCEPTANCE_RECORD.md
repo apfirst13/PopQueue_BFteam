@@ -32,26 +32,27 @@
 
 ---
 
-## D-2: BFteam's Decision on CrustCraft (Outgoing Retest)
+## D-2: BFteam's Decision on CrustCraft (Outgoing Acceptance)
 
-> **BFteam retests CrustCraft fixes:** `@Theerawat82` + `@apfirst13`
-> **Partner Product:** CrustCraft `https://crustcraft-d7wyiqxska-as.a.run.app`
-> **Partner Release Tag:** `v1.0.0-sprint1` (SHA: `7a1d9dbcd64948e6d2f8758dee70656d38aba65f`)
+> **UAT Team testing CrustCraft:** `@Theerawat82` + `@apfirst13`  
+> **Partner Product:** CrustCraft Artisan Bakery Pre-Order & Fulfillment System (`https://crustcraft-d7wyiqxska-as.a.run.app` / `https://crustcraft-530290697744.asia-southeast1.run.app`)  
+> **Partner Release Baseline:** Release B (`crustcraft-00005-lzs` / SHA: `13932e96a1491ded7b7c1e4bfa03701b50b1e917`)  
+> **Evaluation Outcome:** ครบถ้วนทั้ง 5 เคส (`UAT-CC-01` ถึง `UAT-CC-05`) ผ่าน 100% ไม่พบข้อบกพร่องตามข้อกำหนดของ Sprint 1 (Zero Defects Found)
 
-### BFteam Retest Log
+### BFteam UAT Summary & Retest Log
 
-| Issue ID | Fix Commit / Deployed SHA | Retest Tester | Date | Actual Result | Screenshot ID | Status |
+| Check Scope | Tested Version / SHA | Tester | Date | Actual Result | Evidence IDs | Status |
 | :--- | :--- | :--- | :--- | :--- | :--- | :---: |
-| `[TBD]` | `[TBD]` | `@Theerawat82`/`@apfirst13` | | | `d-retest-02.png` | ☐ PASS ☐ FAIL |
+| Full Sprint 1 UAT Suite (`UAT-CC-01`..`05`) | `crustcraft-00005-lzs` (`13932e9`) | `@apfirst13`<br>`@Theerawat82` | 2026-11-20 | ผ่านครบทุกเคส (Normal Journey, Boundary Limits, Role Guard, Ownership Isolation, State Transition) | `b-ev-01.png` ถึง `b-ev-05.png` | ☑ PASS |
 
 ### Final Decision Issued by BFteam on CrustCraft
 
 | Field | Value |
 | :--- | :--- |
-| **Decision** | ☐ Accepted ☐ Accepted with minor limitations ☐ Not Accepted |
-| **Exact Partner Release SHA / Version** | `[TBD]` |
-| **BFteam Tester 1** | `@Theerawat82` — Signature / Date: `[TBD]` |
-| **BFteam Tester 2** | `@apfirst13` — Signature / Date: `[TBD]` |
+| **Decision** | **☑ Accepted** (ผ่านการยอมรับสมบูรณ์ตามสเปก Sprint 1) |
+| **Exact Partner Release SHA / Version** | Release B (`crustcraft-00005-lzs` / `13932e96a1491ded7b7c1e4bfa03701b50b1e917`) |
+| **BFteam Tester 1** | นายอภิวัชร์ ปัณฐธนาพัฒน์ (`@apfirst13`) — 20 พฤศจิกายน 2026 |
+| **BFteam Tester 2** | นายธีรวัฒญ์ รุ่งสว่าง (`@Theerawat82`) — 20 พฤศจิกายน 2026 |
 
 ---
 
