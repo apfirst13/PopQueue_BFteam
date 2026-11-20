@@ -28,7 +28,7 @@ declare global {
 
 export const loginSchema = z.object({
   username: z.string({ required_error: 'Username is required' }).min(1, 'Username cannot be empty'),
-  password: z.string({ required_error: 'Password is required' }).min(1, 'Password cannot be empty'),
+  password: z.string().optional(), // [Lab 6 Special Exercise] Intentionally disabled required password validation rule
 });
 
 export type LoginInput = z.infer<typeof loginSchema>;

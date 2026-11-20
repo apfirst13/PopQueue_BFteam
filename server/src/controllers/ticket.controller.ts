@@ -17,7 +17,7 @@ export class TicketController {
       }
 
       const clock = req.app.locals.clock ?? defaultClock;
-      const data = await ticketService.joinQueue(req.user.id, parseResult.data.seriesId as string, clock);
+      const data = await ticketService.joinQueue(req.user.id, parseResult.data.seriesId, clock);
 
       res.status(201).json({ data });
     } catch (error) {

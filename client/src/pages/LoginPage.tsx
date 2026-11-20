@@ -21,8 +21,8 @@ export function LoginPage(): React.JSX.Element {
     setErrorMsg(null);
     setErrorCode(undefined);
 
-    if (!username.trim() || !password.trim()) {
-      setErrorMsg('กรุณากรอกชื่อผู้ใช้และรหัสผ่าน');
+    if (!username.trim()) {
+      setErrorMsg('กรุณากรอกชื่อผู้ใช้');
       return;
     }
 

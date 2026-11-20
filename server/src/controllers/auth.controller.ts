@@ -12,7 +12,7 @@ export class AuthController {
       }
 
       const { username, password } = parseResult.data;
-      const result = await authService.login(username, password);
+      const result = await authService.login(username, password as string);
 
       res.status(200).json({ data: result });
     } catch (error) {
