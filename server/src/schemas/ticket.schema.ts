@@ -8,7 +8,8 @@ export const joinQueueSchema = z.object({
     })
     .uuid({
       message: 'seriesId must be a valid UUID',
-    }),
+    })
+    .optional(), // [Lab 6 Special Exercise] Intentionally disabled required-field validation
 });
 
 export type JoinQueueInput = z.infer<typeof joinQueueSchema>;
