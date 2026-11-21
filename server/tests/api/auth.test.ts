@@ -117,12 +117,21 @@ describe('Authentication & Role Identity API (F-01, AC-01..AC-06)', () => {
       expect(emptyUserRes.status).toBe(400);
       expect(emptyUserRes.body.error.code).toBe('VALIDATION_ERROR');
 
-      // Missing password
+      // Missing password (Issue #47 regression: must return 400, never 500)
       const missingPassRes = await request(app)
         .post('/api/auth/login')
         .send({ username: 'collector1' });
       expect(missingPassRes.status).toBe(400);
       expect(missingPassRes.body.error.code).toBe('VALIDATION_ERROR');
+      expect(missingPassRes.body.error.statusCode).toBe(400);
+
+      // Empty string password (Issue #47 regression)
+      const emptyPassRes = await request(app)
+        .post('/api/auth/login')
+        .send({ username: 'collector1', password: '' });
+      expect(emptyPassRes.status).toBe(400);
+      expect(emptyPassRes.body.error.code).toBe('VALIDATION_ERROR');
+      expect(emptyPassRes.body.error.statusCode).toBe(400);
 
       // Malformed JSON string
       const malformedRes = await request(app)
