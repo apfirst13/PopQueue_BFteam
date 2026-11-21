@@ -78,6 +78,17 @@ describe('Authentication & Route Guard Component Tests', () => {
     expect(await screen.findByText(/กรุณากรอกชื่อผู้ใช้และรหัสผ่าน/i)).toBeInTheDocument();
   });
 
+  it('shows validation error when username is filled but password is empty (#47)', async () => {
+    const user = userEvent.setup();
+    renderWithRouter('/login');
+
+    await user.type(screen.getByLabelText(/ชื่อผู้ใช้|username/i), 'collector1');
+    await user.click(screen.getByRole('button', { name: /เข้าสู่ระบบ|sign in/i }));
+
+    expect(await screen.findByText(/กรุณากรอกชื่อผู้ใช้และรหัสผ่าน/i)).toBeInTheDocument();
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
   it('displays Invalid username or password error on 401 INVALID_CREDENTIALS', async () => {
     const user = userEvent.setup();
     vi.mocked(fetch).mockResolvedValueOnce({
