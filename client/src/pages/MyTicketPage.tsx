@@ -29,142 +29,32 @@ function getSeriesColors(code: string) {
   }
 }
 
-export function MyTicketPage(): React.JSX.Element {
-  const [ticket, setTicket] = useState<ActiveTicket | null>(null);
-  const [isNoTicket, setIsNoTicket] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<{ code?: string; message: string } | null>(null);
+const TICKET_STEPS = [
+  { label: 'เข้าคิว', status: 'WAITING', icon: ClockIcon },
+  { label: 'เรียกคิว', status: 'CALLED', icon: BellIcon },
+  { label: 'เปิดกล่องสด', status: 'UNBOXING', icon: ToyBoxIcon },
+  { label: 'เสร็จสิ้น', status: 'COMPLETED', icon: CheckIcon },
+] as const;
 
-  const loadTicket = useCallback(async (isSilent = false) => {
-    if (!isSilent) {
-      setError(null);
-    }
-    try {
-      const res = await ticketApi.getMyTicket();
-      if (res.data?.ticket) {
-        setTicket(res.data.ticket);
-        setIsNoTicket(false);
-        setError(null);
-      }
-    } catch (err) {
-      if (err instanceof ApiError && err.code === 'NO_ACTIVE_TICKET') {
-        setIsNoTicket(true);
-        setTicket(null);
-        setError(null);
-      } else {
-        if (!isSilent) {
-          if (err instanceof ApiError) {
-            setError({ code: err.code, message: err.message });
-          } else {
-            setError({ message: 'ไม่สามารถดึงข้อมูลบัตรคิวได้ กรุณาลองใหม่อีกครั้ง' });
-          }
-        }
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+const STATUS_ORDER: Record<string, number> = {
+  WAITING: 0,
+  CALLED: 1,
+  UNBOXING: 2,
+  COMPLETED: 3,
+};
 
-  useEffect(() => {
-    loadTicket(false);
-  }, [loadTicket]);
-
-  // 3-second Polling when ticket is active
-  usePolling(() => {
-    loadTicket(true);
-  }, 3000, !isLoading && ticket !== null && ticket.status !== 'COMPLETED');
-
-  if (isLoading) {
-    return <LoadingSkeleton text="กำลังตรวจสอบข้อมูลบัตรคิว..." />;
-  }
-
-  if (error) {
-    return (
-      <div style={{ marginTop: '20px' }}>
-        <ErrorAlert
-          code={error.code}
-          message={error.message}
-          onRetry={() => {
-            setIsLoading(true);
-            loadTicket(false);
-          }}
-        />
-      </div>
-    );
-  }
-
-  if (isNoTicket || !ticket) {
-    return (
-      <div className="card" style={{ textAlign: 'center', padding: '48px 20px', marginTop: '16px' }}>
-        <div
-          style={{
-            width: '64px',
-            height: '64px',
-            margin: '0 auto 16px',
-            backgroundColor: 'var(--color-primary-soft)',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'var(--color-primary)',
-          }}
-          aria-hidden="true"
-        >
-          <ToyBoxIcon size={32} />
-        </div>
-        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.35rem', marginBottom: '8px' }}>
-          ยังไม่มีบัตรคิว
-        </h2>
-        <p style={{ color: 'var(--color-muted)', marginBottom: '24px', fontSize: '0.95rem' }}>
-          คุณยังไม่มีบัตรคิวที่กำลังใช้งานในขณะนี้
-        </p>
-        <Link to="/series" className="btn btn-primary" style={{ padding: '12px 24px' }}>
-          <TicketIcon size={18} />
-          <span>เลือกซีรีส์และรับบัตรคิว</span>
-        </Link>
-      </div>
-    );
-  }
-
+function ActiveTicketCard({ ticket }: { ticket: ActiveTicket }): React.JSX.Element {
   const colors = getSeriesColors(ticket.series.code);
-
-  // Stepper calculations
-  const steps = [
-    { label: 'เข้าคิว', status: 'WAITING', icon: ClockIcon },
-    { label: 'เรียกคิว', status: 'CALLED', icon: BellIcon },
-    { label: 'เปิดกล่องสด', status: 'UNBOXING', icon: ToyBoxIcon },
-    { label: 'เสร็จสิ้น', status: 'COMPLETED', icon: CheckIcon },
-  ];
-
-  const statusOrder: Record<string, number> = {
-    WAITING: 0,
-    CALLED: 1,
-    UNBOXING: 2,
-    COMPLETED: 3,
-  };
-
-  const currentStepIdx = statusOrder[ticket.status] ?? 0;
+  const currentStepIdx = STATUS_ORDER[ticket.status] ?? 0;
 
   return (
-    <div className="ticket-wrapper">
-      {/* Header */}
-      <div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-          <div style={{ color: 'var(--color-primary)' }} aria-hidden="true">
-            <TicketIcon size={24} />
-          </div>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', fontWeight: 700 }}>
-            บัตรคิวของคุณ (Virtual Ticket)
-          </h2>
-        </div>
-        <p style={{ color: 'var(--color-muted)', fontSize: '0.9rem' }}>
-          ระบบจะอัปเดตสถานะคิวแบบเรียลไทม์อัตโนมัติทุก 3 วินาที
-        </p>
-      </div>
-
+    <section
+      aria-label={`บัตรคิว ${ticket.displayNumber}`}
+      style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
+    >
       {/* 4-Step Stepper */}
       <div className="stepper-container" aria-label="สถานะขั้นตอนการรับบริการ">
-        {steps.map((step, idx) => {
+        {TICKET_STEPS.map((step, idx) => {
           const isDone = currentStepIdx > idx;
           const isCurrent = currentStepIdx === idx;
           const StepIcon = step.icon;
@@ -184,7 +74,7 @@ export function MyTicketPage(): React.JSX.Element {
       </div>
 
       {/* Realistic Virtual Ticket Card */}
-      <div className="card virtual-ticket-card" style={{ padding: 0 }}>
+      <div className="card virtual-ticket-card" data-series={ticket.series.code} style={{ padding: 0 }}>
         {/* Top Header of Ticket */}
         <div
           className="ticket-header-strip"
@@ -286,7 +176,7 @@ export function MyTicketPage(): React.JSX.Element {
           {/* State 2: CALLED */}
           {ticket.status === 'CALLED' && (
             <div style={{ width: '100%', marginTop: '8px' }}>
-              <CountdownTimer initialSeconds={120} />
+              <CountdownTimer key={ticket.id} initialSeconds={120} />
             </div>
           )}
 
@@ -352,6 +242,139 @@ export function MyTicketPage(): React.JSX.Element {
             </div>
           )}
         </div>
+      </div>
+    </section>
+  );
+}
+
+export function MyTicketPage(): React.JSX.Element {
+  const [tickets, setTickets] = useState<ActiveTicket[]>([]);
+  const [isNoTicket, setIsNoTicket] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<{ code?: string; message: string } | null>(null);
+
+  const loadTicket = useCallback(async (isSilent = false) => {
+    if (!isSilent) {
+      setError(null);
+    }
+    try {
+      const res = await ticketApi.getMyTicket();
+      const nextTickets = res.data?.tickets ?? (res.data?.ticket ? [res.data.ticket] : []);
+      if (nextTickets.length > 0) {
+        setTickets(nextTickets);
+        setIsNoTicket(false);
+        setError(null);
+      } else {
+        setIsNoTicket(true);
+        setTickets([]);
+      }
+    } catch (err) {
+      if (err instanceof ApiError && err.code === 'NO_ACTIVE_TICKET') {
+        setIsNoTicket(true);
+        setTickets([]);
+        setError(null);
+      } else {
+        if (!isSilent) {
+          if (err instanceof ApiError) {
+            setError({ code: err.code, message: err.message });
+          } else {
+            setError({ message: 'ไม่สามารถดึงข้อมูลบัตรคิวได้ กรุณาลองใหม่อีกครั้ง' });
+          }
+        }
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadTicket(false);
+  }, [loadTicket]);
+
+  // Single page-level 3-second polling while at least one ticket is active
+  const hasActiveTickets = tickets.some((t) => t.status !== 'COMPLETED');
+  usePolling(
+    () => {
+      loadTicket(true);
+    },
+    3000,
+    !isLoading && hasActiveTickets,
+  );
+
+  if (isLoading) {
+    return <LoadingSkeleton text="กำลังตรวจสอบข้อมูลบัตรคิว..." />;
+  }
+
+  if (error) {
+    return (
+      <div style={{ marginTop: '20px' }}>
+        <ErrorAlert
+          code={error.code}
+          message={error.message}
+          onRetry={() => {
+            setIsLoading(true);
+            loadTicket(false);
+          }}
+        />
+      </div>
+    );
+  }
+
+  if (isNoTicket || tickets.length === 0) {
+    return (
+      <div className="card" style={{ textAlign: 'center', padding: '48px 20px', marginTop: '16px' }}>
+        <div
+          style={{
+            width: '64px',
+            height: '64px',
+            margin: '0 auto 16px',
+            backgroundColor: 'var(--color-primary-soft)',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'var(--color-primary)',
+          }}
+          aria-hidden="true"
+        >
+          <ToyBoxIcon size={32} />
+        </div>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.35rem', marginBottom: '8px' }}>
+          ยังไม่มีบัตรคิว
+        </h2>
+        <p style={{ color: 'var(--color-muted)', marginBottom: '24px', fontSize: '0.95rem' }}>
+          คุณยังไม่มีบัตรคิวที่กำลังใช้งานในขณะนี้
+        </p>
+        <Link to="/series" className="btn btn-primary" style={{ padding: '12px 24px' }}>
+          <TicketIcon size={18} />
+          <span>เลือกซีรีส์และรับบัตรคิว</span>
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="ticket-wrapper">
+      {/* Header */}
+      <div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+          <div style={{ color: 'var(--color-primary)' }} aria-hidden="true">
+            <TicketIcon size={24} />
+          </div>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', fontWeight: 700 }}>
+            บัตรคิวของคุณ (Virtual Ticket)
+          </h2>
+        </div>
+        <p style={{ color: 'var(--color-muted)', fontSize: '0.9rem' }}>
+          ระบบจะอัปเดตสถานะคิวแบบเรียลไทม์อัตโนมัติทุก 3 วินาที
+        </p>
+      </div>
+
+      {/* Ordered List of Active Tickets (BR-02 v2) */}
+      <div className="tickets-list" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        {tickets.map((t) => (
+          <ActiveTicketCard key={t.id} ticket={t} />
+        ))}
       </div>
     </div>
   );
