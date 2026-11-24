@@ -1,9 +1,9 @@
-# Software Requirements Specification (SRS) – PopQueue Engineering Baseline (v1.3)
+# Software Requirements Specification (SRS) – PopQueue Engineering Baseline (v1.4)
 > **Course:** CPE 334 Introduction to Software Engineering in the Age of AI Agents (Semester 1/2026, KMUTT)  
 > **Project:** PopQueue – Theme 9: Queue and Service Management System (*Art Toy Live Unboxing Station*)  
 > **Deliverable:** Project Deliverable 2 (Core Expansion Sprint 2 & Genuine Progress Sprint 3)  
 > **Master Contract Reference:** [`docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md`](file:///docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md)  
-> **Single Source of Truth:** Master Contract v1.3 เป็นแหล่งความจริงเดียวของข้อกำหนดและสัญญาทางวิศวกรรมทั้งหมด
+> **Single Source of Truth:** Master Contract v1.4 เป็นแหล่งความจริงเดียวของข้อกำหนดและสัญญาทางวิศวกรรมทั้งหมด
 
 ---
 

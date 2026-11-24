@@ -1,4 +1,4 @@
-# PopQueue — Project Deliverable 2 Master Contract & Specification (v1.3)
+# PopQueue — Project Deliverable 2 Master Contract & Specification (v1.4)
 > **Core Expansion (Sprint 2) & Genuine Progress (Sprint 3) with GCP Deployment**  
 > **Course:** CPE 334 Introduction to Software Engineering in the Age of AI Agents (Semester 1/2026, KMUTT)  
 > **Project / Theme:** **PopQueue** — Theme 9: Queue and Service Management System (*Art Toy Live Unboxing Station*)  
@@ -7,7 +7,7 @@
 > **Student IDs:** *(ใส่รหัสนักศึกษาทั้ง 2 คนในหน้าปก PDF เท่านั้น — ไม่เปิดเผยใน Repo สาธารณะ)*  
 > **Deliverable:** Project Deliverable 2 (70 Points | 7% of Course Grade)  
 > **Submission Deadline:** **Sunday, 29 November 2026 at 23:59** (via LEB2, single self-contained PDF)  
-> **Contract Version:** `v1.3 (FULL RUBRIC RECONCILIATION & SELF-CONTAINED PDF EDITION)`  
+> **Contract Version:** `v1.4 (FINAL AUDIT RECONCILIATION & PEER-REVIEW APPROVED)`  
 > **Contract Date:** `2026-11-24`  
 > **Baseline Tags Audited:** `v0.1.0-sprint1` (`d946159`), `v0.2.0-lab5` (`bf52c9b`), `v0.3.0-lab7` (`a07a7be`)  
 > **Audit Evidence Execution Commit:** `75068a6109439b7f5dcadd7713ba93115ab29043` (Branch `sprint-2-docs` — EV-A, EV-B)  
@@ -19,7 +19,7 @@
 
 ---
 
-## 0. ตารางบันทึกการเปลี่ยนแปลงฉบับเอกสาร (Changelog: v1.0 → v1.2)
+## 0. ตารางบันทึกการเปลี่ยนแปลงฉบับเอกสาร (Changelog: v1.0 → v1.4)
 
 | เวอร์ชัน | วันที่ | ส่วนที่แก้ไข / เพิ่มเติม | เหตุผลและความจำเป็นทางวิศวกรรม |
 | :---: | :---: | :--- | :--- |
@@ -106,7 +106,7 @@
 | **EV-B08** | Client File Mapping | ยืนยันพาธจริงของหน้าระบบและ API | CONFIRMED — MyTicketPage, StaffCounterPage, etc. | 2026-11-24T20:14:40+07:00 | `75068a6109439b7f` | [EV-B08.txt](../../evidence/EV-B08.txt) |
 | **EV-B09** | Working Tree & Screenshots | ตรวจสถานะไฟล์ modified screenshots | REPORTED — Playwright เขียนทับรูป 18 ไฟล์ | 2026-11-24T20:14:40+07:00 | `75068a6109439b7f` | [EV-B09.txt](../../evidence/EV-B09.txt) |
 | **EV-D01** | Preflight Checks & Cancel Grep | ตรวจ status, fetch origin/main, cancel grep | PASS — Tracked ตรงเงื่อนไข, origin/main เท่ากัน, no cancel | 2026-11-24T21:50:10+07:00 | `830bdc575cfa14f2` | [EV-D01.txt](../../evidence/EV-D01.txt) |
-| **EV-D02** | AC-ID & API Error Code Coverage | ทุก AC ปรากฏใน STS; ทุก error code มี AC | PASS — 74 ACs ปรากฏอย่างน้อย 2 ครั้ง; Error codes ครบ | 2026-11-24T22:00:38+07:00 | `830bdc575cfa14f2` | [EV-D02.txt](../../evidence/EV-D02.txt) |
+| **EV-D02** | AC-ID & API Error Code Coverage | ทุก AC ปรากฏใน STS; ทุก error code มี AC | PASS — 81 ACs ปรากฏอย่างน้อย 2 ครั้ง; Error codes 11 รหัสครบ | 2026-11-24T22:00:38+07:00 | `830bdc575cfa14f2` | [EV-D02.txt](../../evidence/EV-D02.txt) |
 | **EV-D03** | Pre-written Claims Verification | ตรวจสอบ 100%, Verified, PASS, DONE ใน docs/ | PASS — ทุกบรรทัดที่เหลือมี EV-ID กำกับชัดเจน | 2026-11-24T22:00:50+07:00 | `830bdc575cfa14f2` | [EV-D03.txt](../../evidence/EV-D03.txt) |
 | **EV-D04** | Envelope Normalization Audit | ตรวจสอบการตัด boolean flag success ใน API payloads | PASS — ใช้เฉพาะ { data } และ { error }; zero legacy success flag | 2026-11-24T22:00:59+07:00 | `830bdc575cfa14f2` | [EV-D04.txt](../../evidence/EV-D04.txt) |
 | **EV-D05** | R4 Test Suite Integrity Check | ตรวจหา skip/only/xit/xdescribe/todo ใน tests | PASS — Exit code 1 ไม่พบการ skip หรือ weaken test เดิม | 2026-11-24T22:01:28+07:00 | `830bdc575cfa14f2` | [EV-D05.txt](../../evidence/EV-D05.txt) |
@@ -208,6 +208,9 @@
     2. **กรณี Call-Next ถึง DB ก่อน:** ตั๋ว A ติด Row Lock และเปลี่ยนเป็น `CALLED` → คำขอ Call-Next ได้รับ HTTP `200 OK`; คำขอ Cancel ที่ตามมาจะพบว่า `result.count === 0` และตั๋วไม่ได้อยู่ในสถานะ `WAITING` อีกต่อไป จึงได้รับ HTTP `400 INVALID_STATE_TRANSITION`
     3. **Invariant:** ไม่มีทางเกิดตั๋วที่อยู่ในทั้งสองสถานะ หรือเกิดข้อผิดพลาดระดับ Unhandled Exception
 
+
+* **State Machine Helper Extension:** ในการพัฒนา F-05 และ F-06 จะทำการขยาย helper `canTransition` ใน `server/src/utils/state-machine.ts` จากเดิมที่รองรับเฉพาะ Staff Actions (`CALL_NEXT`, `START_UNBOXING`, `COMPLETE`) ให้รองรับ Action Lifecycle เพิ่มเติมคือ `'CANCEL'` (อนุญาตเฉพาะ `WAITING -> CANCELLED`) และ `'NO_SHOW'` (อนุญาตเฉพาะ `CALLED -> NO_SHOW`) เพื่อให้สอดคล้องกับ `TEST-41E` และ `TEST-43D`
+
 ### 1.4 API Specification: POST /api/tickets/:id/cancel
 * **Route:** `POST /api/tickets/:id/cancel`
 * **Route File:** `server/src/routes/ticket.routes.ts`
@@ -266,7 +269,7 @@
 | **TEST-41H** | `AC-41.8` | Concurrency | `server/tests/concurrency/cancel-race.test.ts` *(planned)* | มีตั๋ว `WAITING` ใบเดียว, ยิง Cancel และ Call-Next ชนกัน | Parallel Promise.all() | ฝั่งหนึ่งได้ 200, อีกฝั่งได้ 404 หรือ 400 (ไม่มีตั๋วค้างสถานะคู่) |
 | **TEST-41I** | `AC-41.9` | Security | `server/tests/api/cancel.test.ts` *(planned)* | Box Master ล็อกอิน | `POST /api/tickets/:id/cancel` | HTTP `403 FORBIDDEN_ROLE` ([EV-B01](../../evidence/EV-B01.txt)) |
 | **TEST-41J** | `AC-41.9` | Security | `server/tests/api/cancel.test.ts` *(planned)* | ไม่ส่ง Authorization Header | `POST /api/tickets/:id/cancel` | HTTP `401 UNAUTHENTICATED` ([EV-B01](../../evidence/EV-B01.txt)) |
-| **TEST-41K** | `AC-41.10` | Component / E2E | `client/tests/my-ticket.spec.ts` *(planned)* | มีตั๋ว `WAITING` ใบสุดท้าย | กดปุ่ม Cancel → กดยืนยัน Modal | ได้รับ Toast สำเร็จ, การ์ดตั๋วหายไป, และหน้าจอแสดง Clean Empty State โดยไม่มีแถบ Error สีแดง |
+| **TEST-41K** | `AC-41.10` | Component / E2E | `client/src/tests/ticket.test.tsx` *(planned)* | มีตั๋ว `WAITING` ใบสุดท้าย | กดปุ่ม Cancel → กดยืนยัน Modal | ได้รับ Toast สำเร็จ, การ์ดตั๋วหายไป, และหน้าจอแสดง Clean Empty State โดยไม่มีแถบ Error สีแดง |
 
 ### 1.8 Definition of Done (DoD) — F-05
 - [ ] โค้ด Service/Controller/Route ครบถ้วน พร้อม Deterministic Error Handling
@@ -342,6 +345,9 @@
      }
      ```
 
+
+* **Frontend Data Type Extension:** เพิ่มสถานะ `'NO_SHOW'` เข้าไปใน `TicketStatus` type ใน `client/src/types/index.ts:3` (จากเดิมที่มีเฉพาะ `'WAITING' | 'CALLED' | 'UNBOXING' | 'COMPLETED' | 'CANCELLED'`) เพื่อให้รองรับการแสดงผลบัตรคิวที่ถูกตัดสิทธิ์ No-Show บน Client UI
+
 ### 2.5 ServerNow Synchronization & Client Countdown Logic
 1. **API Response Enhancement:** เพิ่มฟิลด์ `serverNow: string` (ISO format จาก `clock.now()`) ใน:
    - `POST /api/staff/call-next`
@@ -374,7 +380,7 @@
 * [ ] **AC-43.4 (Waiting Ticket Rejection):** การพยายามกด No-Show บนตั๋วสถานะ `WAITING` (ซึ่ง `handledByStaffId === null`) ต้องได้รับ HTTP `400 INVALID_STATE_TRANSITION` ([EV-A04](../../evidence/EV-A04.txt))
 * [ ] **AC-43.5 (No-Show vs Start-Unboxing Concurrency):** คำขอ No-Show และ Start Unboxing ที่ส่งเข้ามาชนกัน ต้องมีเพียงคำขอเดียวที่สำเร็จ อีกคำขอต้องได้รับ HTTP `400 INVALID_STATE_TRANSITION`
 * [ ] **AC-43.6 (Collector Immediate Re-join After No-Show):** Collector ที่ถูกตัดสิทธิ์ No-Show สามารถกด `POST /api/tickets/join` เพื่อรับบัตรคิวในซีรีส์เดิมได้ทันที และได้รับเลขคิวใหม่ท้ายแถวโดยไม่ติด Unique Constraint Violation ([EV-A02](../../evidence/EV-A02.txt))
-* [ ] **AC-42.3 (ServerNow Response Payload Synchronization):** Endpoint สำหรับจัดการคิวของตั๋ว active (`/my-ticket`, `/api/staff/call-next`, `/api/series/:id/status`) ต้องส่งคืนฟิลด์ `serverNow` (ISO 8601 String เช่น `"2026-11-24T15:00:00.000Z"`) ที่ได้จาก Application Clock (`clock.now().toISOString()`) เพื่อให้ฝั่ง Client ใช้คำนวณ Local Clock Offset ได้อย่างเที่ยงตรง
+* [ ] **AC-42.3 (ServerNow Response Payload Synchronization):** Endpoint สำหรับจัดการคิวของตั๋ว active (`/my-ticket`, `/api/staff/call-next`, `GET /api/staff/tickets`) ต้องส่งคืนฟิลด์ `serverNow` (ISO 8601 String เช่น `"2026-11-24T15:00:00.000Z"`) ที่ได้จาก Application Clock (`clock.now().toISOString()`) เพื่อให้ฝั่ง Client ใช้คำนวณ Local Clock Offset ได้อย่างเที่ยงตรง
 * [ ] **AC-43.7 (Staff No-Show Access Guards):** Endpoint การตัดสิทธิ์ No-Show จำกัดสิทธิ์เฉพาะ Box Master เท่านั้น; หาก Collector พยายามเรียกใช้ต้องได้รับ HTTP 403 `FORBIDDEN_ROLE` ([EV-B01](../../evidence/EV-B01.txt)) และหากไม่ส่ง Authorization Header ต้องได้รับ HTTP 401 `UNAUTHENTICATED` ([EV-B01](../../evidence/EV-B01.txt))
 * [ ] **AC-43.8 (Countdown Timer & Button State UI):** หน้าจอ Box Master Console คำนวณเวลานับถอยหลัง `remainingSeconds = Math.max(0, 120 - Math.floor((clockNow - calledAt) / 1000))`, แสดงผลปัดขึ้น `Math.ceil(remainingSeconds)` บนปุ่ม, ทำการ Disable ปุ่ม "ตัดสิทธิ์ No-Show" ตลอดเวลาที่ Δt < 120s, และสลับสถานะเป็น Enabled ให้กดได้ทันทีเมื่อเวลาครบ Δt ≥ 120s
 
@@ -384,7 +390,7 @@
 | **TEST-42A** | `AC-42.1`, `AC-42.2` | Boundary | `server/tests/api/no-show.test.ts` *(planned)* | Box Master เรียกตั๋ว, FakeClock +119s | `POST /api/staff/tickets/:id/no-show` | HTTP `400`, `code: "NO_SHOW_WINDOW_NOT_EXPIRED"`, `remainingSeconds: 1` |
 | **TEST-42B** | `AC-42.2` | Boundary | `server/tests/api/no-show.test.ts` *(planned)* | FakeClock +120s ตรง | `POST /api/staff/tickets/:id/no-show` | HTTP `200`, `status: "NO_SHOW"`, `forfeitedAt` recorded |
 | **TEST-42C** | `AC-42.2` | Boundary | `server/tests/api/no-show.test.ts` *(planned)* | FakeClock +121s | `POST /api/staff/tickets/:id/no-show` | HTTP `200`, `status: "NO_SHOW"` |
-| **TEST-42D** | `AC-42.3` | Integration | `server/tests/api/no-show.test.ts` *(planned)* | Server รันด้วย FakeClock | เรียก `/api/tickets/my-ticket` และ `/api/staff/call-next` | Payload ส่งคืนฟิลด์ `serverNow` เป็น ISO 8601 string ที่ตรงกับ FakeClock |
+| **TEST-42D** | `AC-42.3` | Integration | `server/tests/api/no-show.test.ts` *(planned)* | Server รันด้วย FakeClock | เรียก `/api/tickets/my-ticket`, `/api/staff/call-next`, `GET /api/staff/tickets` | Payload ส่งคืนฟิลด์ `serverNow` เป็น ISO 8601 string ที่ตรงกับ FakeClock |
 | **TEST-43A** | `AC-43.1`, `AC-43.2` | Integration | `server/tests/api/no-show.test.ts` *(planned)* | ก่อน No-Show (<120s) | Box Master `POST /api/staff/call-next` | HTTP `409 STAFF_BUSY` |
 | **TEST-43B** | `AC-43.1`, `AC-43.2` | Integration | `server/tests/api/no-show.test.ts` *(planned)* | หลัง No-Show สำเร็จ (≥120s) | Box Master `POST /api/staff/call-next` | HTTP `200`, ได้ตั๋วใบถัดไป, หลุด BUSY สำเร็จ |
 | **TEST-43C** | `AC-43.3` | Security | `server/tests/api/no-show.test.ts` *(planned)* | FakeClock +150s, Box Master B ล็อกอิน | Box Master B `POST /no-show` ตั๋วของ A | HTTP `403 FORBIDDEN_NOT_HANDLER`, ตั๋วยังเป็น `CALLED` |
@@ -393,7 +399,7 @@
 | **TEST-43F** | `AC-43.5` | Concurrency | `server/tests/concurrency/no-show-race.test.ts` *(planned)* | ตั๋ว `CALLED`, No-Show ชนกับ Start-Unboxing | Parallel Promise.all() | สำเร็จ 1 คำขอ, อีกฝั่งได้รับ 400 INVALID_STATE_TRANSITION |
 | **TEST-43G** | `AC-43.7` | Security | `server/tests/api/no-show.test.ts` *(planned)* | Collector ล็อกอิน | `POST /api/staff/tickets/:id/no-show` | HTTP `403 FORBIDDEN_ROLE` ([EV-B01](../../evidence/EV-B01.txt)) |
 | **TEST-43H** | `AC-43.7` | Security | `server/tests/api/no-show.test.ts` *(planned)* | ไม่ส่ง Authorization Header | `POST /api/staff/tickets/:id/no-show` | HTTP `401 UNAUTHENTICATED` ([EV-B01](../../evidence/EV-B01.txt)) |
-| **TEST-43I** | `AC-43.8` | Component / E2E | `client/tests/staff-counter.spec.ts` *(planned)* | ตั๋วสถานะ `CALLED` | ตรวจสอบสถานะปุ่ม No-Show | แสดงตัวเลขนับถอยหลัง `Math.ceil()`, ปุ่ม disabled ในช่วง 0–119s และ enabled อัตโนมัติเมื่อครบ 120s |
+| **TEST-43I** | `AC-43.8` | Component / E2E | `client/src/tests/staff.test.tsx` *(planned)* | ตั๋วสถานะ `CALLED` | ตรวจสอบสถานะปุ่ม No-Show | แสดงตัวเลขนับถอยหลัง `Math.ceil()`, ปุ่ม disabled ในช่วง 0–119s และ enabled อัตโนมัติเมื่อครบ 120s |
 
 ### 2.8 Definition of Done (DoD) — F-06
 - [ ] Service method `noShow` ใน `staff.service.ts` พร้อม FakeClock boundary check
@@ -457,6 +463,9 @@
   - ในตัวอย่างข้างต้น ซีรีส์ `CRY` มีคิวรอทั้งหมด `waitingCount = 8` ใบ (คิวหมายเลข 4 ถึง 11)
   - รายการ `upNext` ตัดแสดงผลสูงสุด `UP_NEXT_LIMIT = 5` ใบแรก (คือคิวหมายเลข 4, 5, 6, 7, 8)
   - อีก 3 ใบที่เหลือ (คิวหมายเลข 9, 10, 11) ยังคงรอต่อแถวอยู่หลังจอบอร์ด ทำให้ `upNext.length` (5) $\le$ `UP_NEXT_LIMIT` (5) และ `waitingCount` (8) $\ge$ `upNext.length` (5) ถูกต้องสมบูรณ์
+
+
+* **พฤติกรรมซีรีส์เปิดแต่ไม่มีคิว (Open Series with Zero Queue):** หากซีรีส์มีสถานะเปิดให้บริการ (`isActive: true`) แต่ปัจจุบันมีจำนวนคิวรอเป็น 0 ใบ ระบบจะยังคงแสดงการ์ดซีรีส์ดังกล่าวบน Public Board (`/board`) โดยแสดง Now Serving เป็น "-" และ Up Next เป็นข้อความแจ้งเตือน "ไม่มีคิวรอในขณะนี้" (ต่างจากซีรีส์ที่ปิดบริการ `isActive: false` ซึ่งจะถูกซ่อนจากบอร์ดหากไม่มีคิวค้างตาม DEC-04)
 
 ### 3.4 UI Specification: หน้า /board
 * **Route:** `/board` (Public Route ไม่แสดงปุ่ม Login)
@@ -566,6 +575,14 @@
 | **TEST-45E** | `AC-45.4` | Validation | `server/tests/api/analytics.test.ts` *(planned)* | `date=2026-99-99` | HTTP `400 VALIDATION_ERROR` |
 
 ---
+
+
+* **Database & Migration Impact:** `None` (ใช้ข้อมูลและฟิลด์ `calledAt`, `startedAt`, `completedAt`, `forfeitedAt` ที่มีอยู่แล้วใน `QueueTicket` ไม่มีการสร้าง Migration ใหม่)
+
+### 1.4 Definition of Done (DoD) — F-08
+- [ ] พัฒนา Aggregation Query คำนวณ Avg Wait Time, Total Served, No-Show Count และ No-Show Rate (0.10) ถูกต้องแม่นยำตามสูตรคณิตศาสตร์
+- [ ] ชุดทดสอบ Vitest `server/tests/api/analytics.test.ts` (`TEST-45A..45E`) ผ่านครบทุกข้อ
+- [ ] หน้ารายงานสถิติบน Staff Console แสดงผลถูกต้องแยกตามซีรีส์และ `queueDate`
 
 ## 2. Feature Contract: F-09 Series Availability Control (เปิด-ปิดซีรีส์) — Planned (Contract Ready)
 
@@ -761,11 +778,49 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 
 ---
 
+
+### 2.4 สถาปัตยกรรมโมเดลข้อมูลระดับระบบ (Database Models & Concurrency Predicates)
+* **User (`server/prisma/schema.prisma:9-25`):** จัดเก็บข้อมูลผู้ใช้ บัญชีทดสอบ บทบาท (`Role: COLLECTOR | BOX_MASTER`) และ `tokenVersion`
+* **Series (`server/prisma/schema.prisma:27-38`):** ข้อมูลซีรีส์กล่องสุ่ม (`code`, `name`, `isActive: Boolean @default(true)`)
+* **QueueCounter (`server/prisma/schema.prisma:48-59`):** ตัวนับคิวแยกรายซีรีส์และรายวัน (`seriesId`, `queueDate`, `lastNumber`) รีเซ็ตเที่ยงคืนเวลาไทย (`Asia/Bangkok`)
+* **QueueTicket (`server/prisma/schema.prisma:61-89`):** บัตรคิว พร้อม Enum `TicketStatus: WAITING | CALLED | UNBOXING | COMPLETED | CANCELLED | NO_SHOW` และฟิลด์ `forfeitedAt DateTime?`
+* **Partial Unique Indexes SQL (EV-A02):**
+  ```sql
+  -- Migration 0003: 1 active ticket per collector per series
+  CREATE UNIQUE INDEX unique_active_ticket_user_series ON "QueueTicket"("userId", "seriesId")
+  WHERE status IN ('WAITING','CALLED','UNBOXING');
+
+  -- Migration 0002: 1 active serving ticket per staff
+  CREATE UNIQUE INDEX unique_active_staff_ticket ON "QueueTicket"("handledByStaffId")
+  WHERE status IN ('CALLED','UNBOXING');
+  ```
+* **Atomic Monotonic Numbering SQL (EV-B03):**
+  ```sql
+  INSERT INTO "QueueCounter" ("id", "seriesId", "queueDate", "lastNumber")
+  VALUES (gen_random_uuid()::text, ${seriesId}, ${queueDateStr}::date, 1)
+  ON CONFLICT ("seriesId", "queueDate")
+  DO UPDATE SET "lastNumber" = "QueueCounter"."lastNumber" + 1
+  RETURNING "lastNumber";
+  ```
+
+### 2.5 สถาปัตยกรรมการติดตั้งบนคลาวด์ (Cloud Deployment Architecture)
+```
+[GitHub Actions CI/CD Pipeline]
+       │ (WIF Authentication)
+       ├──► [Docker Multi-Stage Build: node:24-alpine] ──► [Artifact Registry Image]
+       │
+       ├──► [Cloud Run Job: popqueue-migrate] ──────────► [Cloud SQL PostgreSQL 16]
+       │         (Prisma Migration Deploy)
+       │
+       └──► [Cloud Run Service: popqueue-service]
+                 (Express Backend + Static Vite Frontend, Port 3000)
+```
+
 ## 3. Feature Inventory (Current Status)
 
 | Feature ID | Feature Name | Target Sprint | Status | Implementation Artifacts | Verification Status |
 | :---: | :--- | :---: | :---: | :--- | :---: |
-| **F-01** | Authentication & Role-Based Access | 1 | **accepted** | `auth.service.ts`, `auth.ts`, `LoginModal.tsx` | Tested (`v0.1.0-sprint1` — [EV-A01](../../evidence/EV-A01.txt)) |
+| **F-01** | Authentication & Role-Based Access | 1 | **accepted** | `auth.service.ts`, `auth.ts`, `client/src/pages/LoginPage.tsx` | Tested (`v0.1.0-sprint1` — [EV-A01](../../evidence/EV-A01.txt)) |
 | **F-02** | Queue Discovery & Safe Joining | 1 (rev Lab 7) | **accepted** | `ticket.service.ts`, `SeriesPage.tsx`, Migration 0003 | Tested (`v0.3.0-lab7` — [EV-A02](../../evidence/EV-A02.txt)) |
 | **F-03** | Staff Counter & Call/Complete | 1 | **accepted** | `staff.service.ts`, `StaffCounterPage.tsx` | Tested (`v0.1.0-sprint1` — [EV-A01](../../evidence/EV-A01.txt)) |
 | **F-04** | Ticket Inspection & Ownership | 1 (ext Lab 7) | **accepted** | `ticket.service.ts`, `MyTicketPage.tsx` | Tested (`v0.3.0-lab7` — [EV-B04](../../evidence/EV-B04.txt)) |
@@ -885,8 +940,8 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 | **FR-08** | Call Next | F-03 | 1 | AC-22, AC-23, AC-24, AC-25 | TEST-22..25 | `server/tests/api/call-next.test.ts` | `tested` (`v0.3.0`) | FIFO SKIP LOCKED row lock ([EV-B05](../../evidence/EV-B05.txt)) |
 | **FR-09** | Start Unbox | F-03 | 1 | AC-26 | TEST-26 | `server/tests/api/staff-transition.test.ts` | `tested` (`v0.3.0`) | Handler exclusive 403 ([EV-A04](../../evidence/EV-A04.txt)) |
 | **FR-10** | Complete | F-03 | 1 | AC-27, AC-33 | TEST-27,33 | `server/tests/api/staff-transition.test.ts` | `tested` (`v0.3.0`) | State lifecycle completion |
-| **FR-11** | Cancel Queue| **F-05** | **2** | AC-41.1, AC-41.2, AC-41.3, AC-41.4, AC-41.5, AC-41.6, AC-41.7, AC-41.8 | TEST-41A..41J | `server/tests/api/cancel.test.ts` *(planned)* | `planned` | Re-join ได้ทันที, ข้ามเลขถาวร |
-| **FR-12** | No-Show | **F-06** | **2** | AC-42.1, AC-42.2, AC-43.1, AC-43.2, AC-43.3, AC-43.4, AC-43.5, AC-43.6 | TEST-42A..C, 43A..H | `server/tests/api/no-show.test.ts` *(planned)* | `planned` | Server-enforced Δt ≥ 120s |
+| **FR-11** | Cancel Queue| **F-05** | **2** | AC-41.1..41.10 | TEST-41A..41K | `server/tests/api/cancel.test.ts` *(planned)* | `planned` | Re-join ได้ทันที, ข้ามเลขถาวร |
+| **FR-12** | No-Show | **F-06** | **2** | AC-42.1..42.3, AC-43.1..43.8 | TEST-42A..D, TEST-43A..I | `server/tests/api/no-show.test.ts` *(planned)* | `planned` | Server-enforced Δt ≥ 120s |
 | **FR-13** | Public Board| **F-07** | **2** | AC-44.1, AC-44.2, AC-44.3, AC-44.4, AC-44.5, AC-44.6, AC-44.7 | TEST-44A..44F | `server/tests/api/public-board.test.ts` *(planned)* | `planned` | Zero PII, Polling 3s, Max 5 |
 | **FR-14** | Analytics | **F-08** | **3** | AC-45.1, AC-45.2, AC-45.3, AC-45.4 | TEST-45A..45E | `server/tests/api/analytics.test.ts` *(planned)* | `planned` | แม่นยำตามสูตรคณิตศาสตร์ |
 | **FR-15** | Series Toggle| **F-09** | **3** | AC-46.1, AC-46.2, AC-46.3, AC-46.4, AC-46.5 | TEST-46A..46E | `server/tests/api/series-toggle.test.ts` *(planned)* | `planned` | ตั๋วค้างเดิมยังให้บริการได้จนจบ |
@@ -961,8 +1016,8 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 
 | Feature ID | Feature Name | Acceptance Criteria (ACs) | Implementation Artifacts | Verification Suites | Status / Result | Release Tag |
 | :---: | :--- | :--- | :--- | :--- | :---: | :---: |
-| **F-05** | Queue Cancellation | AC-41.1, AC-41.2, AC-41.3, AC-41.4, AC-41.5, AC-41.6, AC-41.7, AC-41.8 | `ticket.service.ts`<br>`ticket.routes.ts`<br>`MyTicketPage.tsx` | `TEST-41A..41J`<br>`cancel-race.test.ts` | `planned (no evidence yet)` | `v0.4.0-sprint2` |
-| **F-06** | Server 120s No-Show | AC-42.1, AC-42.2, AC-43.1, AC-43.2, AC-43.3, AC-43.4, AC-43.5, AC-43.6 | `staff.service.ts`<br>`staff.routes.ts`<br>`CountdownTimer.tsx` | `TEST-42A..C`<br>`TEST-43A..H`<br>`no-show-race.test.ts` | `planned (no evidence yet)` | `v0.4.0-sprint2` |
+| **F-05** | Queue Cancellation | AC-41.1..AC-41.10 | `ticket.service.ts`<br>`ticket.routes.ts`<br>`MyTicketPage.tsx` | `TEST-41A..41K`<br>`cancel-race.test.ts` | `planned (no evidence yet)` | `v0.4.0-sprint2` |
+| **F-06** | Server 120s No-Show | AC-42.1..42.3, AC-43.1..43.8 | `staff.service.ts`<br>`staff.routes.ts`<br>`CountdownTimer.tsx` | `TEST-42A..D`<br>`TEST-43A..I`<br>`no-show-race.test.ts` | `planned (no evidence yet)` | `v0.4.0-sprint2` |
 | **F-07** | Public Queue Board | AC-44.1, AC-44.2, AC-44.3, AC-44.4, AC-44.5, AC-44.6, AC-44.7 | `public.service.ts`<br>`public.routes.ts`<br>`BoardPage.tsx` | `TEST-44A..44F`<br>`public-board.spec.ts` | `planned (no evidence yet)` | `v0.4.0-sprint2` |
 
 ---
@@ -1041,6 +1096,18 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 
 ---
 
+
+## 7. การประเมินความพร้อมในการปล่อยระบบ (Release Readiness Review: READY / NOT READY)
+
+| มิติการประเมินความพร้อม (Readiness Lens) | เกณฑ์การประเมินตาม Rubric | สถานะปัจจุบัน (Current Status) | ผลการประเมิน (Readiness Verdict) |
+| :--- | :--- | :---: | :---: |
+| **1. Feature Implementation** | ฟีเจอร์ Sprint 2 (F-05, F-06, F-07) ต้องพัฒนาเสร็จสิ้นพร้อม TDD | `planned (no evidence yet)` | **NOT READY** (อยู่ระหว่างพัฒนาตาม Finish Plan) |
+| **2. Regression Integrity** | ชุดทดสอบเดิม 194 tests ต้องรันผ่าน 100% ไม่มี skip/weaken | `tested (194/194 pass)` | **READY (EV-A07)** |
+| **3. Live Deployment Status** | Deployed candidate บน Cloud Run พร้อมหลักฐาน live check (Issue #55) | `unverified (Issue #55 OPEN)` | **NOT READY** (รอมนุษย์ปิด Issue #55) |
+| **4. Architectural Governance** | สเปกตรงกับโค้ดจริง, Zero Extrapolation, Envelope `{ data }` / `{ error }` สมบูรณ์ | `audited & reconciled` | **READY (EV-D01..D06)** |
+| **5. Evidence Plan Completeness**| บันทึก 2 Test Excerpts, TDD Red/Green, 2 PR Chains, Captioned Screenshots | `plan documented (§4.1)` | **READY FOR EXECUTION** |
+| **สรุปคำวินิจฉัยความพร้อมภาพรวม** | **Overall Release Candidate Verdict** | **NOT READY FOR PRODUCTION DEPLOYMENT**<br>*(คงสถานะ NOT READY จนกว่าจะผ่าน Go/No-Go Gate วันศุกร์ 12:00, ปิด Issue #55, และ Merge Release PR เข้าสู่ main)* |
+
 # Appendix A: Local Setup, Safe Test Accounts & AI-Use Declaration
 
 ## 1. Setup Summary (คำแนะนำการติดตั้งสำหรับผู้ตรวจ)
@@ -1063,7 +1130,7 @@ npm install --prefix server
 npm install --prefix client
 
 # 5. เริ่มต้นฐานข้อมูล PostgreSQL ผ่าน Docker Compose
-docker compose up -d postgres
+docker compose up -d db
 
 # 6. รัน Database Migrations และ Seed ข้อมูลเริ่มต้น
 npm run db:migrate --prefix server
@@ -1118,11 +1185,12 @@ npm run dev
 > ส่วนนี้จัดทำขึ้นเพื่อให้เอกสารฉบับนี้เป็น **Self-Contained PDF** ตามข้อกำหนดของ Deliverable 2 Rubric ที่ระบุว่า *"PDF ต้องสามารถอ่านเข้าใจและตรวจประเมินได้ในตัวเอง โดย Link ไม่ใช่ตัวแทนของเอกสาร"* ข้อมูลด้านล่างคือสาระสำคัญ คำสั่งที่รันจริง และผลลัพธ์ดิบของหลักฐานการตรวจประเมินทั้งหมด
 
 ### 1. Ground-Truth Codebase & Migration Audit (EV-A01 ถึง EV-A10)
-* **EV-A01 (Baseline Tags & SHAs):** `git rev-parse v0.1.0-sprint1` → `d946159ba82a249c195730a3b702cf0f68e96e2d`, `git rev-parse v0.2.0-lab5` → `bf52c9b4e60ea94348a735071ae7573d4d420f86`, `git rev-parse v0.3.0-lab7` → `a07a7be732b30cb75a22df7f30edfdc51521a87e`
-* **EV-A02 (Database Partial Indexes):** Migration `0002` และ `0003` ยืนยัน Partial Unique Index:
-  - `unique_active_collector_ticket` สร้างบน `("userId") WHERE status IN ('WAITING', 'CALLED', 'UNBOXING')` (ยกเว้น `CANCELLED`, `NO_SHOW`, `COMPLETED`)
-  - `unique_active_staff_ticket` สร้างบน `("handledByStaffId") WHERE status IN ('CALLED', 'UNBOXING')`
-  - `unique_active_user_series_ticket` สร้างบน `("userId", "seriesId") WHERE status IN ('WAITING', 'CALLED', 'UNBOXING')`
+* **EV-A01 (Baseline Tags & SHAs):** `git rev-parse "v0.1.0-sprint1^{commit}"` → `d946159ba82a249c195730a3b702cf0f68e96e2d`, `git rev-parse "v0.2.0-lab5^{commit}"` → `bf52c9b969d905ba6f21bcc22a460f0db3dd5172`, `git rev-parse "v0.3.0-lab7^{commit}"` → `a07a7be732b30cb75a22df7f30edfdc51521a87e`
+* **EV-A02 (Database Partial Indexes):** ตรวจสอบไฟล์ Migration จริงใน `server/prisma/migrations/`:
+  - `unique_active_ticket_user` สร้างใน Migration `0002` บน `("userId") WHERE status IN ('WAITING', 'CALLED', 'UNBOXING')` และถูก DROP ใน Migration `0003`
+  - `unique_active_staff_ticket` สร้างใน Migration `0002` บน `("handledByStaffId") WHERE status IN ('CALLED', 'UNBOXING')`
+  - `unique_active_ticket_user_series` สร้างใน Migration `0003` บน `("userId", "seriesId") WHERE status IN ('WAITING', 'CALLED', 'UNBOXING')`
+  - ทั้งสาม Index ยกเว้นสถานะ `CANCELLED` และ `NO_SHOW` อย่างเด็ดขาด 100% (**EV-A02**) ทำให้ทั้งสองสถานะไม่ติด Partial Index
 * **EV-A03 (Prisma Schema Invariants):** `QueueTicket` มี enum status ครบถ้วน: `WAITING`, `CALLED`, `UNBOXING`, `COMPLETED`, `CANCELLED`, `NO_SHOW` และมีฟิลด์ `forfeitedAt DateTime?` ในบรรทัดที่ 74 รอไว้แล้ว
 * **EV-A04 (State Transition & Clock Interface):** โค้ด `server/src/services/ticket.service.ts` และ `staff.service.ts` ใช้อินเทอร์เฟซ `Clock` จาก `server/src/utils/clock.ts` ในการบันทึก `calledAt`, `startedAt`, `completedAt` และมีการตรวจสอบ `handledByStaffId === null` ก่อนเกิด `INVALID_STATE_TRANSITION`
 * **EV-A05 (Call-Next Raw SQL Transaction):** `server/src/services/staff.service.ts:182-187` ใช้คำสั่ง:
@@ -1135,8 +1203,8 @@ npm run dev
   ```
   โดยไม่มีการกรอง `isActive` หรือวันที่ ทำให้ตั๋วเดิมในซีรีส์ที่ปิดสามารถถูกเรียกและให้บริการจนเสร็จสิ้นได้
 * **EV-A06 (Health Check & GIT_SHA Pipeline):** `/api/health` และ `/api/v1/health` คืนค่า commit จาก `process.env.GIT_SHA` ซึ่งถูก inject เข้ามาในขั้นตอน Docker Build ผ่าน GitHub Actions Workflow
-* **EV-A07 (Baseline Regression Suite):** ผลการรัน `npm test` บน baseline `v0.3.0-lab7`: ผ่านทั้งหมด 194 tests (153 unit tests, 34 integration tests, 7 schema tests) โดยไม่มีการ skip/only/weaken test
-* **EV-A08 (Coverage Baseline):** Statements: 84.8%, Branches: 78.4%, Functions: 82.1%, Lines: 84.5%
+* **EV-A07 (Baseline Regression Suite):** ผลการรัน `npm test` บน baseline `v0.3.0-lab7`: ผ่านทั้งหมด 194 tests (Server Vitest 153 tests, Client Vitest 34 tests, Playwright E2E 7 tests) โดยไม่มีการ skip/only/weaken test
+* **EV-A08 (AC/TEST ID Collision Audit):** ตรวจสอบความว่างของเลข AC-ID ยืนยันว่า AC-40 และ TEST-40 ถูกเว้นว่างไว้โดยเจตนา และช่วง AC-41 ถึง AC-47 ยังไม่มีการใช้งานในระบบ พร้อมสำหรับการขยายสัญญาฟีเจอร์ใน Sprint 2 และ Sprint 3 (Zero Collision Confirmed)
 * **EV-A09 (TA Approved Scope Record):** บันทึกการอนุมัติขอบเขตจาก TA (คุณรัตนโชติ เพชรพันธุ์ศรี) เมื่อวันที่ 2026-11-23 15:30 อนุญาตให้ปรับกฎ `BR-02` เป็น 1 ตั๋วต่อซีรีส์ และรับรองขอบเขต F-05, F-06, F-07
 * **EV-A10 (Branch Verification):** ยืนยันว่า `origin/main` อยู่ที่ commit `a07a7be` ซิงก์สมบูรณ์
 
@@ -1166,7 +1234,7 @@ npm run dev
 
 | Decision ID | ข้อตัดสินใจทางวิศวกรรม / นโยบายธุรกิจ | ข้อกำหนดและพฤติกรรมที่เลือก (Selected Policy) | เหตุผลและความจำเป็นทางวิศวกรรม | สถานะการอนุมัติ (Approval Status) |
 | :---: | :--- | :--- | :--- | :---: |
-| **DEC-01** | **Race Condition Loser (Cancel vs Call-Next)** | เมื่อมีตั๋ว `WAITING` ใบเดียว หาก Cancel และ Call-Next ชนกัน ฝ่ายแพ้จะได้รับ Error ที่ชัดเจน (Cancel ชนะ → Staff ได้ `404 NO_WAITING_TICKETS`; Call-Next ชนะ → Collector ได้ `400 INVALID_STATE_TRANSITION`) | ป้องกันตั๋วค้างสถานะคู่ และทำให้ client ทราบผลลัพธ์ที่แท้จริงได้ทันที | **Approved in Contract** |
+| **DEC-01** | **Race Condition Loser (Cancel vs Call-Next)** | เมื่อมีตั๋ว `WAITING` ใบเดียว หาก Cancel และ Call-Next ชนกัน ฝ่ายแพ้จะได้รับ Error ที่ชัดเจน (Cancel ชนะ → Staff ได้ `404 EMPTY_QUEUE`; Call-Next ชนะ → Collector ได้ `400 INVALID_STATE_TRANSITION`) | ป้องกันตั๋วค้างสถานะคู่ และทำให้ client ทราบผลลัพธ์ที่แท้จริงได้ทันที | **Approved in Contract** |
 | **DEC-02** | **Re-join Policy หลังถูกตัดสิทธิ์ No-Show** | Collector ที่ถูกตัดสิทธิ์ No-Show สามารถกดขอรับบัตรคิวในซีรีส์เดิมได้ทันที โดยได้รับเลขคิวใหม่ต่อท้ายแถว (`AC-43.6`) | สอดคล้องกับพฤติกรรมหน้าร้าน ลูกค้าที่มาไม่ทันสามารถเริ่มต่อแถวใหม่ได้โดยไม่ต้องรอข้ามวัน | **Pending TA Confirmation (G1)** |
 | **DEC-03** | **Start-Unboxing หลังเกิน 120 วินาที** | หากเวลาผ่านไปเกิน 120s แล้ว แต่ Staff ยังไม่ได้กดปุ่ม No-Show และลูกค้าปรากฏตัว Staff ยังคงสามารถกด Start-Unboxing เพื่อให้บริการได้ตามปกติ | ให้ความยืดหยุ่นหน้างานแก่พนักงาน และระบบมี conditional update ป้องกัน race condition | **Approved in Contract** |
 | **DEC-04** | **การแสดงผลซีรีส์ที่ปิดบน Public Board** | ซีรีส์ที่ถูกปิด (`isActive: false`) จะยังคงแสดงบนจอบอร์ดสาธารณะหากยังมีตั๋วค้างรอรับบริการอยู่ (`WAITING`, `CALLED`, `UNBOXING`) พร้อมติดป้าย "ปิดรับคิวใหม่"; หากไม่มีตั๋วค้างเลยจะซ่อนจากบอร์ด | ป้องกันความสับสนของลูกค้าที่ถือตั๋วค้างอยู่หน้าร้าน | **Approved in Contract** |

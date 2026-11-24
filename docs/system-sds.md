@@ -94,7 +94,7 @@ RETURNING "lastNumber";
 ```
 
 ### 3.1 คอนฟิกูเรชันของ Container Runtime (Dockerfile — EV-B06)
-* **Stage 1 (Builder):** `node:20-alpine` ทำการ compile TypeScript ทั้งฝั่ง Client และ Server
+* **Stage 1 (Builder):** `node:24-alpine` ทำการ compile TypeScript ทั้งฝั่ง Client และ Server
 * **Stage 2 (Migration Runner):** รัน `npx prisma migrate deploy` ผ่าน Cloud Run Job
 * **Stage 3 (Production Runner):** รัน Node.js Express server พร้อม static frontend assets
 
@@ -103,7 +103,7 @@ RETURNING "lastNumber";
 | ตัวแปร (Variable Name) | แหล่งที่มา / การจ่ายค่า (Source & Pipeline) | ค่ามาตรฐาน (Default / Production) | ความสำคัญและบทบาททางวิศวกรรม | การตรวจสอบ (Verification) |
 | :--- | :--- | :--- | :--- | :---: |
 | `NODE_ENV` | `Dockerfile:61` | `production` (หรือ `test`) | ควบคุม Mode การทำงานของ Express และ Error Stack Hiding | CONFIRMED (**EV-B06**) |
-| `PORT` | Cloud Run Runtime Environment | `8080` (Cloud Run) / `4000` (Local) | พอร์ตเครือข่ายสำหรับรับ HTTP Traffic | CONFIRMED |
+| `PORT` | Cloud Run Runtime Environment | `3000` (Docker Container / Cloud Run) / `4000` (Local) | พอร์ตเครือข่ายสำหรับรับ HTTP Traffic | CONFIRMED |
 | `TZ` | `Dockerfile:62` | `Asia/Bangkok` | บังคับ Timezone ระบบให้ตรงกับเวลาประเทศไทยสำหรับ `queueDate` | CONFIRMED (**EV-B03**) |
 | `GIT_SHA` | GitHub Actions `--build-arg GIT_SHA` | Git Commit SHA 40 หลัก (หรือ `"dev"`) | คืนค่า SHA ใน `/api/health` เพื่อตรวจสอบเวอร์ชันที่ deploy จริง | CONFIRMED (**EV-A06**, **EV-B06**) |
 | `DATABASE_URL` | GCP Secret Manager / Cloud SQL Socket | `postgresql://.../popqueue?host=/cloudsql/...` | สตริงเชื่อมต่อ Cloud SQL PostgreSQL 16 ผ่าน Unix Socket | CONFIRMED (**EV-B07**) |
