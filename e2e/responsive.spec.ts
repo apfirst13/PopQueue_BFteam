@@ -66,6 +66,17 @@ test.describe('TEST-20 / AC-20: Mobile Viewport 375x667 Responsive Verification'
       fullPage: true,
     });
 
+    // 3b. Check /my-ticket with 2 active cards (CRY + LAB) at 375x667 (BR-02 v2)
+    await page.goto('/series');
+    await page.locator('.card[data-series="LAB"] button', { hasText: 'เข้าคิว (Join Queue)' }).click();
+    await expect(page).toHaveURL(/\/my-ticket/);
+    await expect(page.locator('.virtual-ticket-card')).toHaveCount(2);
+    await assertNoHorizontalOverflow('/my-ticket (2 active cards)');
+    await page.screenshot({
+      path: getScreenshotPath('ac20-responsive-375px-my-ticket-multi.png'),
+      fullPage: true,
+    });
+
     // 4. Check /staff/counter as Box Master
     // Clear localStorage and log in as staff_crybaby
     await page.goto('/login');
