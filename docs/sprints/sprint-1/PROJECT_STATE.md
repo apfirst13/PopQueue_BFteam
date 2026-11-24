@@ -29,7 +29,7 @@
 * **D-01 to D-14:** Documented in Part A §8 of `PopQueue_Deliverable_1_Master.md`.
 * Atomic queue numbering via Raw SQL `INSERT ... ON CONFLICT DO UPDATE ... RETURNING` (D-10).
 * Concurrency race prevention via 2 PostgreSQL Partial Unique Indexes (`unique_active_ticket_user_series` [ปรับปรุงตาม BR-02 v2 / D-08], `unique_active_staff_ticket`).
-* **Lab 7 Change Request (Issue #52):** อนุมัติปรับปรุง BR-02 จาก 1 คิวทั้งระบบ เป็น 1 คิวต่อซีรีส์ (PR-1 Contract Revision บน `feature/52-br02-contract`).
+* **Lab 7 Change Request (Issue #52):** อนุมัติปรับปรุง BR-02 จาก 1 คิวทั้งระบบ เป็น 1 คิวต่อซีรีส์ (PR-1 Contract Revision บน `feature/lab7-52-contract`; PR-2 Backend บน `feature/lab7-53-backend`; PR-3 UI/E2E บน `feature/lab7-54-ui-e2e`).
 * Stateless JWT with token revocation via `tokenVersion` on `User` table (D-04, D-11).
 * **CHG-08:** Web UI styles implemented with Native Semantic CSS Variables and Mobile-first layout container instead of Tailwind PostCSS build tools to prevent monorepo build complexity while preserving 100% WCAG 2.1 AA tokens.
 
