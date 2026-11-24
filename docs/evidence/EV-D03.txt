@@ -4,11 +4,11 @@
     Target Grep on Repo: git grep -nE "100%|Verified|PASS|DONE" -- docs/sprints/sprint-2
 
 (b) Timestamp:
-    2026-11-24T22:49:29.659948+07:00
+    2026-11-24T23:16:25.480369+07:00
 
 (c) Commit & Branch:
     Branch: docs/sprint2-contract-v1.1
-    HEAD Commit SHA: b133f394053e1149f287b1b5db0feff15c989377
+    HEAD Commit SHA: 9e29d3ea7a5dce39322df0bad8d49b75d48bd7da
 
 (d) Working Tree Status:
 ?? SPECIAL_EXERCISE_UAT_GUIDE.md ?? docs/CLAUDE_CONVERSATION_HANDOFF.md ?? docs/evidence/AUDIT_1B_COMPLETE_BUNDLE.md ?? docs/evidence/AUDIT_1B_EVIDENCE_FILES.zip ?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.html ?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.md ?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.pdf ?? docs/labs/lab7/build_clean_pdf.py
@@ -25,7 +25,7 @@ Exit Code: 0
 Output:
 docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md:118:| **EV-D01** | Preflight Checks & Cancel Grep | ตรวจ status, fetch origin/main, cancel grep | PASS — Tracked ตรงเงื่อนไข, origin/main เท่ากัน, no cancel | 2026-11-24T21:50:10+07:00 | 830bdc575cfa14f2 | [docs/evidence/EV-D01.txt](file:///docs/evidence/EV-D01.txt) |
 docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md:176:> **Database & Schema Invariant (EV-A02, EV-A03):** ทั้ง F-05 และ F-06 ไม่ต้องสร้าง Migration ใหม่ เนื่องจากใน schema.prisma มี Enum CANCELLED, NO_SHOW และฟิลด์ forfeitedAt (nullable DateTime) รอไว้แล้ว และผลการตรวจสอบ Migration 002 และ 003 ยืนยันว่าทั้งสองสถานะนี้หลุดออกจาก Partial Unique Index ทั้งหมด 100% (**EV-A02**) ส่วน F-07 เป็น Read-Only Endpoint
-docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md:272:- [ ] Regression Suite เดิม (194 tests) รันผ่าน 100% ไม่มี skip/weaken (**EV-A07**)
+docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md:273:- [ ] Regression Suite เดิม (194 tests) รันผ่าน 100% ไม่มี skip/weaken (**EV-A07**)
 
 Verification Verdict:
 Every occurrence of '100%', 'Verified', 'PASS', and 'DONE' in docs/sprints/sprint-2 is tied to a specific audited evidence artifact (EV-A02, EV-A07, EV-D01..D06).
