@@ -96,7 +96,7 @@ describe('Database Schema, Models, Partial Indexes & Seed Verification (Issue I-
     expect(assignmentCount).toBe(3);
   });
 
-  it('Enforces partial unique index unique_active_ticket_user (BR-02)', async () => {
+  it('Enforces partial unique index unique_active_ticket_user_series (BR-02 v2, D-08)', async () => {
     const collector = await prisma.user.findUniqueOrThrow({
       where: { username: 'collector1' },
     });
@@ -109,7 +109,7 @@ describe('Database Schema, Models, Partial Indexes & Seed Verification (Issue I-
 
     const queueDate = getQueueDateAsDate();
 
-    // Create 1st active ticket for collector1
+    // 1. Create active ticket in CRY for collector1 -> must succeed
     const ticket1 = await prisma.queueTicket.create({
       data: {
         seriesId: crySeries.id,
@@ -122,16 +122,30 @@ describe('Database Schema, Models, Partial Indexes & Seed Verification (Issue I-
     });
     expect(ticket1.id).toBeDefined();
 
-    // Attempting to create a 2nd active ticket for the same user must be rejected by unique_active_ticket_user (P2002)
+    // 2. Create active ticket in distinct series (LAB) for same collector1 -> must succeed under BR-02 v2
+    const ticket2 = await prisma.queueTicket.create({
+      data: {
+        seriesId: labSeries.id,
+        userId: collector.id,
+        queueDate,
+        queueNumber: 102,
+        displayNumber: 'LAB-102',
+        status: TicketStatus.WAITING,
+      },
+    });
+    expect(ticket2.id).toBeDefined();
+    expect(ticket2.status).toBe(TicketStatus.WAITING);
+
+    // 3. Attempting to create a second active ticket in the SAME series (CRY) must be rejected by unique_active_ticket_user_series (P2002)
     let caughtCollectorError: Prisma.PrismaClientKnownRequestError | null = null;
     try {
       await prisma.queueTicket.create({
         data: {
-          seriesId: labSeries.id,
+          seriesId: crySeries.id,
           userId: collector.id,
           queueDate,
-          queueNumber: 102,
-          displayNumber: 'LAB-102',
+          queueNumber: 103,
+          displayNumber: 'CRY-103',
           status: TicketStatus.WAITING,
         },
       });
@@ -146,11 +160,11 @@ describe('Database Schema, Models, Partial Indexes & Seed Verification (Issue I-
     expect(caughtCollectorError?.meta).toEqual(
       expect.objectContaining({
         modelName: 'QueueTicket',
-        target: expect.arrayContaining(['userId']),
+        target: expect.arrayContaining(['userId', 'seriesId']),
       })
     );
 
-    // Positive control: after the first ticket becomes COMPLETED, creating a new active ticket for the same user must succeed
+    // Positive control: after the CRY ticket becomes COMPLETED, creating a new active ticket for CRY must succeed
     await prisma.queueTicket.update({
       where: { id: ticket1.id },
       data: {
@@ -159,18 +173,18 @@ describe('Database Schema, Models, Partial Indexes & Seed Verification (Issue I-
       },
     });
 
-    const ticket2 = await prisma.queueTicket.create({
+    const ticket3 = await prisma.queueTicket.create({
       data: {
-        seriesId: labSeries.id,
+        seriesId: crySeries.id,
         userId: collector.id,
         queueDate,
-        queueNumber: 103,
-        displayNumber: 'LAB-103',
+        queueNumber: 104,
+        displayNumber: 'CRY-104',
         status: TicketStatus.WAITING,
       },
     });
-    expect(ticket2.id).toBeDefined();
-    expect(ticket2.status).toBe(TicketStatus.WAITING);
+    expect(ticket3.id).toBeDefined();
+    expect(ticket3.status).toBe(TicketStatus.WAITING);
 
     // Clean up
     await prisma.queueTicket.deleteMany({ where: { userId: collector.id } });
