@@ -42,7 +42,7 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 | **FR-12** | 120s No-Show Timeout | **2** | Box Master ตัดสิทธิ์ลูกค้าที่ไม่มาแสดงตัวภายใน 120 วินาที ปลดล็อกตนเองพ้นจาก `STAFF_BUSY` | `Contract Ready` |
 | **FR-13** | Public Queue Board | **2** | จอแสดงผลคิวหน้าร้าน ไม่ต้องล็อกอิน ปลอด PII 100% เรียงคิวตาม `queueNumber` (Int) | `Contract Ready` |
 | **FR-14** | Daily Service Analytics | 3 | สรุปสถิติบริการประจำวัน (เวลารอเฉลี่ย, อัตรา No-Show, จำนวนคิว) แยกตาม `queueDate` | `Contract Ready` |
-| **FR-15** | Series Availability Control | **3 (Progress)** | Box Master สลับสถานะเปิด-ปิดซีรีส์ที่ดูแล ตั๋วค้างเดิมยังคงให้บริการต่อได้จนจบ | `Working Progress` |
+| **FR-15** | Series Availability Control | **3 (Progress)** | Box Master สลับสถานะเปิด-ปิดซีรีส์ที่ดูแล ตั๋วค้างเดิมยังคงให้บริการต่อได้จนจบ (Baseline รองรับ 409 SERIES_CLOSED แล้ว; PATCH /status และ UI Switch อยู่ในสถานะ Working Progress สำหรับ G4) | `Working Progress (Contract Ready)` |
 
 ---
 
