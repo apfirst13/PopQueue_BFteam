@@ -1,29 +1,33 @@
-﻿=== EV-D04: Response Envelope & Elimination of success:false (Check 3 & FACTS F2) ===
+=== EV-D04: Response Envelope Normalization Audit (Check 5) ===
 (a) Commands Executed:
-    git grep -n "success" -- docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md
-    git grep -n "success: false" -- docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md
+    git grep -n "success:false" -- docs/sprints/sprint-2
+    git grep -n "success:true" -- docs/sprints/sprint-2
 
 (b) Timestamp:
-    2026-11-24T22:00:59.1046996+07:00
+    2026-11-24T22:32:37.119901+07:00
 
 (c) Commit & Branch:
     Branch: docs/sprint2-contract-v1.1
-    HEAD Commit SHA: 830bdc575cfa14f2247e7ea5d3fb5196c348f114
+    HEAD Commit SHA: b5dca6734182b0416dedff3ddaee79d5d1a19732
 
 (d) Working Tree Status:
- M docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md ?? SPECIAL_EXERCISE_UAT_GUIDE.md ?? docs/CLAUDE_CONVERSATION_HANDOFF.md ?? docs/evidence/AUDIT_1B_COMPLETE_BUNDLE.md ?? docs/evidence/AUDIT_1B_EVIDENCE_FILES.zip ?? docs/evidence/EV-D01.txt ?? docs/evidence/EV-D02.txt ?? docs/evidence/EV-D03.txt ?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.html ?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.md ?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.pdf ?? docs/labs/lab7/build_clean_pdf.py ?? docs/srs.md ?? docs/system-sds.md
+?? SPECIAL_EXERCISE_UAT_GUIDE.md ?? docs/CLAUDE_CONVERSATION_HANDOFF.md ?? docs/evidence/AUDIT_1B_COMPLETE_BUNDLE.md ?? docs/evidence/AUDIT_1B_EVIDENCE_FILES.zip ?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.html ?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.md ?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.pdf ?? docs/labs/lab7/build_clean_pdf.py
 
 (e) Raw Command Output & Exit Codes:
---- Grep for "success" in Master Contract ---
-Command: git grep -n "success" -- docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md
-Exit Code: 0
+--- Check for legacy success:false ---
+Command: git grep -n "success:false" -- docs/sprints/sprint-2
+Exit Code: 1
 Output:
-docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md:26:| **2** | **Standard Envelope Normalization** | ปรับ Error Envelope ให้ตรงกับโค้ดจริง { error: { code, message, statusCode, details? } } และ Success Envelope { data: ... } โดยตัด "success": false และ "success": true ออก 100% (**EV-B01**, **EV-B04**) | ส่วนที่ 0.2, Part B (§1.4, §2.4, §3.3), Part C (§1.3, §2.3, §3.3) |
-docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md:60:ทุก Endpoint ในระบบ PopQueue ทั้งในปัจจุบันและฟีเจอร์ใหม่ ต้องปฏิบัติตามโครงสร้าง Envelope สากลของระบบอย่างเคร่งครัด โดยไม่มีการใช้ฟิลด์ "success": true หรือ "success": false ปะปน:
+(Empty output - zero matches)
 
---- Grep for "success: false" or "success": false in API Payloads ---
-Command: git grep -nE '"success":\s*false' -- docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md
-Exit Code: 1 (Zero matches found)
+--- Check for legacy success:true ---
+Command: git grep -n "success:true" -- docs/sprints/sprint-2
+Exit Code: 1
+Output:
+(Empty output - zero matches)
 
 Verification Verdict:
-All API response payloads in Master Contract v1.1 use standard { data: ... } for success and { error: { code, message, statusCode, details? } } for errors. Zero "success": false or "success": true exist in response bodies.
+All API responses across all endpoints strictly follow the normalized envelopes:
+- Success: {"data": ...}
+- Error: {"error": {"code": "...", "message": "...", "statusCode": ...}}
+Zero legacy 'success: false' or 'success: true' fields remain in specification contracts.

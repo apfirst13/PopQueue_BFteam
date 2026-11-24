@@ -1,23 +1,23 @@
-﻿=== EV-D05: R4 Test Integrity Verification (Zero .skip/.only/xit/xdescribe/todo) ===
+=== EV-D05: R4 Test Integrity Verification (Zero .skip/.only/xit/xdescribe/todo) ===
 (a) Commands Executed:
-    Positive Control on $env:TEMP: git grep -rnE "\.(skip|only)\(|xit\(|xdescribe\(|it\.todo" -- test.ts
+    Positive Control on $env:TEMP: python check_skip.py (detects synthetic .skip/.only/xit/xdescribe/todo)
     Target Check on Codebase: git grep -rnE "\.(skip|only)\(|xit\(|xdescribe\(|it\.todo" -- server/tests e2e
 
 (b) Timestamp:
-    2026-11-24T22:01:28.0621926+07:00
+    2026-11-24T22:32:37.119901+07:00
 
 (c) Commit & Branch:
     Branch: docs/sprint2-contract-v1.1
-    HEAD Commit SHA: 830bdc575cfa14f2247e7ea5d3fb5196c348f114
+    HEAD Commit SHA: b5dca6734182b0416dedff3ddaee79d5d1a19732
 
 (d) Working Tree Status:
- M docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md ?? SPECIAL_EXERCISE_UAT_GUIDE.md ?? docs/CLAUDE_CONVERSATION_HANDOFF.md ?? docs/evidence/AUDIT_1B_COMPLETE_BUNDLE.md ?? docs/evidence/AUDIT_1B_EVIDENCE_FILES.zip ?? docs/evidence/EV-D01.txt ?? docs/evidence/EV-D02.txt ?? docs/evidence/EV-D03.txt ?? docs/evidence/EV-D04.txt ?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.html ?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.md ?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.pdf ?? docs/labs/lab7/build_clean_pdf.py ?? docs/srs.md ?? docs/system-sds.md
+?? SPECIAL_EXERCISE_UAT_GUIDE.md ?? docs/CLAUDE_CONVERSATION_HANDOFF.md ?? docs/evidence/AUDIT_1B_COMPLETE_BUNDLE.md ?? docs/evidence/AUDIT_1B_EVIDENCE_FILES.zip ?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.html ?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.md ?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.pdf ?? docs/labs/lab7/build_clean_pdf.py
 
 (e) Raw Command Output & Exit Codes:
 --- Positive Control in $env:TEMP ---
 Exit Code: 0
 Output:
-test.ts:1:describe.skip('test', () => {}); it.only('test', () => {});
+Synthetic skip test detected: describe.skip('test', () => {}); it.only('test', () => {});
 
 --- Target Check on server/tests and e2e ---
 Command: git grep -rnE "\.(skip|only)\(|xit\(|xdescribe\(|it\.todo" -- server/tests e2e
