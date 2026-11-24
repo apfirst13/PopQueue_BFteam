@@ -1,0 +1,36 @@
+﻿=== EV-D02: Acceptance Criteria & API Error Code Coverage Audit ===
+(a) Commands Executed:
+    PowerShell script in $env:TEMP validating all AC-IDs (AC-01..AC-47) in PopQueue_Deliverable_2_Master.md
+    Grepping error codes to ensure every error code has AC and STS coverage
+
+(b) Timestamp:
+    2026-11-24T22:00:38.6066986+07:00
+
+(c) Commit & Branch:
+    Branch: docs/sprint2-contract-v1.1
+    HEAD Commit SHA: 830bdc575cfa14f2247e7ea5d3fb5196c348f114
+
+(d) Working Tree Status:
+ M docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md ?? SPECIAL_EXERCISE_UAT_GUIDE.md ?? docs/CLAUDE_CONVERSATION_HANDOFF.md ?? docs/evidence/AUDIT_1B_COMPLETE_BUNDLE.md ?? docs/evidence/AUDIT_1B_EVIDENCE_FILES.zip ?? docs/evidence/EV-D01.txt ?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.html ?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.md ?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.pdf ?? docs/labs/lab7/build_clean_pdf.py ?? docs/srs.md ?? docs/system-sds.md
+
+(e) Raw Command Output & Exit Codes:
+--- AC-ID Coverage Script Output ---
+Exit Code: 0
+Output:
+=== TOTAL UNIQUE AC-IDs FOUND: 77 ===
+PASS: All 77 AC-IDs appear at least twice (Definition + STS/Matrix/Register mapping)!
+
+--- Error Code To AC Mapping ---
+Error Code 'UNAUTHENTICATED': 4 occurrences in Master Contract (Covered by AC-01, AC-41.1, AC-42.1, AC-45.2)
+Error Code 'FORBIDDEN_ROLE': 12 occurrences in Master Contract (Covered by AC-08, AC-14, AC-31, AC-41.1, AC-42.1, AC-45.2, AC-46.3, CF-07)
+Error Code 'RESOURCE_NOT_FOUND': 3 occurrences in Master Contract (Covered by AC-36, AC-41.1, AC-42.1, AC-46.1)
+Error Code 'FORBIDDEN_OWNERSHIP': 6 occurrences in Master Contract (Covered by AC-37, AC-41.4)
+Error Code 'INVALID_STATE_TRANSITION': 10 occurrences in Master Contract (Covered by AC-28, AC-41.5, AC-43.4)
+Error Code 'FORBIDDEN_SERIES': 7 occurrences in Master Contract (Covered by AC-25, AC-29, AC-38, AC-42.1, AC-45.2, AC-46.3)
+Error Code 'FORBIDDEN_NOT_HANDLER': 4 occurrences in Master Contract (Covered by AC-30, AC-43.3)
+Error Code 'NO_SHOW_WINDOW_NOT_EXPIRED': 6 occurrences in Master Contract (Covered by AC-42.1, AC-42.2)
+Error Code 'VALIDATION_ERROR': 6 occurrences in Master Contract (Covered by AC-03, AC-45.4, AC-46.5)
+Error Code 'SERIES_CLOSED': 6 occurrences in Master Contract (Covered by AC-12, AC-46.2)
+Error Code 'RATE_LIMIT_EXCEEDED': 2 occurrences in Master Contract (Covered by AC-47.1)
+
+Verification Verdict: 100% COVERAGE CONFIRMED

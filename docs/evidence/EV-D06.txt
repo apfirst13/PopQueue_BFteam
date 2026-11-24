@@ -1,0 +1,26 @@
+﻿=== EV-D06: Diff Stat & Allowed Files Audit vs origin/main ===
+(a) Commands Executed:
+    git diff --stat origin/main..HEAD
+    git status --porcelain
+
+(b) Timestamp:
+    2026-11-24T22:01:35.9632260+07:00
+
+(c) Commit & Branch:
+    Branch: docs/sprint2-contract-v1.1
+    HEAD Commit SHA: 830bdc575cfa14f2247e7ea5d3fb5196c348f114
+
+(d) Working Tree Status:
+ M docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md ?? SPECIAL_EXERCISE_UAT_GUIDE.md ?? docs/CLAUDE_CONVERSATION_HANDOFF.md ?? docs/evidence/AUDIT_1B_COMPLETE_BUNDLE.md ?? docs/evidence/AUDIT_1B_EVIDENCE_FILES.zip ?? docs/evidence/EV-D01.txt ?? docs/evidence/EV-D02.txt ?? docs/evidence/EV-D03.txt ?? docs/evidence/EV-D04.txt ?? docs/evidence/EV-D05.txt ?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.html ?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.md ?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.pdf ?? docs/labs/lab7/build_clean_pdf.py ?? docs/srs.md ?? docs/system-sds.md
+
+(e) Raw Command Output & Exit Codes:
+--- git diff --stat origin/main..HEAD ---
+ AGENTS.md                                          |   9 +  docs/AGENT_RULES.md                                |  44 ++  docs/evidence/EV-A01.txt                           |  50 ++  docs/evidence/EV-A02.txt                           |  73 +++  docs/evidence/EV-A03.txt                           |  76 +++  docs/evidence/EV-A04.txt                           |  84 +++  docs/evidence/EV-A05.txt                           |  90 +++  docs/evidence/EV-A06.txt                           |  91 +++  docs/evidence/EV-A07.txt                           | 135 +++++  docs/evidence/EV-A08.txt                           |  61 ++  docs/evidence/EV-A09.txt                           |  85 +++  docs/evidence/EV-A10.txt                           |  74 +++  docs/evidence/EV-B01.txt                           | 150 +++++  docs/evidence/EV-B02.txt                           |  71 +++  docs/evidence/EV-B03.txt                           | 145 +++++  docs/evidence/EV-B04.txt                           | 235 ++++++++  docs/evidence/EV-B05.txt                           | 116 ++++  docs/evidence/EV-B06.txt                           | 120 ++++  docs/evidence/EV-B07.txt                           | 125 ++++  docs/evidence/EV-B08.txt                           | 112 ++++  docs/evidence/EV-B09.txt                           | 101 ++++  docs/evidence/audit-addendum.md                    | 377 ++++++++++++  docs/evidence/audit-ground-truth.md                | 273 +++++++++  .../sprint-2/PopQueue_Deliverable_2_Master.md      | 632 +++++++++++++++++++++  24 files changed, 3329 insertions(+)
+
+Verification Verdict:
+1. All committed files in lineage belong strictly to Allowed Files:
+   - AGENTS.md, docs/AGENT_RULES.md (Step 2 C-2)
+   - docs/evidence/EV-A*.txt, EV-B*.txt, audit-ground-truth.md, audit-addendum.md (Step 2 C-3)
+   - docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md (Step 2 C-1 & v1.1 revision)
+2. Zero files committed from server/, client/, e2e/, prisma/, tests.
+3. Zero files committed from docs/evidence/screenshots/**, docs/labs/lab7/**, SPECIAL_EXERCISE_UAT_GUIDE.md.

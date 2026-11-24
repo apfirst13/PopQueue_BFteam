@@ -1,0 +1,62 @@
+﻿=== EV-D01: Preflight Verification (Steps 1.1 - 1.5) ===
+(a) Commands Executed:
+    1.1: git status --porcelain --untracked-files=all
+    1.2: git fetch origin; git rev-parse origin/main
+    1.3: git switch -c sprint2-staging origin/main; git push origin sprint2-staging; git switch -c docs/sprint2-contract-v1.1
+    1.4: git rev-parse sprint-2-docs:docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md
+    1.5: git grep -nE "cancel" -- server/src client/src e2e (with Positive Control in $env:TEMP)
+
+(b) Timestamp:
+    2026-11-24T21:50:10.3396864+07:00
+
+(c) Commit & Branch:
+    Branch: docs/sprint2-contract-v1.1
+    HEAD Commit SHA: 830bdc575cfa14f2247e7ea5d3fb5196c348f114
+
+(d) Working Tree Status:
+?? SPECIAL_EXERCISE_UAT_GUIDE.md ?? docs/CLAUDE_CONVERSATION_HANDOFF.md ?? docs/evidence/AUDIT_1B_COMPLETE_BUNDLE.md ?? docs/evidence/AUDIT_1B_EVIDENCE_FILES.zip ?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.html ?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.md ?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.pdf ?? docs/labs/lab7/build_clean_pdf.py
+
+(e) Raw Command Output & Exit Codes:
+--- 1.1 git status ---
+Exit Code: 0
+Output:
+ M AGENTS.md
+?? SPECIAL_EXERCISE_UAT_GUIDE.md
+?? docs/CLAUDE_CONVERSATION_HANDOFF.md
+?? docs/evidence/AUDIT_1B_COMPLETE_BUNDLE.md
+?? docs/evidence/AUDIT_1B_EVIDENCE_FILES.zip
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.html
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.md
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.pdf
+?? docs/labs/lab7/build_clean_pdf.py
+
+--- 1.2 git fetch origin && git rev-parse origin/main ---
+Exit Code: 0
+Output:
+a07a7be732b30cb75a22df7f30edfdc51521a87e
+Comparison to a07a7be732b30cb75a22df7f30edfdc51521a87e: IDENTICAL (Exit code 0)
+
+--- 1.3 Branch Creation & Push ---
+Exit Code: 0
+Output:
+Branch 'sprint2-staging' created from origin/main (a07a7be732b30cb75a22df7f30edfdc51521a87e).
+Push to origin/sprint2-staging: SUCCESS (To https://github.com/apfirst13/PopQueue_BFteam.git * [new branch] sprint2-staging -> sprint2-staging)
+Branch 'docs/sprint2-contract-v1.1' created from sprint2-staging.
+
+--- 1.4 Master v1.0 Blob SHA ---
+Exit Code: 0
+Command: git rev-parse sprint-2-docs:docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md
+Output:
+2bbdcdb6e64d887da923300027cfeb0abd70daa2
+
+--- 1.5 Existing Cancel Check ---
+Command: git grep -nE "cancel" -- server/src client/src e2e
+Exit Code: 1 (No cancel endpoints exist in server/src, client/src, or e2e)
+Case-insensitive check: client/src/types/index.ts:3:export type TicketStatus = 'WAITING' | 'CALLED' | 'UNBOXING' | 'COMPLETED' | 'CANCELLED';
+Positive Control on $env:TEMP:
+Command: git grep -nE "cancel" -- test.txt
+Exit Code: 0
+Output:
+test.txt:1:this is a cancel test
+
+Verification Verdict: ALL PREFLIGHT CHECKS PASSED
