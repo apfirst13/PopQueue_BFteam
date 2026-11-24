@@ -76,7 +76,9 @@ model QueueTicket {
   @@unique([seriesId, queueDate, queueNumber])
   @@index([seriesId, status, queueDate, queueNumber])
   @@index([userId])
-  // Note: Partial Unique Indexes (BR-02, BR-06) written in migration 0002_partial_unique_indexes
+  // Note: Partial Unique Indexes written in raw migrations:
+  // - BR-02 (v2 / D-08): unique_active_ticket_user_series on (userId, seriesId) WHERE status IN ('WAITING','CALLED','UNBOXING') (Migration 0003)
+  // - BR-06: unique_active_staff_ticket on (handledByStaffId) WHERE status IN ('CALLED','UNBOXING') (Migration 0002)
 }
 
 model QueueCounter {

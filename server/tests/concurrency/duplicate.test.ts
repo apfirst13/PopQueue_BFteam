@@ -57,4 +57,38 @@ describe('Concurrency: Single-User Duplicate Join Race (TEST-16, AC-16, BR-02, N
     });
     expect(counter?.lastNumber).toBe(1);
   });
+
+  it('TEST-16 (Extended): concurrent requests across distinct series (CRY and LAB) succeed simultaneously (2 x 201)', async () => {
+    const collector = await prisma.user.findUniqueOrThrow({ where: { username: 'collector3' } });
+    const crySeries = await prisma.series.findUniqueOrThrow({ where: { code: 'CRY' } });
+    const labSeries = await prisma.series.findUniqueOrThrow({ where: { code: 'LAB' } });
+    const token = signTestToken(collector.id, collector.role, collector.tokenVersion);
+
+    // Act: Fire simultaneous join requests for distinct active series
+    const [cryRes, labRes] = await Promise.all([
+      request(app)
+        .post('/api/tickets/join')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ seriesId: crySeries.id }),
+      request(app)
+        .post('/api/tickets/join')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ seriesId: labSeries.id }),
+    ]);
+
+    // Assert: Both requests succeed with 201 Created
+    expect(cryRes.status).toBe(201);
+    expect(labRes.status).toBe(201);
+    expect(cryRes.body.data.displayNumber).toBe('CRY-001');
+    expect(labRes.body.data.displayNumber).toBe('LAB-001');
+
+    // Verify database state: Exactly 2 active tickets in DB
+    const activeTickets = await prisma.queueTicket.findMany({
+      where: {
+        userId: collector.id,
+        status: { in: [TicketStatus.WAITING, TicketStatus.CALLED, TicketStatus.UNBOXING] },
+      },
+    });
+    expect(activeTickets.length).toBe(2);
+  });
 });
