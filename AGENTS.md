@@ -12,6 +12,15 @@
 10. Update `docs/PROJECT_STATE.md` at the end of every completed task.
 11. Code, commits, branches, PRs, and test names are in English.
 
+## ENVIRONMENT
+OS: Windows, shell: PowerShell. ไม่มี grep / date -Is แบบ bash.
+1. timestamp: Get-Date -Format o
+2. ค้นหา: git grep -nE "<pattern>" -- <paths>
+3. ทุก grep ที่ต้องการผล "ไม่พบ" ต้องทำ positive control ก่อน (สร้างไฟล์ชั่วคราวใน $env:TEMP ที่มี pattern แล้วยืนยันว่าคำสั่งเดียวกันจับได้)
+4. หลักฐานเป็น append-only: ห้ามแก้ EV-* เดิม ถ้าต้องแก้ให้สร้าง EV-xxx-r2.txt พร้อมเหตุผล
+5. ห้ามสร้างสคริปต์ชั่วคราวใน repo ใช้ $env:TEMP
+6. หลังรัน Playwright ให้ git status ถ้ามีไฟล์ tracked ถูกเขียนทับ ให้รายงาน ห้าม commit และห้าม restore เอง
+
 ## Source of Truth
 * **Master Specification & Engineering Contracts (v0.2):** `docs/sprints/sprint-1/PopQueue_Deliverable_1_Master.md`  
   (Contains Part A: SRS, Part B: Traceability, Part C: System SDS, Part D: Sprint Plan, Part E: Contracts & STS for F-01..F-04, Part F: Verification Evidence templates)
