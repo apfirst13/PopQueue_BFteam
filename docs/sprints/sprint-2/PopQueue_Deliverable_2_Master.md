@@ -1,4 +1,4 @@
-# PopQueue — Project Deliverable 2 Master Contract & Specification (v1.4)
+# PopQueue — Project Deliverable 2 Master Contract & Specification (v1.5)
 > **Core Expansion (Sprint 2) & Genuine Progress (Sprint 3) with GCP Deployment**  
 > **Course:** CPE 334 Introduction to Software Engineering in the Age of AI Agents (Semester 1/2026, KMUTT)  
 > **Project / Theme:** **PopQueue** — Theme 9: Queue and Service Management System (*Art Toy Live Unboxing Station*)  
