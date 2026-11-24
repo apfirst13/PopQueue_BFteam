@@ -86,6 +86,7 @@
 > **หมายเหตุลำดับ Commit ของหลักฐาน:**  
 > - **EV-A01 ถึง EV-A10** และ **EV-B01 ถึง EV-B09:** รันตรวจสอบบน commit `75068a6109439b7f5dcadd7713ba93115ab29043` (Branch `sprint-2-docs` ต้นทาง)  
 > - **EV-D01 ถึง EV-D06:** รันตรวจสอบบน commit `830bdc575cfa14f2247e7ea5d3fb5196c348f114` จนถึง `02f0264` บน branch ปัจจุบัน (`docs/sprint2-contract-v1.1`)
+> - **EV-D01-r2 ถึง EV-D06-r2:** รันตรวจสอบรอบ Append-Only v1.5 บน commit `81d605a84ba73ab0bc530c39cf9eb0083f76d635` ตามกฎ `AGENTS.md` Rule 4 เพื่อยืนยันการแก้ตาม Peer Review ครั้งที่ 2 ครบ 100%
 
 | รหัสหลักฐาน (EV-ID) | หัวข้อการตรวจสอบ | ผลลัพธ์ที่คาดหวัง | ผลลัพธ์ที่ตรวจพบจริง (Actual Result) | เวลาที่รันคำสั่ง (ISO) | Commit SHA ที่ตรวจ | ไฟล์หลักฐานบนดิสก์ |
 | :---: | :--- | :--- | :--- | :---: | :---: | :--- |
@@ -114,6 +115,12 @@
 | **EV-D04** | Envelope Normalization Audit | ตรวจสอบการตัด boolean flag success ใน API payloads | PASS — ใช้เฉพาะ { data } และ { error }; zero legacy success flag | 2026-11-24T22:00:59+07:00 | `830bdc575cfa14f2` | [EV-D04.txt](../../evidence/EV-D04.txt) |
 | **EV-D05** | R4 Test Suite Integrity Check | ตรวจหา skip/only/xit/xdescribe/todo ใน tests | PASS — Exit code 1 ไม่พบการ skip หรือ weaken test เดิม | 2026-11-24T22:01:28+07:00 | `830bdc575cfa14f2` | [EV-D05.txt](../../evidence/EV-D05.txt) |
 | **EV-D06** | Diff Stat & Allowed Files Audit | เทียบ origin/main..HEAD และสถานะ working tree | PASS — แก้ไขเฉพาะ Allowed Files; zero code/test changes | 2026-11-24T22:01:35+07:00 | `830bdc575cfa14f2` | [EV-D06.txt](../../evidence/EV-D06.txt) |
+| **EV-D01-r2** | Preflight Checks & Cancel Grep (r2) | ตรวจ status, fetch origin/main, cancel grep | PASS — Tracked ตรงเงื่อนไข, no cancel in code | 2026-11-24T23:50:00+07:00 | `81d605a84ba73ab0` | [EV-D01-r2.txt](../../evidence/EV-D01-r2.txt) |
+| **EV-D02-r2** | AC-ID & API Error Code Coverage (r2) | ทุก AC ปรากฏใน STS; ทุก error code มี AC | PASS — 81 ACs ปรากฏอย่างน้อย 2 ครั้ง; Error codes 14 รหัสครบ | 2026-11-24T23:50:00+07:00 | `81d605a84ba73ab0` | [EV-D02-r2.txt](../../evidence/EV-D02-r2.txt) |
+| **EV-D03-r2** | Pre-written Claims Verification (r2) | ตรวจสอบ 100%, Verified, PASS, DONE ใน docs/ | PASS — ทุกบรรทัดที่เหลือมี EV-ID กำกับชัดเจน | 2026-11-24T23:50:00+07:00 | `81d605a84ba73ab0` | [EV-D03-r2.txt](../../evidence/EV-D03-r2.txt) |
+| **EV-D04-r2** | Envelope Normalization Audit (r2) | ตรวจสอบการตัด boolean flag success ใน API payloads | PASS — ใช้เฉพาะ { data } และ { error }; zero legacy success flag | 2026-11-24T23:50:00+07:00 | `81d605a84ba73ab0` | [EV-D04-r2.txt](../../evidence/EV-D04-r2.txt) |
+| **EV-D05-r2** | R4 Test Suite Integrity Check (r2) | ตรวจหา skip/only/xit/xdescribe/todo ใน tests | PASS — Exit code 1 ไม่พบการ skip หรือ weaken test เดิม | 2026-11-24T23:50:00+07:00 | `81d605a84ba73ab0` | [EV-D05-r2.txt](../../evidence/EV-D05-r2.txt) |
+| **EV-D06-r2** | Diff Stat & Allowed Files Audit (r2) | เทียบ origin/main..HEAD และสถานะ working tree | PASS — แก้ไขเฉพาะ Allowed Files; zero code/test changes | 2026-11-24T23:50:00+07:00 | `81d605a84ba73ab0` | [EV-D06-r2.txt](../../evidence/EV-D06-r2.txt) |
 
 ---
 
@@ -1270,6 +1277,7 @@ docker compose up -d --build
 * **EV-D04 (Response Envelope Normalization):** ตรวจสอบว่าในข้อกำหนดและตัวอย่าง payload ทั้งหมดไม่มีการใช้ boolean flag `success: true` หรือ `success: false` แม้แต่จุดเดียว
 * **EV-D05 (R4 Test Integrity Verification):** ตรวจสอบชุดทดสอบใน `server/tests` และ `e2e` ยืนยันว่า Exit Code 1 ของคำสั่ง grep พิสูจน์ว่าปราศจากการใช้ `.skip(`, `.only(`, `xit(`, `xdescribe(`, `it.todo` 100%
 * **EV-D06 (Diff Stat vs origin/main):** ยืนยันว่าการเปลี่ยนแปลงทั้งหมดถูกจำกัดอยู่เฉพาะเอกสารและหลักฐานใน `docs/` และ `AGENTS.md` โดยไม่มีการแก้ไขโค้ดหรือชุดทดสอบในโฟลเดอร์อื่น
+* **EV-D01-r2 ถึง EV-D06-r2 (Append-Only v1.5 Audit Suite):** ชุดหลักฐานตรวจสอบซ้ำรอบที่สองบน commit `81d605a` ยืนยันการแก้ไขตาม Peer Review: บัญชีทดสอบจริง, คำสั่ง monorepo root dev scripts, DB impact: None & DoD ครบถ้วน, response envelope สะอาด ปราศจาก boolean flag, และ test suite ปลอด skip 100%
 
 ---
 
