@@ -13,22 +13,25 @@ export interface JoinQueueResult {
   createdAt: string;
 }
 
-export interface ActiveTicketResult {
-  ticket: {
+export interface ActiveTicketItem {
+  id: string;
+  displayNumber: string;
+  queueNumber: number;
+  status: TicketStatus;
+  waitingAhead: number;
+  series: {
     id: string;
-    displayNumber: string;
-    queueNumber: number;
-    status: TicketStatus;
-    waitingAhead: number;
-    series: {
-      id: string;
-      code: string;
-      name: string;
-    };
-    createdAt: string;
-    calledAt: string | null;
-    startedAt: string | null;
+    code: string;
+    name: string;
   };
+  createdAt: string;
+  calledAt: string | null;
+  startedAt: string | null;
+}
+
+export interface ActiveTicketResult {
+  ticket: ActiveTicketItem;
+  tickets: ActiveTicketItem[];
 }
 
 export interface TicketDetailResult {
@@ -121,14 +124,16 @@ export class TicketService {
         const targetStr = Array.isArray(metaTarget) ? metaTarget.join(',') : String(metaTarget);
 
         if (
-          targetStr.includes('userId') ||
+          targetStr.includes('unique_active_ticket_user_series') ||
           targetStr.includes('unique_active_ticket_user') ||
-          error.message?.includes('unique_active_ticket_user')
+          error.message?.includes('unique_active_ticket_user_series') ||
+          error.message?.includes('unique_active_ticket_user') ||
+          (Array.isArray(metaTarget) && metaTarget.includes('userId') && metaTarget.includes('seriesId'))
         ) {
           throw new AppError(
             409,
             'DUPLICATE_ACTIVE_QUEUE',
-            'User already has an active queue ticket',
+            'User already has an active queue ticket in this series',
           );
         }
       }
@@ -138,22 +143,20 @@ export class TicketService {
   }
 
   /**
-   * Retrieves active ticket for current collector with waitingAhead calculation (AC-34, AC-35, FR-05)
+   * Retrieves active tickets for current collector with waitingAhead calculation (AC-34, AC-35, FR-05, BR-02 v2)
    */
   async getMyActiveTicket(
     userId: string,
     _clock: Clock = defaultClock,
   ): Promise<ActiveTicketResult> {
-    const activeTicket = await prisma.queueTicket.findFirst({
+    const activeTickets = await prisma.queueTicket.findMany({
       where: {
         userId,
         status: {
           in: [TicketStatus.WAITING, TicketStatus.CALLED, TicketStatus.UNBOXING],
         },
       },
-      orderBy: {
-        createdAt: 'desc',
-      },
+      orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
       include: {
         series: {
           select: {
@@ -165,40 +168,47 @@ export class TicketService {
       },
     });
 
-    if (!activeTicket) {
+    if (!activeTickets || activeTickets.length === 0) {
       throw new AppError(404, 'NO_ACTIVE_TICKET', 'No active queue ticket found');
     }
 
-    let waitingAhead = 0;
-    if (activeTicket.status === TicketStatus.WAITING) {
-      waitingAhead = await prisma.queueTicket.count({
-        where: {
-          seriesId: activeTicket.seriesId,
-          queueDate: activeTicket.queueDate,
-          status: TicketStatus.WAITING,
-          queueNumber: {
-            lt: activeTicket.queueNumber,
+    const ticketsWithWaitingAhead = await Promise.all(
+      activeTickets.map(async (ticket) => {
+        let waitingAhead = 0;
+        if (ticket.status === TicketStatus.WAITING) {
+          waitingAhead = await prisma.queueTicket.count({
+            where: {
+              seriesId: ticket.seriesId,
+              queueDate: ticket.queueDate,
+              status: TicketStatus.WAITING,
+              queueNumber: {
+                lt: ticket.queueNumber,
+              },
+            },
+          });
+        }
+
+        return {
+          id: ticket.id,
+          displayNumber: ticket.displayNumber,
+          queueNumber: ticket.queueNumber,
+          status: ticket.status,
+          waitingAhead,
+          series: {
+            id: ticket.series.id,
+            code: ticket.series.code,
+            name: ticket.series.name,
           },
-        },
-      });
-    }
+          createdAt: ticket.createdAt.toISOString(),
+          calledAt: ticket.calledAt?.toISOString() ?? null,
+          startedAt: ticket.startedAt?.toISOString() ?? null,
+        };
+      }),
+    );
 
     return {
-      ticket: {
-        id: activeTicket.id,
-        displayNumber: activeTicket.displayNumber,
-        queueNumber: activeTicket.queueNumber,
-        status: activeTicket.status,
-        waitingAhead,
-        series: {
-          id: activeTicket.series.id,
-          code: activeTicket.series.code,
-          name: activeTicket.series.name,
-        },
-        createdAt: activeTicket.createdAt.toISOString(),
-        calledAt: activeTicket.calledAt?.toISOString() ?? null,
-        startedAt: activeTicket.startedAt?.toISOString() ?? null,
-      },
+      ticket: ticketsWithWaitingAhead[0],
+      tickets: ticketsWithWaitingAhead,
     };
   }
 

@@ -41,7 +41,7 @@
   * `FR-10`: Box Master กด Complete จบการให้บริการ
 * **Business Rules (BR-01 ถึง BR-07, BR-09):**
   * `BR-01`: ออกเลขคิวต่อเนื่องรายวัน เริ่มที่ 1 รีเซ็ตเที่ยงคืนเวลาไทย ไม่นำเลขกลับมาใช้ซ้ำ
-  * `BR-02`: ลูกค้า 1 คนถือตั๋ว Active ได้สูงสุด 1 ใบทั้งระบบ (บังคับด้วย Partial Unique Index)
+  * `BR-02`: (Revised v2 via D-08, Lab 7) ลูกค้า 1 คนถือตั๋ว Active ได้สูงสุด 1 ใบต่อ 1 ซีรีส์ (เข้าคิวข้ามซีรีส์พร้อมกันได้ แต่ห้ามซ้ำซีรีส์เดิม บังคับด้วย Partial Unique Index บน userId + seriesId)
   * `BR-03`: State Lifecycle เคร่งครัด: `WAITING -> CALLED -> UNBOXING -> COMPLETED`
   * `BR-04`: Collector ถูกบล็อกไม่ให้เรียก Endpoint ของ Staff (403 Forbidden)
   * `BR-05`: Box Master ดำเนินการได้เฉพาะซีรีส์ที่ได้รับมอบหมายเท่านั้น (403 Forbidden)

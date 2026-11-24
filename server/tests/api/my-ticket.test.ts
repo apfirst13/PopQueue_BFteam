@@ -16,6 +16,7 @@ describe('F-04 Ticket Inspection: GET /api/tickets/my-ticket (TEST-34, TEST-35)'
   let collector3User: { id: string };
   let staffCryUser: { id: string };
   let crySeries: { id: string; code: string; name: string };
+  let labSeries: { id: string; code: string; name: string };
 
   beforeAll(async () => {
     const c1 = await prisma.user.findUniqueOrThrow({ where: { username: 'collector1' } });
@@ -24,12 +25,14 @@ describe('F-04 Ticket Inspection: GET /api/tickets/my-ticket (TEST-34, TEST-35)'
     const c4 = await prisma.user.findUniqueOrThrow({ where: { username: 'collector4' } });
     const staffCry = await prisma.user.findUniqueOrThrow({ where: { username: 'staff_crybaby' } });
     const series = await prisma.series.findUniqueOrThrow({ where: { code: 'CRY' } });
+    const lab = await prisma.series.findUniqueOrThrow({ where: { code: 'LAB' } });
 
     collector1User = c1;
     collector2User = c2;
     collector3User = c3;
     staffCryUser = staffCry;
     crySeries = series;
+    labSeries = lab;
 
     collector1Token = signTestToken(c1.id, Role.COLLECTOR, c1.tokenVersion);
     collector4Token = signTestToken(c4.id, Role.COLLECTOR, c4.tokenVersion);
@@ -124,6 +127,91 @@ describe('F-04 Ticket Inspection: GET /api/tickets/my-ticket (TEST-34, TEST-35)'
         },
       });
       expect(new Date(res2.body.data.ticket.calledAt).getTime()).toBeCloseTo(calledTime.getTime(), -3);
+    });
+
+    it('returns all active tickets in data.tickets ordered createdAt ASC, id ASC with data.ticket alias, per-series waitingAhead, and shrinks after completion (BR-02 v2, AC-34)', async () => {
+      const today = new Date();
+
+      // Seed 2 CRY waiting tickets ahead of collector1
+      await createTicketFixture({
+        userId: collector2User.id,
+        seriesId: crySeries.id,
+        queueNumber: 1,
+        displayNumber: 'CRY-001',
+        status: TicketStatus.WAITING,
+        queueDate: today,
+      });
+      await createTicketFixture({
+        userId: collector3User.id,
+        seriesId: crySeries.id,
+        queueNumber: 2,
+        displayNumber: 'CRY-002',
+        status: TicketStatus.WAITING,
+        queueDate: today,
+      });
+
+      // Collector1 holds CRY-003 created first
+      const cryTicket = await createTicketFixture({
+        userId: collector1User.id,
+        seriesId: crySeries.id,
+        queueNumber: 3,
+        displayNumber: 'CRY-003',
+        status: TicketStatus.WAITING,
+        queueDate: today,
+      });
+
+      // Collector1 holds LAB-001 created second
+      const labTicket = await createTicketFixture({
+        userId: collector1User.id,
+        seriesId: labSeries.id,
+        queueNumber: 1,
+        displayNumber: 'LAB-001',
+        status: TicketStatus.WAITING,
+        queueDate: today,
+      });
+
+      // 1. Initial inspection: returns both active tickets in data.tickets
+      const res1 = await request(app)
+        .get('/api/tickets/my-ticket')
+        .set(getAuthHeader(collector1Token));
+
+      expect(res1.status).toBe(200);
+      expect(res1.body.data).toBeDefined();
+      expect(Array.isArray(res1.body.data.tickets)).toBe(true);
+      expect(res1.body.data.tickets).toHaveLength(2);
+
+      // Verify ordering: createdAt ASC, id ASC -> cryTicket first, labTicket second
+      expect(res1.body.data.tickets[0].id).toBe(cryTicket.id);
+      expect(res1.body.data.tickets[0].displayNumber).toBe('CRY-003');
+      expect(res1.body.data.tickets[0].waitingAhead).toBe(2);
+
+      expect(res1.body.data.tickets[1].id).toBe(labTicket.id);
+      expect(res1.body.data.tickets[1].displayNumber).toBe('LAB-001');
+      expect(res1.body.data.tickets[1].waitingAhead).toBe(0);
+
+      // Verify backward compatibility alias: data.ticket equals tickets[0]
+      expect(res1.body.data.ticket).toBeDefined();
+      expect(res1.body.data.ticket.id).toBe(cryTicket.id);
+      expect(res1.body.data.ticket.displayNumber).toBe('CRY-003');
+
+      // 2. Complete CRY ticket -> data.tickets shrinks back to 1 (only LAB ticket remains)
+      await prisma.queueTicket.update({
+        where: { id: cryTicket.id },
+        data: { status: TicketStatus.COMPLETED, completedAt: new Date() },
+      });
+
+      const res2 = await request(app)
+        .get('/api/tickets/my-ticket')
+        .set(getAuthHeader(collector1Token));
+
+      expect(res2.status).toBe(200);
+      expect(res2.body.data.tickets).toHaveLength(1);
+      expect(res2.body.data.tickets[0].id).toBe(labTicket.id);
+      expect(res2.body.data.tickets[0].displayNumber).toBe('LAB-001');
+
+      // Alias data.ticket updates to the remaining active ticket
+      expect(res2.body.data.ticket.id).toBe(labTicket.id);
+      expect(res2.body.data.ticket.displayNumber).toBe('LAB-001');
     });
   });
 

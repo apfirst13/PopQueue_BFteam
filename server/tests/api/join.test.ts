@@ -45,7 +45,7 @@ describe('Safe Queue Joining API: POST /api/tickets/join (F-02, AC-10..14, AC-18
     expect(dbTicket?.status).toBe(TicketStatus.WAITING);
   });
 
-  it('TEST-11: rejects join with 409 DUPLICATE_ACTIVE_QUEUE when user already has an active ticket (same or different series)', async () => {
+  it('TEST-11: allows cross-series join (CRY -> LAB returns 201) but rejects duplicate join in same series with 409 (BR-02 v2, D-08)', async () => {
     const collector = await prisma.user.findUniqueOrThrow({ where: { username: 'collector1' } });
     const crySeries = await prisma.series.findUniqueOrThrow({ where: { code: 'CRY' } });
     const labSeries = await prisma.series.findUniqueOrThrow({ where: { code: 'LAB' } });
@@ -57,6 +57,7 @@ describe('Safe Queue Joining API: POST /api/tickets/join (F-02, AC-10..14, AC-18
       .set('Authorization', `Bearer ${token}`)
       .send({ seriesId: crySeries.id });
     expect(firstRes.status).toBe(201);
+    expect(firstRes.body.data.displayNumber).toBe('CRY-001');
 
     // Record lastNumber after successful join
     const cryCounterBefore = await prisma.queueCounter.findFirst({
@@ -64,7 +65,7 @@ describe('Safe Queue Joining API: POST /api/tickets/join (F-02, AC-10..14, AC-18
     });
     const lastNumberBefore = cryCounterBefore?.lastNumber ?? 1;
 
-    // 2. Try joining CRY again -> 409 DUPLICATE_ACTIVE_QUEUE
+    // 2. Try joining CRY again (same series duplicate) -> 409 DUPLICATE_ACTIVE_QUEUE
     const retryRes = await request(app)
       .post('/api/tickets/join')
       .set('Authorization', `Bearer ${token}`)
@@ -72,28 +73,29 @@ describe('Safe Queue Joining API: POST /api/tickets/join (F-02, AC-10..14, AC-18
     expect(retryRes.status).toBe(409);
     expect(retryRes.body.error.code).toBe('DUPLICATE_ACTIVE_QUEUE');
 
-    // 3. Try joining LAB (different series) -> 409 DUPLICATE_ACTIVE_QUEUE
+    // Verify counter rollback: QueueCounter lastNumber was not incremented
+    const cryCounterAfter = await prisma.queueCounter.findFirst({
+      where: { seriesId: crySeries.id },
+    });
+    expect(cryCounterAfter?.lastNumber).toBe(lastNumberBefore);
+
+    // 3. Try joining LAB (different series) -> 201 Created under BR-02 v2
     const crossRes = await request(app)
       .post('/api/tickets/join')
       .set('Authorization', `Bearer ${token}`)
       .send({ seriesId: labSeries.id });
-    expect(crossRes.status).toBe(409);
-    expect(crossRes.body.error.code).toBe('DUPLICATE_ACTIVE_QUEUE');
+    expect(crossRes.status).toBe(201);
+    expect(crossRes.body.data.displayNumber).toBe('LAB-001');
+    expect(crossRes.body.data.status).toBe('WAITING');
 
-    // Verify database integrity: Active tickets count for user is still exactly 1
+    // Verify database integrity: Active tickets count for user is now exactly 2
     const activeTickets = await prisma.queueTicket.findMany({
       where: {
         userId: collector.id,
         status: { in: [TicketStatus.WAITING, TicketStatus.CALLED, TicketStatus.UNBOXING] },
       },
     });
-    expect(activeTickets.length).toBe(1);
-
-    // Verify counter rollback: QueueCounter lastNumber was not incremented
-    const cryCounterAfter = await prisma.queueCounter.findFirst({
-      where: { seriesId: crySeries.id },
-    });
-    expect(cryCounterAfter?.lastNumber).toBe(lastNumberBefore);
+    expect(activeTickets.length).toBe(2);
   });
 
   it('TEST-12: rejects join for closed series (isActive = false) with 409 SERIES_CLOSED', async () => {

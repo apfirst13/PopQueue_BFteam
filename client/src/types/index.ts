@@ -85,6 +85,7 @@ export interface ActiveTicket {
 export interface MyTicketResponse {
   data: {
     ticket: ActiveTicket;
+    tickets?: ActiveTicket[];
   };
 }
 

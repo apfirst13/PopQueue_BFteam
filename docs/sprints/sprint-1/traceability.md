@@ -18,7 +18,7 @@
   1. `tests/api/auth.test.ts` $\rightarrow$ ตรวจ AC-01, 02, 03, 05, 06 (Login/Logout/Me)
   2. `tests/security/` $\rightarrow$ ตรวจ AC-04 (Unauthenticated), AC-07 (Bcrypt cost >= 10)
   3. `tests/unit/` $\rightarrow$ ตรวจ AC-08 (Role guard), AC-17U (Date helper), AC-28U (Pure state transition guard)
-  4. `tests/api/series.test.ts` & `tests/api/join.test.ts` $\rightarrow$ ตรวจ AC-09 ถึง AC-14, AC-18 (Discovery & Join)
+  4. `tests/api/series.test.ts` & `tests/api/join.test.ts` $\rightarrow$ ตรวจ AC-09 ถึง AC-14, AC-18 (Discovery & Join; AC-11/TEST-11 ปรับปรุงรองรับ 1 คิวต่อซีรีส์ตาม BR-02 v2 / D-08)
   5. `tests/concurrency/` $\rightarrow$ ตรวจ AC-15 (50 Users Numbering), AC-16 (10 Duplicate Join), AC-32a/b (Staff Call Next Race)
   6. `tests/api/staff-*.test.ts` $\rightarrow$ ตรวจ AC-21 ถึง AC-31 (Staff Queue, Call Next, Start, Complete, Scope & Handler guards)
   7. `tests/api/ticket-*.test.ts` $\rightarrow$ ตรวจ AC-34 ถึง AC-38 (My-ticket & Ownership guards)

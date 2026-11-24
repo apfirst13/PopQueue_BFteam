@@ -64,7 +64,7 @@ Semester 1/2026 | Department of Computer Engineering, KMUTT
 6. **กรณีลูกค้าไม่มา (Sprint 2):** หากครบ 120 วินาทีและลูกค้าไม่มา พนักงานกด **"Mark No-Show"** Backend ตรวจ `now - calledAt >= 120s` แล้วเปลี่ยนเป็น `NO_SHOW` (ลูกค้ารับคิวใหม่ได้ แต่ต่อท้ายแถว)
 7. **กรณียกเลิก (Sprint 2):** ลูกค้ายกเลิกตั๋วของตนเองได้ขณะ `WAITING`
 
-> **ข้อจำกัดของ Sprint 1 (เปิดเผยชัดเจน):** Sprint 1 ยังไม่มี Cancel/No-Show หากลูกค้าถูก `CALLED` แล้วไม่มา พนักงานคนนั้นจะติด `STAFF_BUSY` ทางแก้ชั่วคราวคือสคริปต์ `npm run db:reset-demo` (ดู D-09 และความเสี่ยงใน Part D)
+> **ข้อจำกัดของ Sprint 1 (เปิดเผยชัดเจน):** Sprint 1 ยังไม่มี Cancel/No-Show หากลูกค้าถูก `CALLED` แล้วไม่มา พนักงานคนนั้นจะติด `STAFF_BUSY` ทางแก้ชั่วคราวคือสคริปต์ `npm run db:reset-demo` (ดู D-09 และความเสี่ยงใน Part D) และใน Lab 7 (D-08) เมื่อเปิดให้ถือตั๋วข้ามซีรีส์ได้ หาก Collector ถูก `CALLED` พร้อมกัน 2 ซีรีส์ UI จะแจ้งเตือนตัวนับถอยหลัง 120s แยกการ์ด แต่การสับรางเดินไปเคาน์เตอร์จริงถือเป็น Operational Trade-off หน้าร้านที่ยอมรับได้ใน Sprint 1 (รอระบบ No-Show อัตโนมัติใน Sprint 2)
 
 ---
 
@@ -139,7 +139,7 @@ Semester 1/2026 | Department of Computer Engineering, KMUTT
 | ID | กฎทางธุรกิจ | Sprint |
 | :---: | :--- | :---: |
 | **BR-01** | **Safe Sequential Numbering:** เลขคิวรายวันรายซีรีส์เริ่ม 1 ต่อเนื่อง ไม่ซ้ำ ไม่ข้าม รีเซ็ตเที่ยงคืนเวลาไทย เลขของตั๋วที่ออกจากคิวแล้ว (Complete/Cancel/No-Show) ไม่ถูกนำกลับมาใช้ | 1 |
-| **BR-02** | **Single Active Ticket per User:** ผู้ใช้ 1 คนมีตั๋วสถานะ `WAITING/CALLED/UNBOXING` ได้ไม่เกิน 1 ใบทั้งระบบ บังคับที่ Database | 1 |
+| **BR-02** | **Single Active Ticket per Series:** ผู้ใช้ 1 คนมีตั๋วสถานะ `WAITING/CALLED/UNBOXING` ได้ไม่เกิน 1 ใบต่อ 1 ซีรีส์ บังคับที่ Database ด้วย Partial Unique Index (Revised v2 via D-08 / Lab 7 จากเดิม 1 ใบทั้งระบบ) | 1 |
 | **BR-03** | **Strict State Lifecycle:** `WAITING → CALLED → UNBOXING → COMPLETED` ห้ามข้ามขั้น/ย้อนกลับ (Sprint 2 เพิ่ม `WAITING → CANCELLED`, `CALLED → NO_SHOW`) | 1 |
 | **BR-04** | **Role & Ownership:** Collector เรียก Endpoint ของ Staff ไม่ได้ (403) และเห็นเฉพาะตั๋วของตน; Box Master เรียก Endpoint ของ Collector (join/my-ticket) ไม่ได้ (403) | 1 |
 | **BR-05** | **Authorized Series Scope:** Box Master ทำ Call Next / Start / Complete / No-Show ได้เฉพาะซีรีส์ที่ตนได้รับมอบหมาย มิฉะนั้น 403 `FORBIDDEN_SERIES` | 1 |
@@ -170,7 +170,7 @@ Semester 1/2026 | Department of Computer Engineering, KMUTT
 | **NFR-01** | รหัสผ่านเก็บเป็น Bcrypt cost ≥ 10 ไม่เก็บ plaintext | DB integration test: อ่าน `passwordHash`, ตรวจ pattern `$2[aby]$NN$` และ NN ≥ 10 | 1 |
 | **NFR-02** | ทุก Protected Endpoint ปฏิเสธคำขอที่ไม่มี/Token เสีย (401) และ Role/Scope ผิด (403) โดยไม่คืนข้อมูลส่วนตัว | API integration test แบบ parameterized ทุก route ใน Role Matrix | 1 |
 | **NFR-03** | **Concurrency ของ BR-01:** 50 คำขอ join พร้อมกันจาก 50 บัญชีต่างกัน → 201 ทั้งหมด เลข 1–50 ไม่ซ้ำไม่ข้าม | Multi-user concurrency test | 1 |
-| **NFR-04** | **Concurrency ของ BR-02:** 10 คำขอ join พร้อมกันจากผู้ใช้เดียว → สำเร็จ 1, ได้ 409 อีก 9, ใน DB มีตั๋ว Active 1 ใบ | Single-user race test | 1 |
+| **NFR-04** | **Concurrency ของ BR-02:** 10 คำขอ join พร้อมกันจากผู้ใช้เดียวในซีรีส์เดิม → สำเร็จ 1, ได้ 409 อีก 9; และคำขอพร้อมกันข้ามซีรีส์สำเร็จพร้อมกัน (2 x 201) | Single-user race test | 1 |
 | **NFR-05** | ข้อมูลตั๋ว/ตัวนับคิวคงอยู่หลัง Restart Database Container และเลขคิวถัดไปต่อเนื่อง | Persistence script (Node.js) ผูกกับ README | 1 |
 | **NFR-06** | UI ใช้งานได้ที่ความกว้าง 375px โดยไม่มี horizontal overflow ทุกหน้า Sprint 1 | Playwright viewport test | 1 |
 | **NFR-07** | Login rate limit: ผิดเกิน 5 ครั้ง/15 นาที/บัญชี+IP → 429 `TOO_MANY_REQUESTS` (ปิดได้ผ่าน config ในโหมดทดสอบ) | API integration test | 3 |
@@ -188,9 +188,9 @@ Semester 1/2026 | Department of Computer Engineering, KMUTT
 | **D-03** | ผูก `handledByStaffId` ตอน Call Next | ให้รู้ว่าใครเรียกใคร และจำกัด 1 ตั๋ว Active/พนักงาน – **ตัดสินแล้ว** |
 | **D-04** | เพิกถอน Token ด้วย `tokenVersion` บน User | Stateless JWT แต่เพิกถอนได้ ไม่ต้องใช้ Redis – **ตัดสินแล้ว** |
 | **D-05** | No-Show ตรวจเวลาที่ Server (120s) | กันพนักงานตัดสิทธิ์ก่อนเวลา (Sprint 2) – **ตัดสินแล้ว** |
-| **D-06** | 1 ผู้ใช้ถือตั๋ว Active ได้ 1 ใบทั้งระบบ | ความเป็นธรรมหน้าร้าน – **ตัดสินแล้ว** |
+| **D-06** | 1 ผู้ใช้ถือตั๋ว Active ได้ 1 ใบทั้งระบบ (ใน Sprint 1 Baseline) | ความเป็นธรรมหน้าร้านใน Baseline เดิม – **ปรับปรุงใน Lab 7 โดย D-08** |
 | **D-07** | ไม่มี API ลัดสถานะ ใช้ `npm run db:reset-demo` | รักษา State Machine – **ตัดสินแล้ว** |
-| **D-08** | เสนอเปลี่ยน BR-02 เป็น "1 คิวต่อซีรีส์" เป็นโจทย์ Lab 7 | **รออนุมัติจาก TA/อาจารย์** – ยังไม่ผูกเป็นแผนยืนยัน |
+| **D-08** | ปรับปรุง BR-02 เป็น "1 คิวต่อซีรีส์" สำหรับ Lab 7 | **อนุมัติแล้วโดย TA (23 พ.ย. 2026, Issue #52)** – บังคับใช้ใน Migration 0003, API (`{ ticket, tickets }`) และ UI Card List พร้อมรับประกัน **0 unintended regressions** บนฟังก์ชันเดิม; บันทึก Trade-off ตามเงื่อนไข TA ข้อ 4: กรณี Collector ถูก `CALLED` พร้อมกัน 2 โต๊ะ/ซีรีส์ UI จะแสดง `CountdownTimer` 120s แยกรายบัตร แต่การจัดสรรเวลาเดินไปรับบริการที่เคาน์เตอร์จริงถือเป็น Operational Trade-off ที่ยอมรับได้ใน Sprint 1 (เนื่องจากระบบ No-Show อัตโนมัติอยู่ใน Sprint 2 `F-06`) |
 | **D-09** | Sprint 1 ยังไม่มี Cancel/No-Show: Seed collector 6 บัญชี + `db:reset-demo` + ออกแบบ UAT case ให้จบ journey; **เปิดเผยเป็น Known Limitation** (ไม่ใช่ทางแก้ถาวร) | ลดความเสี่ยง Lab 6 UAT (10–12 พ.ย.); ถ้า Sprint 1 เสร็จก่อนกำหนดจะพิจารณาดึง F-05/F-06 ขึ้นมา – **ตัดสินแล้ว (ชั่วคราว)** |
 | **D-10** | ออกเลขคิวด้วย Raw SQL `INSERT … ON CONFLICT DO UPDATE … RETURNING` ใน Transaction เดียวกับการสร้างตั๋ว | Prisma `upsert` ไม่รับประกัน atomic increment ภายใต้ race – **ตัดสินแล้ว** |
 | **D-11** | Logout เพิ่ม `tokenVersion` → Token ทุกอุปกรณ์ของผู้ใช้นั้นใช้ไม่ได้ | ยอมรับ trade-off (เรียบง่ายกว่ามี jti denylist) – **ตัดสินแล้ว** |
@@ -271,7 +271,7 @@ Semester 1/2026 | Department of Computer Engineering, KMUTT
 | G-03 | NFR-03/NFR-04 ซ้ำกับ BR-01/BR-02 (เป็นการพิสูจน์ภายใต้ Concurrency) | ไม่กระทบความครบถ้วน | ระบุชัดใน Part A §7 |
 | G-04 | Test ของ Midnight Reset ใช้ Clock ที่ inject ได้ ไม่ได้รอเที่ยงคืนจริง | – | AC-17 (Unit + Integration พร้อม fake clock) |
 | G-05 | Rate limit ล็อกอินยังไม่อยู่ใน Sprint 1 | ความเสี่ยง Brute force (ยอมรับสำหรับ Sprint 1) | D-12: NFR-07 / Sprint 3 |
-| G-06 | D-08 (Lab 7 เปลี่ยน BR-02) ยังไม่ได้รับอนุมัติ | ไม่กระทบ Sprint 1 | รออนุมัติ TA/อาจารย์ |
+| G-06 | D-08 (Lab 7 เปลี่ยน BR-02 เป็น 1 คิวต่อซีรีส์) | บังคับใช้ใน Lab 7 | อนุมัติโดย TA (23 พ.ย. 2026, Issue #52) ดำเนินการปรับปรุง Contract (PR-1) |
 | G-07 | ตั๋วค้างข้ามวัน (A-07) ยังไม่มี Requirement จัดการ | Edge case | บันทึกใน Known Limitations; พิจารณาใน Sprint 3 |
 
 ### Approved / Recorded Changes (การเปลี่ยนแปลงที่บันทึกไว้)
@@ -287,6 +287,31 @@ Semester 1/2026 | Department of Computer Engineering, KMUTT
 | CHG-07 | 2026-11-02 | ปรับ UI Stack จาก Next.js 14 เป็น React 18 + Vite | สเปก §5.1 ส่งเสริมการใช้ Stack จาก Labs 1–4 และสถาปัตยกรรม SPA เพียงพอต่อการใช้งาน | ทีมตกลง (v0.2) |
 | CHG-08 | 2026-11-02 | ปรับปรุง STS ของ F-01 (TEST-03 Malformed JSON, TEST-04 Parameterized + Algorithm confusion, TEST-07 Characterization, TEST-08U Unauthenticated) และเพิ่ม config `JWT_EXPIRES_IN` | Handout §3.5 & NFR-02: ดักจับ SyntaxError ป้องกัน 500 unhandled, ป้องกัน Algorithm confusion (alg:none), แยก characterization test ของ Seed, และสร้างตาราง protected route กลางรองรับ I-02..I-06 | ทีมตกลง (v0.2.2) |
 | CHG-09 | 2026-11-02 | ปรับปรุง STS ของ F-02 (TEST-16 เสริม assertion `QueueCounter.lastNumber=1` พิสูจน์ rollback ภายใต้ race, TEST-17U เป็น Characterization) และกำหนด `AppOptions { clock }` สำหรับ Clock Injection | Handout §3.5 & Decision D-10: พิสูจน์ Rollback ภายใต้ race condition โดยไม่สูญเสียเลขคิว, แยก characterization test ของ timezone clock จาก I-01, และรองรับการฉีด FakeClock ในการทดสอบข้ามเที่ยงคืน | ทีมตกลง (v0.2.3) |
+| CHG-10 | 2026-11-23 | ปรับปรุง BR-02 จาก 1 คิวทั้งระบบเป็น 1 คิวต่อซีรีส์ (D-08, Issue #52) พร้อมอัปเดต AC-11, AC-16, AC-19, AC-34 และ STS | ตอบสนองต่อการใช้งานหน้าร้านจริงที่มีเคาน์เตอร์แยกตามซีรีส์ (Lab 7 Maintenance Change Request) | อนุมัติโดย TA (พี่ลูกหมู, 23 พ.ย. 2026) |
+
+### 2.4 ตารางวิเคราะห์ผลกระทบระดับระบบและชุดการทดสอบ (Lab 7 Part A Impact & Test Matrix)
+
+#### 2.4.1 Requirement-to-Module Impact Table (Lab 7 §3.1 Format)
+| Req ID | Feature | Affected SRS / Feature SDS / System SDS Sections | Affected AC | STS Test IDs | Code Modules & Persistence / Role / Caller Notes |
+| :--- | :---: | :--- | :---: | :--- | :--- |
+| **BR-02** | `F-02` | Master Part A §6 (`BR-02`), §8 (`D-06`, `D-08`); Part C §2, §4 (`unique_active_ticket_user_series`); Part E §2.3, §2.5, §2.8; `srs.md`, `system-sds.md` | `AC-11`, `AC-16`, `AC-19` | `TEST-11` *(rev)*, `TEST-16` *(ext)*, `TEST-19` *(ext)*, `db-schema-and-seed` *(rev)* | `0003` migration (`QueueTicket`), `schema.prisma` comment, `ticket.service.ts` (`joinQueue` P2002), `SeriesPage.tsx` (unchanged error alert), `smoke_test.py` (`N/A`: checks health/ready/series/auth only), `test-persistence.mjs` (`N/A`: distinct users) |
+| **FR-04** | `F-02` | Master Part A §5 (`FR-04`); Part E §2.3 | `AC-10`, `AC-11` | `TEST-10` *(keep)*, `TEST-11` *(rev)* | `ticket.controller.ts`, `ticket.service.ts`; `SeriesPage` navigation to `/my-ticket` unchanged |
+| **FR-05** | `F-04` | Master Part A §5 (`FR-05`), Part C §6–§8; Part E §4.3, §4.6, §4.7; `traceability.md` | `AC-34`, `AC-35`, `AC-20` | `TEST-34` *(ext)*, `TEST-35` *(keep)*, `TEST-20` *(reg)* | `ticket.service.ts` (`getMyActiveTicket`), `ticket.controller.ts`, `client/src/types/index.ts`, `MyTicketPage.tsx` (single 3s poller, ordered list, `<CountdownTimer key={t.id} />`), `LoginPage.tsx` (unchanged via `data.ticket`) |
+| **BR-04, BR-05, BR-06, BR-07** | `F-01`, `F-03`, `F-04` | **Unchanged (`N/A` for rule edit)** — Master Part A §6, Part C §7 | `AC-08`, `AC-14`, `AC-24..31`, `AC-35` *(403)*, `AC-37`, `AC-38` | `TEST-08U`, `14`, `24..32`, `35` *(403)*, `37`, `38`, `db-schema` (`BR-06`) | **Roles / Ownership:** Collector blocked on `/api/staff/*` & cross-user `tickets/:id` (`403`); Box Master blocked on `join`/`my-ticket` (`403`) & still restricted to 1 serving ticket (`409 STAFF_BUSY`). Protected by regression suite |
+| **BR-01, BR-03, BR-09** | `F-02`, `F-03` | **Unchanged (`N/A` for rule edit)** | `AC-12`, `AC-15`, `AC-17`, `AC-18`, `AC-28` | `TEST-12`, `15`, `17`, `18`, `28` | Atomic daily numbering, closed series `SKP` (`409 SERIES_CLOSED`), and strict state lifecycle unchanged; protected by regression suite |
+
+#### 2.4.2 Complete Test Impact Matrix (`AGENTS.md` #5 & Lab 7 §3.2 Justification)
+| Test File & ID | Pre-Change Expectation | Disposition | Exact Action & Justification |
+| :--- | :--- | :---: | :--- |
+| `server/tests/db-schema-and-seed.test.ts` (`BR-02` test) | Creating `CRY` + `LAB` directly for `collector1` throws `P2002` | **Revised (Legitimate)** | Assert `CRY` + `LAB` succeeds, while `CRY` + second active `CRY` throws `P2002` on `unique_active_ticket_user_series`; keep `BR-06` test intact |
+| `server/tests/api/join.test.ts` (`TEST-11`) | `CRY` then `LAB` (`crossRes`) returns `409 DUPLICATE_ACTIVE_QUEUE` | **Revised (Legitimate — `[RED]` Target)** | Update `crossRes` assertion from `409` to `201` (`LAB-001`, active count = 2); **retain** same-series `CRY` -> `CRY` `409` + counter rollback assertion; justified in Contract PR & PR-2 description per Lab 7 §3.2 |
+| `server/tests/concurrency/duplicate.test.ts` (`TEST-16`) | 10 concurrent `CRY` joins -> 1×`201`, 9×`409` | **Preserved + Extended** | Keep existing 10× same-series race test intact; add concurrent distinct-series test (`CRY` + `LAB` -> `2 x 201`) |
+| `server/tests/api/my-ticket.test.ts` (`TEST-34`, `TEST-35`) | `GET /api/tickets/my-ticket` returns `{ data: { ticket } }` or `404` / `403` | **Preserved + Extended** | Keep `data.ticket` & `404`/`403` tests untouched; add test asserting `data.tickets` returns 2 tickets ordered `createdAt ASC` with per-series `waitingAhead`, shrinking to 1 after one completes |
+| `client/src/tests/ticket.test.tsx` | Single ticket render & `404` empty state (`data.ticket`) | **Preserved + Extended** | Keep existing mocks untouched (via fallback); add multi-ticket render test (`CRY` `CALLED` + `LAB` `WAITING`) verifying independent `CountdownTimer` & order |
+| `client/src/tests/auth.test.tsx` & `series.test.tsx` | Mock `GET /api/tickets/my-ticket` returning `{ data: { ticket: ... } }` | **Preserved (Untouched)** | Protected by `{ ticket: tickets[0], tickets }` API shape & client fallback (`TD-02`) |
+| `e2e/join-queue.spec.ts` (`TEST-19`) | Join `CRY` -> `/my-ticket` -> retry `CRY` -> `DUPLICATE_ACTIVE_QUEUE` | **Preserved + Extended** | Keep same-series duplicate check intact; add multi-series flow joining `LAB` after `CRY` |
+| `e2e/responsive.spec.ts` (`TEST-20`) | `375x667` zero horizontal overflow across Sprint 1 UI | **Preserved (Extended Run)** | Verify `/my-ticket` with 2 active cards still exhibits zero horizontal overflow at `375px` |
+| All other Sprint 1 tests (34 tests: `auth`, `ticket-detail`, `ticket-security`, `staff-*`, `numbering`, `queue-reset`, `permissions`) | Expected status codes, `401`/`403` security checks, `1..50` numbering | **Preserved (Untouched)** | Full regression proof that unrelated Sprint 1 security, role, and concurrency rules remain unbroken (**0 unintended regressions**) |
 
 ---
 
@@ -405,7 +430,7 @@ model QueueCounter {
 
 | Entity | ความสัมพันธ์ | Ownership / Constraint สำคัญ |
 | :--- | :--- | :--- |
-| `User` 1–N `QueueTicket` (`userId`) | ตั๋วเป็นของ Collector | `unique_active_ticket_user`: 1 ตั๋ว Active/ผู้ใช้ (BR-02) |
+| `User` 1–N `QueueTicket` (`userId`) | ตั๋วเป็นของ Collector | `unique_active_ticket_user_series`: 1 ตั๋ว Active/ผู้ใช้/ซีรีส์ (BR-02 v2, D-08) |
 | `User` 1–N `QueueTicket` (`handledByStaffId`) | พนักงานผู้ Call | `unique_active_staff_ticket`: 1 ตั๋ว CALLED/UNBOXING/พนักงาน (BR-06) |
 | `User` N–M `Series` ผ่าน `StaffSeriesAssignment` | สิทธิ์ซีรีส์ของ Box Master | `@@unique([staffId, seriesId])` (BR-05) |
 | `Series` 1–N `QueueTicket`, `QueueCounter` | เลขคิวรายซีรีส์รายวัน | `@@unique([seriesId, queueDate, queueNumber])`, `@@unique([seriesId, queueDate])` (BR-01) |
@@ -430,9 +455,9 @@ model QueueCounter {
 
 ## 4. การออกแบบ Concurrency
 
-1. **BR-02 – Partial Unique Index (ผู้ใช้):**
+1. **BR-02 – Partial Unique Index (ผู้ใช้รายซีรีส์ - BR-02 v2, D-08):**
    ```sql
-   CREATE UNIQUE INDEX unique_active_ticket_user ON "QueueTicket"("userId")
+   CREATE UNIQUE INDEX unique_active_ticket_user_series ON "QueueTicket"("userId", "seriesId")
    WHERE status IN ('WAITING','CALLED','UNBOXING');
    ```
 2. **BR-06 – Partial Unique Index (พนักงาน):**
@@ -664,6 +689,7 @@ F-05, F-06, F-07 (Sprint 2), Dockerfile/CI/CD/GCP (Lab 5), F-08, F-09, NFR-07, R
 | v0.2.1 | 2026-11-02 | `[TBD]` | ปรับปรุง Contract สถาปัตยกรรม Web Client เป็น React 18 + Vite ตาม CHG-07 (สเปก §5.1 ส่งเสริม Labs 1–4 stack และสถาปัตยกรรม SPA เพียงพอ) | ทีมตกลง |
 | v0.2.2 | 2026-11-02 | `[TBD]` | ปรับปรุงรายละเอียด STS ของ F-01 ตาม CHG-08: เพิ่ม Malformed JSON ใน TEST-03, Parameterized + Algorithm confusion ใน TEST-04, TEST-07 เป็น Characterization, และ TEST-08U ตรวจสอบ 401 เมื่อขาด req.user | ทีมตกลง |
 | v0.2.3 | 2026-11-02 | `[TBD]` | ปรับปรุง STS ของ F-02 ตาม CHG-09: เสริม assertion `QueueCounter.lastNumber=1` ใน TEST-16, ระบุ TEST-17U เป็น Characterization, และกำหนด `AppOptions { clock }` | Theerawat (AI-assisted plan review) |
+| v0.3.0 | 2026-11-23 | (PR-1) | ปรับปรุง BR-02 จาก 1 คิวทั้งระบบเป็น 1 คิวต่อซีรีส์ (D-08, Issue #52) ขยาย AC-11, AC-16, AC-19, AC-34 และปรับ STS TEST-11, TEST-16, TEST-19, TEST-34 สอดรับกับ Migration 0003 | Theerawat / Aphivat (Refs #52) |
 | v0.x | `[TBD]` | `[TBD]` | การแก้ไข Contract ระหว่าง Implement (ต้องระบุเหตุผลทุกครั้ง ห้ามเขียนทับประวัติ) | `[TBD]` |
 
 ### ข้อตกลงร่วมของชุดทดสอบ (Test Conventions)
@@ -763,7 +789,7 @@ FR-03, FR-04, BR-01, BR-02, BR-09, BR-04 (Box Master ห้าม join), NFR-03,
 ### 2.3 Workflow & Business Rules
 1. `GET /api/series` (สาธารณะ) → รายการซีรีส์ + `waitingCount` (ตั๋ว WAITING ของวันนี้ Asia/Bangkok)
 2. Collector `POST /api/tickets/join` ใน Transaction เดียว: ตรวจซีรีส์มีอยู่ → ตรวจ `isActive` → ออกเลขด้วย Raw SQL `ON CONFLICT` (Part C §4) → INSERT ตั๋ว `WAITING` (`displayNumber = CODE-` + เลข 3 หลัก)
-3. ผู้ใช้ที่มีตั๋ว Active อยู่แล้ว (ซีรีส์ใดก็ตาม) → ชน `unique_active_ticket_user` → `DUPLICATE_ACTIVE_QUEUE` และ Rollback (เลขไม่ถูกใช้)
+3. ผู้ใช้ที่มีตั๋ว Active อยู่แล้วในซีรีส์เดียวกัน → ชน `unique_active_ticket_user_series` (ปรับปรุงตาม BR-02 v2 / D-08 ใน Migration `0003`) → ตอบ 409 `DUPLICATE_ACTIVE_QUEUE` และ Rollback (เลขไม่ถูกใช้); ส่วนการ join ข้ามซีรีส์ที่เปิดอยู่สามารถทำได้สำเร็จ (สถานะ WAITING/CALLED/UNBOXING รวมได้ไม่เกิน 1 ใบต่อซีรีส์)
 4. `userId` มาจาก Token เท่านั้น
 
 ### 2.4 Permissions
@@ -776,10 +802,12 @@ FR-03, FR-04, BR-01, BR-02, BR-09, BR-04 (Box Master ห้าม join), NFR-03,
 | `seriesId` ขาด/ไม่ใช่ UUID | 400 `VALIDATION_ERROR` |
 | `seriesId` ไม่มีในระบบ | 404 `RESOURCE_NOT_FOUND` |
 | ซีรีส์ `isActive=false` (SKP) | 409 `SERIES_CLOSED` ไม่สร้างตั๋ว |
-| ผู้ใช้มีตั๋ว Active แล้ว | 409 `DUPLICATE_ACTIVE_QUEUE` ไม่สร้างตั๋วใหม่ |
+| ผู้ใช้มีตั๋ว Active ในซีรีส์เดิมอยู่แล้ว | 409 `DUPLICATE_ACTIVE_QUEUE` ไม่สร้างตั๋วใหม่ |
+| ผู้ใช้มีตั๋ว Active ในซีรีส์อื่น join ซีรีส์ใหม่ที่เปิด | 201 Created สร้างตั๋วใหม่สำเร็จ (ถือได้สูงสุด 1 ใบต่อซีรีส์) |
 | Box Master เรียก join | 403 `FORBIDDEN_ROLE` |
 | 50 คำขอพร้อมกัน (ผู้ใช้ต่างกัน) | ทุกคำขอ 201 เลข 1..50 ไม่ซ้ำไม่ข้าม |
-| 10 คำขอพร้อมกัน (ผู้ใช้เดียว) | 201 หนึ่งครั้ง, 409 เก้าครั้ง |
+| 10 คำขอพร้อมกันในซีรีส์เดิม (ผู้ใช้เดียว) | 201 หนึ่งครั้ง, 409 เก้าครั้ง |
+| คำขอพร้อมกันข้ามซีรีส์ต่างกัน (CRY และ LAB) | สำเร็จทั้ง 2 คำขอ (2 x 201) ได้ตั๋ว Active 2 ใบ |
 | ข้ามเที่ยงคืนเวลาไทย | เลขรีเซ็ตเป็น 1 ของ `queueDate` ใหม่ |
 | หลังตั๋วใบแรกออกจากคิว (COMPLETED) | ผู้ใช้อื่น join ได้เลขถัดไป (ไม่ reuse) |
 
@@ -794,7 +822,7 @@ FR-03, FR-04, BR-01, BR-02, BR-09, BR-04 (Box Master ห้าม join), NFR-03,
 | `POST /api/tickets/join` | Bearer (Collector); `{ "seriesId": "<uuid>" }` | 201 `{ "data": { "ticketId","displayNumber":"CRY-001","queueNumber":1,"queueDate":"2026-11-08","status":"WAITING","seriesName","createdAt" } }` | 400 `VALIDATION_ERROR`, 401 `UNAUTHENTICATED`, 403 `FORBIDDEN_ROLE`, 404 `RESOURCE_NOT_FOUND`, 409 `DUPLICATE_ACTIVE_QUEUE`, 409 `SERIES_CLOSED` |
 
 ### 2.8 Data Changes
-ตาราง `Series`, `QueueTicket`, `QueueCounter` (Migration `0001_init`); **Migration `0002`:** `unique_active_ticket_user` (partial unique index); Constraint `@@unique([seriesId, queueDate, queueNumber])`, `@@unique([seriesId, queueDate])`; Seed 3 ซีรีส์
+ตาราง `Series`, `QueueTicket`, `QueueCounter` (Migration `0001_init`); **Migration `0002`:** `unique_active_ticket_user` (Sprint 1 Baseline); **Migration `0003` (Lab 7 / D-08):** เปลี่ยน Partial Unique Index เป็น `unique_active_ticket_user_series` บน `("userId", "seriesId") WHERE status IN ('WAITING','CALLED','UNBOXING')` โดยบังคับใช้กฎ Zero-gap Migration (`CREATE UNIQUE INDEX` ตัวใหม่ก่อน แล้วจึง `DROP INDEX IF EXISTS` ตัวเก่า เพื่อป้องกันช่องว่างที่ไม่มี Constraint ตรวจสอบ); Constraint `@@unique([seriesId, queueDate, queueNumber])`, `@@unique([seriesId, queueDate])`; Seed 3 ซีรีส์
 
 ### 2.9 Acceptance Criteria (F-02)
 
@@ -802,15 +830,15 @@ FR-03, FR-04, BR-01, BR-02, BR-09, BR-04 (Box Master ห้าม join), NFR-03,
 | :---: | :--- | :---: | :---: |
 | **AC-09** | `GET /api/series` (ไม่ล็อกอิน) → 200 รายการ CRY, LAB, SKP พร้อม `isActive` และ `waitingCount` ตรงกับจำนวนตั๋ว WAITING วันนี้ | Positive | FR-03 |
 | **AC-10** | Collector ที่ไม่มีตั๋ว Active join CRY → 201, `status=WAITING`, `displayNumber=CRY-001`, `queueNumber=1`; ใน DB มี 1 แถวตรงกัน (`userId` จาก Token) | Positive | FR-04, BR-01 |
-| **AC-11** | Collector ที่มีตั๋ว Active อยู่แล้ว join (ซีรีส์เดิมหรือต่างซีรีส์) → 409 `DUPLICATE_ACTIVE_QUEUE`; ใน DB ยังมีตั๋ว Active เพียง 1 ใบ | Negative | BR-02 |
+| **AC-11** | (a) Collector ที่มีตั๋ว Active ในซีรีส์หนึ่ง (เช่น CRY) join ซีรีส์เดิมซ้ำ → 409 `DUPLICATE_ACTIVE_QUEUE`; (b) Collector ที่มีตั๋ว Active ใน CRY join ซีรีส์อื่นที่เปิดอยู่ (เช่น LAB) → 201 Created ได้ตั๋ว `LAB-001` (สถานะ WAITING) และใน DB มีตั๋ว Active 2 ใบแยกตามซีรีส์ | Positive/Negative | BR-02 (v2), D-08, FR-04 |
 | **AC-12** | join SKP (ปิด) → 409 `SERIES_CLOSED`; ไม่มีตั๋วถูกสร้าง | Negative | BR-09, FR-04 |
 | **AC-13** | join ด้วย `seriesId` ที่ไม่มี → 404 `RESOURCE_NOT_FOUND`; `seriesId` ขาด/ไม่ใช่ UUID → 400 `VALIDATION_ERROR` | Boundary | FR-04 |
 | **AC-14** | Box Master เรียก join → 403 `FORBIDDEN_ROLE`; ไม่มี Token → 401; ไม่มีตั๋วถูกสร้าง | Role | BR-04, NFR-02 |
 | **AC-15** | Collector 50 คน (บัญชีต่างกัน) join CRY พร้อมกัน → ทุกคำขอ 201; `queueNumber` ครบ 1..50 ไม่ซ้ำ ไม่ข้าม | Concurrency | BR-01, NFR-03 |
-| **AC-16** | Collector คนเดียว join 10 คำขอพร้อมกัน → 201 เพียง 1 ครั้ง อีก 9 ครั้ง 409 `DUPLICATE_ACTIVE_QUEUE`; ตั๋ว Active ใน DB = 1 | Concurrency | BR-02, NFR-04 |
+| **AC-16** | (a) Collector คนเดียว join 10 คำขอพร้อมกันในซีรีส์เดิม → 201 เพียง 1 ครั้ง อีก 9 ครั้ง 409 `DUPLICATE_ACTIVE_QUEUE` (ตั๋วใน DB = 1); (b) Collector คนเดียวส่งคำขอพร้อมกันข้ามซีรีส์ที่ต่างกัน (CRY และ LAB) → สำเร็จทั้ง 2 คำขอ (2 x 201) ได้ตั๋ว active 2 ใบใน DB | Concurrency | BR-02 (v2), NFR-04 |
 | **AC-17** | `getQueueDate()` แปลงเวลาเป็นวันที่ Asia/Bangkok ถูกต้อง (16:59:59Z และ 17:00:00Z คนละวัน); join ที่ 23:59:59+07 กับ 00:00:01+07 วันถัดไป ได้เลขสุดท้ายของวันเดิมและเลข 1 ของวันใหม่ตามลำดับ | Boundary | BR-01, A-01 |
 | **AC-18** | หลังตั๋วใบ 001 เป็น COMPLETED ผู้ใช้อื่น join ได้ `002` (ไม่ reuse 001) | Boundary | BR-01 |
-| **AC-19** | (E2E) ล็อกอิน → `/series` → Join CRY → `/my-ticket` แสดงเลขคิวและ `WAITING`; Join ซ้ำแสดงข้อผิดพลาด `DUPLICATE_ACTIVE_QUEUE` | E2E | FR-04 |
+| **AC-19** | (E2E) ล็อกอิน → `/series` → Join CRY สำเร็จ → ไปหน้า `/series` แล้ว Join LAB สำเร็จ → `/my-ticket` แสดงการ์ดตั๋วทั้ง 2 ใบแยกกันอย่างถูกต้อง; หากกด Join ซ้ำในซีรีส์ที่มีตั๋ว active อยู่แล้วแสดงข้อผิดพลาด `DUPLICATE_ACTIVE_QUEUE` | E2E | FR-04, BR-02 (v2) |
 | **AC-20** | (E2E) ที่ viewport 375×667 หน้า `/login`, `/series`, `/my-ticket`, `/staff/counter` ไม่มี horizontal overflow (`scrollWidth ≤ clientWidth`) | E2E | NFR-06 |
 
 ### 2.10 Software Test Specification (STS) – F-02
@@ -819,16 +847,16 @@ FR-03, FR-04, BR-01, BR-02, BR-09, BR-04 (Box Master ห้าม join), NFR-03,
 | :---: | :---: | :---: | :--- | :--- | :--- |
 | **TEST-09** | AC-09 | Integration | Seed 3 ซีรีส์; มีตั๋ว WAITING CRY 3 ใบ | `GET /api/series` ไม่ส่ง Token | 200; CRY `waitingCount=3`, LAB 0, SKP `isActive=false` |
 | **TEST-10** | AC-10 | Integration | `collector1` ไม่มีตั๋ว | `POST /api/tickets/join` {CRY} | 201; `CRY-001`, `WAITING`; DB มีแถว `userId=collector1`, `queueNumber=1` |
-| **TEST-11** | AC-11 | Integration | `collector1` มีตั๋ว CRY WAITING | join CRY อีกครั้ง และ join LAB | ทั้งสอง 409 `DUPLICATE_ACTIVE_QUEUE`; DB ตั๋ว Active ของ collector1 = 1; `QueueCounter` ไม่ถูกใช้ไปโดยเปล่า (lastNumber เท่าเดิม) |
+| **TEST-11** | AC-11 | Integration | `collector1` มีตั๋ว CRY WAITING | (1) join CRY ซ้ำ (2) join LAB | (1) 409 `DUPLICATE_ACTIVE_QUEUE` และ `QueueCounter` ไม่เพิ่ม; (2) 201 Created ได้ `LAB-001` (WAITING) และตั๋ว Active ใน DB รวมเป็น 2 ใบ |
 | **TEST-12** | AC-12 | Integration | ซีรีส์ SKP `isActive=false` | join SKP | 409 `SERIES_CLOSED`; จำนวนตั๋ว SKP ใน DB = 0 |
 | **TEST-13** | AC-13 | Integration | – | join ด้วย UUID สุ่มที่ไม่มี / `{}` / `{seriesId:"abc"}` | 404 `RESOURCE_NOT_FOUND` / 400 / 400 `VALIDATION_ERROR` |
 | **TEST-14** | AC-14 | Integration | Token `staff_crybaby`; และไม่ส่ง Token | join CRY | 403 `FORBIDDEN_ROLE`; 401 `UNAUTHENTICATED`; ไม่มีตั๋วเพิ่ม |
 | **TEST-15** | AC-15 | Concurrency | Fixture 50 Collector ต่างบัญชี | `Promise.all` join CRY 50 คำขอ | 50 × 201; เซต `queueNumber` = {1..50}; ไม่มีซ้ำ; `QueueCounter.lastNumber=50` |
-| **TEST-16** | AC-16 | Concurrency | `collector2` ไม่มีตั๋ว | `Promise.all` join 10 คำขอ | 201 จำนวน 1; 409 `DUPLICATE_ACTIVE_QUEUE` จำนวน 9; DB ตั๋ว Active = 1; และ `QueueCounter.lastNumber = 1` |
+| **TEST-16** | AC-16 | Concurrency | `collector2` ไม่มีตั๋ว | (a) `Promise.all` join 10 คำขอในซีรีส์เดิม (b) `Promise.all` join CRY และ LAB ข้ามซีรีส์ | (a) 201 จำนวน 1, 409 จำนวน 9, `QueueCounter.lastNumber = 1`; (b) 201 ทั้ง 2 คำขอ ได้ตั๋ว Active 2 ซีรีส์ใน DB |
 | **TEST-17U** | AC-17 | Unit (Characterization) | `Date` = 2026-11-08T16:59:59Z, 17:00:00Z | `getQueueDate(now)` | `2026-11-08` และ `2026-11-09` ตามลำดับ |
 | **TEST-17** | AC-17 | Integration | `clock` = 23:59:59+07 แล้ว 00:00:01+07 (วันถัดไป) ผู้ใช้ต่างกัน | join CRY ทั้งสองครั้ง | ครั้งแรกได้เลข n ของวันเดิม; ครั้งหลังได้ `001` และ `queueDate` ใหม่ |
 | **TEST-18** | AC-18 | Integration | ตั๋ว CRY-001 สถานะ COMPLETED (ตั้งผ่าน DB fixture) | `collector3` join CRY | 201 `CRY-002` |
-| **TEST-19** | AC-19 | E2E (Playwright) | DB เทสต์ว่าง; `collector1` | Login → เลือก CRY → Join → กด Join ซ้ำ | ถึง `/my-ticket` เห็น `CRY-001` + `WAITING`; Join ซ้ำเห็นข้อความ/รหัส `DUPLICATE_ACTIVE_QUEUE` |
+| **TEST-19** | AC-19 | E2E (Playwright) | DB เทสต์ว่าง; `collector1` | Login → เลือก CRY → Join → ไป `/series` Join LAB → กด Join CRY ซ้ำ | ถึง `/my-ticket` แสดงการ์ดทั้ง CRY และ LAB พร้อมกัน; พยายาม Join CRY ซ้ำแสดงข้อความ `DUPLICATE_ACTIVE_QUEUE` |
 | **TEST-20** | AC-20 | E2E (Playwright) | viewport 375×667; ล็อกอินเป็น Collector และ Box Master | เปิดทุกหน้า Sprint 1 | `document.documentElement.scrollWidth ≤ clientWidth` ทุกหน้า |
 
 ### 2.11 Definition of Done & Evidence – F-02
@@ -946,9 +974,10 @@ FR-07, FR-08, FR-09, FR-10, BR-03, BR-04, BR-05, BR-06, BR-07 | Dependencies: F-
 FR-05, FR-06, BR-04, NFR-02, NFR-05 | Dependencies: F-01, F-02 (ตั๋ว), F-03 (สถานะ CALLED/COMPLETED ที่ต้องแสดง)
 
 ### 4.3 Workflow & Business Rules
-1. `my-ticket`: คืนตั๋ว Active (`WAITING/CALLED/UNBOXING`) ของผู้ใช้จาก Token; `waitingAhead` = จำนวนตั๋ว `WAITING` ซีรีส์/วันเดียวกันที่ `queueNumber` น้อยกว่า (0 ถ้าสถานะไม่ใช่ WAITING)
+1. `my-ticket`: คืนตั๋ว Active (`WAITING/CALLED/UNBOXING`) ทั้งหมดของผู้ใช้จาก Token ในฟิลด์ `data.tickets` เรียงตาม `createdAt ASC, id ASC` (พร้อมส่ง alias `data.ticket = tickets[0]` เพื่อ Backward Compatibility กับไคลเอนต์และเทสเดิม); ค่า `waitingAhead` คำนวณแยกอิสระตามแต่ละซีรีส์/วันเดียวกันที่ `queueNumber` น้อยกว่า (0 ถ้าสถานะไม่ใช่ WAITING)
 2. `tickets/:id`: ลำดับตรวจสอบ Auth → Role → UUID → ตั๋วมีอยู่ (404) → สิทธิ์ (Collector ต้องเป็นเจ้าของ, Box Master ต้องดูแลซีรีส์) → ตอบ
-3. UI Polling 3 วินาทีจาก `my-ticket`; เมื่อสถานะ CALLED แสดงข้อความเรียกพร้อมนับถอยหลัง 120 วินาที (แสดงผลเท่านั้นใน Sprint 1)
+3. UI Polling 3 วินาทีจาก `my-ticket` โดยใช้ Page-level Poller เพียงตัวเดียวที่ระดับหน้าจอ; แสดงรายการการ์ดตั๋ว Active ทั้งหมด; ตั๋วใบใดอยู่ในสถานะ `CALLED` จะแสดงกรอบเตือนสีส้ม "ถึงคิวแล้ว กรุณามาที่เคาน์เตอร์" พร้อมตัวนับถอยหลัง 120 วินาที (`<CountdownTimer key={t.id} />`) ประจำแต่ละการ์ดอย่างอิสระ (แสดงผลเท่านั้นใน Sprint 1)
+4. **Trade-off เมื่อถูกเรียกคิวพร้อมกัน 2 โต๊ะ/ซีรีส์ (ตามเงื่อนไข TA ข้อ 4):** ในกรณีที่ Collector ถือตั๋ว 2 ใบแล้วถูก `CALLED` พร้อมกันหรือในเวลาไล่เลี่ยกัน หน้าจอจะแสดงการแจ้งเตือนและการนับถอยหลัง 120s แยกการ์ดอย่างอิสระ แต่การจัดสรรเวลาเดินไปรับบริการที่เคาน์เตอร์จริงถือเป็น **Operational Trade-off ที่ยอมรับได้สำหรับ Sprint 1** (เนื่องจากระบบ No-Show แบบอัตโนมัติจะถูกพัฒนาใน Sprint 2 `F-06`)
 
 ### 4.4 Permissions
 `my-ticket`: Collector เท่านั้น (Box Master 403) | `tickets/:id`: เจ้าของตั๋ว หรือ Box Master ของซีรีส์นั้น; อื่นๆ 403
@@ -965,13 +994,13 @@ FR-05, FR-06, BR-04, NFR-02, NFR-05 | Dependencies: F-01, F-02 (ตั๋ว), F
 | Restart DB | ข้อมูลตั๋วทุกสถานะ+ตัวนับยังอยู่ และ join ถัดไปได้เลขต่อเนื่อง |
 
 ### 4.6 UI Behavior
-`/my-ticket`: การ์ดตั๋วใหญ่ (เลข, ซีรีส์, สถานะ, "เหลืออีก N คิวก่อนหน้า"); CALLED → กรอบเตือนสีส้ม "ถึงคิวแล้ว กรุณามาที่เคาน์เตอร์" + นับถอยหลัง; UNBOXING → "กำลังให้บริการ"; Empty state เมื่อไม่มีตั๋ว (ลิงก์ไป `/series`); Error state พร้อมปุ่มลองใหม่; Polling 3 วินาที
+`/my-ticket`: แสดงรายการการ์ดตั๋ว Active ทั้งหมดของผู้ใช้ เรียงลำดับตาม `createdAt ASC` รองรับทั้งกรณีถือ 1 ใบ หรือ 2 ใบข้ามซีรีส์; แต่ละการ์ดแสดง (เลขคิว, ซีรีส์, สถานะ, "เหลืออีก N คิวก่อนหน้า" คำนวณแยกตามซีรีส์); สถานะ `CALLED` → แสดงกรอบเตือนสีส้ม "ถึงคิวแล้ว กรุณามาที่เคาน์เตอร์" พร้อมตัวนับถอยหลังอิสระรายบัตร (`<CountdownTimer key={t.id} />`); `UNBOXING` → "กำลังให้บริการ"; Empty state เมื่อไม่มีตั๋ว Active ใดๆ (ลิงก์ไป `/series`); Error state พร้อมปุ่มลองใหม่; ควบคุมการอัปเดตข้อมูลด้วย Single Page-level Poller ทุก 3 วินาที (ไม่สร้าง Poller แยกรายบัตร เพื่อประหยัด Network I/O)
 
 ### 4.7 API Specifications
 
 | Method / Path | Request | Success | Errors |
 | :--- | :--- | :--- | :--- |
-| `GET /api/tickets/my-ticket` | Bearer (Collector) | 200 `{ "data": { "ticket": { "id","displayNumber","queueNumber","status","waitingAhead","series": { "id","code","name" },"createdAt","calledAt","startedAt" } } }` | 401, 403 `FORBIDDEN_ROLE`, 404 `NO_ACTIVE_TICKET` |
+| `GET /api/tickets/my-ticket` | Bearer (Collector) | 200 `{ "data": { "ticket": { "id","displayNumber","queueNumber","status","waitingAhead","series": { "id","code","name" },"createdAt","calledAt","startedAt" }, "tickets": [ { "id","displayNumber","queueNumber","status","waitingAhead","series": { "id","code","name" },"createdAt","calledAt","startedAt" } ] } }` | 401, 403 `FORBIDDEN_ROLE`, 404 `NO_ACTIVE_TICKET` |
 | `GET /api/tickets/:id` | Bearer | 200 `{ "data": { "id","displayNumber","status","series","createdAt","calledAt","startedAt","completedAt" } }` (Box Master เพิ่ม `userFullName`) | 400 `VALIDATION_ERROR`, 401, 403 `FORBIDDEN_OWNERSHIP`/`FORBIDDEN_SERIES`, 404 `RESOURCE_NOT_FOUND` |
 
 ### 4.8 Data Changes
@@ -981,7 +1010,7 @@ FR-05, FR-06, BR-04, NFR-02, NFR-05 | Dependencies: F-01, F-02 (ตั๋ว), F
 
 | AC ID | Observable Outcome | ประเภท | Req |
 | :---: | :--- | :---: | :---: |
-| **AC-34** | `collector1` ที่มีตั๋ว CRY-003 WAITING และมี WAITING เลข 1, 2 อยู่ก่อน → `my-ticket` 200 คืนตั๋วของตนเอง `waitingAhead=2` และไม่คืนตั๋วผู้อื่น; เมื่อถูก CALLED `waitingAhead=0` และมี `calledAt` | Positive | FR-05 |
+| **AC-34** | `collector1` เรียก `GET /api/tickets/my-ticket` → คืน 200 พร้อม `data.tickets` เป็น Array ของตั๋ว Active ทั้งหมดของผู้ใช้ เรียงลำดับ `createdAt ASC, id ASC` และมี `waitingAhead` คำนวณแยกตามซีรีส์; พร้อมส่ง `data.ticket = tickets[0]` เพื่อ Backward Compatibility | Positive | FR-05, BR-02 (v2) |
 | **AC-35** | Collector ที่ไม่มีตั๋ว Active (รวมกรณีตั๋วเดิม COMPLETED) เรียก `my-ticket` → 404 `NO_ACTIVE_TICKET`; Box Master เรียก → 403 `FORBIDDEN_ROLE` | Boundary/Role | FR-05, BR-04 |
 | **AC-36** | เจ้าของเรียก `GET /api/tickets/:id` ของตั๋ว COMPLETED → 200 พร้อม `status=COMPLETED` และ `calledAt/startedAt/completedAt` ครบ (ดึงผลที่บันทึกไว้) | Positive | FR-06 |
 | **AC-37** | `collector2` เรียก `GET /api/tickets/:id` ของ `collector1` → 403 `FORBIDDEN_OWNERSHIP` และ Body ไม่มีเลขคิว/ชื่อ/สถานะของตั๋วนั้น | Ownership | FR-06, BR-04, NFR-02 |
@@ -992,7 +1021,7 @@ FR-05, FR-06, BR-04, NFR-02, NFR-05 | Dependencies: F-01, F-02 (ตั๋ว), F
 
 | Test ID | AC | Level | Precondition / Input | Action | Expected Result |
 | :---: | :---: | :---: | :--- | :--- | :--- |
-| **TEST-34** | AC-34 | Integration | CRY WAITING 001, 002 (ผู้ใช้อื่น), `collector1` ถือ 003 | `GET /my-ticket` (collector1); จากนั้นตั้ง 001, 002 เป็น COMPLETED ผ่าน DB fixture, `staff_crybaby` Call Next (ได้ 003) แล้วเรียก `GET /my-ticket` ซ้ำ | `displayNumber=CRY-003`, `waitingAhead=2`; หลังถูก CALLED `status=CALLED`, `waitingAhead=0`, `calledAt` มีค่า |
+| **TEST-34** | AC-34 | Integration | (a) `CRY` WAITING 001, 002 (ผู้ใช้อื่น), `collector1` ถือ 003; (b) `collector1` ถือตั๋วข้ามซีรีส์ `LAB-001` (WAITING) เพิ่มเติม | 1. `GET /my-ticket` (collector1)<br>2. ตั้ง 001, 002 เป็น COMPLETED, `staff_crybaby` Call Next (ได้ 003) แล้วเรียก `GET /my-ticket` ซ้ำ<br>3. `staff_crybaby` Complete ตั๋ว 003 แล้วเรียก `GET /my-ticket` ซ้ำ | **ตอนถือ 2 ใบ:** คืน 200 พร้อม `data.tickets` ความยาว 2 เรียง `createdAt ASC` (CRY แล้ว LAB); `data.ticket` คือตั๋ว CRY; `waitingAhead` แยกตามซีรีส์ (CRY=2, LAB=0)<br>**หลังถูก CALLED:** ตั๋ว CRY มี `status=CALLED`, `waitingAhead=0`, `calledAt` มีค่า<br>**หลัง Complete ตั๋ว CRY:** `data.tickets` ลดความยาวเหลือ 1 ใบ (เฉพาะ LAB-001) และ `data.ticket` เปลี่ยนเป็น LAB-001 |
 | **TEST-35** | AC-35 | Integration | (a) `collector4` ไม่มีตั๋ว (b) `collector1` ตั๋ว COMPLETED (c) Token `staff_crybaby` | `GET /my-ticket` | (a),(b) 404 `NO_ACTIVE_TICKET`; (c) 403 `FORBIDDEN_ROLE` |
 | **TEST-36** | AC-36 | Integration | ตั๋วของ collector1 ผ่านวงจรจนเป็น COMPLETED | `GET /tickets/:id` ด้วย Token เจ้าของ | 200; `status=COMPLETED`; `calledAt`, `startedAt`, `completedAt` ไม่ว่างและเรียงตามเวลา |
 | **TEST-37** | AC-37 | Integration | ตั๋วของ collector1; Token `collector2` | `GET /tickets/{id ของ collector1}` | 403 `FORBIDDEN_OWNERSHIP`; Body ไม่มี `displayNumber`/`status`/ชื่อผู้ใช้ |

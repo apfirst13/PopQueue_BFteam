@@ -20,9 +20,10 @@
 
 ## 🔐 สถาปัตยกรรม Concurrency & Data Model ใน Sprint 1
 1. **Prisma Data Model:** โมเดล `User`, `Series`, `StaffSeriesAssignment`, `QueueTicket`, `QueueCounter`
-2. **Partial Unique Index 1 (กันลูกค้ากดซ้อน - BR-02):**
+2. **Partial Unique Index 1 (กันลูกค้ากดซ้อนรายซีรีส์ - BR-02 v2, D-08):**
    ```sql
-   CREATE UNIQUE INDEX unique_active_ticket_user ON "QueueTicket"("userId")
+   -- ปรับปรุงใน Migration 0003: 1 Active Ticket per Series
+   CREATE UNIQUE INDEX unique_active_ticket_user_series ON "QueueTicket"("userId", "seriesId")
    WHERE status IN ('WAITING','CALLED','UNBOXING');
    ```
 3. **Partial Unique Index 2 (กันพนักงานกดเรียกซ้อน - BR-06):**
