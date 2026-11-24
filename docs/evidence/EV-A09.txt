@@ -1,0 +1,85 @@
+=== COMMAND ===
+gh issue list --state all --limit 100
+gh pr list --state all --limit 100
+gh pr view 57 --json title,body,reviews
+gh pr view 60 --json title,body,reviews
+
+=== TIMESTAMP ===
+2026-11-24T19:24:06+07:00
+
+=== GIT REVISION & BRANCH ===
+Commit: 75068a6109439b7f5dcadd7713ba93115ab29043
+Branch: sprint-2-docs
+
+=== GIT STATUS ===
+ M docs/evidence/screenshots/ac19-duplicate-rejection-error.png
+ M docs/evidence/screenshots/ac19-join-success-waiting.png
+ M docs/evidence/screenshots/ac20-responsive-375px-login.png
+ M docs/evidence/screenshots/ac20-responsive-375px-my-ticket-multi.png
+ M docs/evidence/screenshots/ac20-responsive-375px-my-ticket.png
+ M docs/evidence/screenshots/ac20-responsive-375px-series.png
+ M docs/evidence/screenshots/ac20-responsive-375px-staff-counter.png
+ M docs/evidence/screenshots/demo1-step1-collector-waiting.png
+ M docs/evidence/screenshots/demo1-step2-staff-called.png
+ M docs/evidence/screenshots/demo1-step3-collector-called.png
+ M docs/evidence/screenshots/demo1-step4-staff-unboxing.png
+ M docs/evidence/screenshots/demo1-step5-collector-unboxing.png
+ M docs/evidence/screenshots/demo1-step6-staff-completed.png
+ M docs/evidence/screenshots/demo1-step7-collector-completed-reloaded.png
+ M docs/evidence/screenshots/demo2-step1-duplicate-error.png
+ M docs/evidence/screenshots/demo2-step2-closed-series.png
+ M docs/evidence/screenshots/demo3-step1-forbidden-collector.png
+ M docs/evidence/screenshots/demo3-step2-logout-redirect.png
+?? SPECIAL_EXERCISE_UAT_GUIDE.md
+?? docs/evidence/EV-A01.txt
+?? docs/evidence/EV-A02.txt
+?? docs/evidence/EV-A03.txt
+?? docs/evidence/EV-A04.txt
+?? docs/evidence/EV-A05.txt
+?? docs/evidence/EV-A06.txt
+?? docs/evidence/EV-A07.txt
+?? docs/evidence/EV-A08.txt
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.html
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.md
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.pdf
+?? docs/labs/lab7/build_clean_pdf.py
+
+=== RAW ISSUES INVENTORY (#24-#32, #46-#60) ===
+#24: CLOSED - Lab 5 Issue 1: Setup GCP Project, Budget Alert ($5 threshold) & IAM Team Access
+#25: CLOSED - Lab 5 Issues 2 & 3: Cloud Readiness, Multi-Stage Dockerfile & Local Parity (PR #26)
+#27: CLOSED - Lab 5 Issue 4: CI Pipeline on Pull Requests with PostgreSQL Service Container & Docker Build Gate
+#28: CLOSED - Lab 5 Issue 5: First Manual Deployment to Cloud Run & Cloud SQL via Cloud Shell
+#29: CLOSED - Lab 5 Issue 6: Workload Identity Federation & Branch Protection Rulesets on Staging and Main
+#30: CLOSED - Lab 5 Issue 7: Automated CD Pipeline on Main Merge, Read-Only Smoke Test & Commit SHA Traceability
+#31: CLOSED - Lab 5 Issue 8: Live Verification of Public GCP Domain, Data Persistence & Traceability Evidence
+#32: CLOSED - Lab 5 Issue 9: Release Tagging v0.2.0-lab5, Cost Management, Evidence Index & Final PDF Report
+#46: CLOSED - [Defect] Missing required seriesId validation on POST /api/tickets/join (Lab 6 Special Exercise)
+#47: CLOSED - [Lab6 Blind UAT] Login ไม่ส่ง password แล้วตอบ HTTP 500 แทน 400 VALIDATION_ERROR
+#52: CLOSED - [Lab 7 Change Request] Revise BR-02 from 1 active ticket system-wide to 1 active ticket per Series (D-08)
+#53: CLOSED - [Lab 7 Part B] Backend Implementation, Zero-Gap Migration 0003 & Server Vitest
+#54: CLOSED - [Lab 7 Part B] Frontend Multi-Ticket Card List, Countdown Timer & E2E Tests
+#55: OPEN   - [Lab 7 Part C/D] Release Tagging v0.3.0-lab7, Cloud Run Live Verification, Metrics & Final PDF
+
+=== RAW PR INVENTORY (#46-#60) ===
+PR #48: MERGED - fix(auth): restore required password validation on login endpoint and UI (Closes #47)
+PR #49: CLOSED - release(lab6): deploy Issue #47 login password validation fix to production (superseded by #50)
+PR #50: MERGED - release(lab6): deploy Issue #47 login password validation fix to production (merged to main at 2aee62b)
+PR #51: CLOSED - chore(sync): merge main release commits (#39, #43) into lab5-staging (closed, unmerged chore)
+PR #56: CLOSED - chore(sync): sync main (2aee62b / PR #50) into lab5-staging before Lab 7 (closed, unmerged chore)
+PR #57: MERGED - docs(lab7): revise BR-02 to 1 active ticket per series and update STS (Refs #52)
+PR #58: MERGED - feat(backend): implement migration 0003 per-series active ticket index and multi-ticket payload (Refs #52, #53)
+PR #59: MERGED - feat(ui): implement multi-series virtual ticket list and E2E tests (Refs #52, #54)
+PR #60: MERGED - release(lab7): release BR-02 v2 multi-series queueing to production (Closes #52)
+
+=== RECORD OF TA APPROVAL (23 พ.ย. 15:30) ===
+Verified in Issue #52 description, PR #57 body, and PR #60 review:
+- Formal approval from TA (นายรัตนโชติ เพ็ชรพันธ์ศรี / พี่ลูกหมู) on 2026-11-23 15:30 ICT.
+- 4 Approval Conditions:
+  1. Contract-first: Update SRS / SDS / STS before code.
+  2. Zero-gap migration: CREATE new unique index before dropping old one.
+  3. Strict anti-hoarding invariant: Hoarding within same series remains strictly forbidden.
+  4. Operational trade-off: Dual-CALLED desk arrival trade-off documented.
+- All 4 conditions verified and signed off by peer reviewer `@Theerawat82` in PR #57 and PR #60.
+
+=== EXIT CODE ===
+0

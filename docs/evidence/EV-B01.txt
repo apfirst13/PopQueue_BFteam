@@ -1,0 +1,150 @@
+=== COMMAND ===
+Inspect server/src/middleware/auth.ts (lines 67-93)
+Inspect server/src/middleware/error-handler.ts (lines 1-52)
+Inspect server/tests/unit/role-guard.test.ts (lines 34-67)
+
+=== TIMESTAMP ===
+2026-11-24T20:12:00+07:00
+
+=== GIT REVISION & BRANCH ===
+Commit: 75068a6109439b7f5dcadd7713ba93115ab29043
+Branch: sprint-2-docs
+
+=== GIT STATUS ===
+ M AGENTS.md
+ M docs/evidence/screenshots/ac19-duplicate-rejection-error.png
+ M docs/evidence/screenshots/ac19-join-success-waiting.png
+ M docs/evidence/screenshots/ac20-responsive-375px-login.png
+ M docs/evidence/screenshots/ac20-responsive-375px-my-ticket-multi.png
+ M docs/evidence/screenshots/ac20-responsive-375px-my-ticket.png
+ M docs/evidence/screenshots/ac20-responsive-375px-series.png
+ M docs/evidence/screenshots/ac20-responsive-375px-staff-counter.png
+ M docs/evidence/screenshots/demo1-step1-collector-waiting.png
+ M docs/evidence/screenshots/demo1-step2-staff-called.png
+ M docs/evidence/screenshots/demo1-step3-collector-called.png
+ M docs/evidence/screenshots/demo1-step4-staff-unboxing.png
+ M docs/evidence/screenshots/demo1-step5-collector-unboxing.png
+ M docs/evidence/screenshots/demo1-step6-staff-completed.png
+ M docs/evidence/screenshots/demo1-step7-collector-completed-reloaded.png
+ M docs/evidence/screenshots/demo2-step1-duplicate-error.png
+ M docs/evidence/screenshots/demo2-step2-closed-series.png
+ M docs/evidence/screenshots/demo3-step1-forbidden-collector.png
+ M docs/evidence/screenshots/demo3-step2-logout-redirect.png
+?? SPECIAL_EXERCISE_UAT_GUIDE.md
+?? docs/AGENT_RULES.md
+?? docs/evidence/EV-A01.txt
+?? docs/evidence/EV-A02.txt
+?? docs/evidence/EV-A03.txt
+?? docs/evidence/EV-A04.txt
+?? docs/evidence/EV-A05.txt
+?? docs/evidence/EV-A06.txt
+?? docs/evidence/EV-A07.txt
+?? docs/evidence/EV-A08.txt
+?? docs/evidence/EV-A09.txt
+?? docs/evidence/EV-A10.txt
+?? docs/evidence/audit-ground-truth.md
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.html
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.md
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.pdf
+?? docs/labs/lab7/build_clean_pdf.py
+
+=== RAW CODE (server/src/middleware/auth.ts:67-93) ===
+/**
+ * Role-Based Access Control Middleware Guard (AC-08, BR-04)
+ * Enforces Role check strictly after Authentication check (Part C §6).
+ */
+export function requireRole(allowedRoles: Role[]) {
+  return (req: Request, res: Response, next: NextFunction): void => {
+    // 1. Authentication check precedes Role check
+    if (!req.user) {
+      res.status(401).json({
+        error: {
+          code: 'UNAUTHENTICATED',
+          message: 'Authentication required or token has been revoked',
+          statusCode: 401,
+        },
+      });
+      return;
+    }
+
+    // 2. Role permission check
+    if (!allowedRoles.includes(req.user.role)) {
+      res.status(403).json({
+        error: {
+          code: 'FORBIDDEN_ROLE',
+          message: 'Forbidden: Insufficient role permissions',
+          statusCode: 403,
+        },
+      });
+      return;
+    }
+
+    next();
+  };
+}
+
+=== RAW TEST (server/tests/unit/role-guard.test.ts:34-67) ===
+  it('rejects access with 403 FORBIDDEN_ROLE when user has role COLLECTOR', () => {
+    const middleware = requireRole([Role.BOX_MASTER]);
+
+    const req = {
+      user: {
+        id: 'user-collector-1',
+        username: 'collector1',
+        fullName: 'Collector 1',
+        role: Role.COLLECTOR,
+        tokenVersion: 0,
+      },
+    } as unknown as Request;
+
+    const jsonFn = vi.fn();
+    const statusFn = vi.fn().mockReturnValue({ json: jsonFn });
+    const res = {
+      status: statusFn,
+      json: jsonFn,
+    } as unknown as Response;
+
+    const next = vi.fn() as unknown as NextFunction;
+
+    middleware(req, res, next);
+
+    expect(next).not.toHaveBeenCalled();
+    expect(statusFn).toHaveBeenCalledWith(403);
+    expect(jsonFn).toHaveBeenCalledWith({
+      error: {
+        code: 'FORBIDDEN_ROLE',
+        message: expect.stringMatching(/forbidden|insufficient/i),
+        statusCode: 403,
+      },
+    });
+  });
+
+=== RESPONSE ENVELOPE ANALYSIS ===
+1. Error Code:
+   Error code ที่ middleware `requireRole` ส่งกลับจริงคือ "FORBIDDEN_ROLE" (ไม่ใช่ "FORBIDDEN")
+2. JSON Response ตัวอย่างจริงจาก Unit Test และ Implementation:
+   ```json
+   {
+     "error": {
+       "code": "FORBIDDEN_ROLE",
+       "message": "Forbidden: Insufficient role permissions",
+       "statusCode": 403
+     }
+   }
+   ```
+3. Response Envelope Structure:
+   โครงสร้าง response envelope ของระบบเป็นแบบ Standard Error Wrapper:
+   - Root object บรรจุฟิลด์ `error` (Object)
+   - ฟิลด์ย่อยภายใน `error` ประกอบด้วย:
+     - `code` (string): รหัสข้อผิดพลาดตาม Contract (เช่น `'FORBIDDEN_ROLE'`)
+     - `message` (string): ข้อความคำอธิบายข้อผิดพลาด
+     - `statusCode` (number): รหัสสถานะ HTTP (เช่น `403`)
+     - `details` (optional): ข้อมูลรายละเอียดเพิ่มเติมถ้ามี (สอดคล้องกับ Interface `ErrorResponse` ใน `server/src/middleware/error-handler.ts`)
+
+=== CONCLUSION ===
+- โค้ด `requireRole` ตรวจสอบ `req.user` (Authentication) ก่อน Role check เสมอตาม Master Part C §6
+- เมื่อ Role ไม่ตรง ส่ง HTTP 403 พร้อม error code `'FORBIDDEN_ROLE'`
+- ตัว Response มี envelope `{ error: { code, message, statusCode } }` ชัดเจน 100%
+
+=== EXIT CODE ===
+0

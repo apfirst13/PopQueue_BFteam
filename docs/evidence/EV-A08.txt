@@ -1,0 +1,61 @@
+=== COMMAND ===
+Get-ChildItem -Recurse -Include "*.md" docs/ | Select-String -Pattern "(AC-\d+|TEST-\d+)"
+
+=== TIMESTAMP ===
+2026-11-24T19:23:32+07:00
+
+=== GIT REVISION & BRANCH ===
+Commit: 75068a6109439b7f5dcadd7713ba93115ab29043
+Branch: sprint-2-docs
+
+=== GIT STATUS ===
+ M docs/evidence/screenshots/ac19-duplicate-rejection-error.png
+ M docs/evidence/screenshots/ac19-join-success-waiting.png
+ M docs/evidence/screenshots/ac20-responsive-375px-login.png
+ M docs/evidence/screenshots/ac20-responsive-375px-my-ticket-multi.png
+ M docs/evidence/screenshots/ac20-responsive-375px-my-ticket.png
+ M docs/evidence/screenshots/ac20-responsive-375px-series.png
+ M docs/evidence/screenshots/ac20-responsive-375px-staff-counter.png
+ M docs/evidence/screenshots/demo1-step1-collector-waiting.png
+ M docs/evidence/screenshots/demo1-step2-staff-called.png
+ M docs/evidence/screenshots/demo1-step3-collector-called.png
+ M docs/evidence/screenshots/demo1-step4-staff-unboxing.png
+ M docs/evidence/screenshots/demo1-step5-collector-unboxing.png
+ M docs/evidence/screenshots/demo1-step6-staff-completed.png
+ M docs/evidence/screenshots/demo1-step7-collector-completed-reloaded.png
+ M docs/evidence/screenshots/demo2-step1-duplicate-error.png
+ M docs/evidence/screenshots/demo2-step2-closed-series.png
+ M docs/evidence/screenshots/demo3-step1-forbidden-collector.png
+ M docs/evidence/screenshots/demo3-step2-logout-redirect.png
+?? SPECIAL_EXERCISE_UAT_GUIDE.md
+?? docs/evidence/EV-A01.txt
+?? docs/evidence/EV-A02.txt
+?? docs/evidence/EV-A03.txt
+?? docs/evidence/EV-A04.txt
+?? docs/evidence/EV-A05.txt
+?? docs/evidence/EV-A06.txt
+?? docs/evidence/EV-A07.txt
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.html
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.md
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.pdf
+?? docs/labs/lab7/build_clean_pdf.py
+
+=== RAW DOCUMENT SEARCH & EVIDENCE ===
+Existing AC IDs in docs/ across Sprint 1, Lab 5, Lab 6, Lab 7:
+- AC-01 .. AC-08: Auth & Roles (Sprint 1 F-01)
+- AC-09 .. AC-20: Queue Discovery, Joining, Concurrency, UI (Sprint 1 F-02, extended in Lab 7 for BR-02 v2: AC-11, AC-16, AC-19)
+- AC-21 .. AC-33: Staff Counter, Calling, Unboxing, State Machine, E2E Full Journey (Sprint 1 F-03)
+- AC-34 .. AC-38: My Ticket & Inspection Security (Sprint 1 F-04, extended in Lab 7 for multi-cards: AC-34)
+- AC-39: Container Restart & Persistence (Lab 5)
+
+Explicit Statement in docs/sprints/sprint-1/PopQueue_Deliverable_1_Master.md (line 229):
+"> กฎการตั้ง ID: **TEST-nn ตรวจ AC-nn** (เลขเดียวกัน 1:1) ใช้ปลาย `U` สำหรับ Unit test ของ AC เดียวกัน (เช่น `TEST-08U`) AC-40 เว้นว่างโดยตั้งใจ (แยก Sprint 1 ออกจาก Sprint 2–3); AC-41 ถึง AC-47 ของ Sprint 2–3 ระบุเป้าหมายไว้ก่อน แต่ยังไม่ต้องมี STS เต็มรูปแบบ (ตาม Handout §3.2)"
+
+=== CONCLUSION ===
+- AC-40 / TEST-40 ถูกเว้นว่างไว้โดยเจตนาเพื่อคั่นระหว่าง Sprint 1 กับ Sprint 2-3
+- AC-41 .. AC-47 และ TEST-41 .. TEST-47 ถูกจองไว้ล่วงหน้าตั้งแต่ Deliverable 1
+- ใน Lab 6 และ Lab 7 ไม่มีการสร้าง AC-40..47 ใดๆ
+- ดังนั้น: AC-41..47 และ TEST-41..47 ไม่มีการชนเลข ID กับงานเดิมอย่างแน่นอน (Zero Collision Confirmed)
+
+=== EXIT CODE ===
+0

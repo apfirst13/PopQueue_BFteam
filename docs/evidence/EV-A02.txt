@@ -1,0 +1,73 @@
+=== COMMAND ===
+Get-Content server/prisma/migrations/20261101145503_0002_partial_unique_indexes/migration.sql
+Get-Content server/prisma/migrations/20261124143000_0003_per_series_active_ticket_index/migration.sql
+
+=== TIMESTAMP ===
+2026-11-24T19:21:38+07:00
+
+=== GIT REVISION & BRANCH ===
+Commit: 75068a6109439b7f5dcadd7713ba93115ab29043
+Branch: sprint-2-docs
+
+=== GIT STATUS ===
+ M docs/evidence/screenshots/ac19-duplicate-rejection-error.png
+ M docs/evidence/screenshots/ac19-join-success-waiting.png
+ M docs/evidence/screenshots/ac20-responsive-375px-login.png
+ M docs/evidence/screenshots/ac20-responsive-375px-my-ticket-multi.png
+ M docs/evidence/screenshots/ac20-responsive-375px-my-ticket.png
+ M docs/evidence/screenshots/ac20-responsive-375px-series.png
+ M docs/evidence/screenshots/ac20-responsive-375px-staff-counter.png
+ M docs/evidence/screenshots/demo1-step1-collector-waiting.png
+ M docs/evidence/screenshots/demo1-step2-staff-called.png
+ M docs/evidence/screenshots/demo1-step3-collector-called.png
+ M docs/evidence/screenshots/demo1-step4-staff-unboxing.png
+ M docs/evidence/screenshots/demo1-step5-collector-unboxing.png
+ M docs/evidence/screenshots/demo1-step6-staff-completed.png
+ M docs/evidence/screenshots/demo1-step7-collector-completed-reloaded.png
+ M docs/evidence/screenshots/demo2-step1-duplicate-error.png
+ M docs/evidence/screenshots/demo2-step2-closed-series.png
+ M docs/evidence/screenshots/demo3-step1-forbidden-collector.png
+ M docs/evidence/screenshots/demo3-step2-logout-redirect.png
+?? SPECIAL_EXERCISE_UAT_GUIDE.md
+?? docs/evidence/EV-A01.txt
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.html
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.md
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.pdf
+?? docs/labs/lab7/build_clean_pdf.py
+
+=== RAW OUTPUT ===
+-- server/prisma/migrations/20261101145503_0002_partial_unique_indexes/migration.sql:
+-- BR-02: Partial Unique Index for collector active tickets
+CREATE UNIQUE INDEX unique_active_ticket_user ON "QueueTicket"("userId")
+WHERE status IN ('WAITING','CALLED','UNBOXING');
+
+-- BR-06: Partial Unique Index for staff active ticket handling
+CREATE UNIQUE INDEX unique_active_staff_ticket ON "QueueTicket"("handledByStaffId")
+WHERE status IN ('CALLED','UNBOXING');
+
+-- server/prisma/migrations/20261124143000_0003_per_series_active_ticket_index/migration.sql:
+-- BR-02 (v2 / D-08 / Issue #52, #53): Revise single active ticket to per-series
+-- Zero-gap migration rule: CREATE new unique index first, then DROP the old one.
+CREATE UNIQUE INDEX unique_active_ticket_user_series ON "QueueTicket"("userId", "seriesId")
+WHERE status IN ('WAITING','CALLED','UNBOXING');
+
+DROP INDEX IF EXISTS unique_active_ticket_user;
+
+=== ANALYSIS & DIRECT ANSWER ===
+1. Index: unique_active_ticket_user_series (Migration 0003)
+   Predicate: WHERE status IN ('WAITING','CALLED','UNBOXING')
+   Statuses counted: WAITING, CALLED, UNBOXING
+   Statuses excluded: COMPLETED, CANCELLED, NO_SHOW
+
+2. Index: unique_active_staff_ticket (Migration 0002)
+   Predicate: WHERE status IN ('CALLED','UNBOXING')
+   Statuses counted: CALLED, UNBOXING
+   Statuses excluded: WAITING, COMPLETED, CANCELLED, NO_SHOW
+
+Direct Answer:
+ตอบตรงๆ: CANCELLED และ NO_SHOW หลุดจาก Index ทั้งสองตัวอย่างแน่นอน (Yes, excluded from both partial unique indexes).
+- สำหรับ Collector (unique_active_ticket_user_series): เมื่อตั๋วเป็น CANCELLED หรือ NO_SHOW จะไม่อยู่ใน ('WAITING','CALLED','UNBOXING') ผู้ใช้สามารถ join คิวใหม่ในซีรีส์เดิมได้ทันทีโดยไม่ติด unique constraint (AC-41.2 ผ่าน)
+- สำหรับ Staff (unique_active_staff_ticket): เมื่อตั๋วเป็น NO_SHOW จะไม่อยู่ใน ('CALLED','UNBOXING') พนักงานจะหลุดจากสถานะ busy และสามารถ call-next ตั๋วใหม่ได้ทันที
+
+=== EXIT CODE ===
+0

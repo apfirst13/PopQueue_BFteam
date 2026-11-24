@@ -1,0 +1,84 @@
+=== COMMAND ===
+Inspect server/src/routes/staff.routes.ts, server/src/controllers/staff.controller.ts, server/src/services/staff.service.ts
+
+=== TIMESTAMP ===
+2026-11-24T19:22:08+07:00
+
+=== GIT REVISION & BRANCH ===
+Commit: 75068a6109439b7f5dcadd7713ba93115ab29043
+Branch: sprint-2-docs
+
+=== GIT STATUS ===
+ M docs/evidence/screenshots/ac19-duplicate-rejection-error.png
+ M docs/evidence/screenshots/ac19-join-success-waiting.png
+ M docs/evidence/screenshots/ac20-responsive-375px-login.png
+ M docs/evidence/screenshots/ac20-responsive-375px-my-ticket-multi.png
+ M docs/evidence/screenshots/ac20-responsive-375px-my-ticket.png
+ M docs/evidence/screenshots/ac20-responsive-375px-series.png
+ M docs/evidence/screenshots/ac20-responsive-375px-staff-counter.png
+ M docs/evidence/screenshots/demo1-step1-collector-waiting.png
+ M docs/evidence/screenshots/demo1-step2-staff-called.png
+ M docs/evidence/screenshots/demo1-step3-collector-called.png
+ M docs/evidence/screenshots/demo1-step4-staff-unboxing.png
+ M docs/evidence/screenshots/demo1-step5-collector-unboxing.png
+ M docs/evidence/screenshots/demo1-step6-staff-completed.png
+ M docs/evidence/screenshots/demo1-step7-collector-completed-reloaded.png
+ M docs/evidence/screenshots/demo2-step1-duplicate-error.png
+ M docs/evidence/screenshots/demo2-step2-closed-series.png
+ M docs/evidence/screenshots/demo3-step1-forbidden-collector.png
+ M docs/evidence/screenshots/demo3-step2-logout-redirect.png
+?? SPECIAL_EXERCISE_UAT_GUIDE.md
+?? docs/evidence/EV-A01.txt
+?? docs/evidence/EV-A02.txt
+?? docs/evidence/EV-A03.txt
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.html
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.md
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.pdf
+?? docs/labs/lab7/build_clean_pdf.py
+
+=== RAW EVALUATION ORDER TABLE ===
+
+1. POST /api/staff/call-next
+| Step | Layer | Check / Condition | HTTP Code | Error Code | Detail |
+| :---: | :--- | :--- | :---: | :--- | :--- |
+| 1 | Middleware | authenticateToken (missing/invalid JWT) | 401 | UNAUTHENTICATED | "Authentication required or token has been revoked" |
+| 2 | Middleware | requireRole([Role.BOX_MASTER]) | 403 | FORBIDDEN_ROLE | "Forbidden: User does not possess required role(s)" |
+| 3 | Controller | callNextSchema.safeParse(req.body) | 400 | VALIDATION_ERROR | "Validation failed: seriesId must be a valid UUID" |
+| 4 | Service | staffSeriesAssignment.findUnique | 403 | FORBIDDEN_SERIES | "Staff is not assigned to this series" |
+| 5 | Service | activeServing (status IN ['CALLED','UNBOXING']) | 409 | STAFF_BUSY | "Staff currently has an active serving ticket" |
+| 6 | Service (tx) | SELECT ... FOR UPDATE SKIP LOCKED (FIFO WAITING) | 404 | EMPTY_QUEUE | "No waiting tickets available in this series" |
+| 7 | Service (tx) | Model update (concurrent staff call collision) | 409 | STAFF_BUSY | Caught by isStaffBusyError (P2002/P2010) |
+
+2. POST /api/staff/tickets/:id/start-unboxing
+| Step | Layer | Check / Condition | HTTP Code | Error Code | Detail |
+| :---: | :--- | :--- | :---: | :--- | :--- |
+| 1 | Middleware | authenticateToken (missing/invalid JWT) | 401 | UNAUTHENTICATED | "Authentication required or token has been revoked" |
+| 2 | Middleware | requireRole([Role.BOX_MASTER]) | 403 | FORBIDDEN_ROLE | "Forbidden: User does not possess required role(s)" |
+| 3 | Controller | staffTicketParamsSchema.safeParse(req.params) | 400 | VALIDATION_ERROR | "Validation failed: ticket id must be a valid UUID" |
+| 4 | Service | queueTicket.findUnique (existence) | 404 | RESOURCE_NOT_FOUND | "Ticket not found" |
+| 5 | Service | staffSeriesAssignment.findUnique (series scope) | 403 | FORBIDDEN_SERIES | "Staff is not assigned to this series" |
+| 6 | Service | ticket.handledByStaffId !== null && !== staffId | 403 | FORBIDDEN_NOT_HANDLER | "Staff is not the handler of this ticket" |
+| 7 | Service | !canTransition(ticket.status, 'START_UNBOXING') | 400 | INVALID_STATE_TRANSITION | "Invalid ticket state transition: ticket must be in CALLED status..." |
+| 8 | Service | updateMany result.count === 0 (atomic guard) | 400 | INVALID_STATE_TRANSITION | "Invalid ticket state transition: concurrent state change detected" |
+
+3. POST /api/staff/tickets/:id/complete
+| Step | Layer | Check / Condition | HTTP Code | Error Code | Detail |
+| :---: | :--- | :--- | :---: | :--- | :--- |
+| 1 | Middleware | authenticateToken (missing/invalid JWT) | 401 | UNAUTHENTICATED | "Authentication required or token has been revoked" |
+| 2 | Middleware | requireRole([Role.BOX_MASTER]) | 403 | FORBIDDEN_ROLE | "Forbidden: User does not possess required role(s)" |
+| 3 | Controller | staffTicketParamsSchema.safeParse(req.params) | 400 | VALIDATION_ERROR | "Validation failed: ticket id must be a valid UUID" |
+| 4 | Service | queueTicket.findUnique (existence) | 404 | RESOURCE_NOT_FOUND | "Ticket not found" |
+| 5 | Service | staffSeriesAssignment.findUnique (series scope) | 403 | FORBIDDEN_SERIES | "Staff is not assigned to this series" |
+| 6 | Service | ticket.handledByStaffId !== null && !== staffId | 403 | FORBIDDEN_NOT_HANDLER | "Staff is not the handler of this ticket" |
+| 7 | Service | !canTransition(ticket.status, 'COMPLETE') | 400 | INVALID_STATE_TRANSITION | "Invalid ticket state transition: ticket must be in UNBOXING status..." |
+| 8 | Service | updateMany result.count === 0 (atomic guard) | 400 | INVALID_STATE_TRANSITION | "Invalid ticket state transition: concurrent state change detected" |
+
+=== KEY FINDINGS REGARDING F-06 NO-SHOW ===
+- ในโค้ดจริงของ Sprint 1: ลำดับคือ 404 (Existence) -> 403 (FORBIDDEN_SERIES) -> 403 (FORBIDDEN_NOT_HANDLER) -> 400 (INVALID_STATE_TRANSITION)
+- ข้อสังเกตสำคัญมาก: การตรวจ FORBIDDEN_NOT_HANDLER ในโค้ดจริงมีเงื่อนไข `ticket.handledByStaffId !== null && ticket.handledByStaffId !== staffId`
+  ทำให้กรณีตั๋ว `WAITING` (ซึ่ง handledByStaffId เป็น null) จะ "ไม่" ติด FORBIDDEN_NOT_HANDLER แต่จะหลุดไปที่ Step 7 และได้ `400 INVALID_STATE_TRANSITION`!
+- แต่ถ้า Master บรรทัด 199-201 ไปเขียนว่า `staffId != handledByStaffId` โดยไม่มีการตรวจ null ก่อน จะทำให้ตั๋ว WAITING ได้ 403 แทนที่จะเป็น 400
+- ดังนั้นใน F-06 No-Show ต้องเขียน guard ให้ตรงตาม pattern ของ startUnboxing/complete หรือวาง 400 INVALID_STATE_TRANSITION ก่อนเพื่อความชัดเจนตาม spec
+
+=== EXIT CODE ===
+0

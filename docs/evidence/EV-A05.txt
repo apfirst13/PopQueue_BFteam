@@ -1,0 +1,90 @@
+=== COMMAND ===
+Select-String -Path "server/src/*.ts", "server/src/**/*.ts" -Pattern "Clock", "clock", "calledAt", "startedAt", "completedAt", "forfeitedAt"
+
+=== TIMESTAMP ===
+2026-11-24T19:22:25+07:00
+
+=== GIT REVISION & BRANCH ===
+Commit: 75068a6109439b7f5dcadd7713ba93115ab29043
+Branch: sprint-2-docs
+
+=== GIT STATUS ===
+ M docs/evidence/screenshots/ac19-duplicate-rejection-error.png
+ M docs/evidence/screenshots/ac19-join-success-waiting.png
+ M docs/evidence/screenshots/ac20-responsive-375px-login.png
+ M docs/evidence/screenshots/ac20-responsive-375px-my-ticket-multi.png
+ M docs/evidence/screenshots/ac20-responsive-375px-my-ticket.png
+ M docs/evidence/screenshots/ac20-responsive-375px-series.png
+ M docs/evidence/screenshots/ac20-responsive-375px-staff-counter.png
+ M docs/evidence/screenshots/demo1-step1-collector-waiting.png
+ M docs/evidence/screenshots/demo1-step2-staff-called.png
+ M docs/evidence/screenshots/demo1-step3-collector-called.png
+ M docs/evidence/screenshots/demo1-step4-staff-unboxing.png
+ M docs/evidence/screenshots/demo1-step5-collector-unboxing.png
+ M docs/evidence/screenshots/demo1-step6-staff-completed.png
+ M docs/evidence/screenshots/demo1-step7-collector-completed-reloaded.png
+ M docs/evidence/screenshots/demo2-step1-duplicate-error.png
+ M docs/evidence/screenshots/demo2-step2-closed-series.png
+ M docs/evidence/screenshots/demo3-step1-forbidden-collector.png
+ M docs/evidence/screenshots/demo3-step2-logout-redirect.png
+?? SPECIAL_EXERCISE_UAT_GUIDE.md
+?? docs/evidence/EV-A01.txt
+?? docs/evidence/EV-A02.txt
+?? docs/evidence/EV-A03.txt
+?? docs/evidence/EV-A04.txt
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.html
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.md
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.pdf
+?? docs/labs/lab7/build_clean_pdf.py
+
+=== RAW GREP EVIDENCE ===
+1. server/src/utils/clock.ts:
+   export interface Clock {
+     now(): Date;
+   }
+   export class SystemClock implements Clock {
+     now(): Date { return new Date(); }
+   }
+   export class FakeClock implements Clock {
+     private currentTime: Date;
+     constructor(initialTime: Date) { this.currentTime = new Date(initialTime); }
+     now(): Date { return new Date(this.currentTime); }
+     advance(ms: number): void { this.currentTime = new Date(this.currentTime.getTime() + ms); }
+     set(time: Date): void { this.currentTime = new Date(time); }
+   }
+   export const defaultClock: Clock = new SystemClock();
+
+2. server/src/app.ts:
+   export interface AppOptions {
+     clock?: Clock;
+   }
+   export function createApp(options: AppOptions = {}): Express {
+     ...
+     const clock = options.clock ?? defaultClock;
+     app.locals.clock = clock;
+     ...
+   }
+
+3. Timestamp Setting in Services:
+   - calledAt (staff.service.ts line 196, 204):
+     const now = clock.now();
+     calledAt: now
+   - startedAt (staff.service.ts line 284, 293):
+     const now = clock.now();
+     startedAt: now
+   - completedAt (staff.service.ts line 370, 379):
+     const now = clock.now();
+     completedAt: now
+   - createdAt (schema.prisma line 70):
+     createdAt DateTime @default(now()) -- ใช้ DB default now()
+   - forfeitedAt (schema.prisma line 74):
+     forfeitedAt DateTime? -- ยังไม่ถูกเรียกใช้ใน service ของ Sprint 1
+
+=== CONCLUSION ===
+- Interface ชื่อ `Clock` ใน `server/src/utils/clock.ts` (ไม่ใช่ `IClock`)
+- `calledAt`, `startedAt`, และ `completedAt` ถูกเซ็ตผ่าน `clock.now()` ของ application clock เสมอ ไม่ใช่ DB default (now())!
+- สิ่งนี้ทำให้ `FakeClock` สามารถควบคุมและ freeze เวลาใน unit/integration tests ได้อย่างสมบูรณ์แบบ
+- สำหรับ `forfeitedAt` ของ F-05 (Cancel) และ F-06 (No-Show): ต้องปฏิบัติตาม pattern นี้อย่างเคร่งครัด โดยส่ง clock เข้า service และเซ็ต `forfeitedAt: clock.now()` เพื่อให้ทดสอบ boundary 119s / 120s / 121s ด้วย FakeClock ได้
+
+=== EXIT CODE ===
+0

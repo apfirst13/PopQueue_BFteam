@@ -1,0 +1,145 @@
+=== COMMAND ===
+Inspect server/src/services/ticket.service.ts (lines 64-118)
+Inspect server/src/utils/clock.ts (lines 33-53)
+Inspect server/prisma/schema.prisma (lines 84-93)
+
+=== TIMESTAMP ===
+2026-11-24T20:12:30+07:00
+
+=== GIT REVISION & BRANCH ===
+Commit: 75068a6109439b7f5dcadd7713ba93115ab29043
+Branch: sprint-2-docs
+
+=== GIT STATUS ===
+ M AGENTS.md
+ M docs/evidence/screenshots/ac19-duplicate-rejection-error.png
+ M docs/evidence/screenshots/ac19-join-success-waiting.png
+ M docs/evidence/screenshots/ac20-responsive-375px-login.png
+ M docs/evidence/screenshots/ac20-responsive-375px-my-ticket-multi.png
+ M docs/evidence/screenshots/ac20-responsive-375px-my-ticket.png
+ M docs/evidence/screenshots/ac20-responsive-375px-series.png
+ M docs/evidence/screenshots/ac20-responsive-375px-staff-counter.png
+ M docs/evidence/screenshots/demo1-step1-collector-waiting.png
+ M docs/evidence/screenshots/demo1-step2-staff-called.png
+ M docs/evidence/screenshots/demo1-step3-collector-called.png
+ M docs/evidence/screenshots/demo1-step4-staff-unboxing.png
+ M docs/evidence/screenshots/demo1-step5-collector-unboxing.png
+ M docs/evidence/screenshots/demo1-step6-staff-completed.png
+ M docs/evidence/screenshots/demo1-step7-collector-completed-reloaded.png
+ M docs/evidence/screenshots/demo2-step1-duplicate-error.png
+ M docs/evidence/screenshots/demo2-step2-closed-series.png
+ M docs/evidence/screenshots/demo3-step1-forbidden-collector.png
+ M docs/evidence/screenshots/demo3-step2-logout-redirect.png
+?? SPECIAL_EXERCISE_UAT_GUIDE.md
+?? docs/AGENT_RULES.md
+?? docs/evidence/EV-A01.txt
+?? docs/evidence/EV-A02.txt
+?? docs/evidence/EV-A03.txt
+?? docs/evidence/EV-A04.txt
+?? docs/evidence/EV-A05.txt
+?? docs/evidence/EV-A06.txt
+?? docs/evidence/EV-A07.txt
+?? docs/evidence/EV-A08.txt
+?? docs/evidence/EV-A09.txt
+?? docs/evidence/EV-A10.txt
+?? docs/evidence/EV-B01.txt
+?? docs/evidence/EV-B02.txt
+?? docs/evidence/audit-ground-truth.md
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.html
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.md
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.pdf
+?? docs/labs/lab7/build_clean_pdf.py
+
+=== RAW CODE (server/src/services/ticket.service.ts:82-108) ===
+    // 3. Atomic transaction: Raw SQL counter increment + Ticket creation
+    try {
+      const result = await prisma.$transaction(async (tx) => {
+        // Atomic increment of QueueCounter using PostgreSQL raw SQL (D-10, BR-01)
+        const counterRows = await tx.$queryRaw<Array<{ lastNumber: number }>>`
+          INSERT INTO "QueueCounter" ("id", "seriesId", "queueDate", "lastNumber")
+          VALUES (gen_random_uuid()::text, ${seriesId}, ${queueDateStr}::date, 1)
+          ON CONFLICT ("seriesId", "queueDate")
+          DO UPDATE SET "lastNumber" = "QueueCounter"."lastNumber" + 1
+          RETURNING "lastNumber";
+        `;
+
+        const queueNumber = Number(counterRows[0].lastNumber);
+        const displayNumber = `${series.code}-${String(queueNumber).padStart(3, '0')}`;
+
+        // Insert ticket. If user already has an active ticket, unique_active_ticket_user triggers P2002
+        const ticket = await tx.queueTicket.create({
+          data: {
+            userId,
+            seriesId,
+            queueNumber,
+            displayNumber,
+            queueDate: todayDate,
+            status: TicketStatus.WAITING,
+          },
+        });
+
+=== RAW CODE (server/src/utils/clock.ts:33-53) ===
+/**
+ * Returns the queue date string formatted as YYYY-MM-DD in Asia/Bangkok (UTC+7)
+ */
+export function getQueueDate(dateInput: Date = defaultClock.now()): string {
+  const formatter = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Bangkok',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
+  return formatter.format(dateInput);
+}
+
+/**
+ * Returns a Date object representing midnight (00:00:00.000Z) of the queue date in Asia/Bangkok
+ * suitable for Prisma @db.Date fields
+ */
+export function getQueueDateAsDate(dateInput: Date = defaultClock.now()): Date {
+  const dateStr = getQueueDate(dateInput);
+  return new Date(`${dateStr}T00:00:00.000Z`);
+}
+
+=== RAW PRISMA SCHEMA (server/prisma/schema.prisma:84-93) ===
+model QueueCounter {
+  id         String   @id @default(uuid())
+  seriesId   String
+  queueDate  DateTime @db.Date
+  lastNumber Int      @default(0)
+
+  series Series @relation(fields: [seriesId], references: [id])
+
+  @@unique([seriesId, queueDate])
+}
+
+=== DETAILED ANALYSIS & DIRECT ANSWERS ===
+
+1. Counter Key (Series? วัน?):
+   Counter Key เป็นแบบ Composite Key สองมิติคือ `("seriesId", "queueDate")`
+   - กำหนดโดย Unique Constraint ใน Database: `@@unique([seriesId, queueDate])` (หรือชื่อ constraint: `"QueueCounter_seriesId_queueDate_key"`)
+   - ในคำสั่ง SQL Atomic UPSERT ใช้ `ON CONFLICT ("seriesId", "queueDate")`
+   - ผลลัพธ์: ตัวนับถูกแยกอิสระตามแต่ละซีรีส์ และแยกอิสระในแต่ละวัน
+
+2. รีเซ็ตรายวันไหม? Timezone อะไร?:
+   - รีเซ็ตรายวันแน่นอน 100%
+   - Timezone ที่ใช้: `'Asia/Bangkok'` (UTC+7, เวลาประเทศไทย)
+   - กลไกการคำนวณ: ฟังก์ชัน `getQueueDate()` จัดรูปแบบวันที่ตามเขตเวลา `'Asia/Bangkok'` ออกมาเป็น `'YYYY-MM-DD'` เมื่อเวลาผ่านพ้นเที่ยงคืน (00:00:00 น.) ของเวลาไทย ค่า `queueDateStr` จะเปลี่ยนเป็นวันใหม่ ส่งผลให้คำสั่ง `INSERT INTO "QueueCounter"` ไม่ชนกับแถวเดิม (No conflict) และสร้างแถวใหม่ของวันนั้นโดยตั้งค่า `lastNumber = 1` เสมอ
+
+3. ตอบตรงๆ ว่าตั๋วที่ยกเลิกแล้วเลขจะถูกข้ามถาวรหรือไม่:
+   - **ตอบตรงๆ: ถูกข้ามถาวร (Yes, permanently skipped)**
+   - เหตุผลเชิงโครงสร้าง:
+     การออกหมายเลขคิวทำงานด้วย Monotonically Increasing Counter (`DO UPDATE SET "lastNumber" = "QueueCounter"."lastNumber" + 1`) ซึ่งเมื่อตั๋วถูกสร้าง หมายเลข `queueNumber` จะถูกผูกติดกับตั๋วนั้นอย่างถาวร
+     เมื่อตั๋วถูกยกเลิก (`CANCELLED` หรือ `NO_SHOW`):
+     - ค่า `QueueCounter.lastNumber` ในฐานข้อมูล **จะไม่มีการลดค่า (No rollback / No decrement)**
+     - ระบบไม่มีกลไกนำหมายเลขคิวเดิมที่ยกเลิกไปแล้วกลับมาแจกซ้ำ (No reuse mechanism)
+     - ตั๋วคิวที่กดขอรับบริการในลำดับถัดไปจะได้รับเลข `lastNumber + 1` ต่อไปเสมอ
+     - ดังนั้น หมายเลขคิวของตั๋วที่ถูกยกเลิกจะถูกเว้นข้ามไปอย่างถาวร ไม่ปรากฏในคิวรอเรียกอีก (ตรงตามที่ระบุใน Master Specification `PopQueue_Deliverable_2_Master.md` บรรทัด 87: *"QueueCounter.lastNumber ไม่ลดลง → เลขคิวที่ถูกยกเลิกจะถูกข้ามถาวร"*)
+
+=== CONCLUSION ===
+- Counter key: `("seriesId", "queueDate")`
+- Timezone: `Asia/Bangkok` (UTC+7) รีเซ็ตขึ้น 1 ใหม่ทุกวันหลังเที่ยงคืน
+- เลขตั๋วที่ยกเลิกจะถูกข้ามถาวร ไม่มีการ decrement หรือ reuse
+
+=== EXIT CODE ===
+0

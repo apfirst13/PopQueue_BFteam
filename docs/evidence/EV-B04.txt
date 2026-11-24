@@ -1,0 +1,235 @@
+=== COMMAND ===
+Inspect server/src/routes/ticket.routes.ts (lines 16-23)
+Inspect server/src/controllers/ticket.controller.ts (lines 28-41)
+Inspect server/src/services/ticket.service.ts (lines 145-213)
+Inspect client/src/types/index.ts (lines 68-80)
+
+=== TIMESTAMP ===
+2026-11-24T20:12:45+07:00
+
+=== GIT REVISION & BRANCH ===
+Commit: 75068a6109439b7f5dcadd7713ba93115ab29043
+Branch: sprint-2-docs
+
+=== GIT STATUS ===
+ M AGENTS.md
+ M docs/evidence/screenshots/ac19-duplicate-rejection-error.png
+ M docs/evidence/screenshots/ac19-join-success-waiting.png
+ M docs/evidence/screenshots/ac20-responsive-375px-login.png
+ M docs/evidence/screenshots/ac20-responsive-375px-my-ticket-multi.png
+ M docs/evidence/screenshots/ac20-responsive-375px-my-ticket.png
+ M docs/evidence/screenshots/ac20-responsive-375px-series.png
+ M docs/evidence/screenshots/ac20-responsive-375px-staff-counter.png
+ M docs/evidence/screenshots/demo1-step1-collector-waiting.png
+ M docs/evidence/screenshots/demo1-step2-staff-called.png
+ M docs/evidence/screenshots/demo1-step3-collector-called.png
+ M docs/evidence/screenshots/demo1-step4-staff-unboxing.png
+ M docs/evidence/screenshots/demo1-step5-collector-unboxing.png
+ M docs/evidence/screenshots/demo1-step6-staff-completed.png
+ M docs/evidence/screenshots/demo1-step7-collector-completed-reloaded.png
+ M docs/evidence/screenshots/demo2-step1-duplicate-error.png
+ M docs/evidence/screenshots/demo2-step2-closed-series.png
+ M docs/evidence/screenshots/demo3-step1-forbidden-collector.png
+ M docs/evidence/screenshots/demo3-step2-logout-redirect.png
+?? SPECIAL_EXERCISE_UAT_GUIDE.md
+?? docs/AGENT_RULES.md
+?? docs/evidence/EV-A01.txt
+?? docs/evidence/EV-A02.txt
+?? docs/evidence/EV-A03.txt
+?? docs/evidence/EV-A04.txt
+?? docs/evidence/EV-A05.txt
+?? docs/evidence/EV-A06.txt
+?? docs/evidence/EV-A07.txt
+?? docs/evidence/EV-A08.txt
+?? docs/evidence/EV-A09.txt
+?? docs/evidence/EV-A10.txt
+?? docs/evidence/EV-B01.txt
+?? docs/evidence/EV-B02.txt
+?? docs/evidence/EV-B03.txt
+?? docs/evidence/audit-ground-truth.md
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.html
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.md
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.pdf
+?? docs/labs/lab7/build_clean_pdf.py
+
+=== RAW CODE (server/src/services/ticket.service.ts:145-213) ===
+  /**
+   * Retrieves active tickets for current collector with waitingAhead calculation (AC-34, AC-35, FR-05, BR-02 v2)
+   */
+  async getMyActiveTicket(
+    userId: string,
+    _clock: Clock = defaultClock,
+  ): Promise<ActiveTicketResult> {
+    const activeTickets = await prisma.queueTicket.findMany({
+      where: {
+        userId,
+        status: {
+          in: [TicketStatus.WAITING, TicketStatus.CALLED, TicketStatus.UNBOXING],
+        },
+      },
+      orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
+      include: {
+        series: {
+          select: {
+            id: true,
+            code: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    if (!activeTickets || activeTickets.length === 0) {
+      throw new AppError(404, 'NO_ACTIVE_TICKET', 'No active queue ticket found');
+    }
+
+    const ticketsWithWaitingAhead = await Promise.all(
+      activeTickets.map(async (ticket) => {
+        let waitingAhead = 0;
+        if (ticket.status === TicketStatus.WAITING) {
+          waitingAhead = await prisma.queueTicket.count({
+            where: {
+              seriesId: ticket.seriesId,
+              queueDate: ticket.queueDate,
+              status: TicketStatus.WAITING,
+              queueNumber: {
+                lt: ticket.queueNumber,
+              },
+            },
+          });
+        }
+
+        return {
+          id: ticket.id,
+          displayNumber: ticket.displayNumber,
+          queueNumber: ticket.queueNumber,
+          status: ticket.status,
+          waitingAhead,
+          series: {
+            id: ticket.series.id,
+            code: ticket.series.code,
+            name: ticket.series.name,
+          },
+          createdAt: ticket.createdAt.toISOString(),
+          calledAt: ticket.calledAt?.toISOString() ?? null,
+          startedAt: ticket.startedAt?.toISOString() ?? null,
+        };
+      }),
+    );
+
+    return {
+      ticket: ticketsWithWaitingAhead[0],
+      tickets: ticketsWithWaitingAhead,
+    };
+  }
+
+=== RAW CODE (server/src/controllers/ticket.controller.ts:28-41) ===
+  async getMyTicket(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      if (!req.user) {
+        throw new AppError(401, 'UNAUTHENTICATED', 'Authentication required or token has been revoked');
+      }
+
+      const clock = req.app.locals.clock ?? defaultClock;
+      const data = await ticketService.getMyActiveTicket(req.user.id, clock);
+
+      res.status(200).json({ data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+=== RAW TYPES (client/src/types/index.ts:68-80) ===
+// GET /api/tickets/my-ticket -> 200
+export interface MyTicketResponse {
+  data: {
+    // Backward compatibility for single ticket access (Sprint 1)
+    ticket: ActiveTicket;
+    // Multi-ticket list for multi-series queuing (Lab 7 / Sprint 2)
+    tickets: ActiveTicket[];
+  };
+}
+
+=== ANALYSIS OF QUERY / FILTER & RESPONSE SHAPE POST LAB 7 ===
+
+1. Database Query & Filter สถานะ:
+   - ตาราง: `QueueTicket` ผ่าน Prisma Client (`prisma.queueTicket.findMany`)
+   - เงื่อนไข Filter (`where`):
+     ```typescript
+     where: {
+       userId,
+       status: {
+         in: [TicketStatus.WAITING, TicketStatus.CALLED, TicketStatus.UNBOXING],
+       },
+     }
+     ```
+   - การเรียงลำดับ (`orderBy`): `[{ createdAt: 'asc' }, { id: 'asc' }]`
+   - สถานะที่ถูกดึงออกมา: เฉพาะตั๋ว Active 3 สถานะ ได้แก่ `WAITING`, `CALLED`, และ `UNBOXING`
+   - สถานะที่ถูกตัดออก (Excluded): `COMPLETED`, `CANCELLED`, และ `NO_SHOW` ไม่ถูกดึงออกมา
+   - หากผู้ใช้ไม่มีตั๋ว Active หลงเหลืออยู่: Controller จะโยน `404 NO_ACTIVE_TICKET`
+
+2. Response Shape หลัง Lab 7 (Issue #53, PR #58 / Tag v0.3.0-lab7):
+   HTTP Response Envelope: `200 OK`
+   ```json
+   {
+     "data": {
+       "ticket": {
+         "id": "UUID",
+         "displayNumber": "CRY-001",
+         "queueNumber": 1,
+         "status": "WAITING",
+         "waitingAhead": 0,
+         "series": {
+           "id": "UUID",
+           "code": "CRY",
+           "name": "Crybaby Molly"
+         },
+         "createdAt": "2026-11-24T12:00:00.000Z",
+         "calledAt": null,
+         "startedAt": null
+       },
+       "tickets": [
+         {
+           "id": "UUID",
+           "displayNumber": "CRY-001",
+           "queueNumber": 1,
+           "status": "WAITING",
+           "waitingAhead": 0,
+           "series": {
+             "id": "UUID",
+             "code": "CRY",
+             "name": "Crybaby Molly"
+           },
+           "createdAt": "2026-11-24T12:00:00.000Z",
+           "calledAt": null,
+           "startedAt": null
+         },
+         {
+           "id": "UUID-2",
+           "displayNumber": "LAB-001",
+           "queueNumber": 1,
+           "status": "WAITING",
+           "waitingAhead": 0,
+           "series": {
+             "id": "UUID-2",
+             "code": "LAB",
+             "name": "Labubu The Monsters"
+           },
+           "createdAt": "2026-11-24T12:05:00.000Z",
+           "calledAt": null,
+           "startedAt": null
+         }
+       ]
+     }
+   }
+   ```
+   ความสำคัญของการปรับปรุงใน Lab 7:
+   - คืนทั้ง `data.ticket` (ตั๋วใบแรก สำหรับความเข้ากันได้ย้อนหลัง / Backward compatibility กับหน้าจอเดิมเช่น LoginPage)
+   - คืนทั้ง `data.tickets` (Array ของตั๋ว Active ทั้งหมดของผู้ใช้ รองรับกฎ BR-02 v2 ที่ลูกค้าสามารถต่อคิวข้ามหลายซีรีส์ได้พร้อมกัน)
+
+=== CONCLUSION ===
+- Query กรองเฉพาะ `WAITING`, `CALLED`, `UNBOXING` ของ `userId` นั้นๆ
+- Response คืนโครงสร้าง `{ data: { ticket, tickets } }` มีทั้ง single ticket และ array ของ multi-tickets
+
+=== EXIT CODE ===
+0

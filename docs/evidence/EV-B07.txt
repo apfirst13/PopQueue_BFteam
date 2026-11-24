@@ -1,0 +1,125 @@
+=== COMMAND ===
+git grep -inE "persistence.*(3/3|verified|check)" -- docs/
+git grep -inE "DEF-02.*retest" -- docs/
+git grep -inE "CHG-02.*(live|Cloud Run)" -- docs/
+Positive controls on $env:TEMP
+
+=== TIMESTAMP ===
+2026-11-24T20:13:40+07:00
+
+=== GIT REVISION & BRANCH ===
+Commit: 75068a6109439b7f5dcadd7713ba93115ab29043
+Branch: sprint-2-docs
+
+=== GIT STATUS ===
+ M AGENTS.md
+ M docs/evidence/screenshots/ac19-duplicate-rejection-error.png
+ M docs/evidence/screenshots/ac19-join-success-waiting.png
+ M docs/evidence/screenshots/ac20-responsive-375px-login.png
+ M docs/evidence/screenshots/ac20-responsive-375px-my-ticket-multi.png
+ M docs/evidence/screenshots/ac20-responsive-375px-my-ticket.png
+ M docs/evidence/screenshots/ac20-responsive-375px-series.png
+ M docs/evidence/screenshots/ac20-responsive-375px-staff-counter.png
+ M docs/evidence/screenshots/demo1-step1-collector-waiting.png
+ M docs/evidence/screenshots/demo1-step2-staff-called.png
+ M docs/evidence/screenshots/demo1-step3-collector-called.png
+ M docs/evidence/screenshots/demo1-step4-staff-unboxing.png
+ M docs/evidence/screenshots/demo1-step5-collector-unboxing.png
+ M docs/evidence/screenshots/demo1-step6-staff-completed.png
+ M docs/evidence/screenshots/demo1-step7-collector-completed-reloaded.png
+ M docs/evidence/screenshots/demo2-step1-duplicate-error.png
+ M docs/evidence/screenshots/demo2-step2-closed-series.png
+ M docs/evidence/screenshots/demo3-step1-forbidden-collector.png
+ M docs/evidence/screenshots/demo3-step2-logout-redirect.png
+?? SPECIAL_EXERCISE_UAT_GUIDE.md
+?? docs/AGENT_RULES.md
+?? docs/evidence/EV-A01.txt
+?? docs/evidence/EV-A02.txt
+?? docs/evidence/EV-A03.txt
+?? docs/evidence/EV-A04.txt
+?? docs/evidence/EV-A05.txt
+?? docs/evidence/EV-A06.txt
+?? docs/evidence/EV-A07.txt
+?? docs/evidence/EV-A08.txt
+?? docs/evidence/EV-A09.txt
+?? docs/evidence/EV-A10.txt
+?? docs/evidence/EV-B01.txt
+?? docs/evidence/EV-B02.txt
+?? docs/evidence/EV-B03.txt
+?? docs/evidence/EV-B04.txt
+?? docs/evidence/EV-B05.txt
+?? docs/evidence/EV-B06.txt
+?? docs/evidence/audit-ground-truth.md
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.html
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.md
+?? docs/labs/lab7/CHANGE_REQUEST_PROPOSAL.pdf
+?? docs/labs/lab7/build_clean_pdf.py
+
+=== POSITIVE CONTROL VERIFICATION (docs/AGENT_RULES.md Rule 3) ===
+Before asserting "NO EXISTING EVIDENCE", positive control was executed:
+- Created ephemeral file in $env:TEMP containing patterns:
+  "DEF-02 retest PASS" and "CHG-02 live check บน Cloud Run"
+- Verified pattern matcher successfully detected both strings in the temp file.
+- Confirmed search pattern and syntax are effective.
+
+=== AUDIT OF CLAIMS IN MASTER PART A ===
+
+--------------------------------------------------------------------------------
+1. Claim: CHG-01 persistence 3/3
+--------------------------------------------------------------------------------
+Master Claim:
+  `docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md:48`
+  "PASS — Container restart & redeploy persistence verified 3/3 ครั้ง"
+
+Audit in docs/:
+  ผลการตรวจสอบ: **มีหลักฐานเดิมรองรับ (EXISTING EVIDENCE FOUND)**
+  Path และบรรทัดหลักฐาน:
+  1. `docs/labs/lab-05/deployment.md` บรรทัด 349–360 (และคู่ขนานที่ `docs/labs/lab05/deployment.md` บรรทัด 346–357):
+     บันทึกการตรวจสอบความคงทนของข้อมูลตั๋ว `CRY-001` ข้าม 3 เหตุการณ์ปฏิบัติการจริง (Three operational events):
+     - Event 1: Cloud Run Scale-Down to zero instances
+       หลักฐานรูปภาพ: `docs/labs/lab05/evidence/c05-test1-scale-down-persistence.png`
+     - Event 2: Cloud SQL Database Restart
+       หลักฐานรูปภาพ: `docs/labs/lab05/evidence/c05-test2-db-restart-persistence.png`
+       หลักฐานคอนโซล GCP: `docs/labs/lab05/evidence/c05-test2-gcp-db-restart.png`
+     - Event 3: CD Redeployment ผ่าน GitHub Actions
+       หลักฐานรูปภาพ: `docs/labs/lab05/evidence/c05-test3-redeploy-persistence.png`
+       หลักฐาน CLI: `docs/labs/lab05/evidence/c05-test3-redeploy-cli.png`
+  2. `docs/sprints/sprint-1/PopQueue_Deliverable_1_Master.md` บรรทัด 1174, 1282:
+     บันทึกผลการทดสอบ `TEST-39` (AC-39) ผ่านสคริปต์ `scripts/test-persistence.mjs` สถานะ Pass (`815e962`)
+
+--------------------------------------------------------------------------------
+2. Claim: DEF-02 retest PASS
+--------------------------------------------------------------------------------
+Master Claim:
+  `docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md:47`
+  "PASS — Omega-3 retest ยืนยันผลผ่านและปิด Issue #47"
+
+Audit in docs/:
+  ผลการตรวจสอบ: **NO EXISTING EVIDENCE**
+  รายละเอียด:
+  - ในโฟลเดอร์ `docs/` ทั้งหมด มีข้อความคำว่า "DEF-02" และ "Omega-3 retest" ปรากฏเพียง 2 บรรทัดเท่านั้น คือในตัว Master Deliverable 2 เอง (`docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md` บรรทัด 47 และ 52) ซึ่งเป็นตัว Claim ลอยๆ
+  - ไม่พบไฟล์เอกสารหลักฐาน, test log, หรือ artifact บันทึกผล Retest ของทีม Omega-3 อยู่ในโฟลเดอร์ `docs/` ของ repository เลย
+  - (หมายเหตุ: หลักฐานผลการ Retest ของจริงถูกบันทึกอยู่นอกโฟลเดอร์ `docs/` โดยอยู่ใน GitHub Issue #47 comment ของผู้ใช้ `@guluJa` วันที่ 22 พ.ย. 2026 เวลา 16:35 น. และไฟล์ภายนอก repo ใน `lab6/POPQUEUE_UAT_Omega-3_Report_and_Evidence/` แต่ในไดเรกทอรี `docs/` ไม่มีหลักฐานนี้อยู่จริง)
+
+--------------------------------------------------------------------------------
+3. Claim: CHG-02 live check บน Cloud Run
+--------------------------------------------------------------------------------
+Master Claim:
+  `docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md:49`
+  "PASS — Live check บน Cloud Run ยืนยัน cross-series join สำเร็จ, same-series duplicate ยังคงถูก reject"
+
+Audit in docs/:
+  ผลการตรวจสอบ: **NO EXISTING EVIDENCE**
+  รายละเอียด:
+  - ในโฟลเดอร์ `docs/` ทั้งหมด ปรากฏคำว่า "CHG-02" เพียงใน Master Deliverable 1 (บรรทัด 282 ซึ่งเป็นสเปกเก่า) และใน Master Deliverable 2 (`docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md` บรรทัด 49, 53)
+  - ไม่พบไฟล์บันทึกผล curl, network log, หรือภาพถ่ายหน้าจอที่ยืนยันการทำ Live check ของฟีเจอร์ CHG-02 บน Cloud Run อยู่ใน `docs/`
+  - ยิ่งไปกว่านั้น ใน Master Deliverable 2 บรรทัด 14 ช่อง URL ของ Cloud Run Service ยังคงระบุเป็น placeholder `*(จะเติมหลัง Deploy ครั้งสุดท้ายก่อนส่ง PDF)*` และ GitHub Issue #55 (`[Lab 7 Part C/D] Release Tagging v0.3.0-lab7, Cloud Run Live Verification, Metrics & Final PDF`) ยังคงมีสถานะ OPEN
+  - สรุป: การเคลมผล "PASS — Live check บน Cloud Run" สำหรับ CHG-02 ใน Master เป็นการเขียนข้อความเคลมล่วงหน้าโดยไม่มีหลักฐานจริงใน `docs/`
+
+=== CONCLUSION ===
+- CHG-01 persistence 3/3: มีหลักฐานเดิมใน `docs/labs/lab-05/deployment.md:349-360` พร้อมภาพ screenshot 3 ใบ
+- DEF-02 retest PASS: NO EXISTING EVIDENCE (ใน `docs/` มีเพียงข้อความเคลมใน Master บรรทัด 47, 52)
+- CHG-02 live check บน Cloud Run: NO EXISTING EVIDENCE (ใน `docs/` มีเพียงข้อความเคลมใน Master บรรทัด 49, 53 โดย URL ยังเป็น placeholder และ Issue #55 ยัง OPEN)
+
+=== EXIT CODE ===
+0
