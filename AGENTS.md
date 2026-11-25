@@ -1,7 +1,7 @@
 # Agent Rules – PopQueue
 
 1. Read the active Sprint Master Contract first (currently `docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md`, which embeds the full SRS, System SDS, Contracts, STS, Traceability, and Release Plan). Work only on the issue you are given.
-2. Never commit directly to `main` or `sprint-*-staging`. Branch off the active staging branch (`sprint2-staging` for Sprint 2 / Deliverable 2, `sprint3-staging` for Sprint 3) using `feature/<issue#>-<slug>`, `fix/<issue#>-<slug>`, or `docs/<slug>`, merge back to staging via reviewed PR, and promote to `main` via Release PR only.
+2. Never commit directly to `main` or `sprint-*-staging`. Branch off the active staging branch (`sprint2-staging` for Sprint 2 / Deliverable 2, `sprint3-staging` for Sprint 3) using `feature/sprint2-i<XX>-<slug>` (or `feature/sprint<N>-i<XX>-<slug>`), `fix/sprint2-i<XX>-<slug>` / `fix/<issue#>-<slug>`, or `docs/sprint2-i<XX>-<slug>` (`docs/<slug>` for standalone docs), and include `Refs #<github-issue>` in commits/PRs for traceability. Merge back to staging via reviewed PR (`test-and-docker` CI green + peer approval), and promote to `main` via Release PR only.
 3. Contract first: do not implement a feature without its contract in the active Sprint Master Contract (`docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md`).
 4. TDD: write the failing test, show the failing output (Red), implement, then show it passing (Green).
 5. Never weaken, skip, or delete a test to make it pass. Report failures honestly.
