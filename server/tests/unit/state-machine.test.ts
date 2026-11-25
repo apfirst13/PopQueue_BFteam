@@ -45,4 +45,22 @@ describe('State Machine Unit: canTransition (TEST-28U, AC-28, BR-03)', () => {
       expect(canTransition(from, action)).toBe(false);
     },
   );
+
+  describe('TEST-41E (AC-41.5, F-05): CANCEL transition validation', () => {
+    it('allows CANCEL only from WAITING and rejects all other statuses', () => {
+      const cancelAction = 'CANCEL' as StaffTicketAction;
+      expect(canTransition(TicketStatus.WAITING, cancelAction)).toBe(true);
+
+      const nonWaitingStatuses: TicketStatus[] = [
+        TicketStatus.CALLED,
+        TicketStatus.UNBOXING,
+        TicketStatus.COMPLETED,
+        TicketStatus.CANCELLED,
+        TicketStatus.NO_SHOW,
+      ];
+      for (const status of nonWaitingStatuses) {
+        expect(canTransition(status, cancelAction)).toBe(false);
+      }
+    });
+  });
 });
