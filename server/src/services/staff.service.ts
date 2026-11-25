@@ -27,8 +27,16 @@ export interface StaffSeriesQueueDto {
   seriesId: string;
   code: string;
   name: string;
+  isActive: boolean;
   activeServing: ActiveServingTicketDto | null;
   waitingQueue: WaitingQueueTicketDto[];
+}
+
+export interface SeriesStatusResultDto {
+  id: string;
+  code: string;
+  name: string;
+  isActive: boolean;
 }
 
 export interface CallNextResultDto {
@@ -151,6 +159,7 @@ export class StaffService {
         seriesId: assignment.series.id,
         code: assignment.series.code,
         name: assignment.series.name,
+        isActive: assignment.series.isActive,
         activeServing,
         waitingQueue,
       });
@@ -515,6 +524,58 @@ export class StaffService {
       status: TicketStatus.NO_SHOW,
       forfeitedAt: now.toISOString(),
     };
+  }
+
+  /**
+   * Toggles series availability status (isActive) for an assigned BOX_MASTER (F-09, AC-46.1..46.5).
+   * Deterministic evaluation order:
+   * 1) Resource existence (404 RESOURCE_NOT_FOUND)
+   * 2) Series assignment scope (403 FORBIDDEN_SERIES)
+   * 3) Idempotent update on Series.isActive (200 OK)
+   */
+  async updateSeriesStatus(
+    staffId: string,
+    seriesId: string,
+    isActive: boolean,
+  ): Promise<SeriesStatusResultDto> {
+    const existingSeries = await prisma.series.findUnique({
+      where: { id: seriesId },
+      select: {
+        id: true,
+        code: true,
+        name: true,
+      },
+    });
+
+    if (!existingSeries) {
+      throw new AppError(404, 'RESOURCE_NOT_FOUND', 'Series not found');
+    }
+
+    const assignment = await prisma.staffSeriesAssignment.findUnique({
+      where: {
+        staffId_seriesId: {
+          staffId,
+          seriesId,
+        },
+      },
+    });
+
+    if (!assignment) {
+      throw new AppError(403, 'FORBIDDEN_SERIES', 'Staff is not assigned to this series');
+    }
+
+    const updated = await prisma.series.update({
+      where: { id: seriesId },
+      data: { isActive },
+      select: {
+        id: true,
+        code: true,
+        name: true,
+        isActive: true,
+      },
+    });
+
+    return updated;
   }
 }
 

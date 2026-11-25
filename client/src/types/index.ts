@@ -122,6 +122,7 @@ export interface StaffSeriesQueueDto {
   seriesId: string;
   code: string;
   name: string;
+  isActive: boolean;
   activeServing: ActiveServingTicketDto | null;
   waitingQueue: WaitingQueueTicketDto[];
 }
@@ -130,6 +131,16 @@ export interface StaffTicketsResponse {
   data: {
     series: StaffSeriesQueueDto[];
     serverNow?: string;
+  };
+}
+
+// PATCH /api/staff/series/:id/status -> 200
+export interface UpdateSeriesStatusResponse {
+  data: {
+    id: string;
+    code: string;
+    name: string;
+    isActive: boolean;
   };
 }
 

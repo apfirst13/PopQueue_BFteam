@@ -29,6 +29,7 @@ describe('StaffCounterPage Component Tests (Master §3.6)', () => {
           seriesId: 's-cry',
           code: 'CRY',
           name: 'Crybaby Sunset Concert',
+          isActive: true,
           activeServing: null,
           waitingQueue: [
             {
@@ -51,6 +52,7 @@ describe('StaffCounterPage Component Tests (Master §3.6)', () => {
           seriesId: 's-lab',
           code: 'LAB',
           name: 'Labubu Macaron',
+          isActive: true,
           activeServing: null,
           waitingQueue: [],
         },
@@ -106,6 +108,7 @@ describe('StaffCounterPage Component Tests (Master §3.6)', () => {
             seriesId: 's-cry',
             code: 'CRY',
             name: 'Crybaby',
+            isActive: true,
             activeServing: null,
             waitingQueue: [],
           },
@@ -195,6 +198,7 @@ describe('StaffCounterPage Component Tests (Master §3.6)', () => {
             seriesId: 's-cry',
             code: 'CRY',
             name: 'Crybaby',
+            isActive: true,
             activeServing: {
               id: 't-1',
               displayNumber: 'CRY-001',
@@ -456,7 +460,7 @@ describe('StaffCounterPage Component Tests (Master §3.6)', () => {
       expect(screen.getByText(/กำลังอัปเดต|กำลังบันทึก/i)).toBeInTheDocument();
 
       expect(vi.mocked(fetch)).toHaveBeenCalledWith(
-        '/api/staff/series/s-cry/status',
+        expect.stringMatching(/\/api\/staff\/series\/s-cry\/status$/),
         expect.objectContaining({
           method: 'PATCH',
           body: JSON.stringify({ isActive: false }),

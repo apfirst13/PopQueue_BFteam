@@ -5,6 +5,7 @@ import {
   StartUnboxingResponse,
   NoShowTicketResponse,
   CompleteTicketResponse,
+  UpdateSeriesStatusResponse,
 } from '../types/index.js';
 
 export async function getStaffTickets(): Promise<StaffTicketsResponse> {
@@ -35,5 +36,15 @@ export async function markNoShow(ticketId: string): Promise<NoShowTicketResponse
 export async function completeTicket(ticketId: string): Promise<CompleteTicketResponse> {
   return apiClient<CompleteTicketResponse>(`/api/staff/tickets/${ticketId}/complete`, {
     method: 'POST',
+  });
+}
+
+export async function updateSeriesStatus(
+  seriesId: string,
+  isActive: boolean,
+): Promise<UpdateSeriesStatusResponse> {
+  return apiClient<UpdateSeriesStatusResponse>(`/api/staff/series/${seriesId}/status`, {
+    method: 'PATCH',
+    body: JSON.stringify({ isActive }),
   });
 }
