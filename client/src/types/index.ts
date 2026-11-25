@@ -1,6 +1,6 @@
 export type Role = 'COLLECTOR' | 'BOX_MASTER';
 
-export type TicketStatus = 'WAITING' | 'CALLED' | 'UNBOXING' | 'COMPLETED' | 'CANCELLED';
+export type TicketStatus = 'WAITING' | 'CALLED' | 'UNBOXING' | 'COMPLETED' | 'CANCELLED' | 'NO_SHOW';
 
 export interface User {
   id: string;
@@ -86,6 +86,7 @@ export interface MyTicketResponse {
   data: {
     ticket: ActiveTicket;
     tickets?: ActiveTicket[];
+    serverNow?: string;
   };
 }
 
@@ -128,6 +129,7 @@ export interface StaffSeriesQueueDto {
 export interface StaffTicketsResponse {
   data: {
     series: StaffSeriesQueueDto[];
+    serverNow?: string;
   };
 }
 
@@ -139,6 +141,17 @@ export interface CallNextResponse {
     status: TicketStatus;
     handledByStaffId: string | null;
     calledAt: string;
+    serverNow?: string;
+  };
+}
+
+// POST /api/staff/tickets/:id/no-show -> 200
+export interface NoShowTicketResponse {
+  data: {
+    id: string;
+    displayNumber: string;
+    status: TicketStatus;
+    forfeitedAt: string;
   };
 }
 

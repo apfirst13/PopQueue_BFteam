@@ -29,6 +29,14 @@ staffRouter.post(
   (req, res, next) => staffController.startUnboxing(req, res, next),
 );
 
+// POST /api/staff/tickets/:id/no-show - Mark CALLED ticket as No-Show after 120s (F-06, AC-42..43)
+staffRouter.post(
+  '/tickets/:id/no-show',
+  authenticateToken,
+  requireRole([Role.BOX_MASTER]),
+  (req, res, next) => staffController.noShow(req, res, next),
+);
+
 // POST /api/staff/tickets/:id/complete - Complete Unboxing (F-03, AC-27..30)
 staffRouter.post(
   '/tickets/:id/complete',

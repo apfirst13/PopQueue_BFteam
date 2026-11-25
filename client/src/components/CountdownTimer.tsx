@@ -1,32 +1,67 @@
 import React, { useState, useEffect } from 'react';
 import { BellIcon } from './icons.js';
+import {
+  NO_SHOW_SECONDS,
+  computeServerOffsetMs,
+  computeNoShowRemainingSeconds,
+} from '../utils/countdown.js';
 
 interface CountdownTimerProps {
   initialSeconds?: number;
+  calledAt?: string | null;
+  serverNow?: string;
 }
 
-export function CountdownTimer({ initialSeconds = 120 }: CountdownTimerProps): React.JSX.Element {
-  const [secondsLeft, setSecondsLeft] = useState<number>(initialSeconds);
+export function CountdownTimer({
+  initialSeconds = NO_SHOW_SECONDS,
+  calledAt,
+  serverNow,
+}: CountdownTimerProps): React.JSX.Element {
+  const offsetMs = computeServerOffsetMs(serverNow);
+  const hasServerSync = Boolean(calledAt) && offsetMs !== null;
 
+  const [secondsLeft, setSecondsLeft] = useState<number>(() =>
+    hasServerSync
+      ? computeNoShowRemainingSeconds(calledAt, offsetMs, initialSeconds)
+      : initialSeconds,
+  );
+
+  // Sync mode: recompute remaining seconds from server clock offset on mount, serverNow updates, and every 1s tick
   useEffect(() => {
-    if (secondsLeft <= 0) return;
+    if (!hasServerSync) return;
+
+    const syncedOffsetMs = computeServerOffsetMs(serverNow);
+    const updateRemaining = () => {
+      setSecondsLeft(computeNoShowRemainingSeconds(calledAt, syncedOffsetMs, initialSeconds));
+    };
+
+    updateRemaining();
+    const timer = setInterval(updateRemaining, 1000);
+    return () => clearInterval(timer);
+  }, [hasServerSync, calledAt, serverNow, initialSeconds]);
+
+  // Fallback mode when serverNow / calledAt is omitted in standalone or legacy mocks
+  useEffect(() => {
+    if (hasServerSync || secondsLeft <= 0) return;
 
     const timer = setInterval(() => {
       setSecondsLeft((prev) => (prev > 0 ? prev - 1 : 0));
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [secondsLeft]);
+  }, [hasServerSync, secondsLeft]);
 
   const minutes = Math.floor(secondsLeft / 60);
   const seconds = secondsLeft % 60;
   const formatted = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 
+  const totalSeconds = hasServerSync ? NO_SHOW_SECONDS : Math.max(1, initialSeconds);
   const isUrgent = secondsLeft <= 30;
   const strokeColor = isUrgent ? 'var(--color-error)' : 'var(--color-warning)';
   const ringRadius = 42;
   const circumference = 2 * Math.PI * ringRadius;
-  const strokeDashoffset = circumference * (1 - secondsLeft / initialSeconds);
+  const strokeDashoffset =
+    circumference * Math.min(1, Math.max(0, 1 - secondsLeft / totalSeconds));
 
   return (
     <div

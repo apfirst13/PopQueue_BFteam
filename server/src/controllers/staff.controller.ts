@@ -11,7 +11,8 @@ export class StaffController {
         throw new AppError(401, 'UNAUTHENTICATED', 'Authentication required or token has been revoked');
       }
 
-      const data = await staffService.getStaffTickets(req.user.id);
+      const clock = req.app.locals.clock ?? defaultClock;
+      const data = await staffService.getStaffTickets(req.user.id, clock);
       res.status(200).json({ data });
     } catch (error) {
       next(error);
@@ -51,6 +52,26 @@ export class StaffController {
 
       const clock = req.app.locals.clock ?? defaultClock;
       const data = await staffService.startUnboxing(req.user.id, parseResult.data.id, clock);
+
+      res.status(200).json({ data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async noShow(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      if (!req.user) {
+        throw new AppError(401, 'UNAUTHENTICATED', 'Authentication required or token has been revoked');
+      }
+
+      const parseResult = staffTicketParamsSchema.safeParse(req.params);
+      if (!parseResult.success) {
+        throw new AppError(400, 'VALIDATION_ERROR', 'Validation failed: ticket id must be a valid UUID');
+      }
+
+      const clock = req.app.locals.clock ?? defaultClock;
+      const data = await staffService.noShow(req.user.id, parseResult.data.id, clock);
 
       res.status(200).json({ data });
     } catch (error) {
