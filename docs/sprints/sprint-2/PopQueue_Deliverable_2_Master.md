@@ -1,4 +1,4 @@
-# PopQueue — Project Deliverable 2 Master Contract & Specification (v1.7)
+# PopQueue — Project Deliverable 2 Master Contract & Specification (v1.8)
 > **Core Expansion (Sprint 2) & Genuine Progress (Sprint 3) with GCP Deployment**  
 > **Course:** CPE 334 Introduction to Software Engineering in the Age of AI Agents (Semester 1/2026, KMUTT)  
 > **Project / Theme:** **PopQueue** — Theme 9: Queue and Service Management System (*Art Toy Live Unboxing Station*)  
@@ -7,19 +7,19 @@
 > **Student IDs:** *(ใส่รหัสนักศึกษาทั้ง 2 คนในหน้าปก PDF เท่านั้น — ไม่เปิดเผยใน Repo สาธารณะ)*  
 > **Deliverable:** Project Deliverable 2 (70 Points | 7% of Course Grade)  
 > **Submission Deadline:** **Sunday, 29 November 2026 at 23:59** (via LEB2, single self-contained PDF)  
-> **Contract Version:** `v1.7 (6-ISSUE EXECUTION PLAN & RUBRIC RECONCILED)`  
+> **Contract Version:** `v1.8 (CI STAGING TRIGGERS & SPRINT 2 BRANCH NAMING SYNC)`  
 > **Contract Date:** `2026-11-25`  
 > **Baseline Tags Audited:** `v0.1.0-sprint1` (`d946159`), `v0.2.0-lab5` (`bf52c9b`), `v0.3.0-lab7` (`a07a7be`)  
 > **Audit Evidence Execution Commit:** `75068a6109439b7f5dcadd7713ba93115ab29043` (`sprint-2-docs`, bit-identical to `a07a7be` per EV-B02) & `80863efe5da82de12e8494189f9de030262c2432` (`docs/sprint2-master-contract`)  
 > **Evidence Consolidated History:** `75068a6` (`sprint-2-docs`) & `830bdc5..f1941a0` (PR #61 draft history; consolidated on clean branch `docs/sprint2-master-contract` superseding closed PR #61)  
-> **Authors / Reviewers:** Author `@apfirst13` (v1.0–v1.5), Author/Reconciler `@Theerawat82` (v1.6–v1.7) — Target Reviewer: `@apfirst13` (Contract PR `#62` → `sprint2-staging`)  
+> **Authors / Reviewers:** Author `@apfirst13` (v1.0–v1.5), Author/Reconciler `@Theerawat82` (v1.6–v1.8) — PR `#62` (`v1.7`) Merged `f6b088e` → `sprint2-staging`; CI & Branch Sync by `@Theerawat82` (Target Reviewer: `@apfirst13`)  
 > **Staging Lineage Branch:** `sprint2-staging` (แตกจาก `origin/main` commit `a07a7be`)  
 > **Deployed Cloud Run URL:** `https://popqueue-5now4hkvsa-as.a.run.app` *(Baseline Lab 5–7 live URL; รอผล Live Verification รอบ Candidate หลัง Deploy `v0.4.0-sprint2` / `v0.5.0-d2-rc`)*  
 > **Immutable Submitted Tag/Commit:** `*(จะเติมก่อน Export PDF หลัง Deploy รอบสุดท้ายบน main)*`
 
 ---
 
-## 0. ตารางบันทึกการเปลี่ยนแปลงฉบับเอกสาร (Changelog: v1.0 → v1.7)
+## 0. ตารางบันทึกการเปลี่ยนแปลงฉบับเอกสาร (Changelog: v1.0 → v1.8)
 
 | เวอร์ชัน | วันที่ | ส่วนที่แก้ไข / เพิ่มเติม | เหตุผลและความจำเป็นทางวิศวกรรม |
 | :---: | :---: | :--- | :--- |
@@ -31,6 +31,7 @@
 | **v1.5** | 2026-11-24 | **Peer Review v1.4 Reconciliation & Single-Master Consolidation** | 1. Reconcile บัญชีทดสอบใน Appendix A §2 ตรงกับ server/prisma/seed.ts (`collector1..6`, `staff_crybaby`/`2`, `staff_labubu`)<br>2. ปรับคำสั่ง Dev Server ใน Appendix A §1 แยก 2 terminals (API 4000 / Client 3000) และรวม `npm install` ที่ root<br>3. เพิ่ม DB Impact: None, DoD, และ UI Specification บน `StaffCounterPage.tsx` พร้อมระบุการคืน `isActive` ใน `GET /api/staff/tickets` สำหรับ F-09<br>4. เพิ่ม DB Impact: None, DoD, และการกำหนด `RATE_LIMIT_*` / `TRUST_PROXY_HOPS` ใน `server/src/config/env.ts` สำหรับ S3-HARDEN<br>5. ปรับสูตรนับถอยหลัง F-06 AC-43.8 ให้ตรงกับ `virtualServerNow`<br>6. ปรับ Stack Reality เป็น Native CSS Variables, `node:24-alpine`, Port 3000 (Container) / 4000 (Local)<br>7. ปรับ EV-B08 ตัด `BoardPage.tsx` ออกจากไฟล์ UI ที่มีอยู่จริงบน `main`<br>8. ยุบไฟล์ spec/evidence แยกออกจาก PR (`5e95b20`) เพื่อให้ Master เป็นเอกสารศูนย์กลางเล่มเดียว |
 | **v1.6** | 2026-11-25 | **Final Schema, Governance & Link Reconciliation** | 1. แก้ไข API/TypeScript DTO Shapes ของ `F-06 serverNow` (`CallNextResponse`, `MyTicketResponse`, `StaffTicketsResponse`) ให้ตรงกับโค้ดจริงบน `main` และรองรับ `CountdownTimer.tsx` แบบไม่ทำลาย Sprint 1 Regression<br>2. อัปเดต `AGENTS.md` ให้รองรับการควบคุม Agent ข้าม Sprint (`sprint2-staging` → `feature/<issue#>-<slug>`) โดยไม่อ้างอิงไฟล์ที่ถูกลบ<br>3. เพิ่ม HTML anchor `<a id="appendix-b"></a>`, แก้เลข §1/§2/§3 ในตาราง §0.4, แก้หัวข้อซ้ำใน Part C (`F-08` §1.6–§1.7 และ `S3-HARDEN` §3.3 + `config.TRUST_PROXY_HOPS`)<br>4. ปรับสถานะ `F-09` ใน Feature Inventory และ AC Register ให้ตรงความจริง, อัปเดตสถานะ `Issue #55` (`CLOSED` แต่ยังรอผล Live Check), ขยาย buffer `TEST-44C` เป็น 5s, และเพิ่มขั้นตอนสร้าง DB `popqueue_test` ใน Appendix A §1 |
 | **v1.7** | 2026-11-25 | **6-Issue Execution Backlog, Ground-Truth Fixes & Rubric Tightening** | 1. เพิ่ม **6-Issue Execution Plan (`D2-I1`–`D2-I6`)** และรวมตารางเวลา Part E §4 + §6 เป็นตารางเดียวที่ไม่ขัดกัน พร้อมขยับ `F-09` ให้พัฒนาโค้ดล่วงหน้าได้ต่อจาก `F-06` และแก้ลำดับ `deploy.yml` (Merge `main` → Deploy อัตโนมัติ → Live Check → Tag)<br>2. แทนที่เลข CI Run ID/Revision สังเคราะห์ใน §0.1 ด้วยข้อมูลจริงจาก `gh run list` และ Cloud Run Service `popqueue`; แก้ประวัติ `DEF-01`/`DEF-02` (`72e1bb5` ใน `v0.3.0-lab7` + Omega-3 Retest PASS บน `2aee62b` + `LIM-01` CountdownTimer) และแก้ `EV-A09` (ตัด claim เกินหลักฐานและสะกดชื่อ TA `นายรัตนโชติ เพ็ชรพันธ์ศรี`)<br>3. ซิงก์นิยาม `EV-A04`, `EV-A05`, `EV-B02`, `EV-B05`, `EV-B09` ระหว่าง §0.4 และ Appendix B แบบ 1:1 พร้อมฝัง verbatim raw excerpts<br>4. ปิดช่องว่างสัญญาและ Traceability: เพิ่ม SRS **Assumptions**, SDS **UI Route Map**, `AC-41.11`, `AC-43.9` (Collector `/my-ticket` `serverNow` countdown), `AC-43.10` (`403 FORBIDDEN_SERIES` / `DEC-03` / `TEST-43U`), `AC-44.8` (3s polling / error state / `calledAt` sort / `DEC-04`), ปรับ `F-08`/`F-09` (`TEST-46E`/`46F`, `AC-46.4` `isActive` grep), แก้ `NFR-02`/`NFR-06` และคำศัพท์สถานะให้ตรง Rubric, ตัด `auto-cancel`/`Load Test`, เพิ่ม `DEC-06` (`F-08 → F-09`), และปรับ Appendix A (placeholder DB password, Deployment/Rollback summary, Contribution Table, AI-Use `Claude Sonnet 5.5` + `Antigravity`) |
+| **v1.8** | 2026-11-25 | **CI Staging Triggers, Ruleset Sequence & Branch Naming Sync** | 1. ขยาย `.github/workflows/ci-docker.yml` ให้รัน `test-and-docker` บนทุก PR ที่ target `sprint2-staging` และ `sprint3-staging` (เดิมมีเฉพาะ `main`, `lab5-staging`) พร้อมกำหนดลำดับอัปเดต GitHub Ruleset `protect-staging` (`26306708`) หลัง PR นี้ merge เพื่อป้องกัน PR Deadlock<br>2. ปรับรูปแบบชื่อ Branch มาตรฐานใน `AGENTS.md` Rule 2 และแผน Deliverable 2 (§4, Part E) เป็น `feature/sprint2-i<XX>-<slug>` (`i02..i05`) และ `docs/sprint2-i06-d2-final-report` พร้อมบังคับระบุ `Refs #<github-issue>` ใน Commit/PR เพื่อรักษา GitHub Issue → Branch → PR Traceability<br>3. อัปเดตสถานะ Contract PR `#62` (`v1.7`) เป็น Merged (`f6b088e`) เข้า `sprint2-staging` แล้ว |
 
 ---
 
@@ -137,7 +138,7 @@
 | **Part D: Updated SRS, SDS, Traceability** | **10** | Full SRS Baseline + Assumptions, System SDS Architecture + UI Route Map + Role Matrix, Traceability Matrix, Complete AC Register (83 active ACs + AC-40 reserved = 84 rows) | Part D §1–§6 |
 | **Part E: Integrated Candidate & Finish Plan** | **15** | Release Plan (Merge PR → Deploy → Live Check → Tag), **6-Issue Execution Plan (`D2-I1`–`D2-I6`)**, Cross-Feature Checks, Unified Timeline & Readiness Review | Part E §1–§7 |
 | **Appendices: Setup, Evidence & Governance** | — | Local Setup & Deployment/Rollback Ref, Safe Test Accounts (Sanitized), Contribution & AI-Use, Evidence Catalog (Raw Excerpts), Open Decisions (`DEC-01..06`) | Appendix A, B, C |
-| **รวมทั้งหมด (Total)** | **70** | **ครอบคลุมเกณฑ์การประเมิน Project Deliverable 2 ครบถ้วนตาม Rubric** ([EV-A07](#appendix-b), [EV-A08](#appendix-b)) | ฉบับสัญญา Pre-Code `v1.7` (อัปเดตผลจริงก่อน Export PDF) |
+| **รวมทั้งหมด (Total)** | **70** | **ครอบคลุมเกณฑ์การประเมิน Project Deliverable 2 ครบถ้วนตาม Rubric** ([EV-A07](#appendix-b), [EV-A08](#appendix-b)) | ฉบับสัญญา Pre-Code `v1.8` (อัปเดตผลจริงก่อน Export PDF) |
 
 ---
 
@@ -1081,17 +1082,19 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 เพื่อปฏิบัติตามข้อกำหนดของรายวิชา CPE 334 อย่างเคร่งครัด (ตามแบบแผนเดียวกับ Sprint 1 `sprint-1-staging` และ Lab 5 `lab5-staging` ใน `AGENTS.md`) ระบบ PopQueue **จะไม่มีการ Commit ตรงลง `main` หรือ `sprint-*-staging`, จะไม่มีการ Deploy สู่ Production จาก Staging Branch โดยตรง, และไม่มีการทำ Fast-forward merge ข้ามกระบวนการ Release PR** โดยมีแผนการแตก Branch และการปล่อยระบบ 2 ระยะดังนี้:
 
 ```
-[feature/<id>-f05-cancel] ──┐
-[feature/<id>-f06-no-show] ─┼─► PRs ─► [sprint2-staging] ──► Release PR ─► [main] ──► deploy.yml (Auto Deploy + Smoke) ──► Tag v0.4.0-sprint2
-[feature/<id>-f07-board] ───┘                                                 │
-                                                                              ▼ (sync sprint3-staging)
-[feature/<id>-f09-series-toggle] ──► PR ─► [sprint3-staging] ──► Release PR ─► [main] ──► deploy.yml (Auto Deploy + Smoke) ──► Tag v0.5.0-d2-rc
+[feature/sprint2-i02-f05-cancel] ─────────┐
+[feature/sprint2-i03-f06-no-show] ────────┼─► PRs (`CI: test-and-docker`) ─► [sprint2-staging] ──► Release PR ─► [main] ──► deploy.yml (Auto Deploy + Smoke) ──► Tag v0.4.0-sprint2
+[feature/sprint2-i04-f07-public-board] ───┘                                                              │
+                                                                                                         ▼ (sync sprint3-staging)
+[feature/sprint2-i05-f09-series-toggle] ──► PR (`CI: test-and-docker`) ─► [sprint3-staging] ──► Release PR ─► [main] ──► deploy.yml (Auto Deploy + Smoke) ──► Tag v0.5.0-d2-rc
 ```
 
-> **ลำดับ Trigger จริงของ `.github/workflows/deploy.yml` ([EV-B06](#appendix-b)):** Workflow `Deploy demo` ทำงานอัตโนมัติเมื่อ **`push` เข้า branch `main` (ผ่าน Release PR merge)** หรือเรียกแบบ manual **`workflow_dispatch`** เท่านั้น — **ไม่ได้ trigger จากการ push Git Tag** ดังนั้นทุก Release ต้องเรียงลำดับเป็น **`Merge Release PR (→ main) ──► Automated Deploy + Smoke Test ──► Live Check PASS ──► สร้างและ Push Annotated Tag`**
+> **ลำดับ Trigger จริงของ `.github/workflows/deploy.yml` และ `.github/workflows/ci-docker.yml` ([EV-B06](#appendix-b)):**
+> - **CI (`ci-docker.yml` → `test-and-docker`):** ทำงานอัตโนมัติบน `pull_request` ที่ target **`main`**, **`lab5-staging`**, **`sprint2-staging`**, และ **`sprint3-staging`** (เพื่อไม่ให้เกิด PR Deadlock บน Ruleset `protect-staging` ที่บังคับ check `test-and-docker` ต้อง merge PR แก้ `ci-docker.yml` เข้า `sprint2-staging` ก่อนเปิดกฎป้องกัน branch ใน `protect-staging`)
+> - **CD (`deploy.yml`):** ทำงานอัตโนมัติเมื่อ **`push` เข้า branch `main` (ผ่าน Release PR merge)** หรือเรียกแบบ manual **`workflow_dispatch`** เท่านั้น — **ไม่ได้ trigger จากการ push Git Tag** ดังนั้นทุก Release ต้องเรียงลำดับเป็น **`Merge Release PR (→ main) ──► Automated Deploy + Smoke Test ──► Live Check PASS ──► สร้างและ Push Annotated Tag`**
 
 1. **ระยะที่ 1 (Target Sprint 2 Release): `v0.4.0-sprint2` บน `main`**
-   - แตก Branch รายฟีเจอร์จาก **`sprint2-staging`** ตามรูปแบบ `feature/<issue#>-<slug>` (`D2-I2` F-05, `D2-I3` F-06, `D2-I4` F-07)
+   - แตก Branch รายฟีเจอร์จาก **`sprint2-staging`** ตามรูปแบบ `feature/sprint2-i<XX>-<slug>` (`feature/sprint2-i02-f05-cancel`, `feature/sprint2-i03-f06-no-show`, `feature/sprint2-i04-f07-public-board`) และอ้างอิง `Refs #<github-issue>` ใน Commit/PR
    - เมื่อพัฒนาและผ่าน TDD (`[RED]` → `[GREEN]`) + Peer Review + CI (`test-and-docker`) แล้ว Merge เข้า **`sprint2-staging`** ด้วย `Create a merge commit`
    - เปิด **Release PR จาก `sprint2-staging` ไปยัง `main`** พร้อม Peer Review อย่างเป็นทางการ (ผู้ Approve ต้องไม่ใช่เจ้าของ commit ล่าสุดบน `sprint2-staging` ตาม `require_last_push_approval`)
    - Merge เข้า `main` → GitHub Actions `deploy.yml` รัน CI, Build Image (`--build-arg GIT_SHA`), รัน `popqueue-migrate`, Deploy ขึ้น Cloud Run service `popqueue`, และรัน `deploy/smoke_test.py` อัตโนมัติ
@@ -1132,24 +1135,24 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 
 ## 4. แผนการแตกงานและรายละเอียด 6 Issues (Deliverable 2 Execution Backlog: `D2-I1` – `D2-I6`)
 
-เพื่อให้การดำเนินงานระหว่าง **`@apfirst13`** และ **`@Theerawat82`** เดินขนานกันได้จริง ไม่ติด Ruleset Deadlock (`require_last_push_approval`), ตรวจสอบย้อนกลับได้ครบตามเกณฑ์ PR Chain และส่งมอบทันเส้นตาย **อาทิตย์ 29 พ.ย. 2026 เวลา 23:59 น.** งานทั้งหมดในรอบ Deliverable 2 ถูกแบ่งออกเป็น **6 GitHub Issues** ดังรายละเอียดต่อไปนี้ *(เมื่อเปิด Issue บน GitHub แล้วให้เติมเลข `#63..#68` แทน `<issue#>` และตั้งชื่อ Branch ตาม `AGENTS.md` Rule 2)*:
+เพื่อให้การดำเนินงานระหว่าง **`@apfirst13`** และ **`@Theerawat82`** เดินขนานกันได้จริง ไม่ติด Ruleset Deadlock (`require_last_push_approval`), ตรวจสอบย้อนกลับได้ครบตามเกณฑ์ PR Chain และส่งมอบทันเส้นตาย **อาทิตย์ 29 พ.ย. 2026 เวลา 23:59 น.** งานทั้งหมดในรอบ Deliverable 2 ถูกแบ่งออกเป็น **6 GitHub Issues** ดังรายละเอียดต่อไปนี้ *(ตั้งชื่อ Branch ตาม `AGENTS.md` Rule 2 ในรูปแบบ `feature/sprint2-i<XX>-<slug>` / `fix/sprint2-i<XX>-<slug>` / `docs/sprint2-i<XX>-<slug>` และระบุ `Refs #<github-issue>` หรือ `Closes #<github-issue>` ใน Commit/PR หลังเปิด Issue บน GitHub)*:
 
 ### ตารางสรุปการหมุนเวียนสิทธิ์ 6 Issues (Ruleset-Safe PR & Ownership Matrix)
 
 | Issue Key | GitHub Issue | ชื่องานและฟีเจอร์หลัก (Scope) | Branch Name (`AGENTS.md` Rule 2) | Target Branch | Author / Opener | Reviewer & Merger | Covered ACs & Tests | เป้าหมายเสร็จ (Target) |
 | :---: | :---: | :--- | :--- | :---: | :---: | :---: | :--- | :---: |
-| **`D2-I1`** | `#TBD` *(PR `#62`)* | **Contract & Plan Baseline (`v1.7`):** Master Spec + `AGENTS.md` + ปิดลูปหลักฐาน Lab 7 (`#55`) | `docs/sprint2-master-contract` | `sprint2-staging` | `@Theerawat82` | `@apfirst13` | Contract Gate (`G0/G1`), `EV-A/B/D` | **พ. 25 พ.ย. 12:00** |
-| **`D2-I2`** | `#TBD` | **F-05 Queue Cancellation:** API `POST /api/tickets/:id/cancel` + UI ปุ่มยกเลิก/Modal/Empty State + Race Test | `feature/<id>-f05-cancel` *(จาก `sprint2-staging`)* | `sprint2-staging` | `@apfirst13` | `@Theerawat82` | `AC-41.1..41.11`, `TEST-41A..41L`, `CF-01`, `CF-03` | **พ. 25 พ.ย. 23:59** |
-| **`D2-I3`** | `#TBD` | **F-06 Server-Enforced 120s No-Show & `serverNow` Sync:** `POST /api/staff/tickets/:id/no-show` + `serverNow` บน 3 API + Countdown ทั้ง `/my-ticket` (`LIM-01`) และ `/staff/counter` | `feature/<id>-f06-no-show` *(จาก `sprint2-staging`)* | `sprint2-staging` | `@Theerawat82` | `@apfirst13` | `AC-42.1..42.3`, `AC-43.1..43.10`, `TEST-42A..D`, `TEST-43A..K/U`, `CF-02` | **พฤ. 26 พ.ย. 18:00** |
-| **`D2-I4`** | `#TBD` | **F-07 Public Queue Board & Sprint 2 Release (`v0.4.0-sprint2`):** `GET /api/public/queue-board` (Zero PII) + `/board` Kiosk UI + Release PR `sprint2-staging → main` + Deploy & Tag | `feature/<id>-f07-public-board` *(จาก `sprint2-staging`)* | `sprint2-staging` → `main` | `@apfirst13` *(Feature)*<br>สลับ opener/merger ตอน Release PR ตาม HEAD author | `@Theerawat82` | `AC-44.1..44.8`, `TEST-44A..44G`, `CF-05`, `CF-06` | **ศ. 27 พ.ย. 12:00** (Feature/Gate)<br>**ศ. 27 พ.ย. 18:00** (`v0.4.0` deployed) |
-| **`D2-I5`** | `#TBD` | **F-09 Series Availability Control (Sprint 3 Working Progress):** `PATCH /api/staff/series/:id/status` + `isActive` ใน `GET /api/staff/tickets` + Toggle Switch UI | `feature/<id>-f09-series-toggle` *(เริ่มโค้ดได้ทันทีหลัง `D2-I3`; PR เข้า `sprint3-staging`)* | `sprint3-staging` | `@Theerawat82` | `@apfirst13` | `AC-46.1..46.5`, `TEST-46A..46F`, `CF-04`, `CF-05`, `CF-07` | **ส. 28 พ.ย. 12:00** *(โค้ดเริ่ม พฤ.ค่ำ/ศ.)* |
-| **`D2-I6`** | `#TBD` | **Final Candidate (`v0.5.0-d2-rc`), Full Regression, Live Verification & Deliverable 2 PDF:** Release PR `sprint3-staging → main`, รัน Full Suite Verbose + Persistence + Live Cloud Run + Private Credential Handoff + Export PDF | `docs/<id>-d2-final-report` | `sprint3-staging` → `main` | ทั้งสองคน (`@apfirst13` ↔ `@Theerawat82`) | Cross-Review | `CF-08`, Full Suite Verbose, Persistence, Demo 1–5, PDF Rubric 70 pts | **ส. 28 พ.ย. 18:00** (`v0.5.0` Freeze)<br>**อา. 29 พ.ย. 18:00** (ส่ง LEB2 ก่อน 23:59) |
+| **`D2-I1`** | PR `#62` *(Merged)* | **Contract, Governance & CI Staging Setup (`v1.7 → v1.8`):** Master Spec + `AGENTS.md` + `ci-docker.yml` triggers (`sprint2/3-staging`) + เปิด Issues `D2-I2..I6` + ปิดลูป Lab 7 (`#55`) | `docs/sprint2-master-contract` *(Merged `f6b088e`)*<br>`fix/sprint2-i01-ci-branch-rules` | `sprint2-staging` | `@Theerawat82` | `@apfirst13` | Contract Gate (`G0/G1`), `EV-A/B/D`, `test-and-docker` | **พ. 25 พ.ย. 12:00** *(PR `#62` Merged แล้ว)* |
+| **`D2-I2`** | `#TBD` | **F-05 Queue Cancellation:** API `POST /api/tickets/:id/cancel` + UI ปุ่มยกเลิก/Modal/Empty State + Race Test | `feature/sprint2-i02-f05-cancel` *(จาก `sprint2-staging`)* | `sprint2-staging` | `@apfirst13` | `@Theerawat82` | `AC-41.1..41.11`, `TEST-41A..41L`, `CF-01`, `CF-03` | **พ. 25 พ.ย. 23:59** |
+| **`D2-I3`** | `#TBD` | **F-06 Server-Enforced 120s No-Show & `serverNow` Sync:** `POST /api/staff/tickets/:id/no-show` + `serverNow` บน 3 API + Countdown ทั้ง `/my-ticket` (`LIM-01`) และ `/staff/counter` | `feature/sprint2-i03-f06-no-show` *(จาก `sprint2-staging`)* | `sprint2-staging` | `@Theerawat82` | `@apfirst13` | `AC-42.1..42.3`, `AC-43.1..43.10`, `TEST-42A..D`, `TEST-43A..K/U`, `CF-02` | **พฤ. 26 พ.ย. 18:00** |
+| **`D2-I4`** | `#TBD` | **F-07 Public Queue Board & Sprint 2 Release (`v0.4.0-sprint2`):** `GET /api/public/queue-board` (Zero PII) + `/board` Kiosk UI + Release PR `sprint2-staging → main` + Deploy & Tag | `feature/sprint2-i04-f07-public-board` *(จาก `sprint2-staging`)* | `sprint2-staging` → `main` | `@apfirst13` *(Feature)*<br>สลับ opener/merger ตอน Release PR ตาม HEAD author | `@Theerawat82` | `AC-44.1..44.8`, `TEST-44A..44G`, `CF-05`, `CF-06` | **ศ. 27 พ.ย. 12:00** (Feature/Gate)<br>**ศ. 27 พ.ย. 18:00** (`v0.4.0` deployed) |
+| **`D2-I5`** | `#TBD` | **F-09 Series Availability Control (Sprint 3 Working Progress):** `PATCH /api/staff/series/:id/status` + `isActive` ใน `GET /api/staff/tickets` + Toggle Switch UI | `feature/sprint2-i05-f09-series-toggle` *(เริ่มโค้ดได้ทันทีหลัง `D2-I3`; PR เข้า `sprint3-staging`)* | `sprint3-staging` | `@Theerawat82` | `@apfirst13` | `AC-46.1..46.5`, `TEST-46A..46F`, `CF-04`, `CF-05`, `CF-07` | **ส. 28 พ.ย. 12:00** *(โค้ดเริ่ม พฤ.ค่ำ/ศ.)* |
+| **`D2-I6`** | `#TBD` | **Final Candidate (`v0.5.0-d2-rc`), Full Regression, Live Verification & Deliverable 2 PDF:** Release PR `sprint3-staging → main`, รัน Full Suite Verbose + Persistence + Live Cloud Run + Private Credential Handoff + Export PDF | `docs/sprint2-i06-d2-final-report` | `sprint3-staging` → `main` | ทั้งสองคน (`@apfirst13` ↔ `@Theerawat82`) | Cross-Review | `CF-08`, Full Suite Verbose, Persistence, Demo 1–5, PDF Rubric 70 pts | **ส. 28 พ.ย. 18:00** (`v0.5.0` Freeze)<br>**อา. 29 พ.ย. 18:00** (ส่ง LEB2 ก่อน 23:59) |
 
 ### รายละเอียดการดำเนินการราย Issue (Actionable Specifications & Exit Criteria)
 
-1. **`D2-I1` — Sprint 2 Master Contract, Governance & Baseline Verification (`PR #62`)**
-   - **Deliverables:** ปรับปรุง `docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md` (`v1.7`) + `AGENTS.md` ให้สอดคล้องกับโค้ดจริงบน `main` (`a07a7be`), ปิดลูปคอมเมนต์หลักฐาน Live Verification ของ Lab 7 ใน Issue `#55` (หรือปรับสถานะตามจริง), และยืนยัน `DEC-02` กับ TA
-   - **Exit Criteria:** `PR #62` ผ่านการ Review/Approve โดย `@apfirst13` และ Merge เข้า `sprint2-staging` ด้วย `Create a merge commit` (zero code changes)
+1. **`D2-I1` — Sprint 2 Master Contract, Governance & CI Baseline (`PR #62` + CI Sync)**
+   - **Deliverables:** ปรับปรุง `docs/sprints/sprint-2/PopQueue_Deliverable_2_Master.md` (`v1.7` → `v1.8`) + `AGENTS.md` (branch `feature/sprint2-i<XX>-<slug>`), ขยาย `.github/workflows/ci-docker.yml` ให้รัน `test-and-docker` บน `sprint2-staging`/`sprint3-staging`, ให้ `@apfirst13` เพิ่ม `refs/heads/sprint2-staging` และ `refs/heads/sprint3-staging` ใน Ruleset `protect-staging` *หลัง* PR แก้ CI merge แล้ว, เปิด GitHub Issues `D2-I2..D2-I6`, ปิดลูปหลักฐาน Live Verification ของ Lab 7 ใน Issue `#55`, และยืนยัน `DEC-02` กับ TA
+   - **Exit Criteria:** `PR #62` Merged เข้า `sprint2-staging` แล้ว (`f6b088e`); PR `fix/sprint2-i01-ci-branch-rules` ผ่าน `test-and-docker` + Review โดย `@apfirst13` และ Merge เข้า `sprint2-staging`; GitHub Issues `D2-I2..D2-I6` เปิดครบและ Ruleset `protect-staging` ครอบคลุม `sprint2-staging` / `sprint3-staging`
 
 2. **`D2-I2` — `F-05` Queue Cancellation (Track A — `@apfirst13`)**
    - **Deliverables:**
@@ -1174,7 +1177,7 @@ PopQueue เป็นระบบบริหารจัดการคิว�
    - **TDD & Exit Criteria:** `TEST-44A..44G`, `e2e/public-board.spec.ts`, `e2e/responsive.spec.ts` ผ่าน 100%, `CF-05`/`CF-06` ผ่าน, และ Live Cloud Run แสดง commit ตรงกับ `v0.4.0-sprint2`
 
 5. **`D2-I5` — `F-09` Series Availability Control — Sprint 3 Working Progress (Track B — `@Theerawat82`)**
-   - **Scheduling De-risk Rule:** เพื่อไม่ให้ Part C (15 คะแนน) ไปกระจุกเสี่ยงในวันเสาร์ `@Theerawat82` **เริ่มเขียนโค้ดและเทสต์ของ `D2-I5` ได้ทันทีหลังจบ `D2-I3` (พฤ. ค่ำ / ศ. เช้า)** บน branch `feature/<id>-f09-series-toggle` จากนั้นเมื่อ `v0.4.0-sprint2` ขึ้น `main` จึงแตก `sprint3-staging` จาก `main`, ซิงก์ branch, และเปิด PR เข้า `sprint3-staging` ทันที
+   - **Scheduling De-risk Rule:** เพื่อไม่ให้ Part C (15 คะแนน) ไปกระจุกเสี่ยงในวันเสาร์ `@Theerawat82` **เริ่มเขียนโค้ดและเทสต์ของ `D2-I5` ได้ทันทีหลังจบ `D2-I3` (พฤ. ค่ำ / ศ. เช้า)** บน branch `feature/sprint2-i05-f09-series-toggle` จากนั้นเมื่อ `v0.4.0-sprint2` ขึ้น `main` จึงแตก `sprint3-staging` จาก `main`, ซิงก์ branch, และเปิด PR เข้า `sprint3-staging` ทันที
    - **Deliverables:**
      - เพิ่ม `PATCH /api/staff/series/:id/status` ใน `staff.routes.ts` / `staff.service.ts` (Auth/Role/Validation/404/Series Guard + Idempotency)
      - เพิ่ม `isActive: boolean` ใน DTO ของ `GET /api/staff/tickets` (โดยไม่กรองซีรีส์ที่ปิดออก) และติดตั้ง Toggle Switch + Loading/Toast/Rollback-on-Error บน `StaffCounterPage.tsx`
@@ -1201,9 +1204,9 @@ PopQueue เป็นระบบบริหารจัดการคิว�
    - Commit `[GREEN]`: SHA + ผลการรัน Vitest ที่ผ่านครบทั้งชุด
    - `git diff --stat` ระหว่าง 2 Commits เพื่อแสดงปริมาณโค้ดที่เพิ่มขึ้น
 4. **Issue / PR Chain Evidence:**  
-   แสดงประวัติ Git Lineage ครบวงจรอย่างน้อย 2 สายงาน (`feature/<issue#>-<slug>`):
-   - สายงานที่ 1 (`D2-I2` F-05): GitHub Issue → Branch `feature/<id>-f05-cancel` → PR + 5-Lenses Review Comments → Merge เข้า `sprint2-staging`
-   - สายงานที่ 2 (`D2-I3` F-06): GitHub Issue → Branch `feature/<id>-f06-no-show` → PR + Review Comments → Merge เข้า `sprint2-staging`
+   แสดงประวัติ Git Lineage ครบวงจรอย่างน้อย 2 สายงาน (`feature/sprint2-i<XX>-<slug>` + `Refs #<github-issue>`):
+   - สายงานที่ 1 (`D2-I2` F-05): GitHub Issue → Branch `feature/sprint2-i02-f05-cancel` → PR (`test-and-docker` CI + 5-Lenses Review) → Merge เข้า `sprint2-staging`
+   - สายงานที่ 2 (`D2-I3` F-06): GitHub Issue → Branch `feature/sprint2-i03-f06-no-show` → PR (`test-and-docker` CI + Review) → Merge เข้า `sprint2-staging`
 5. **Program Demonstrations (Screenshots with API Payloads & Full Candidate E2E):**  
    จับภาพหน้าจอคู่กับ DevTools Network Panel บน **`v0.5.0-d2-rc`** (หมายเหตุ: เคส `403` ที่ UI ซ่อนปุ่มให้แนบหลักฐานจาก API call / Vitest log คู่กัน):
    - Demo 1: Sprint 1 Continuity Journey บน Candidate `v0.5.0-d2-rc` (`CF-08`)
@@ -1220,7 +1223,7 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 
 | Gate / ระยะ | Issue ที่ผูก | วัน–เวลาเป้าหมาย (ICT) | กิจกรรมทางวิศวกรรมหลัก (Engineering Tasks) | เกณฑ์ความสำเร็จ (Exit Criteria) | ผู้รับผิดชอบ | Dependency |
 | :---: | :---: | :---: | :--- | :--- | :---: | :---: |
-| **G0 / G1** | **`D2-I1`** | **พ. 25 พ.ย. 12:00** | Merge Contract PR `#62` (`v1.7` + `AGENTS.md`) เข้า `sprint2-staging`, เปิด Issues `D2-I2..I6`, คอมเมนต์ปิดลูป Live Check ใน Issue `#55`, ยืนยัน `DEC-02` กับ TA | PR `#62` Merged เข้า `sprint2-staging`, 6 Issues เปิดครบ | `@Theerawat82` & `@apfirst13` | - |
+| **G0 / G1** | **`D2-I1`** | **พ. 25 พ.ย. 12:00** | PR `#62` (`v1.7` + `AGENTS.md`) Merged แล้ว (`f6b088e`), Merge PR `fix/sprint2-i01-ci-branch-rules` (เพิ่ม `sprint2/3-staging` ใน `ci-docker.yml` + `v1.8`), `@apfirst13` เพิ่ม `sprint2/3-staging` ใน Ruleset `protect-staging`, เปิด Issues `D2-I2..I6`, คอมเมนต์ `#55`, ยืนยัน `DEC-02` | PR `#62` + CI PR Merged, `protect-staging` ครอบคลุม `sprint2/3-staging`, Issues `D2-I2..I6` เปิดครบ | `@Theerawat82` & `@apfirst13` | - |
 | **G2a (Track A)** | **`D2-I2`** | **พ. 25 พ.ย. 23:59** | พัฒนา `F-05` Cancel ด้วย TDD `[RED]`→`[GREEN]` + UI `/my-ticket` + `cancel-race.test.ts` | `TEST-41A..41L` ผ่าน, PR Merged เข้า `sprint2-staging` | `@apfirst13` (Author)<br>`@Theerawat82` (Reviewer) | `G1` |
 | **G2b (Track B)** | **`D2-I3`** | **พ. 25 – พฤ. 26 พ.ย. 18:00** | พัฒนา `F-06` No-Show 120s + `serverNow` Sync ทั้ง Staff & Collector `/my-ticket` (**ทำขนานกับ `D2-I2`**) | `TEST-42A..D`, `TEST-43A..K/U` ผ่าน, PR Merged เข้า `sprint2-staging` | `@Theerawat82` (Author)<br>`@apfirst13` (Reviewer) | `G1` *(อิสระจาก `D2-I2`)* |
 | **G3a (Track A)** | **`D2-I4`** | **พฤ. 26 – ศ. 27 พ.ย. 12:00** | พัฒนา `F-07` Public Queue Board (`/api/public/queue-board`, `/board` UI, Polling 3s, E2E) | `TEST-44A..44G` ผ่าน, PR พร้อมบน `sprint2-staging` | `@apfirst13` (Author)<br>`@Theerawat82` (Reviewer) | `G2a` |
@@ -1242,9 +1245,9 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 | **2. Regression & Skipped Tests** | ชุดทดสอบเต็มรันผ่าน 100% บน Candidate (`0 failed, 0 skipped`) | `tested` บน Baseline `75068a6` (`194/194 pass, 0 skipped` — **ยังไม่ได้รันบน `v0.5.0-d2-rc`**) | **NOT READY FOR RC** *(Baseline READY — [EV-A07](#appendix-b))* |
 | **3. Security & Role Guard Integrity** | 401/403 Guards, Zero PII Public Board, ไม่เปิดเผยรหัสจริงใน Git/PDF | Baseline `401/403` ผ่าน ([EV-B01](#appendix-b)); ฟีเจอร์ใหม่ `planned` | **NOT READY** *(รอ `D2-I2..I5`)* |
 | **4. Live Deployment & Rollback Plan** | Deploy บน Cloud Run `popqueue` + Live Check + Rollback Procedure | Rollback procedure พร้อมใน `deploy.yml` (`workflow_dispatch` + `image_tag`); Live Candidate `planned` *(Issue `#55` รอปิดลูปคอมเมนต์)* | **NOT READY** *(รอ `D2-I4`/`D2-I6`)* |
-| **5. Governance, Known Issues & Release Notes** | Contract ตรงโค้ดจริง, Known Issues (`LIM-01`, `G-07`, `TD-01..04`) เปิดเผยชัด, Release Notes ฉบับ Candidate | `in progress` (`v1.7` Contract Baseline รอ Merge PR `#62`; Release Notes ของ `v0.5.0-d2-rc` เติมใน `D2-I6`) | **IN PROGRESS** |
+| **5. Governance, Known Issues & Release Notes** | Contract ตรงโค้ดจริง, Known Issues (`LIM-01`, `G-07`, `TD-01..04`) เปิดเผยชัด, Release Notes ฉบับ Candidate | PR `#62` (`v1.7`) Merged (`f6b088e`); CI & Branch Naming Sync (`v1.8`) `in progress` (Release Notes ของ `v0.5.0-d2-rc` เติมใน `D2-I6`) | **IN PROGRESS** |
 | **6. Evidence Plan Completeness** | 2 Test Excerpts, TDD Red/Green, 2 PR Chains, Captioned Screenshots, Private Credential Handoff | แผนครบใน §4–§5 (รอเก็บหลักฐานจริงใน `D2-I2..I6`) | **READY FOR EXECUTION** |
-| **สรุปคำวินิจฉัยความพร้อมภาพรวม** | **Overall Release Candidate Verdict** | **NOT READY FOR PRODUCTION DEPLOYMENT**<br>*(คงสถานะ NOT READY ในขั้นแผน `v1.7` จนกว่าจะจบ `D2-I2..D2-I5`, ผ่าน Go/No-Go Gate ศ. 27 พ.ย. 12:00, Deploy และรัน Full Suite + Live Verification บน `v0.5.0-d2-rc` ใน `D2-I6`)* | |
+| **สรุปคำวินิจฉัยความพร้อมภาพรวม** | **Overall Release Candidate Verdict** | **NOT READY FOR PRODUCTION DEPLOYMENT**<br>*(คงสถานะ NOT READY ในขั้นแผน `v1.8` จนกว่าจะจบ `D2-I2..D2-I5`, ผ่าน Go/No-Go Gate ศ. 27 พ.ย. 12:00, Deploy และรัน Full Suite + Live Verification บน `v0.5.0-d2-rc` ใน `D2-I6`)* | |
 
 # Appendix A: Local Setup, Deployment Ref, Safe Test Accounts & AI-Use Declaration
 
@@ -1323,7 +1326,7 @@ docker compose up -d --build
 | หมวดหมู่งาน / ฟีเจอร์หลัก | `@apfirst13` (aphiwat) | `@Theerawat82` (Theerawat) | สถานะของงาน (Task Status) |
 | :--- | :---: | :---: | :---: |
 | Lab 5–7 Continuity, CI/CD Pipeline & Maintenance (`v0.2.0`–`v0.3.0`) | Co-Author / Reviewer | Co-Author / Reviewer | `accepted` |
-| Master Contract `v1.0–v1.7` & `AGENTS.md` (`D2-I1`, PR `#62`) | Author (`v1.0–v1.5`) / Reviewer (`v1.6–v1.7`) | Reviewer (`v1.0–v1.5`) / Author (`v1.6–v1.7`) | `in progress` |
+| Master Contract `v1.0–v1.8`, `AGENTS.md` & CI Staging Triggers (`D2-I1`, PR `#62` Merged) | Author (`v1.0–v1.5`) / Reviewer (`v1.6–v1.8`) | Reviewer (`v1.0–v1.5`) / Author (`v1.6–v1.8`) | `in progress` |
 | `D2-I2`: F-05 Queue Cancellation (Backend, UI & TDD Tests) | Author | Reviewer & Merger | `planned` |
 | `D2-I3`: F-06 No-Show 120s & `serverNow` Sync (Backend, UI & TDD Tests) | Reviewer & Merger | Author | `planned` |
 | `D2-I4`: F-07 Public Queue Display Board & `v0.4.0-sprint2` Release | Author | Reviewer & Merger | `planned` |
