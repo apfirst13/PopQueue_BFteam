@@ -3,7 +3,7 @@ export interface ProtectedRouteDef {
   path: string;
   description: string;
   body?: unknown;
-  addedInIssue: 'I-02' | 'I-03' | 'I-04' | 'I-05' | 'I-06' | 'D2-I2' | 'D2-I3';
+  addedInIssue: 'I-02' | 'I-03' | 'I-04' | 'I-05' | 'I-06' | 'D2-I2' | 'D2-I3' | 'D2-I5';
 }
 
 /**
@@ -68,5 +68,12 @@ export const protectedRoutes: ProtectedRouteDef[] = [
     path: '/api/staff/tickets/00000000-0000-0000-0000-000000000000/no-show',
     description: 'Mark called ticket as no-show after 120s timeout (F-06)',
     addedInIssue: 'D2-I3',
+  },
+  {
+    method: 'PATCH',
+    path: '/api/staff/series/00000000-0000-0000-0000-000000000000/status',
+    description: 'Toggle assigned series availability status (F-09)',
+    body: { isActive: false },
+    addedInIssue: 'D2-I5',
   },
 ];

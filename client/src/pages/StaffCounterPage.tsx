@@ -29,7 +29,12 @@ export function StaffCounterPage(): React.JSX.Element {
   const [pendingNoShowTicket, setPendingNoShowTicket] = useState<ActiveServingTicketDto | null>(null);
   const [isMarkingNoShow, setIsMarkingNoShow] = useState<boolean>(false);
   const [noShowError, setNoShowError] = useState<{ code?: string; message: string } | null>(null);
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [toastState, setToastState] = useState<{
+    type: 'success' | 'error';
+    code?: string;
+    message: string;
+  } | null>(null);
+  const [togglingSeriesId, setTogglingSeriesId] = useState<string | null>(null);
 
   const loadTickets = useCallback(async (isSilent = false) => {
     if (!isSilent) {
@@ -66,10 +71,10 @@ export function StaffCounterPage(): React.JSX.Element {
   }, [loadTickets]);
 
   useEffect(() => {
-    if (!toastMessage) return;
-    const timer = setTimeout(() => setToastMessage(null), 5000);
+    if (!toastState) return;
+    const timer = setTimeout(() => setToastState(null), 5000);
     return () => clearTimeout(timer);
-  }, [toastMessage]);
+  }, [toastState]);
 
   // 3-second Polling for Staff Counter
   usePolling(() => {
@@ -80,26 +85,19 @@ export function StaffCounterPage(): React.JSX.Element {
   const activeServing = currentSeries?.activeServing ?? null;
   const activeCalledAt = activeServing?.status === 'CALLED' ? activeServing.calledAt : null;
 
-  const [noShowRemainingSeconds, setNoShowRemainingSeconds] = useState<number>(() =>
-    activeCalledAt
-      ? computeNoShowRemainingSeconds(activeCalledAt, serverOffsetMs, NO_SHOW_SECONDS)
-      : NO_SHOW_SECONDS,
-  );
+  const [, setCountdownTick] = useState<number>(0);
+  const noShowRemainingSeconds = activeCalledAt
+    ? computeNoShowRemainingSeconds(activeCalledAt, serverOffsetMs, NO_SHOW_SECONDS)
+    : NO_SHOW_SECONDS;
 
   useEffect(() => {
     if (!activeCalledAt) {
-      setNoShowRemainingSeconds(NO_SHOW_SECONDS);
       return;
     }
 
-    const updateCountdown = () => {
-      setNoShowRemainingSeconds(
-        computeNoShowRemainingSeconds(activeCalledAt, serverOffsetMs, NO_SHOW_SECONDS),
-      );
-    };
-
-    updateCountdown();
-    const timer = setInterval(updateCountdown, 1000);
+    const timer = setInterval(() => {
+      setCountdownTick((prev) => prev + 1);
+    }, 1000);
     return () => clearInterval(timer);
   }, [activeServing?.id, activeCalledAt, serverOffsetMs]);
 
@@ -124,6 +122,45 @@ export function StaffCounterPage(): React.JSX.Element {
     }
   };
 
+  const handleToggleSeriesStatus = async (seriesId: string, nextIsActive: boolean) => {
+    if (togglingSeriesId) return;
+    const targetSeries = seriesList.find((s) => s.seriesId === seriesId);
+    const previousIsActive = targetSeries?.isActive ?? true;
+
+    setToastState(null);
+    setTogglingSeriesId(seriesId);
+    setSeriesList((prev) =>
+      prev.map((s) => (s.seriesId === seriesId ? { ...s, isActive: nextIsActive } : s)),
+    );
+
+    try {
+      const result = await staffApi.updateSeriesStatus(seriesId, nextIsActive);
+      const confirmedIsActive = result.data.isActive;
+      setSeriesList((prev) =>
+        prev.map((s) => (s.seriesId === seriesId ? { ...s, isActive: confirmedIsActive } : s)),
+      );
+      setToastState({
+        type: 'success',
+        message: confirmedIsActive ? 'เปิดรับคิวสำเร็จ' : 'ปิดรับคิวเรียบร้อย',
+      });
+      await loadTickets(true);
+    } catch (err) {
+      setSeriesList((prev) =>
+        prev.map((s) => (s.seriesId === seriesId ? { ...s, isActive: previousIsActive } : s)),
+      );
+      if (err instanceof ApiError) {
+        setToastState({ type: 'error', code: err.code, message: err.message });
+      } else {
+        setToastState({
+          type: 'error',
+          message: 'ไม่สามารถอัปเดตสถานะเปิด-ปิดซีรีส์ได้ กรุณาลองใหม่อีกครั้ง',
+        });
+      }
+    } finally {
+      setTogglingSeriesId(null);
+    }
+  };
+
   const handleRequestNoShow = (ticket: ActiveServingTicketDto) => {
     setNoShowError(null);
     setPendingNoShowTicket(ticket);
@@ -142,7 +179,10 @@ export function StaffCounterPage(): React.JSX.Element {
     try {
       const result = await staffApi.markNoShow(pendingNoShowTicket.id);
       setPendingNoShowTicket(null);
-      setToastMessage(`ตัดสิทธิ์ No-Show คิว ${result.data.displayNumber} สำเร็จ`);
+      setToastState({
+        type: 'success',
+        message: `ตัดสิทธิ์ No-Show คิว ${result.data.displayNumber} สำเร็จ`,
+      });
       await loadTickets(false);
     } catch (err) {
       if (err instanceof ApiError) {
@@ -204,18 +244,25 @@ export function StaffCounterPage(): React.JSX.Element {
 
   return (
     <div>
-      {toastMessage && (
-        <div className="alert toast-success pop-in" role="status" style={{ marginBottom: '16px' }}>
+      {toastState && (
+        <div
+          className={`alert pop-in ${toastState.type === 'success' ? 'toast-success' : 'alert-error'}`}
+          role={toastState.type === 'success' ? 'status' : 'alert'}
+          style={{ marginBottom: '16px' }}
+        >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600 }}>
-              <CheckIcon size={18} />
-              <span>{toastMessage}</span>
+              {toastState.type === 'success' && <CheckIcon size={18} />}
+              <span>
+                {toastState.code ? `[${toastState.code}] ` : ''}
+                {toastState.message}
+              </span>
             </div>
             <button
               type="button"
               className="toast-dismiss-btn"
               aria-label="ปิดการแจ้งเตือน"
-              onClick={() => setToastMessage(null)}
+              onClick={() => setToastState(null)}
             >
               ×
             </button>
@@ -258,6 +305,8 @@ export function StaffCounterPage(): React.JSX.Element {
               seriesList={seriesList}
               selectedSeriesId={selectedSeriesId}
               onSelect={setSelectedSeriesId}
+              onToggleStatus={handleToggleSeriesStatus}
+              togglingSeriesId={togglingSeriesId}
             />
 
             {/* Current Serving Card */}

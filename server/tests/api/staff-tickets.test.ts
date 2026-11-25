@@ -70,6 +70,7 @@ describe('Staff Service Counter API: GET /api/staff/tickets (F-03, AC-21, FR-07,
     const cryItem = crySeriesList.find((s: { code: string }) => s.code === 'CRY');
     expect(cryItem).toBeDefined();
     expect(cryItem.seriesId).toBe(crySeries.id);
+    expect(cryItem.isActive).toBe(true);
     expect(cryItem.activeServing).toBeNull();
     expect(cryItem.waitingQueue.length).toBe(2);
     expect(cryItem.waitingQueue[0].displayNumber).toBe('CRY-001');
@@ -92,6 +93,7 @@ describe('Staff Service Counter API: GET /api/staff/tickets (F-03, AC-21, FR-07,
     const labItem = labSeriesList.find((s: { code: string }) => s.code === 'LAB');
     expect(labItem).toBeDefined();
     expect(labItem.seriesId).toBe(labSeries.id);
+    expect(labItem.isActive).toBe(true);
     expect(labItem.activeServing).toBeNull();
     expect(labItem.waitingQueue.length).toBe(1);
     expect(labItem.waitingQueue[0].displayNumber).toBe('LAB-001');
@@ -113,5 +115,43 @@ describe('Staff Service Counter API: GET /api/staff/tickets (F-03, AC-21, FR-07,
     expect(cryUpdatedItem.activeServing.startedAt).toBeNull();
     expect(cryUpdatedItem.waitingQueue.length).toBe(1);
     expect(cryUpdatedItem.waitingQueue[0].displayNumber).toBe('CRY-002');
+  });
+
+  it('includes closed assigned series with isActive: false and remaining queues (F-09, AC-46.4)', async () => {
+    const staffCry = await prisma.user.findUniqueOrThrow({ where: { username: 'staff_crybaby' } });
+    const collector1 = await prisma.user.findUniqueOrThrow({ where: { username: 'collector1' } });
+    const crySeries = await prisma.series.findUniqueOrThrow({ where: { code: 'CRY' } });
+
+    await createTicketFixture({
+      userId: collector1.id,
+      seriesId: crySeries.id,
+      queueNumber: 1,
+      displayNumber: 'CRY-001',
+      status: 'WAITING',
+    });
+
+    await prisma.series.update({
+      where: { id: crySeries.id },
+      data: { isActive: false },
+    });
+
+    try {
+      const cryToken = signTestToken(staffCry.id, staffCry.role, staffCry.tokenVersion);
+      const res = await request(app)
+        .get('/api/staff/tickets')
+        .set('Authorization', `Bearer ${cryToken}`);
+
+      expect(res.status).toBe(200);
+      const cryItem = res.body.data.series.find((s: { code: string }) => s.code === 'CRY');
+      expect(cryItem).toBeDefined();
+      expect(cryItem.isActive).toBe(false);
+      expect(cryItem.waitingQueue).toHaveLength(1);
+      expect(cryItem.waitingQueue[0].displayNumber).toBe('CRY-001');
+    } finally {
+      await prisma.series.update({
+        where: { id: crySeries.id },
+        data: { isActive: true },
+      });
+    }
   });
 });

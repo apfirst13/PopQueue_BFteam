@@ -44,3 +44,11 @@ staffRouter.post(
   requireRole([Role.BOX_MASTER]),
   (req, res, next) => staffController.complete(req, res, next),
 );
+
+// PATCH /api/staff/series/:id/status - Toggle Series Availability Status (F-09, AC-46.1..46.5)
+staffRouter.patch(
+  '/series/:id/status',
+  authenticateToken,
+  requireRole([Role.BOX_MASTER]),
+  (req, res, next) => staffController.updateSeriesStatus(req, res, next),
+);

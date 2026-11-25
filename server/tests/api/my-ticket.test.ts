@@ -158,6 +158,7 @@ describe('F-04 Ticket Inspection: GET /api/tickets/my-ticket (TEST-34, TEST-35)'
         displayNumber: 'CRY-003',
         status: TicketStatus.WAITING,
         queueDate: today,
+        createdAt: new Date(today.getTime() - 2000),
       });
 
       // Collector1 holds LAB-001 created second
@@ -168,6 +169,7 @@ describe('F-04 Ticket Inspection: GET /api/tickets/my-ticket (TEST-34, TEST-35)'
         displayNumber: 'LAB-001',
         status: TicketStatus.WAITING,
         queueDate: today,
+        createdAt: new Date(today.getTime() - 1000),
       });
 
       // 1. Initial inspection: returns both active tickets in data.tickets
