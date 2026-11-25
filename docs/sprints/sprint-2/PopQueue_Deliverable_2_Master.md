@@ -1,4 +1,4 @@
-# PopQueue — Project Deliverable 2 Master Contract & Specification (v1.9)
+# PopQueue — Project Deliverable 2 Master Contract & Specification (v1.10)
 > **Core Expansion (Sprint 2) & Genuine Progress (Sprint 3) with GCP Deployment**  
 > **Course:** CPE 334 Introduction to Software Engineering in the Age of AI Agents (Semester 1/2026, KMUTT)  
 > **Project / Theme:** **PopQueue** — Theme 9: Queue and Service Management System (*Art Toy Live Unboxing Station*)  
@@ -7,7 +7,7 @@
 > **Student IDs:** *(ใส่รหัสนักศึกษาทั้ง 2 คนในหน้าปก PDF เท่านั้น — ไม่เปิดเผยใน Repo สาธารณะ)*  
 > **Deliverable:** Project Deliverable 2 (70 Points | 7% of Course Grade)  
 > **Submission Deadline:** **Sunday, 29 November 2026 at 23:59** (via LEB2, single self-contained PDF)  
-> **Contract Version:** `v1.9 (ISSUES #64-#69, LAB 7 REVISION & TEAM DECISIONS RECONCILED)`  
+> **Contract Version:** `v1.10 (D2-I2 #64 F-05 QUEUE CANCELLATION IMPLEMENTED & TESTED)`  
 > **Contract Date:** `2026-11-25`  
 > **Baseline Tags Audited:** `v0.1.0-sprint1` (`d946159`), `v0.2.0-lab5` (`bf52c9b`), `v0.3.0-lab7` (`a07a7be`)  
 > **Audit Evidence Execution Commit:** `75068a6109439b7f5dcadd7713ba93115ab29043` (`sprint-2-docs`, bit-identical to `a07a7be` per EV-B02) & `80863efe5da82de12e8494189f9de030262c2432` (`docs/sprint2-master-contract`)  
@@ -19,7 +19,7 @@
 
 ---
 
-## 0. ตารางบันทึกการเปลี่ยนแปลงฉบับเอกสาร (Changelog: v1.0 → v1.9)
+## 0. ตารางบันทึกการเปลี่ยนแปลงฉบับเอกสาร (Changelog: v1.0 → v1.10)
 
 | เวอร์ชัน | วันที่ | ส่วนที่แก้ไข / เพิ่มเติม | เหตุผลและความจำเป็นทางวิศวกรรม |
 | :---: | :---: | :--- | :--- |
@@ -33,6 +33,7 @@
 | **v1.7** | 2026-11-25 | **6-Issue Execution Backlog, Ground-Truth Fixes & Rubric Tightening** | 1. เพิ่ม **6-Issue Execution Plan (`D2-I1`–`D2-I6`)** และรวมตารางเวลา Part E §4 + §6 เป็นตารางเดียวที่ไม่ขัดกัน พร้อมขยับ `F-09` ให้พัฒนาโค้ดล่วงหน้าได้ต่อจาก `F-06` และแก้ลำดับ `deploy.yml` (Merge `main` → Deploy อัตโนมัติ → Live Check → Tag)<br>2. แทนที่เลข CI Run ID/Revision สังเคราะห์ใน §0.1 ด้วยข้อมูลจริงจาก `gh run list` และ Cloud Run Service `popqueue`; แก้ประวัติ `DEF-01`/`DEF-02` (`72e1bb5` ใน `v0.3.0-lab7` + Omega-3 Retest PASS บน `2aee62b` + `LIM-01` CountdownTimer) และแก้ `EV-A09` (ตัด claim เกินหลักฐานและสะกดชื่อ TA `นายรัตนโชติ เพ็ชรพันธ์ศรี`)<br>3. ซิงก์นิยาม `EV-A04`, `EV-A05`, `EV-B02`, `EV-B05`, `EV-B09` ระหว่าง §0.4 และ Appendix B แบบ 1:1 พร้อมฝัง verbatim raw excerpts<br>4. ปิดช่องว่างสัญญาและ Traceability: เพิ่ม SRS **Assumptions**, SDS **UI Route Map**, `AC-41.11`, `AC-43.9` (Collector `/my-ticket` `serverNow` countdown), `AC-43.10` (`403 FORBIDDEN_SERIES` / `DEC-03` / `TEST-43U`), `AC-44.8` (3s polling / error state / `calledAt` sort / `DEC-04`), ปรับ `F-08`/`F-09` (`TEST-46E`/`46F`, `AC-46.4` `isActive` grep), แก้ `NFR-02`/`NFR-06` และคำศัพท์สถานะให้ตรง Rubric, ตัด `auto-cancel`/`Load Test`, เพิ่ม `DEC-06` (`F-08 → F-09`), และปรับ Appendix A (placeholder DB password, Deployment/Rollback summary, Contribution Table, AI-Use `Claude Sonnet 5.5` + `Antigravity`) |
 | **v1.8** | 2026-11-25 | **CI Staging Triggers, Ruleset Sequence & Branch Naming Sync** | 1. ขยาย `.github/workflows/ci-docker.yml` ให้รัน `test-and-docker` บนทุก PR ที่ target `sprint2-staging` และ `sprint3-staging` (เดิมมีเฉพาะ `main`, `lab5-staging`) พร้อมกำหนดลำดับอัปเดต GitHub Ruleset `protect-staging` (`26306708`) หลัง PR นี้ merge เพื่อป้องกัน PR Deadlock<br>2. ปรับรูปแบบชื่อ Branch มาตรฐานใน `AGENTS.md` Rule 2 และแผน Deliverable 2 (§4, Part E) เป็น `feature/sprint2-i<XX>-<slug>` (`i02..i05`) และ `docs/sprint2-i06-d2-final-report` พร้อมบังคับระบุ `Refs #<github-issue>` ใน Commit/PR เพื่อรักษา GitHub Issue → Branch → PR Traceability<br>3. อัปเดตสถานะ Contract PR `#62` (`v1.7`) เป็น Merged (`f6b088e`) เข้า `sprint2-staging` แล้ว |
 | **v1.9** | 2026-11-25 | **Issue Linkage (`#64`–`#69`), Cloud Run Lineage & Team Decisions Sync** | 1. บันทึก Milestone `#5`, Labels (`sprint2`, `sprint3`, `deliverable2`, `release`) และเลข GitHub Issues จริง `#69` (`D2-I1`, Closed), `#64` (`D2-I2`), `#65` (`D2-I3`), `#66` (`D2-I4`), `#67` (`D2-I5`), `#68` (`D2-I6`) ครบใน Project Board `PopQueue_Individual_Sprints` และเชื่อม PR `#62`/`#63` (`b9a4404`) กับ `Refs #69`<br>2. เติมหลักฐานจริงจาก CD Run `#45357138027` (`rev popqueue-00007-npd`, `popqueue-migrate-j2lpp`), ยืนยันการส่ง Lab 7 PDF ใน LEB2 แล้ว และชี้แจง Issue `#55` (ปิดเป็น checklist ซ้ำซ้อนหลังจบ Lab 7 โดย PR `#60` ปิด `#52` และ Deploy จริงแล้ว)<br>3. ปิดข้อตกลงทีม: `DEC-02` (`Approved by Team` หลัง TA/อาจารย์งดการรอถามเพิ่ม), `A-03` (`1 ตั๋ว = แกะ 1 กล่อง / 1 รอบบริการต่อซีรีส์`), เพิ่มบรรทัด `DB / Migration Impact: ไม่มี` ใน `F-07 §3.1` ให้ครบเกณฑ์ Rubric 3.2, อัปเดต `protect-staging` (`refs/heads/sprint2-staging` + `merge` only แล้ว; `sprint3-staging` รอสร้างจาก `main` ก่อนเพิ่ม) และบันทึกสถานะ Seed Secrets บน Cloud Run (`popqueue-seed-collector-pw` / `popqueue-seed-staff-pw` สร้างแล้ว รอ GCP Owner `@Theerawat82` ให้สิทธิ์ IAM) |
+| **v1.10** | 2026-11-25 | **`D2-I2` (`#64`) `F-05` Queue Cancellation Implemented & Verified (`[RED]`→`[GREEN]`)** | 1. พัฒนา `F-05` (`POST /api/tickets/:id/cancel`, `canTransition(..., 'CANCEL')`, `cancelTicket` Atomic `updateMany` + `MyTicketPage.tsx` Cancel Modal/Toast/Empty State) บน branch `feature/sprint2-i02-f05-cancel` ด้วย TDD (`[RED]` `9a2998f` → `[GREEN]` `ab03141`)<br>2. อัปเดตสถานะ `F-05`, `AC-41.1..41.11`, `FR-11`, `CF-01`, `CF-03`, UI Route Map (`/my-ticket`), Role Matrix และบันทึกผลรันชุดทดสอบเต็มรอบพัฒนา (`Server 175/175`, `Client 37/37`, `E2E 7/7`, รวม `219 passed, 0 failed, 0 skipped`) |
 
 ---
 
@@ -263,40 +264,40 @@
 * **Error Handling:** จัดการข้อผิดพลาดด้วย Error Toast เฉพาะรหัส `400`, `403`, `404` (ไม่มีรหัส 409)
 
 ### 1.6 Numbered Acceptance Criteria (AC: F-05)
-* [ ] **AC-41.1 (Valid Cancellation):** Collector ที่มีตั๋ว `WAITING` กดยกเลิกสำเร็จ ได้รับ HTTP 200, สถานะเปลี่ยนเป็น `CANCELLED`, บันทึก `forfeitedAt` เป็นเวลาปัจจุบันจาก Application Clock
-* [ ] **AC-41.2 (Quota Release & Immediate Re-join):** หลังยกเลิกสำเร็จ Collector สามารถกด `POST /api/tickets/join` เข้าซีรีส์เดิมได้ทันที ได้รับ HTTP 201 และได้เลขคิวใหม่ท้ายแถวโดยไม่ติดข้อผิดพลาด `409 DUPLICATE_ACTIVE_QUEUE` ([EV-A02](#appendix-b))
-* [ ] **AC-41.3 (Monotonic Counter & WaitingAhead Update):** เมื่อมีคิวรอ `CRY-001` และ `CRY-002` อยู่ในซีรีส์ แล้ว `CRY-001` ถูกยกเลิก เลขคิว `CRY-001` จะถูกข้ามถาวร คิวถัดไปที่กดเข้ามาใหม่จะได้รับเลขถัดจากตัวนับสูงสุด (`CRY-003` — [EV-B03](#appendix-b)) และตั๋ว `CRY-002` ที่อยู่ข้างหลังจะมีค่า `waitingAhead` ลดลงจาก `1` เหลือ `0` ทันที
-* [ ] **AC-41.4 (Forbidden Ownership Rejection):** Collector A พยายามส่งคำขอยกเลิกตั๋วของ Collector B ต้องถูกปฏิเสธด้วย HTTP `403 FORBIDDEN_OWNERSHIP` ตั๋วของ B คงสถานะ `WAITING`
-* [ ] **AC-41.5 (Invalid State Transition on Non-Waiting):** กดยกเลิกตั๋วที่สถานะเป็น `CALLED`, `UNBOXING`, `COMPLETED`, `NO_SHOW` หรือยกเลิกซ้ำบนตั๋ว `CANCELLED` ต้องได้รับ HTTP `400 INVALID_STATE_TRANSITION`
-* [ ] **AC-41.6 (Structural Call-Next Exclusion):** ตั๋วสถานะ `CANCELLED` จะไม่มีทางถูกเรียกโดย `POST /api/staff/call-next` เนื่องจากคำสั่ง SQL มีเงื่อนไข `WHERE status = 'WAITING'` ชัดเจน ([EV-B05](#appendix-b))
-* [ ] **AC-41.7 (Multi-Ticket Holding Independence):** Collector ที่ถือตั๋วหลายซีรีส์พร้อมกัน (ตาม BR-02 v2) เมื่อยกเลิกตั๋วใบหนึ่ง ตั๋วใบอื่นใน `data.tickets` ยังคงสถานะเดิมครบถ้วน
-* [ ] **AC-41.8 (Cancel vs Call-Next Race Concurrency):** คำขอยกเลิกคิวและคำขอเรียกคิวที่ส่งเข้ามาชนกันบนตั๋วใบเดียว ต้องมีเพียงคำขอเดียวที่สำเร็จ และอีกคำขอได้รับ Error ที่ถูกต้อง (`404 EMPTY_QUEUE` หรือ `400 INVALID_STATE_TRANSITION`)
-* [ ] **AC-41.9 (Collector Cancel Access Guards):** Endpoint สำหรับยกเลิกตั๋วจำกัดสิทธิ์เฉพาะ Collector (หรือผู้ถือครอง); หาก Box Master ส่งคำขอต้องได้รับ HTTP 403 `FORBIDDEN_ROLE` ([EV-B01](#appendix-b)) และหากไม่ส่ง Authorization Header ต้องได้รับ HTTP 401 `UNAUTHENTICATED` ([EV-B01](#appendix-b))
-* [ ] **AC-41.10 (Cancellation UI Modal & Clean Empty State):** หน้าจอ `/my-ticket` แสดง Confirmation Dialog เมื่อกดปุ่มยกเลิก, แสดง Toast สีเขียวเมื่อสำเร็จ, และในกรณีที่ตั๋วที่ยกเลิกเป็นตั๋วใบสุดท้ายในมือ (API คืน `404 NO_ACTIVE_TICKET` — [EV-B04](#appendix-b)) หน้าจอต้องปรับเข้าสู่ Clean Empty State ("ไม่มีคิวที่กำลังรอ") โดยต้องไม่แสดง Error Banner สีแดงรบกวนผู้ใช้
-* [ ] **AC-41.11 (Not-Found Rejection & Double-Submit Guard):** ส่งคำขอยกเลิกด้วย Ticket UUID ที่ไม่มีอยู่จริงต้องได้รับ HTTP `404 RESOURCE_NOT_FOUND` (และ invalid UUID → `400 VALIDATION_ERROR`); บนหน้าจอ UI ระหว่างรอ response ปุ่มยืนยันใน Modal ต้องถูก Disable เพื่อป้องกันการส่งคำขอซ้ำ
+* [x] **AC-41.1 (Valid Cancellation):** Collector ที่มีตั๋ว `WAITING` กดยกเลิกสำเร็จ ได้รับ HTTP 200, สถานะเปลี่ยนเป็น `CANCELLED`, บันทึก `forfeitedAt` เป็นเวลาปัจจุบันจาก Application Clock
+* [x] **AC-41.2 (Quota Release & Immediate Re-join):** หลังยกเลิกสำเร็จ Collector สามารถกด `POST /api/tickets/join` เข้าซีรีส์เดิมได้ทันที ได้รับ HTTP 201 และได้เลขคิวใหม่ท้ายแถวโดยไม่ติดข้อผิดพลาด `409 DUPLICATE_ACTIVE_QUEUE` ([EV-A02](#appendix-b))
+* [x] **AC-41.3 (Monotonic Counter & WaitingAhead Update):** เมื่อมีคิวรอ `CRY-001` และ `CRY-002` อยู่ในซีรีส์ แล้ว `CRY-001` ถูกยกเลิก เลขคิว `CRY-001` จะถูกข้ามถาวร คิวถัดไปที่กดเข้ามาใหม่จะได้รับเลขถัดจากตัวนับสูงสุด (`CRY-003` — [EV-B03](#appendix-b)) และตั๋ว `CRY-002` ที่อยู่ข้างหลังจะมีค่า `waitingAhead` ลดลงจาก `1` เหลือ `0` ทันที
+* [x] **AC-41.4 (Forbidden Ownership Rejection):** Collector A พยายามส่งคำขอยกเลิกตั๋วของ Collector B ต้องถูกปฏิเสธด้วย HTTP `403 FORBIDDEN_OWNERSHIP` ตั๋วของ B คงสถานะ `WAITING`
+* [x] **AC-41.5 (Invalid State Transition on Non-Waiting):** กดยกเลิกตั๋วที่สถานะเป็น `CALLED`, `UNBOXING`, `COMPLETED`, `NO_SHOW` หรือยกเลิกซ้ำบนตั๋ว `CANCELLED` ต้องได้รับ HTTP `400 INVALID_STATE_TRANSITION`
+* [x] **AC-41.6 (Structural Call-Next Exclusion):** ตั๋วสถานะ `CANCELLED` จะไม่มีทางถูกเรียกโดย `POST /api/staff/call-next` เนื่องจากคำสั่ง SQL มีเงื่อนไข `WHERE status = 'WAITING'` ชัดเจน ([EV-B05](#appendix-b))
+* [x] **AC-41.7 (Multi-Ticket Holding Independence):** Collector ที่ถือตั๋วหลายซีรีส์พร้อมกัน (ตาม BR-02 v2) เมื่อยกเลิกตั๋วใบหนึ่ง ตั๋วใบอื่นใน `data.tickets` ยังคงสถานะเดิมครบถ้วน
+* [x] **AC-41.8 (Cancel vs Call-Next Race Concurrency):** คำขอยกเลิกคิวและคำขอเรียกคิวที่ส่งเข้ามาชนกันบนตั๋วใบเดียว ต้องมีเพียงคำขอเดียวที่สำเร็จ และอีกคำขอได้รับ Error ที่ถูกต้อง (`404 EMPTY_QUEUE` หรือ `400 INVALID_STATE_TRANSITION`)
+* [x] **AC-41.9 (Collector Cancel Access Guards):** Endpoint สำหรับยกเลิกตั๋วจำกัดสิทธิ์เฉพาะ Collector (หรือผู้ถือครอง); หาก Box Master ส่งคำขอต้องได้รับ HTTP 403 `FORBIDDEN_ROLE` ([EV-B01](#appendix-b)) และหากไม่ส่ง Authorization Header ต้องได้รับ HTTP 401 `UNAUTHENTICATED` ([EV-B01](#appendix-b))
+* [x] **AC-41.10 (Cancellation UI Modal & Clean Empty State):** หน้าจอ `/my-ticket` แสดง Confirmation Dialog เมื่อกดปุ่มยกเลิก, แสดง Toast สีเขียวเมื่อสำเร็จ, และในกรณีที่ตั๋วที่ยกเลิกเป็นตั๋วใบสุดท้ายในมือ (API คืน `404 NO_ACTIVE_TICKET` — [EV-B04](#appendix-b)) หน้าจอต้องปรับเข้าสู่ Clean Empty State ("ไม่มีคิวที่กำลังรอ") โดยต้องไม่แสดง Error Banner สีแดงรบกวนผู้ใช้
+* [x] **AC-41.11 (Not-Found Rejection & Double-Submit Guard):** ส่งคำขอยกเลิกด้วย Ticket UUID ที่ไม่มีอยู่จริงต้องได้รับ HTTP `404 RESOURCE_NOT_FOUND` (และ invalid UUID → `400 VALIDATION_ERROR`); บนหน้าจอ UI ระหว่างรอ response ปุ่มยืนยันใน Modal ต้องถูก Disable เพื่อป้องกันการส่งคำขอซ้ำ
 
 ### 1.7 Software Test Specification (STS: TEST-41)
 | Test ID | Covered AC | Level | Test File | Preconditions | Inputs | Expected Output |
 | :---: | :---: | :---: | :--- | :--- | :--- | :--- |
-| **TEST-41A** | `AC-41.1` | Integration | `server/tests/api/cancel.test.ts` *(planned)* | Collector 1 ล็อกอิน, ถือตั๋ว `CRY-001` (`WAITING`) | `POST /api/tickets/:id/cancel` | HTTP `200`, `status: "CANCELLED"`, `forfeitedAt` ≠ null |
-| **TEST-41B** | `AC-41.2`, `AC-41.3` | Integration | `server/tests/api/cancel.test.ts` *(planned)* | มีตั๋ว `CRY-001` (Collector 1) และ `CRY-002` (Collector 2, `waitingAhead: 1`) → ยกเลิก `CRY-001` แล้ว Collector 1 กด join ใหม่ | `POST /api/tickets/join` ซีรีส์ `CRY` + เช็กตั๋ว 2 | HTTP `201`, ได้เลข `CRY-003`, ตั๋ว 2 มี `waitingAhead` ลดลงเหลือ `0` |
-| **TEST-41C** | `AC-41.4` | Security | `server/tests/api/cancel.test.ts` *(planned)* | Collector 1 ถือ `CRY-001`, Collector 2 ล็อกอิน | Collector 2 `POST /cancel` ตั๋ว 1 | HTTP `403 FORBIDDEN_OWNERSHIP`, ตั๋ว 1 คงสถานะ `WAITING` |
-| **TEST-41D** | `AC-41.5` | Boundary | `server/tests/api/cancel.test.ts` *(planned)* | ตั๋วถูกเรียกแล้ว (`CALLED`) | Collector 1 `POST /cancel` | HTTP `400 INVALID_STATE_TRANSITION`, ตั๋วคงสถานะ `CALLED` |
+| **TEST-41A** | `AC-41.1` | Integration | `server/tests/api/cancel.test.ts` | Collector 1 ล็อกอิน, ถือตั๋ว `CRY-001` (`WAITING`) | `POST /api/tickets/:id/cancel` | HTTP `200`, `status: "CANCELLED"`, `forfeitedAt` ≠ null |
+| **TEST-41B** | `AC-41.2`, `AC-41.3` | Integration | `server/tests/api/cancel.test.ts` | มีตั๋ว `CRY-001` (Collector 1) และ `CRY-002` (Collector 2, `waitingAhead: 1`) → ยกเลิก `CRY-001` แล้ว Collector 1 กด join ใหม่ | `POST /api/tickets/join` ซีรีส์ `CRY` + เช็กตั๋ว 2 | HTTP `201`, ได้เลข `CRY-003`, ตั๋ว 2 มี `waitingAhead` ลดลงเหลือ `0` |
+| **TEST-41C** | `AC-41.4` | Security | `server/tests/api/cancel.test.ts` | Collector 1 ถือ `CRY-001`, Collector 2 ล็อกอิน | Collector 2 `POST /cancel` ตั๋ว 1 | HTTP `403 FORBIDDEN_OWNERSHIP`, ตั๋ว 1 คงสถานะ `WAITING` |
+| **TEST-41D** | `AC-41.5` | Boundary | `server/tests/api/cancel.test.ts` | ตั๋วถูกเรียกแล้ว (`CALLED`) | Collector 1 `POST /cancel` | HTTP `400 INVALID_STATE_TRANSITION`, ตั๋วคงสถานะ `CALLED` |
 | **TEST-41E** | `AC-41.5` | Unit | `server/tests/unit/state-machine.test.ts` | State machine transition validator | ตรวจทุกสถานะ → `CANCELLED` | อนุญาตเฉพาะ `WAITING`; ปฏิเสธสถานะอื่นทั้งหมด |
-| **TEST-41F** | `AC-41.6` | Integration | `server/tests/api/cancel.test.ts` *(planned)* | มีตั๋ว `CANCELLED` 1 ใบ และ `WAITING` 1 ใบ | Box Master `POST /api/staff/call-next` | HTTP `200`, เรียกได้เฉพาะตั๋ว `WAITING`, ข้ามใบ `CANCELLED` |
-| **TEST-41G** | `AC-41.7` | Integration | `server/tests/api/cancel.test.ts` *(planned)* | Collector ถือตั๋ว `CRY` และ `LAB` พร้อมกัน | `POST /cancel` ตั๋ว `CRY` | HTTP `200`, ตั๋ว `LAB` ยังคงอยู่ใน `data.tickets` |
-| **TEST-41H** | `AC-41.8` | Concurrency | `server/tests/concurrency/cancel-race.test.ts` *(planned)* | มีตั๋ว `WAITING` ใบเดียว, ยิง Cancel และ Call-Next ชนกัน | Parallel Promise.all() | ฝั่งหนึ่งได้ 200, อีกฝั่งได้ 404 หรือ 400 (ไม่มีตั๋วค้างสถานะคู่) |
-| **TEST-41I** | `AC-41.9` | Security | `server/tests/api/cancel.test.ts` *(planned)* | Box Master ล็อกอิน | `POST /api/tickets/:id/cancel` | HTTP `403 FORBIDDEN_ROLE` ([EV-B01](#appendix-b)) |
-| **TEST-41J** | `AC-41.9` | Security | `server/tests/api/cancel.test.ts` *(planned)* | ไม่ส่ง Authorization Header | `POST /api/tickets/:id/cancel` | HTTP `401 UNAUTHENTICATED` ([EV-B01](#appendix-b)) |
-| **TEST-41K** | `AC-41.10`, `AC-41.11` | Component / E2E | `client/src/tests/ticket.test.tsx` *(planned)* | มีตั๋ว `WAITING` ใบสุดท้าย | กดปุ่ม Cancel → กดยืนยัน Modal (ตรวจ disabled state ระหว่างส่ง) | ปุ่มถูก disable ระหว่างรอ, ได้รับ Toast สำเร็จ, การ์ดตั๋วหายไป และหน้าจอแสดง Clean Empty State โดยไม่มี Error Banner สีแดง |
-| **TEST-41L** | `AC-41.11` | Boundary / Validation | `server/tests/api/cancel.test.ts` *(planned)* | Collector 1 ล็อกอิน | `POST /api/tickets/<nonexistent-uuid>/cancel` และ invalid UUID | HTTP `404 RESOURCE_NOT_FOUND` (และ `400 VALIDATION_ERROR` กรณี UUID ผิดรูปแบบ) |
+| **TEST-41F** | `AC-41.6` | Integration | `server/tests/api/cancel.test.ts` | มีตั๋ว `CANCELLED` 1 ใบ และ `WAITING` 1 ใบ | Box Master `POST /api/staff/call-next` | HTTP `200`, เรียกได้เฉพาะตั๋ว `WAITING`, ข้ามใบ `CANCELLED` |
+| **TEST-41G** | `AC-41.7` | Integration | `server/tests/api/cancel.test.ts` | Collector ถือตั๋ว `CRY` และ `LAB` พร้อมกัน | `POST /cancel` ตั๋ว `CRY` | HTTP `200`, ตั๋ว `LAB` ยังคงอยู่ใน `data.tickets` |
+| **TEST-41H** | `AC-41.8` | Concurrency | `server/tests/concurrency/cancel-race.test.ts` | มีตั๋ว `WAITING` ใบเดียว, ยิง Cancel และ Call-Next ชนกัน | Parallel Promise.all() | ฝั่งหนึ่งได้ 200, อีกฝั่งได้ 404 หรือ 400 (ไม่มีตั๋วค้างสถานะคู่) |
+| **TEST-41I** | `AC-41.9` | Security | `server/tests/api/cancel.test.ts` | Box Master ล็อกอิน | `POST /api/tickets/:id/cancel` | HTTP `403 FORBIDDEN_ROLE` ([EV-B01](#appendix-b)) |
+| **TEST-41J** | `AC-41.9` | Security | `server/tests/api/cancel.test.ts` | ไม่ส่ง Authorization Header | `POST /api/tickets/:id/cancel` | HTTP `401 UNAUTHENTICATED` ([EV-B01](#appendix-b)) |
+| **TEST-41K** | `AC-41.10`, `AC-41.11` | Component / E2E | `client/src/tests/ticket.test.tsx` | มีตั๋ว `WAITING` ใบสุดท้าย | กดปุ่ม Cancel → กดยืนยัน Modal (ตรวจ disabled state ระหว่างส่ง) | ปุ่มถูก disable ระหว่างรอ, ได้รับ Toast สำเร็จ, การ์ดตั๋วหายไป และหน้าจอแสดง Clean Empty State โดยไม่มี Error Banner สีแดง |
+| **TEST-41L** | `AC-41.11` | Boundary / Validation | `server/tests/api/cancel.test.ts` | Collector 1 ล็อกอิน | `POST /api/tickets/<nonexistent-uuid>/cancel` และ invalid UUID | HTTP `404 RESOURCE_NOT_FOUND` (และ `400 VALIDATION_ERROR` กรณี UUID ผิดรูปแบบ) |
 
 ### 1.8 Definition of Done (DoD) — F-05
-- [ ] โค้ด Service/Controller/Route ครบถ้วน พร้อม Deterministic Error Handling
-- [ ] บันทึก `[RED]` commit SHA และ `[GREEN]` commit SHA ตามระเบียบ TDD
-- [ ] Regression Suite เดิม (194 tests) รันผ่าน 100% ไม่มี skip/weaken ([EV-A07](#appendix-b))
-- [ ] UI ปุ่ม Cancel, Modal, Toast และ Empty State ทำงานสมบูรณ์บนหน้า `/my-ticket`
-- [ ] PR ผ่านการ Review และ Merge เข้าสู่ `sprint2-staging`
+- [x] โค้ด Service/Controller/Route ครบถ้วน พร้อม Deterministic Error Handling
+- [x] บันทึก `[RED]` commit SHA (`9a2998f`) และ `[GREEN]` commit SHA (`ab03141`) ตามระเบียบ TDD
+- [x] Regression Suite เดิม (194 tests) รันผ่าน 100% ไม่มี skip/weaken (รวมชุดใหม่เป็น `219 passed, 0 failed, 0 skipped` — Server `175`, Client `37`, E2E `7`)
+- [x] UI ปุ่ม Cancel, Modal, Toast และ Empty State ทำงานสมบูรณ์บนหน้า `/my-ticket`
+- [ ] PR ผ่านการ Review และ Merge เข้าสู่ `sprint2-staging` *(อยู่ระหว่างเปิด PR ของ `#64`)*
 
 ---
 
@@ -817,7 +818,7 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 | :--- | :--- | :---: | :--- | :---: |
 | `/login` | `client/src/pages/LoginPage.tsx` | Public | เข้าสู่ระบบด้วย `username`/`password` → Redirect ตาม Role | `accepted` |
 | `/series` | `client/src/pages/SeriesPage.tsx` | `COLLECTOR` | แสดงรายการซีรีส์ + คิวรอ + ปุ่ม Join Queue | `accepted` |
-| `/my-ticket` | `client/src/pages/MyTicketPage.tsx` | `COLLECTOR` | แสดงการ์ดตั๋ว Active หลายซีรีส์ (Polling 3s), Countdown sync `serverNow` (`F-06`), ปุ่ม Cancel + Modal (`F-05`) | `accepted` (S1/L7) / `planned` (F-05, F-06) |
+| `/my-ticket` | `client/src/pages/MyTicketPage.tsx` | `COLLECTOR` | แสดงการ์ดตั๋ว Active หลายซีรีส์ (Polling 3s), Countdown sync `serverNow` (`F-06`), ปุ่ม Cancel + Modal (`F-05`) | `accepted` (S1/L7) / `tested` (`F-05`) / `planned` (`F-06`) |
 | `/staff/counter` | `client/src/pages/StaffCounterPage.tsx` | `BOX_MASTER` | คิวรอเฉพาะซีรีส์ตน (Polling 3s), Call Next, Verify & Start, Complete, ปุ่ม No-Show 120s (`F-06`), สวิตช์เปิด-ปิดซีรีส์ (`F-09`) | `accepted` (S1) / `planned` (F-06, F-09) |
 | `/forbidden` | `client/src/pages/ForbiddenPage.tsx` | All | หน้าแจ้งเตือน 403 เมื่อเข้า URL นอกบทบาท | `accepted` |
 | `/board` | `client/src/pages/BoardPage.tsx` *(planned)* | Public | จอบอร์ดหน้าร้าน Kiosk-style แสดง Now Serving + Up Next (Max 5) + Polling 3s + Error Banner (`F-07`) | `planned` |
@@ -838,7 +839,7 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 | `POST /api/tickets/join` | `authenticateToken` | `COLLECTOR` | 1 active ticket per series (`BR-02 v2`) | `401 UNAUTHENTICATED`<br>`403 FORBIDDEN_ROLE`<br>`409 DUPLICATE_ACTIVE_QUEUE`<br>`409 SERIES_CLOSED` | `server/src/routes/ticket.routes.ts:9`<br>`server/src/services/ticket.service.ts:60-140` |
 | `GET /api/tickets/my-ticket` | `authenticateToken` | `COLLECTOR` | กรองเฉพาะตั๋วของผู้เรียก (`userId`) | `401 UNAUTHENTICATED`<br>`404 NO_ACTIVE_TICKET` | `server/src/routes/ticket.routes.ts:17`<br>`server/src/services/ticket.service.ts:145-213` ([EV-B04](#appendix-b)) |
 | `GET /api/tickets/:id` | `authenticateToken` | All Roles | Ownership (Collector: own ticket, Staff: assigned series) | `401 UNAUTHENTICATED`<br>`404 RESOURCE_NOT_FOUND`<br>`403 FORBIDDEN_OWNERSHIP`<br>`403 FORBIDDEN_SERIES` | `server/src/routes/ticket.routes.ts:25`<br>`server/src/services/ticket.service.ts:220-262` |
-| `POST /api/tickets/:id/cancel` *(F-05)* | `authenticateToken` | `COLLECTOR` | Ownership (`ticket.userId === auth.userId`) | `401 UNAUTHENTICATED`<br>`403 FORBIDDEN_ROLE`<br>`404 RESOURCE_NOT_FOUND`<br>`403 FORBIDDEN_OWNERSHIP`<br>`400 INVALID_STATE_TRANSITION` | `server/src/routes/ticket.routes.ts` *(planned)*<br>Master Contract Part B §1.4 |
+| `POST /api/tickets/:id/cancel` *(F-05)* | `authenticateToken` | `COLLECTOR` | Ownership (`ticket.userId === auth.userId`) | `401 UNAUTHENTICATED`<br>`403 FORBIDDEN_ROLE`<br>`404 RESOURCE_NOT_FOUND`<br>`403 FORBIDDEN_OWNERSHIP`<br>`400 INVALID_STATE_TRANSITION` | `server/src/routes/ticket.routes.ts:25-30`<br>`server/src/services/ticket.service.ts:322-386` |
 | `GET /api/staff/tickets` | `authenticateToken` | `BOX_MASTER` | เฉพาะซีรีส์ที่ตนได้รับมอบหมาย | `401 UNAUTHENTICATED`<br>`403 FORBIDDEN_ROLE` | `server/src/routes/staff.routes.ts:9`<br>`server/src/services/staff.service.ts:77-142` |
 | `POST /api/staff/call-next` | `authenticateToken` | `BOX_MASTER` | ซีรีส์ที่ได้รับมอบหมาย + Single Serving | `401 UNAUTHENTICATED`<br>`403 FORBIDDEN_ROLE`<br>`403 FORBIDDEN_SERIES`<br>`409 STAFF_BUSY`<br>`404 EMPTY_QUEUE` | `server/src/routes/staff.routes.ts:17`<br>`server/src/services/staff.service.ts:148-223` ([EV-B05](#appendix-b)) |
 | `POST /api/staff/tickets/:id/start-unboxing` | `authenticateToken` | `BOX_MASTER` | Assigned Series + Handler Exclusive | `401 UNAUTHENTICATED`<br>`403 FORBIDDEN_ROLE`<br>`404 RESOURCE_NOT_FOUND`<br>`403 FORBIDDEN_SERIES`<br>`403 FORBIDDEN_NOT_HANDLER`<br>`400 INVALID_STATE_TRANSITION` | `server/src/routes/staff.routes.ts:25`<br>`server/src/services/staff.service.ts:237-302` ([EV-A04](#appendix-b)) |
@@ -909,7 +910,7 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 | **F-02** | Queue Discovery & Safe Joining | 1 (rev Lab 7) | `accepted` | `ticket.service.ts`, `SeriesPage.tsx`, Migration 0003 | `accepted` (`v0.3.0-lab7` — [EV-A02](#appendix-b), [EV-A07](#appendix-b)) |
 | **F-03** | Staff Counter & Call/Complete | 1 | `accepted` | `staff.service.ts`, `StaffCounterPage.tsx` | `accepted` (`v0.1.0-sprint1` — [EV-A07](#appendix-b)) |
 | **F-04** | Ticket Inspection & Ownership | 1 (ext Lab 7) | `accepted` | `ticket.service.ts`, `MyTicketPage.tsx` | `accepted` (`v0.3.0-lab7` — [EV-B04](#appendix-b), [EV-A07](#appendix-b)) |
-| **F-05** | Queue Cancellation | **2** | `planned` | `ticket.service.ts`, `ticket.routes.ts`, `MyTicketPage.tsx` *(Issue `D2-I2`)* | `planned` (no implementation evidence yet) |
+| **F-05** | Queue Cancellation | **2** | `tested` | `ticket.service.ts`, `ticket.routes.ts`, `MyTicketPage.tsx` *(Issue `#64`)* | `tested` (`TEST-41A..41L`, `ab03141` — PR pending review) |
 | **F-06** | Server-Enforced 120s No-Show | **2** | `planned` | `staff.service.ts`, `CountdownTimer.tsx`, `StaffCounterPage.tsx` *(Issue `D2-I3`)* | `planned` (no implementation evidence yet) |
 | **F-07** | Public Queue Display Board | **2** | `planned` | `public.service.ts`, `public.routes.ts`, `BoardPage.tsx` *(Issue `D2-I4`)* | `planned` (no implementation evidence yet) |
 | **F-08** | Daily Service Analytics | 3 | `planned` | `staff.service.ts`, Staff Analytics UI *(Post-D2)* | `planned` (no implementation evidence yet) |
@@ -964,17 +965,17 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 | **AC-38** | Ticket Detail Staff Scope Guard (`403 FORBIDDEN_SERIES`) | Yes | Yes | `accepted` | [EV-A07](#appendix-b) | `d946159` *(reg `75068a6`)* |
 | **AC-39** | DB Container Restart & Cloud Deployment Persistence | Yes | Yes | `tested` (`v0.2.0-lab5`) | [EV-B07](#appendix-b) | `bf52c9b` *(re-run planned on `v0.5.0-d2-rc`)* |
 | **AC-40** | *(เว้นว่างไว้โดยเจตนา — EV-A08)* | N/A | N/A | `N/A` | [EV-A08](#appendix-b) | N/A |
-| **AC-41.1** | F-05 Valid Ticket Cancellation | No | No | `planned` | - | TBD |
-| **AC-41.2** | F-05 Immediate Re-join After Cancel | No | No | `planned` | - | TBD |
-| **AC-41.3** | F-05 Monotonic Counter Continuity (`CRY-003`) | No | No | `planned` | - | TBD |
-| **AC-41.4** | F-05 Forbidden Ownership Rejection | No | No | `planned` | - | TBD |
-| **AC-41.5** | F-05 Invalid State Transition Rejection | No | No | `planned` | - | TBD |
-| **AC-41.6** | F-05 Call-Next Structural Exclusion | No | No | `planned` | - | TBD |
-| **AC-41.7** | F-05 Multi-Ticket Independence | No | No | `planned` | - | TBD |
-| **AC-41.8** | F-05 Concurrency Race Guard | No | No | `planned` | - | TBD |
-| **AC-41.9** | F-05 Collector Cancel Role & Auth Guards | No | No | `planned` | - | TBD |
-| **AC-41.10** | F-05 Cancel Confirmation Modal & Empty State UI | No | No | `planned` | - | TBD |
-| **AC-41.11** | F-05 Not-Found (`404`), UUID Validation & Double-Submit Guard | No | No | `planned` | - | TBD |
+| **AC-41.1** | F-05 Valid Ticket Cancellation | Yes | Yes | `tested` | `TEST-41A` (`[GREEN]`) | `ab03141` |
+| **AC-41.2** | F-05 Immediate Re-join After Cancel | Yes | Yes | `tested` | `TEST-41B` (`[GREEN]`) | `ab03141` |
+| **AC-41.3** | F-05 Monotonic Counter Continuity (`CRY-003`) | Yes | Yes | `tested` | `TEST-41B` (`[GREEN]`) | `ab03141` |
+| **AC-41.4** | F-05 Forbidden Ownership Rejection | Yes | Yes | `tested` | `TEST-41C` (`[GREEN]`) | `ab03141` |
+| **AC-41.5** | F-05 Invalid State Transition Rejection | Yes | Yes | `tested` | `TEST-41D`, `TEST-41E` (`[GREEN]`) | `ab03141` |
+| **AC-41.6** | F-05 Call-Next Structural Exclusion | Yes | Yes | `tested` | `TEST-41F` (`[GREEN]`) | `ab03141` |
+| **AC-41.7** | F-05 Multi-Ticket Independence | Yes | Yes | `tested` | `TEST-41G` (`[GREEN]`) | `ab03141` |
+| **AC-41.8** | F-05 Concurrency Race Guard | Yes | Yes | `tested` | `TEST-41H` (`[GREEN]`) | `ab03141` |
+| **AC-41.9** | F-05 Collector Cancel Role & Auth Guards | Yes | Yes | `tested` | `TEST-41I`, `TEST-41J` (`[GREEN]`) | `ab03141` |
+| **AC-41.10** | F-05 Cancel Confirmation Modal & Empty State UI | Yes | Yes | `tested` | `TEST-41K` (`[GREEN]`) | `ab03141` |
+| **AC-41.11** | F-05 Not-Found (`404`), UUID Validation & Double-Submit Guard | Yes | Yes | `tested` | `TEST-41K`, `TEST-41L` (`[GREEN]`) | `ab03141` |
 | **AC-42.1** | F-06 Premature No-Show Rejection (<120s) + `STAFF_BUSY` | No | No | `planned` | - | TBD |
 | **AC-42.2** | F-06 119s / 120s / 121s Boundary | No | No | `planned` | - | TBD |
 | **AC-42.3** | F-06 ServerNow Timestamp Synchronization | No | No | `planned` | - | TBD |
@@ -1029,15 +1030,15 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 | **FR-08** | Call Next | F-03 | 1 | AC-22, AC-23, AC-24, AC-25 | TEST-22..25 | `server/tests/api/call-next.test.ts` | `accepted` (`v0.3.0-lab7`) | FIFO `SKIP LOCKED` row lock ([EV-B05](#appendix-b)) |
 | **FR-09** | Start Unbox | F-03 | 1 | AC-26 | TEST-26 | `server/tests/api/staff-transition.test.ts` | `accepted` (`v0.3.0-lab7`) | Handler exclusive 403 ([EV-A04](#appendix-b)) |
 | **FR-10** | Complete | F-03 | 1 | AC-27, AC-33 | TEST-27,33 | `server/tests/api/staff-transition.test.ts`, `e2e/full-journey.spec.ts` | `accepted` (`v0.3.0-lab7`) | State lifecycle completion |
-| **FR-11** | Cancel Queue | **F-05** | **2** | AC-41.1..41.11 | TEST-41A..41L | `server/tests/api/cancel.test.ts` *(planned)* | `planned` | Re-join ได้ทันที, ข้ามเลขถาวร |
+| **FR-11** | Cancel Queue | **F-05** | **2** | AC-41.1..41.11 | TEST-41A..41L | `server/tests/api/cancel.test.ts`, `concurrency/cancel-race.test.ts`, `client/src/tests/ticket.test.tsx` | `tested` (`D2-I2` `#64`) | Re-join ได้ทันที, ข้ามเลขถาวร |
 | **FR-12** | No-Show | **F-06** | **2** | AC-42.1..42.3, AC-43.1..43.10 | TEST-42A..D, TEST-43A..K, 43U | `server/tests/api/no-show.test.ts` *(planned)* | `planned` | Server-enforced Δt ≥ 120s + `serverNow` sync |
 | **FR-13** | Public Board | **F-07** | **2** | AC-44.1..44.8 | TEST-44A..44G | `server/tests/api/public-board.test.ts` *(planned)* | `planned` | Zero PII, Polling 3s, Max 5 |
 | **FR-14** | Analytics | **F-08** | **3** | AC-45.1..45.4 | TEST-45A..45E | `server/tests/api/analytics.test.ts` *(planned)* | `planned` | แม่นยำตามสูตรคณิตศาสตร์ |
 | **FR-15** | Series Toggle | **F-09** | **3** | AC-46.1..46.5 | TEST-46A..46F | `server/tests/api/series-toggle.test.ts` *(planned)* | `planned` | ตั๋วค้างเดิมยังให้บริการได้จนจบ |
-| **BR-01** | Monotonic No | F-02, F-05 | 1, 2 | AC-10, AC-17, AC-18, AC-41.3 | TEST-10,17,18,41B | `server/tests/concurrency/numbering.test.ts` | `accepted (S1) / planned (S2)` | Composite key `(seriesId, queueDate)` |
+| **BR-01** | Monotonic No | F-02, F-05 | 1, 2 | AC-10, AC-17, AC-18, AC-41.3 | TEST-10,17,18,41B | `server/tests/concurrency/numbering.test.ts`, `api/cancel.test.ts` | `accepted (S1) / tested (S2)` | Composite key `(seriesId, queueDate)` |
 | **BR-02 v2**| 1/Series | F-02 | 1, Lab 7 | AC-11, AC-16, AC-19 | TEST-11,16,19 | `server/tests/concurrency/duplicate.test.ts`, `join.test.ts` | `accepted` (`v0.3.0-lab7`) | Partial Unique Index ([EV-A02](#appendix-b)) |
-| **BR-03** | State Life | F-03, F-05, F-06 | 1, 2 | AC-22, AC-26, AC-27, AC-28, AC-41.5, AC-43.10 | TEST-28,41D,41E,43D,43U | `server/tests/unit/state-machine.test.ts` | `accepted (S1) / planned (S2)` | ทิศทางเดียว ไม่ย้อนกลับ |
-| **BR-04** | Role Guard | All | 1, 2, 3 | AC-08, AC-14, AC-31, AC-41.9, AC-43.7, AC-45.2, AC-46.3 | TEST-08U,14,31,41I,43G,45B,46F | `server/tests/unit/role-guard.test.ts` | `accepted (S1) / planned (S2–S3)` | `403 FORBIDDEN_ROLE` ([EV-B01](#appendix-b)) |
+| **BR-03** | State Life | F-03, F-05, F-06 | 1, 2 | AC-22, AC-26, AC-27, AC-28, AC-41.5, AC-43.10 | TEST-28,41D,41E,43D,43U | `server/tests/unit/state-machine.test.ts`, `api/cancel.test.ts` | `accepted (S1) / tested (F-05) / planned (F-06)` | ทิศทางเดียว ไม่ย้อนกลับ |
+| **BR-04** | Role Guard | All | 1, 2, 3 | AC-08, AC-14, AC-31, AC-41.9, AC-43.7, AC-45.2, AC-46.3 | TEST-08U,14,31,41I,43G,45B,46F | `server/tests/unit/role-guard.test.ts`, `api/cancel.test.ts` | `accepted (S1) / tested (F-05) / planned (F-06..09)` | `403 FORBIDDEN_ROLE` ([EV-B01](#appendix-b)) |
 | **BR-05** | Staff Series | F-03, F-06, F-08, F-09 | 1, 2, 3 | AC-25, AC-29, AC-43.10, AC-45.2, AC-46.3 | TEST-25,29,43K,45B,46C | `server/tests/api/staff-tickets.test.ts` | `accepted (S1) / planned (S2–S3)` | `403 FORBIDDEN_SERIES` |
 | **BR-06** | Single Staff | F-03, F-06 | 1, 2 | AC-24, AC-32, AC-43.2 | TEST-24,32,43B | `server/tests/api/call-next.test.ts` | `accepted (S1) / planned (S2)` | `409 STAFF_BUSY` ([EV-A02](#appendix-b)) |
 | **BR-07** | Handler Excl | F-03, F-06 | 1, 2 | AC-26, AC-30, AC-43.3 | TEST-26,30,43C | `server/tests/api/staff-transition.test.ts` | `accepted (S1) / planned (S2)` | `403 FORBIDDEN_NOT_HANDLER` |
@@ -1114,7 +1115,7 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 
 | Feature ID | Feature Name | Acceptance Criteria (ACs) | Implementation Artifacts | Verification Suites | Status / Result | Release Tag |
 | :---: | :--- | :--- | :--- | :--- | :---: | :---: |
-| **F-05** | Queue Cancellation | AC-41.1..AC-41.11 | `ticket.service.ts`<br>`ticket.routes.ts`<br>`MyTicketPage.tsx` | `TEST-41A..41L`<br>`cancel-race.test.ts` | `planned` | `v0.4.0-sprint2` |
+| **F-05** | Queue Cancellation | AC-41.1..AC-41.11 | `ticket.service.ts`<br>`ticket.routes.ts`<br>`MyTicketPage.tsx` | `TEST-41A..41L`<br>`cancel-race.test.ts` | `tested` (`D2-I2`, `ab03141`) | `v0.4.0-sprint2` |
 | **F-06** | Server 120s No-Show | AC-42.1..42.3, AC-43.1..43.10 | `staff.service.ts`<br>`staff.routes.ts`<br>`CountdownTimer.tsx` | `TEST-42A..D`<br>`TEST-43A..K`, `43U`<br>`no-show-race.test.ts` | `planned` | `v0.4.0-sprint2` |
 | **F-07** | Public Queue Board | AC-44.1..AC-44.8 | `public.service.ts`<br>`public.routes.ts`<br>`BoardPage.tsx` | `TEST-44A..44G`<br>`public-board.spec.ts` | `planned` | `v0.4.0-sprint2` |
 
@@ -1124,9 +1125,9 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 
 | Check ID | ชื่อการตรวจสอบ (Cross-Feature Interaction) | กฎและพฤติกรรมที่ต้องยืนยัน (Behavior & Invariant) | ชุดทดสอบที่ครอบคลุม | สถานะ (Status) |
 | :---: | :--- | :--- | :---: | :---: |
-| **CF-01** | `cancel` × `call-next` | ตั๋วที่ถูก Cancel ต้องไม่ถูก `call-next` เรียก ([EV-B05](#appendix-b)); หากกดพร้อมกันบนตั๋วใบเดียว ฝั่งแพ้ได้ 404 หรือ 400 | `TEST-41F`, `TEST-41H` | `planned` |
+| **CF-01** | `cancel` × `call-next` | ตั๋วที่ถูก Cancel ต้องไม่ถูก `call-next` เรียก ([EV-B05](#appendix-b)); หากกดพร้อมกันบนตั๋วใบเดียว ฝั่งแพ้ได้ 404 หรือ 400 | `TEST-41F`, `TEST-41H` | `tested` (`ab03141`) |
 | **CF-02** | `no-show` × `call-next` | หลังตัดสิทธิ์ No-Show สำเร็จ พนักงานหลุดจาก `STAFF_BUSY` และเรียกตั๋วถัดไปได้ทันที ([EV-A02](#appendix-b)) | `TEST-43B` | `planned` |
-| **CF-03** | `cancel` × Multi-Ticket (BR-02 v2) | ยกเลิกตั๋ว 1 ใบในมือ ตั๋วใบอื่นในซีรีส์อื่นยังคงอยู่ปกติ ([EV-B04](#appendix-b)); ยกเลิกใบสุดท้ายแสดง Empty State สะอาด | `TEST-41G`, `TEST-41K` | `planned` |
+| **CF-03** | `cancel` × Multi-Ticket (BR-02 v2) | ยกเลิกตั๋ว 1 ใบในมือ ตั๋วใบอื่นในซีรีส์อื่นยังคงอยู่ปกติ ([EV-B04](#appendix-b)); ยกเลิกใบสุดท้ายแสดง Empty State สะอาด | `TEST-41G`, `TEST-41K` | `tested` (`ab03141`) |
 | **CF-04** | `series-toggle` × `join` | เมื่อปิดซีรีส์ (`isActive: false`) คำขอ Join ใหม่ต้องถูกปฏิเสธด้วย `409 SERIES_CLOSED` (AC-12) | `TEST-46B` | `planned` |
 | **CF-05** | `series-toggle` × Public Board | ซีรีส์ที่ปิดแต่มีตั๋วค้าง ยังคงแสดงบนบอร์ดพร้อมป้าย Badge "ปิดรับคิวใหม่"; หากไม่มีตั๋วค้างให้ซ่อน (`DEC-04`) | `TEST-44D`, `TEST-44G` | `planned` |
 | **CF-06** | `cancel` / `no-show` × Public Board | ตั๋วที่ถูก Cancel หรือ No-Show ต้องหายจากบอร์ดหน้าร้านทันทีภายในการ Polling รอบถัดไป | `TEST-44A`, `TEST-44C` | `planned` |
@@ -1201,10 +1202,13 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 2. **Test Excerpt #2 (Access Restriction Evidence):**  
    คัดเลือกโค้ดทดสอบจาก `server/tests/api/cancel.test.ts` (เคส `TEST-41C`) แสดงการส่งคำขอยกเลิกตั๋วของผู้อื่น และยืนยันการตอบกลับ HTTP `403 FORBIDDEN_OWNERSHIP` จากระดับ Backend
 3. **TDD RED/GREEN Evidence Chain:**  
-   บันทึกหลักฐานคู่ Commit ของฟีเจอร์ F-05 (`D2-I2`) และ F-06 (`D2-I3`):
-   - Commit `[RED]`: SHA + ผลการรัน Vitest ที่ล้มเหลวเพราะ Assertion (`expected 200, received 404`)
-   - Commit `[GREEN]`: SHA + ผลการรัน Vitest ที่ผ่านครบทั้งชุด
-   - `git diff --stat` ระหว่าง 2 Commits เพื่อแสดงปริมาณโค้ดที่เพิ่มขึ้น
+   บันทึกหลักฐานคู่ Commit ของฟีเจอร์ F-05 (`D2-I2` `#64`) และ F-06 (`D2-I3` `#65`):
+   - **F-05 (`D2-I2` `#64`):**
+     - Commit `[RED]`: `9a2998f698b2c477bfa09e8dc82d4522dae4f9b9` — Server Vitest `22 failed | 153 passed` (`expected 404 to be 200/403/400/401`), Client Vitest `3 failed | 34 passed`
+     - Commit `[GREEN]`: `ab03141b306634b0647f5fb20c0185b107ac19a9` — Server Vitest `175 passed, 0 failed, 0 skipped` (26 files), Client Vitest `37 passed, 0 failed, 0 skipped` (6 files), Playwright E2E `7 passed` (`219 passed` total)
+     - `git diff --stat 9a2998f..ab03141`: `9 files changed, 391 insertions(+), 54 deletions(-)`
+   - **F-06 (`D2-I3` `#65`):** *(รอดำเนินการใน Track B)*
+     - Commit `[RED]`: TBD | Commit `[GREEN]`: TBD | `git diff --stat`: TBD
 4. **Issue / PR Chain Evidence:**  
    แสดงประวัติ Git Lineage ครบวงจรอย่างน้อย 2 สายงาน (`feature/sprint2-i<XX>-<slug>` + `Refs #<github-issue>`):
    - สายงานที่ 1 (`D2-I2` `#64` F-05): GitHub Issue `#64` → Branch `feature/sprint2-i02-f05-cancel` → PR (`test-and-docker` CI + 5-Lenses Review) → Merge เข้า `sprint2-staging`
@@ -1329,7 +1333,7 @@ docker compose up -d --build
 | :--- | :---: | :---: | :---: |
 | Lab 5–7 Continuity, CI/CD Pipeline & Maintenance (`v0.2.0`–`v0.3.0`) | Co-Author / Reviewer | Co-Author / Reviewer | `accepted` |
 | Master Contract `v1.0–v1.9`, `AGENTS.md`, CI Staging Triggers & Ruleset Setup (`D2-I1` `#69`, PR `#62`/`#63` Merged) | Author (`v1.0–v1.5`, `v1.9`) / Reviewer (`v1.6–v1.8`) | Reviewer (`v1.0–v1.5`, `v1.9`) / Author (`v1.6–v1.8`) | `in progress` *(PR `v1.9` + Seed IAM)* |
-| `D2-I2` (`#64`): F-05 Queue Cancellation (Backend, UI & TDD Tests) | Author | Reviewer & Merger | `planned` |
+| `D2-I2` (`#64`): F-05 Queue Cancellation (Backend, UI & TDD Tests) | Author | Reviewer & Merger | `tested` *(PR pending review)* |
 | `D2-I3` (`#65`): F-06 No-Show 120s & `serverNow` Sync (Backend, UI & TDD Tests) | Reviewer & Merger | Author | `planned` |
 | `D2-I4` (`#66`): F-07 Public Queue Display Board & `v0.4.0-sprint2` Release | Author | Reviewer & Merger | `planned` |
 | `D2-I5` (`#67`): F-09 Series Availability Control (Sprint 3 Working Progress) | Reviewer & Merger | Author | `planned` |
