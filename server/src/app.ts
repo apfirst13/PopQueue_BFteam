@@ -6,6 +6,7 @@ import { authRouter } from './routes/auth.routes.js';
 import { seriesRouter } from './routes/series.routes.js';
 import { ticketRouter } from './routes/ticket.routes.js';
 import { staffRouter } from './routes/staff.routes.js';
+import { publicRouter } from './routes/public.routes.js';
 import { errorHandler } from './middleware/error-handler.js';
 import { Clock, defaultClock } from './utils/clock.js';
 import { prisma } from './config/db.js';
@@ -51,6 +52,9 @@ export function createApp(options: AppOptions = {}): Express {
 
   // Box Master Service Counter routes (F-03)
   app.use('/api/staff', staffRouter);
+
+  // Public Queue Display Board routes (F-07)
+  app.use('/api/public', publicRouter);
 
   // Serve static frontend assets in production container if client dist exists
   const clientDist = process.env.CLIENT_DIST_DIR || path.resolve(process.cwd(), '../client/dist');

@@ -8,6 +8,7 @@ import { SeriesPage } from './pages/SeriesPage.js';
 import { MyTicketPage } from './pages/MyTicketPage.js';
 import { StaffCounterPage } from './pages/StaffCounterPage.js';
 import { ForbiddenPage } from './pages/ForbiddenPage.js';
+import { BoardPage } from './pages/BoardPage.js';
 import './styles/index.css';
 
 export function AppRoutes(): React.JSX.Element {
@@ -16,6 +17,7 @@ export function AppRoutes(): React.JSX.Element {
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/board" element={<BoardPage />} />
         <Route
           path="/series"
           element={

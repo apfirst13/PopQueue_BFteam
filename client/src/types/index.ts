@@ -173,6 +173,33 @@ export interface CompleteTicketResponse {
   };
 }
 
+// GET /api/public/queue-board -> 200 (F-07)
+export interface PublicNowServingItem {
+  displayNumber: string;
+  status: 'CALLED' | 'UNBOXING';
+}
+
+export interface PublicUpNextItem {
+  queueNumber: number;
+  displayNumber: string;
+}
+
+export interface PublicSeriesBoard {
+  seriesCode: string;
+  seriesName: string;
+  isActive: boolean;
+  nowServing: PublicNowServingItem[];
+  upNext: PublicUpNextItem[];
+  waitingCount: number;
+}
+
+export interface PublicQueueBoardResponse {
+  data: {
+    timestamp: string;
+    boards: PublicSeriesBoard[];
+  };
+}
+
 // Standard Error Envelope
 export interface ApiErrorPayload {
   error: {
