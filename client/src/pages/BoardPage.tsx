@@ -151,11 +151,11 @@ export function BoardPage(): React.JSX.Element {
                       </div>
                     ) : (
                       <div className="board-serving-list">
-                        {board.nowServing.map((item) => {
+                        {board.nowServing.map((item, idx) => {
                           const isUnboxing = item.status === 'UNBOXING';
                           return (
                             <div
-                              key={item.displayNumber}
+                              key={`${board.seriesCode}-${item.displayNumber}-${idx}`}
                               className={`board-serving-ticket ${isUnboxing ? 'is-unboxing' : 'is-called'}`}
                             >
                               <span className="board-serving-number tabular-nums">
