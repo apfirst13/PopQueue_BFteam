@@ -1,6 +1,6 @@
 export type Role = 'COLLECTOR' | 'BOX_MASTER';
 
-export type TicketStatus = 'WAITING' | 'CALLED' | 'UNBOXING' | 'COMPLETED' | 'CANCELLED';
+export type TicketStatus = 'WAITING' | 'CALLED' | 'UNBOXING' | 'COMPLETED' | 'CANCELLED' | 'NO_SHOW';
 
 export interface User {
   id: string;
@@ -86,6 +86,18 @@ export interface MyTicketResponse {
   data: {
     ticket: ActiveTicket;
     tickets?: ActiveTicket[];
+    serverNow?: string;
+  };
+}
+
+// POST /api/tickets/:id/cancel -> 200
+export interface CancelTicketResponse {
+  data: {
+    id: string;
+    seriesId: string;
+    displayNumber: string;
+    status: TicketStatus;
+    forfeitedAt: string;
   };
 }
 
@@ -117,6 +129,7 @@ export interface StaffSeriesQueueDto {
 export interface StaffTicketsResponse {
   data: {
     series: StaffSeriesQueueDto[];
+    serverNow?: string;
   };
 }
 
@@ -128,6 +141,17 @@ export interface CallNextResponse {
     status: TicketStatus;
     handledByStaffId: string | null;
     calledAt: string;
+    serverNow?: string;
+  };
+}
+
+// POST /api/staff/tickets/:id/no-show -> 200
+export interface NoShowTicketResponse {
+  data: {
+    id: string;
+    displayNumber: string;
+    status: TicketStatus;
+    forfeitedAt: string;
   };
 }
 
@@ -146,6 +170,33 @@ export interface CompleteTicketResponse {
     ticketId: string;
     status: TicketStatus;
     completedAt: string;
+  };
+}
+
+// GET /api/public/queue-board -> 200 (F-07)
+export interface PublicNowServingItem {
+  displayNumber: string;
+  status: 'CALLED' | 'UNBOXING';
+}
+
+export interface PublicUpNextItem {
+  queueNumber: number;
+  displayNumber: string;
+}
+
+export interface PublicSeriesBoard {
+  seriesCode: string;
+  seriesName: string;
+  isActive: boolean;
+  nowServing: PublicNowServingItem[];
+  upNext: PublicUpNextItem[];
+  waitingCount: number;
+}
+
+export interface PublicQueueBoardResponse {
+  data: {
+    timestamp: string;
+    boards: PublicSeriesBoard[];
   };
 }
 

@@ -1,11 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import * as staffApi from '../api/staff.api.js';
-import { StaffSeriesQueueDto } from '../types/index.js';
+import { ActiveServingTicketDto, StaffSeriesQueueDto } from '../types/index.js';
 import { SeriesSelector } from '../components/SeriesSelector.js';
 import { ErrorAlert } from '../components/ErrorAlert.js';
 import { LoadingSkeleton } from '../components/LoadingSkeleton.js';
 import { usePolling } from '../hooks/usePolling.js';
 import { ApiError } from '../api/client.js';
+import {
+  NO_SHOW_SECONDS,
+  computeServerOffsetMs,
+  computeNoShowRemainingSeconds,
+} from '../utils/countdown.js';
 import {
   ToyBoxIcon,
   BellIcon,
@@ -17,9 +22,14 @@ import {
 export function StaffCounterPage(): React.JSX.Element {
   const [seriesList, setSeriesList] = useState<StaffSeriesQueueDto[]>([]);
   const [selectedSeriesId, setSelectedSeriesId] = useState<string>('');
+  const [serverOffsetMs, setServerOffsetMs] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [actionError, setActionError] = useState<{ code?: string; message: string } | null>(null);
   const [isActing, setIsActing] = useState<boolean>(false);
+  const [pendingNoShowTicket, setPendingNoShowTicket] = useState<ActiveServingTicketDto | null>(null);
+  const [isMarkingNoShow, setIsMarkingNoShow] = useState<boolean>(false);
+  const [noShowError, setNoShowError] = useState<{ code?: string; message: string } | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const loadTickets = useCallback(async (isSilent = false) => {
     if (!isSilent) {
@@ -29,6 +39,9 @@ export function StaffCounterPage(): React.JSX.Element {
       const res = await staffApi.getStaffTickets();
       const list = res.data?.series || [];
       setSeriesList(list);
+      if (res.data?.serverNow) {
+        setServerOffsetMs(computeServerOffsetMs(res.data.serverNow));
+      }
       setSelectedSeriesId((prev) => {
         if (prev && list.some((s) => s.seriesId === prev)) {
           return prev;
@@ -52,19 +65,53 @@ export function StaffCounterPage(): React.JSX.Element {
     loadTickets(false);
   }, [loadTickets]);
 
+  useEffect(() => {
+    if (!toastMessage) return;
+    const timer = setTimeout(() => setToastMessage(null), 5000);
+    return () => clearTimeout(timer);
+  }, [toastMessage]);
+
   // 3-second Polling for Staff Counter
   usePolling(() => {
     loadTickets(true);
   }, 3000, !isLoading);
 
   const currentSeries = seriesList.find((s) => s.seriesId === selectedSeriesId) || seriesList[0];
+  const activeServing = currentSeries?.activeServing ?? null;
+  const activeCalledAt = activeServing?.status === 'CALLED' ? activeServing.calledAt : null;
+
+  const [noShowRemainingSeconds, setNoShowRemainingSeconds] = useState<number>(() =>
+    activeCalledAt
+      ? computeNoShowRemainingSeconds(activeCalledAt, serverOffsetMs, NO_SHOW_SECONDS)
+      : NO_SHOW_SECONDS,
+  );
+
+  useEffect(() => {
+    if (!activeCalledAt) {
+      setNoShowRemainingSeconds(NO_SHOW_SECONDS);
+      return;
+    }
+
+    const updateCountdown = () => {
+      setNoShowRemainingSeconds(
+        computeNoShowRemainingSeconds(activeCalledAt, serverOffsetMs, NO_SHOW_SECONDS),
+      );
+    };
+
+    updateCountdown();
+    const timer = setInterval(updateCountdown, 1000);
+    return () => clearInterval(timer);
+  }, [activeServing?.id, activeCalledAt, serverOffsetMs]);
 
   const handleCallNext = async () => {
     if (!currentSeries) return;
     setActionError(null);
     setIsActing(true);
     try {
-      await staffApi.callNext(currentSeries.seriesId);
+      const res = await staffApi.callNext(currentSeries.seriesId);
+      if (res.data?.serverNow) {
+        setServerOffsetMs(computeServerOffsetMs(res.data.serverNow));
+      }
       await loadTickets(true);
     } catch (err) {
       if (err instanceof ApiError) {
@@ -74,6 +121,44 @@ export function StaffCounterPage(): React.JSX.Element {
       }
     } finally {
       setIsActing(false);
+    }
+  };
+
+  const handleRequestNoShow = (ticket: ActiveServingTicketDto) => {
+    setNoShowError(null);
+    setPendingNoShowTicket(ticket);
+  };
+
+  const handleCloseNoShowModal = () => {
+    if (isMarkingNoShow) return;
+    setPendingNoShowTicket(null);
+    setNoShowError(null);
+  };
+
+  const handleConfirmNoShow = async () => {
+    if (!pendingNoShowTicket || isMarkingNoShow) return;
+    setNoShowError(null);
+    setIsMarkingNoShow(true);
+    try {
+      const result = await staffApi.markNoShow(pendingNoShowTicket.id);
+      setPendingNoShowTicket(null);
+      setToastMessage(`ตัดสิทธิ์ No-Show คิว ${result.data.displayNumber} สำเร็จ`);
+      await loadTickets(false);
+    } catch (err) {
+      if (err instanceof ApiError) {
+        setNoShowError({ code: err.code, message: err.message });
+        if (
+          err.code === 'NO_SHOW_WINDOW_NOT_EXPIRED' ||
+          err.code === 'INVALID_STATE_TRANSITION' ||
+          err.code === 'RESOURCE_NOT_FOUND'
+        ) {
+          void loadTickets(true);
+        }
+      } else {
+        setNoShowError({ message: 'ไม่สามารถตัดสิทธิ์ No-Show ได้ กรุณาลองใหม่อีกครั้ง' });
+      }
+    } finally {
+      setIsMarkingNoShow(false);
     }
   };
 
@@ -119,6 +204,25 @@ export function StaffCounterPage(): React.JSX.Element {
 
   return (
     <div>
+      {toastMessage && (
+        <div className="alert toast-success pop-in" role="status" style={{ marginBottom: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600 }}>
+              <CheckIcon size={18} />
+              <span>{toastMessage}</span>
+            </div>
+            <button
+              type="button"
+              className="toast-dismiss-btn"
+              aria-label="ปิดการแจ้งเตือน"
+              onClick={() => setToastMessage(null)}
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div style={{ marginBottom: '20px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
@@ -217,18 +321,41 @@ export function StaffCounterPage(): React.JSX.Element {
                     </span>
                   </div>
 
-                  <div style={{ display: 'flex', gap: '10px', marginTop: '16px' }}>
+                  <div style={{ display: 'flex', gap: '10px', marginTop: '16px', flexWrap: 'wrap' }}>
                     {currentSeries.activeServing.status === 'CALLED' && (
-                      <button
-                        type="button"
-                        className="btn btn-primary staff-action-btn"
-                        onClick={handleStartUnboxing}
-                        disabled={isActing}
-                        style={{ width: '100%' }}
-                      >
-                        <ToyBoxIcon size={20} />
-                        <span>Verify & Start Unboxing</span>
-                      </button>
+                      <>
+                        <button
+                          type="button"
+                          className="btn btn-primary staff-action-btn"
+                          onClick={handleStartUnboxing}
+                          disabled={isActing || isMarkingNoShow}
+                          style={{ flex: '1 1 200px' }}
+                        >
+                          <ToyBoxIcon size={20} />
+                          <span>Verify & Start Unboxing</span>
+                        </button>
+                        <button
+                          type="button"
+                          className={`btn staff-action-btn ${
+                            noShowRemainingSeconds > 0 ? 'btn-secondary' : 'btn-danger'
+                          }`}
+                          onClick={() => activeServing && handleRequestNoShow(activeServing)}
+                          disabled={noShowRemainingSeconds > 0 || isActing || isMarkingNoShow}
+                          aria-label={
+                            noShowRemainingSeconds > 0
+                              ? `ตัดสิทธิ์ No-Show (รออีก ${noShowRemainingSeconds} วินาที)`
+                              : 'ตัดสิทธิ์ No-Show'
+                          }
+                          style={{ flex: '1 1 180px' }}
+                        >
+                          <ClockIcon size={20} />
+                          <span>
+                            {noShowRemainingSeconds > 0
+                              ? `รออีก ${noShowRemainingSeconds} วินาที`
+                              : 'ตัดสิทธิ์ No-Show'}
+                          </span>
+                        </button>
+                      </>
                     )}
 
                     {currentSeries.activeServing.status === 'UNBOXING' && (
@@ -395,6 +522,55 @@ export function StaffCounterPage(): React.JSX.Element {
                 ))}
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* No-Show Confirmation Modal (F-06, §2.8 DoD) */}
+      {pendingNoShowTicket && (
+        <div className="modal-backdrop">
+          <div
+            className="card modal-dialog pop-in"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="noshow-dialog-title"
+            aria-describedby="noshow-dialog-desc"
+          >
+            <h3
+              id="noshow-dialog-title"
+              style={{ fontFamily: 'var(--font-display)', fontSize: '1.2rem', marginBottom: '10px' }}
+            >
+              ยืนยันการตัดสิทธิ์ No-Show
+            </h3>
+            <p
+              id="noshow-dialog-desc"
+              style={{ color: 'var(--color-text)', fontSize: '0.95rem', marginBottom: '16px' }}
+            >
+              ลูกค้าคิว {pendingNoShowTicket.displayNumber} ไม่มาแสดงตัวหลังครบ 120 วินาทีใช่หรือไม่? ตั๋วนี้จะถูกตัดสิทธิ์และคุณจะสามารถเรียกคิวถัดไปได้ทันที
+            </p>
+            {noShowError && (
+              <div style={{ marginBottom: '16px' }}>
+                <ErrorAlert code={noShowError.code} message={noShowError.message} />
+              </div>
+            )}
+            <div className="modal-actions">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={handleCloseNoShowModal}
+                disabled={isMarkingNoShow}
+              >
+                ยกเลิก
+              </button>
+              <button
+                type="button"
+                className="btn btn-danger"
+                onClick={handleConfirmNoShow}
+                disabled={isMarkingNoShow}
+              >
+                {isMarkingNoShow ? 'กำลังบันทึก...' : 'ยืนยันตัดสิทธิ์ No-Show'}
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -95,3 +95,52 @@ test.describe('TEST-20 / AC-20: Mobile Viewport 375x667 Responsive Verification'
     });
   });
 });
+
+test.describe('TEST-44F / AC-44.7: Public Board (/board) Multi-Viewport Responsive Verification', () => {
+  const viewports = [
+    { name: 'TV 1920x1080', width: 1920, height: 1080 },
+    { name: 'Tablet 768x1024', width: 768, height: 1024 },
+    { name: 'Mobile 375x667', width: 375, height: 667 },
+  ];
+
+  test.beforeEach(async () => {
+    await resetTestDatabase();
+  });
+
+  test.afterAll(async () => {
+    await resetTestDatabase();
+  });
+
+  for (const vp of viewports) {
+    test(`renders /board cleanly with no horizontal overflow at ${vp.name}`, async ({ page }) => {
+      await page.setViewportSize({ width: vp.width, height: vp.height });
+      await page.goto('/board');
+
+      await expect(page.locator('[data-testid="public-board-page"]')).toBeVisible();
+      await expect(page.locator('[data-series="CRY"]')).toBeVisible();
+
+      const layoutCheck = await page.evaluate(() => {
+        const doc = document.documentElement;
+        const card = document.querySelector('[data-series="CRY"]');
+        const title = document.querySelector('.board-series-name');
+        const cardRect = card ? card.getBoundingClientRect() : null;
+        const titleFontPx = title ? parseFloat(getComputedStyle(title).fontSize) : 0;
+
+        return {
+          overflows: doc.scrollWidth > doc.clientWidth,
+          scrollWidth: doc.scrollWidth,
+          clientWidth: doc.clientWidth,
+          cardRight: cardRect ? cardRect.right : 0,
+          titleFontPx,
+        };
+      });
+
+      expect(
+        layoutCheck.overflows,
+        `Board /board overflowed at ${vp.name} (${layoutCheck.scrollWidth} > ${layoutCheck.clientWidth})`,
+      ).toBe(false);
+      expect(layoutCheck.cardRight).toBeLessThanOrEqual(vp.width);
+      expect(layoutCheck.titleFontPx).toBeGreaterThanOrEqual(16);
+    });
+  }
+});

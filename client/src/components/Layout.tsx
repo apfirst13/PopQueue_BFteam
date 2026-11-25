@@ -20,11 +20,12 @@ export function Layout({ children }: { children: React.ReactNode }): React.JSX.E
     navigate('/login');
   };
 
-  const isCollector = user && user.role === 'COLLECTOR';
+  const isBoardPage = location.pathname === '/board';
+  const isCollector = !isBoardPage && user && user.role === 'COLLECTOR';
   const initial = user?.fullName ? user.fullName.charAt(0).toUpperCase() : 'U';
 
   return (
-    <div className="app-container">
+    <div className={`app-container ${isBoardPage ? 'board-app-container' : ''}`}>
       <div className="header-wrapper">
         <header className="header">
           <div className="header-brand">
@@ -57,7 +58,7 @@ export function Layout({ children }: { children: React.ReactNode }): React.JSX.E
             </nav>
           )}
 
-          {user && (
+          {!isBoardPage && user && (
             <div className="header-user">
               <div className="user-avatar-initial" title={user.fullName}>
                 {initial}

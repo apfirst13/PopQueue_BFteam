@@ -4,6 +4,9 @@ import { AppError } from '../middleware/error-handler.js';
 import { Clock, defaultClock } from '../utils/clock.js';
 import { canTransition } from '../utils/state-machine.js';
 
+export const NO_SHOW_SECONDS = 120;
+export const NO_SHOW_WINDOW_MS = NO_SHOW_SECONDS * 1000;
+
 export interface ActiveServingTicketDto {
   id: string;
   displayNumber: string;
@@ -34,6 +37,14 @@ export interface CallNextResultDto {
   status: TicketStatus;
   handledByStaffId: string | null;
   calledAt: string;
+  serverNow: string;
+}
+
+export interface NoShowResultDto {
+  id: string;
+  displayNumber: string;
+  status: TicketStatus;
+  forfeitedAt: string;
 }
 
 export interface StartUnboxingResultDto {
@@ -74,7 +85,10 @@ export function isStaffBusyError(error: unknown): boolean {
 }
 
 export class StaffService {
-  async getStaffTickets(staffId: string): Promise<{ series: StaffSeriesQueueDto[] }> {
+  async getStaffTickets(
+    staffId: string,
+    clock: Clock = defaultClock,
+  ): Promise<{ series: StaffSeriesQueueDto[]; serverNow: string }> {
     // 1. Fetch assigned series for this staff member
     const assignments = await prisma.staffSeriesAssignment.findMany({
       where: { staffId },
@@ -142,7 +156,10 @@ export class StaffService {
       });
     }
 
-    return { series: seriesResult };
+    return {
+      series: seriesResult,
+      serverNow: clock.now().toISOString(),
+    };
   }
 
   async callNext(
@@ -211,6 +228,7 @@ export class StaffService {
           status: updated.status,
           handledByStaffId: updated.handledByStaffId,
           calledAt: updated.calledAt?.toISOString() ?? now.toISOString(),
+          serverNow: now.toISOString(),
         };
       });
 
@@ -392,6 +410,110 @@ export class StaffService {
       ticketId,
       status: TicketStatus.COMPLETED,
       completedAt: now.toISOString(),
+    };
+  }
+
+  /**
+   * Marks a CALLED ticket as NO_SHOW after >= 120s elapsed from calledAt (F-06, AC-42..43, BR-08).
+   * Deterministic evaluation order (EV-A04):
+   * 1) Resource existence (404 RESOURCE_NOT_FOUND)
+   * 2) Series scope (403 FORBIDDEN_SERIES)
+   * 3) Handler ownership with null guard (403 FORBIDDEN_NOT_HANDLER)
+   * 4) State transition validity (400 INVALID_STATE_TRANSITION)
+   * 5) Server clock timeout validation >= 120s (400 NO_SHOW_WINDOW_NOT_EXPIRED)
+   * 6) Atomic guarded update (id, status = CALLED, handledByStaffId = staffId)
+   */
+  async noShow(
+    staffId: string,
+    ticketId: string,
+    clock: Clock = defaultClock,
+  ): Promise<NoShowResultDto> {
+    const ticket = await prisma.queueTicket.findUnique({
+      where: { id: ticketId },
+      select: {
+        id: true,
+        seriesId: true,
+        displayNumber: true,
+        status: true,
+        handledByStaffId: true,
+        calledAt: true,
+      },
+    });
+
+    if (!ticket) {
+      throw new AppError(404, 'RESOURCE_NOT_FOUND', 'Ticket not found');
+    }
+
+    const assignment = await prisma.staffSeriesAssignment.findUnique({
+      where: {
+        staffId_seriesId: {
+          staffId,
+          seriesId: ticket.seriesId,
+        },
+      },
+    });
+
+    if (!assignment) {
+      throw new AppError(403, 'FORBIDDEN_SERIES', 'Staff is not assigned to this series');
+    }
+
+    if (ticket.handledByStaffId !== null && ticket.handledByStaffId !== staffId) {
+      throw new AppError(403, 'FORBIDDEN_NOT_HANDLER', 'Staff is not the handler of this ticket');
+    }
+
+    if (!canTransition(ticket.status, 'NO_SHOW')) {
+      throw new AppError(
+        400,
+        'INVALID_STATE_TRANSITION',
+        'Invalid ticket state transition: ticket must be in CALLED status to mark as NO_SHOW',
+      );
+    }
+
+    if (!ticket.calledAt) {
+      throw new AppError(
+        400,
+        'INVALID_STATE_TRANSITION',
+        'Invalid ticket state transition: missing calledAt timestamp',
+      );
+    }
+
+    const now = clock.now();
+    const elapsedMs = now.getTime() - ticket.calledAt.getTime();
+    if (elapsedMs < NO_SHOW_WINDOW_MS) {
+      const remainingSeconds = Math.ceil((NO_SHOW_WINDOW_MS - elapsedMs) / 1000);
+      throw new AppError(
+        400,
+        'NO_SHOW_WINDOW_NOT_EXPIRED',
+        'No-show window has not expired yet',
+        { remainingSeconds },
+      );
+    }
+
+    const result = await prisma.queueTicket.updateMany({
+      where: {
+        id: ticketId,
+        status: TicketStatus.CALLED,
+        handledByStaffId: staffId,
+      },
+      data: {
+        status: TicketStatus.NO_SHOW,
+        forfeitedAt: now,
+      },
+    });
+
+    if (result.count === 0) {
+      throw new AppError(
+        400,
+        'INVALID_STATE_TRANSITION',
+        'Invalid ticket state transition: concurrent state change detected',
+      );
+    }
+
+    return {
+      id: ticket.id,
+      displayNumber: ticket.displayNumber,
+      status: TicketStatus.NO_SHOW,
+      forfeitedAt: now.toISOString(),
     };
   }
 }

@@ -3,6 +3,7 @@ import {
   StaffTicketsResponse,
   CallNextResponse,
   StartUnboxingResponse,
+  NoShowTicketResponse,
   CompleteTicketResponse,
 } from '../types/index.js';
 
@@ -21,6 +22,12 @@ export async function callNext(seriesId: string): Promise<CallNextResponse> {
 
 export async function startUnboxing(ticketId: string): Promise<StartUnboxingResponse> {
   return apiClient<StartUnboxingResponse>(`/api/staff/tickets/${ticketId}/start-unboxing`, {
+    method: 'POST',
+  });
+}
+
+export async function markNoShow(ticketId: string): Promise<NoShowTicketResponse> {
+  return apiClient<NoShowTicketResponse>(`/api/staff/tickets/${ticketId}/no-show`, {
     method: 'POST',
   });
 }

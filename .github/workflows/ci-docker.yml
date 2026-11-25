@@ -3,9 +3,11 @@
 # ##############################################################################
 # WHAT THIS WORKFLOW DOES
 #   Implements the automated CI pipeline on pull requests per Lab 5 Episode 4
-#   (GitHub Issue #27). Runs on every PR targeting `main` and `lab5-staging`.
+#   (GitHub Issue #27). Runs on every PR targeting `main`, `lab5-staging`,
+#   `sprint2-staging`, and `sprint3-staging`.
 #   Used in two ways:
-#     1) directly on every pull request to `main` and `lab5-staging` (Check C-01),
+#     1) directly on every pull request to `main`, `lab5-staging`, `sprint2-staging`,
+#        and `sprint3-staging` (Check C-01),
 #     2) as a REUSABLE workflow called by deploy.yml (`workflow_call`) so the
 #        deploy only starts after these checks pass.
 #   Quality Gate Steps:
@@ -27,7 +29,7 @@ name: CI & Docker Build
 on:
   workflow_call:
   pull_request:
-    branches: [main, lab5-staging]
+    branches: [main, lab5-staging, sprint2-staging, sprint3-staging]
   workflow_dispatch:
 
 permissions:

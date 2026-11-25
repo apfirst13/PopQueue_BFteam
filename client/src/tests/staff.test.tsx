@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '../context/AuthContext.js';
@@ -18,6 +18,7 @@ describe('StaffCounterPage Component Tests (Master §3.6)', () => {
   });
 
   afterEach(() => {
+    vi.useRealTimers();
     vi.restoreAllMocks();
   });
 
@@ -284,5 +285,102 @@ describe('StaffCounterPage Component Tests (Master §3.6)', () => {
     await user.click(callNextBtn);
 
     expect(await screen.findByText(/STAFF_BUSY/i)).toBeInTheDocument();
+  });
+
+  describe('TEST-43I (AC-43.8, F-06): Staff Console 120s No-Show Countdown & Confirmation Flow', () => {
+    it('disables No-Show button with countdown before 120s, enables at >=120s, and confirms No-Show with toast', async () => {
+      vi.useFakeTimers({ shouldAdvanceTime: true });
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+
+      const calledAt = '2026-11-25T10:00:00.000Z';
+      const initialServerNow = '2026-11-25T10:01:58.000Z'; // 118s elapsed -> 2s remaining
+      const afterTwoSecServerNow = '2026-11-25T10:02:00.000Z';
+
+      const calledPayload = {
+        data: {
+          serverNow: initialServerNow,
+          series: [
+            {
+              seriesId: 's-cry',
+              code: 'CRY',
+              name: 'Crybaby Sunset Concert',
+              activeServing: {
+                id: 't-cry-1',
+                displayNumber: 'CRY-001',
+                status: 'CALLED',
+                calledAt,
+                startedAt: null,
+              },
+              waitingQueue: [],
+            },
+          ],
+        },
+      };
+
+      const afterNoShowPayload = {
+        data: {
+          serverNow: afterTwoSecServerNow,
+          series: [
+            {
+              seriesId: 's-cry',
+              code: 'CRY',
+              name: 'Crybaby Sunset Concert',
+              activeServing: null,
+              waitingQueue: [],
+            },
+          ],
+        },
+      };
+
+      vi.mocked(fetch)
+        .mockResolvedValueOnce({
+          ok: true,
+          status: 200,
+          json: async () => calledPayload,
+        } as Response)
+        .mockResolvedValueOnce({
+          ok: true,
+          status: 200,
+          json: async () => ({
+            data: {
+              id: 't-cry-1',
+              displayNumber: 'CRY-001',
+              status: 'NO_SHOW',
+              forfeitedAt: afterTwoSecServerNow,
+            },
+          }),
+        } as Response)
+        .mockResolvedValueOnce({
+          ok: true,
+          status: 200,
+          json: async () => afterNoShowPayload,
+        } as Response);
+
+      renderStaff();
+
+      const waitingNoShowBtn = await screen.findByRole('button', { name: /รออีก 2 วินาที|ตัดสิทธิ์ No-Show/i });
+      expect(waitingNoShowBtn).toBeDisabled();
+      expect(waitingNoShowBtn).toHaveTextContent(/รออีก 2 วินาที/);
+
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(2100);
+      });
+
+      const readyNoShowBtn = screen.getByRole('button', { name: /ตัดสิทธิ์ No-Show/i });
+      expect(readyNoShowBtn).toBeEnabled();
+      expect(readyNoShowBtn).toHaveTextContent('ตัดสิทธิ์ No-Show');
+
+      await user.click(readyNoShowBtn);
+
+      const dialog = await screen.findByRole('dialog');
+      expect(dialog).toHaveTextContent(/CRY-001/);
+
+      const confirmBtn = screen.getByRole('button', { name: /ยืนยันตัดสิทธิ์ No-Show/i });
+      await user.click(confirmBtn);
+
+      expect(await screen.findByText(/ตัดสิทธิ์ No-Show คิว CRY-001 สำเร็จ/i)).toBeInTheDocument();
+      const callNextBtn = screen.getByRole('button', { name: /เรียกคิวถัดไป|call next/i });
+      expect(callNextBtn).toBeEnabled();
+    });
   });
 });
