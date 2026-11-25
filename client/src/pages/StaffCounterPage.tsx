@@ -85,26 +85,19 @@ export function StaffCounterPage(): React.JSX.Element {
   const activeServing = currentSeries?.activeServing ?? null;
   const activeCalledAt = activeServing?.status === 'CALLED' ? activeServing.calledAt : null;
 
-  const [noShowRemainingSeconds, setNoShowRemainingSeconds] = useState<number>(() =>
-    activeCalledAt
-      ? computeNoShowRemainingSeconds(activeCalledAt, serverOffsetMs, NO_SHOW_SECONDS)
-      : NO_SHOW_SECONDS,
-  );
+  const [, setCountdownTick] = useState<number>(0);
+  const noShowRemainingSeconds = activeCalledAt
+    ? computeNoShowRemainingSeconds(activeCalledAt, serverOffsetMs, NO_SHOW_SECONDS)
+    : NO_SHOW_SECONDS;
 
   useEffect(() => {
     if (!activeCalledAt) {
-      setNoShowRemainingSeconds(NO_SHOW_SECONDS);
       return;
     }
 
-    const updateCountdown = () => {
-      setNoShowRemainingSeconds(
-        computeNoShowRemainingSeconds(activeCalledAt, serverOffsetMs, NO_SHOW_SECONDS),
-      );
-    };
-
-    updateCountdown();
-    const timer = setInterval(updateCountdown, 1000);
+    const timer = setInterval(() => {
+      setCountdownTick((prev) => prev + 1);
+    }, 1000);
     return () => clearInterval(timer);
   }, [activeServing?.id, activeCalledAt, serverOffsetMs]);
 
