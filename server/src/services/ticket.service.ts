@@ -33,6 +33,7 @@ export interface ActiveTicketItem {
 export interface ActiveTicketResult {
   ticket: ActiveTicketItem;
   tickets: ActiveTicketItem[];
+  serverNow: string;
 }
 
 export interface TicketDetailResult {
@@ -156,7 +157,7 @@ export class TicketService {
    */
   async getMyActiveTicket(
     userId: string,
-    _clock: Clock = defaultClock,
+    clock: Clock = defaultClock,
   ): Promise<ActiveTicketResult> {
     const activeTickets = await prisma.queueTicket.findMany({
       where: {
@@ -218,6 +219,7 @@ export class TicketService {
     return {
       ticket: ticketsWithWaitingAhead[0],
       tickets: ticketsWithWaitingAhead,
+      serverNow: clock.now().toISOString(),
     };
   }
 

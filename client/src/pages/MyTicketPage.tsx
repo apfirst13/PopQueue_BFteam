@@ -45,9 +45,11 @@ const STATUS_ORDER: Record<string, number> = {
 
 function ActiveTicketCard({
   ticket,
+  serverNow,
   onRequestCancel,
 }: {
   ticket: ActiveTicket;
+  serverNow?: string;
   onRequestCancel: (ticket: ActiveTicket) => void;
 }): React.JSX.Element {
   const colors = getSeriesColors(ticket.series.code);
@@ -194,7 +196,12 @@ function ActiveTicketCard({
           {/* State 2: CALLED */}
           {ticket.status === 'CALLED' && (
             <div style={{ width: '100%', marginTop: '8px' }}>
-              <CountdownTimer key={ticket.id} initialSeconds={120} />
+              <CountdownTimer
+                key={ticket.id}
+                calledAt={ticket.calledAt}
+                serverNow={serverNow}
+                initialSeconds={120}
+              />
             </div>
           )}
 
@@ -267,6 +274,7 @@ function ActiveTicketCard({
 
 export function MyTicketPage(): React.JSX.Element {
   const [tickets, setTickets] = useState<ActiveTicket[]>([]);
+  const [serverNow, setServerNow] = useState<string | undefined>(undefined);
   const [isNoTicket, setIsNoTicket] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<{ code?: string; message: string } | null>(null);
@@ -282,6 +290,7 @@ export function MyTicketPage(): React.JSX.Element {
     try {
       const res = await ticketApi.getMyTicket();
       const nextTickets = res.data?.tickets ?? (res.data?.ticket ? [res.data.ticket] : []);
+      setServerNow(res.data?.serverNow);
       if (nextTickets.length > 0) {
         setTickets(nextTickets);
         setIsNoTicket(false);
@@ -460,7 +469,12 @@ export function MyTicketPage(): React.JSX.Element {
       {/* Ordered List of Active Tickets (BR-02 v2) */}
       <div className="tickets-list" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
         {tickets.map((t) => (
-          <ActiveTicketCard key={t.id} ticket={t} onRequestCancel={handleRequestCancel} />
+          <ActiveTicketCard
+            key={t.id}
+            ticket={t}
+            serverNow={serverNow}
+            onRequestCancel={handleRequestCancel}
+          />
         ))}
       </div>
 
