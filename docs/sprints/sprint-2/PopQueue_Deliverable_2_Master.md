@@ -1,4 +1,4 @@
-# PopQueue — Project Deliverable 2 Master Contract & Specification (v1.11)
+# PopQueue — Project Deliverable 2 Master Contract & Specification (v1.12)
 > **Core Expansion (Sprint 2) & Genuine Progress (Sprint 3) with GCP Deployment**  
 > **Course:** CPE 334 Introduction to Software Engineering in the Age of AI Agents (Semester 1/2026, KMUTT)  
 > **Project / Theme:** **PopQueue** — Theme 9: Queue and Service Management System (*Art Toy Live Unboxing Station*)  
@@ -7,19 +7,19 @@
 > **Student IDs:** *(ใส่รหัสนักศึกษาทั้ง 2 คนในหน้าปก PDF เท่านั้น — ไม่เปิดเผยใน Repo สาธารณะ)*  
 > **Deliverable:** Project Deliverable 2 (70 Points | 7% of Course Grade)  
 > **Submission Deadline:** **Sunday, 29 November 2026 at 23:59** (via LEB2, single self-contained PDF)  
-> **Contract Version:** `v1.11 (D2-I3 #65 F-06 NO-SHOW & SERVERNOW IMPLEMENTED + SEED IAM VERIFIED)`  
+> **Contract Version:** `v1.12 (D2-I4 #66 F-07 PUBLIC QUEUE BOARD IMPLEMENTED & VERIFIED)`  
 > **Contract Date:** `2026-11-25`  
 > **Baseline Tags Audited:** `v0.1.0-sprint1` (`d946159`), `v0.2.0-lab5` (`bf52c9b`), `v0.3.0-lab7` (`a07a7be`)  
 > **Audit Evidence Execution Commit:** `75068a6109439b7f5dcadd7713ba93115ab29043` (`sprint-2-docs`, bit-identical to `a07a7be` per EV-B02) & `80863efe5da82de12e8494189f9de030262c2432` (`docs/sprint2-master-contract`)  
 > **Evidence Consolidated History:** `75068a6` (`sprint-2-docs`) & `830bdc5..f1941a0` (PR #61 draft history; consolidated on clean branch `docs/sprint2-master-contract` superseding closed PR #61)  
-> **Authors / Reviewers:** Author `@apfirst13` (v1.0–v1.5, v1.9–v1.10), Author/Reconciler `@Theerawat82` (v1.6–v1.8, v1.11) — PR `#62`/`#63`/`#70`/`#71` Merged → `sprint2-staging`; `D2-I3` (`#65`) by `@Theerawat82` (Target Reviewer: `@apfirst13`)  
+> **Authors / Reviewers:** Author `@apfirst13` (v1.0–v1.5, v1.9–v1.10, v1.12), Author/Reconciler `@Theerawat82` (v1.6–v1.8, v1.11) — PR `#62`/`#63`/`#70`/`#71`/`#72` Merged → `sprint2-staging`; `D2-I4` (`#66` F-07) by `@apfirst13` (PR `#73`, Reviewer: `@Theerawat82`)  
 > **Staging Lineage Branch:** `sprint2-staging` (แตกจาก `origin/main` commit `a07a7be`)  
 > **Deployed Cloud Run URL:** `https://popqueue-5now4hkvsa-as.a.run.app` *(Baseline Lab 5–7 live URL; รอผล Live Verification รอบ Candidate หลัง Deploy `v0.4.0-sprint2` / `v0.5.0-d2-rc`)*  
 > **Immutable Submitted Tag/Commit:** `*(จะเติมก่อน Export PDF หลัง Deploy รอบสุดท้ายบน main)*`
 
 ---
 
-## 0. ตารางบันทึกการเปลี่ยนแปลงฉบับเอกสาร (Changelog: v1.0 → v1.11)
+## 0. ตารางบันทึกการเปลี่ยนแปลงฉบับเอกสาร (Changelog: v1.0 → v1.12)
 
 | เวอร์ชัน | วันที่ | ส่วนที่แก้ไข / เพิ่มเติม | เหตุผลและความจำเป็นทางวิศวกรรม |
 | :---: | :---: | :--- | :--- |
@@ -35,6 +35,7 @@
 | **v1.9** | 2026-11-25 | **Issue Linkage (`#64`–`#69`), Cloud Run Lineage & Team Decisions Sync** | 1. บันทึก Milestone `#5`, Labels (`sprint2`, `sprint3`, `deliverable2`, `release`) และเลข GitHub Issues จริง `#69` (`D2-I1`, Closed), `#64` (`D2-I2`), `#65` (`D2-I3`), `#66` (`D2-I4`), `#67` (`D2-I5`), `#68` (`D2-I6`) ครบใน Project Board `PopQueue_Individual_Sprints` และเชื่อม PR `#62`/`#63` (`b9a4404`) กับ `Refs #69`<br>2. เติมหลักฐานจริงจาก CD Run `#45357138027` (`rev popqueue-00007-npd`, `popqueue-migrate-j2lpp`), ยืนยันการส่ง Lab 7 PDF ใน LEB2 แล้ว และชี้แจง Issue `#55` (ปิดเป็น checklist ซ้ำซ้อนหลังจบ Lab 7 โดย PR `#60` ปิด `#52` และ Deploy จริงแล้ว)<br>3. ปิดข้อตกลงทีม: `DEC-02` (`Approved by Team` หลัง TA/อาจารย์งดการรอถามเพิ่ม), `A-03` (`1 ตั๋ว = แกะ 1 กล่อง / 1 รอบบริการต่อซีรีส์`), เพิ่มบรรทัด `DB / Migration Impact: ไม่มี` ใน `F-07 §3.1` ให้ครบเกณฑ์ Rubric 3.2, อัปเดต `protect-staging` (`refs/heads/sprint2-staging` + `merge` only แล้ว; `sprint3-staging` รอสร้างจาก `main` ก่อนเพิ่ม) และบันทึกสถานะ Seed Secrets บน Cloud Run (`popqueue-seed-collector-pw` / `popqueue-seed-staff-pw` สร้างแล้ว รอ GCP Owner `@Theerawat82` ให้สิทธิ์ IAM) |
 | **v1.10** | 2026-11-25 | **`D2-I2` (`#64`) `F-05` Queue Cancellation Implemented & Verified (`[RED]`→`[GREEN]`)** | 1. พัฒนา `F-05` (`POST /api/tickets/:id/cancel`, `canTransition(..., 'CANCEL')`, `cancelTicket` Atomic `updateMany` + `MyTicketPage.tsx` Cancel Modal/Toast/Empty State) บน branch `feature/sprint2-i02-f05-cancel` ด้วย TDD (`[RED]` `9a2998f` → `[GREEN]` `ab03141`)<br>2. อัปเดตสถานะ `F-05`, `AC-41.1..41.11`, `FR-11`, `CF-01`, `CF-03`, UI Route Map (`/my-ticket`), Role Matrix และบันทึกผลรันชุดทดสอบเต็มรอบพัฒนา (`Server 175/175`, `Client 37/37`, `E2E 7/7`, รวม `219 passed, 0 failed, 0 skipped`) |
 | **v1.11** | 2026-11-25 | **`D2-I3` (`#65`) `F-06` 120s No-Show & `serverNow` Implemented + Seed IAM Verified** | 1. พัฒนา `F-06` (`POST /api/staff/tickets/:id/no-show`, `canTransition(..., 'NO_SHOW')`, `StaffService.noShow` 120s boundary + Atomic `updateMany`, `data.serverNow` บน 3 APIs, `CountdownTimer` + `MyTicketPage` แก้ `LIM-01` + `StaffCounterPage` countdown/modal/toast) บน branch `feature/sprint2-i03-f06-no-show` ด้วย TDD (`[RED]` `8eb200a` → `[GREEN]` `71f617f`; `Server 197/197`, `Client 39/39`)<br>2. อัปเดตสถานะ `F-06`, `LIM-01`, `AC-42.1..42.3`, `AC-43.1..43.10`, `FR-12`, `BR-03`–`BR-08`, `CF-02`, UI Route Map, Role Matrix, PR `#70`/`#71` Merged<br>3. บันทึกการตั้งสิทธิ์ IAM บน Seed Secrets (`popqueue-seed-collector-pw` / `popqueue-seed-staff-pw`) และรัน `popqueue-migrate` พร้อมผลทดสอบ Live Cloud Run (`401` on dev password, `200` on both collector & staff) |
+| **v1.12** | 2026-11-25 | **`D2-I4` (`#66`) `F-07` Public Queue Display Board Implemented & Verified (`[RED]`→`[GREEN]`)** | 1. พัฒนา `GET /api/public/queue-board` (`public.service.ts`, `public.controller.ts`, `public.routes.ts`, `app.ts`) ด้วย Prisma `select` projection ปลอด PII (`NFR-02`), `Cache-Control: no-store`, `UP_NEXT_LIMIT = 5`, เรียง FIFO `queueDate ASC, queueNumber ASC`, `nowServing` เรียง `calledAt ASC`, และซ่อนซีรีส์ปิดที่ไม่มีตั๋ว (`DEC-04`)<br>2. พัฒนา `/board` (`BoardPage.tsx`, `public.api.ts`, `App.tsx`, `Layout.tsx`, `index.css`) แบบ Kiosk-style Responsive (`1920x1080` / `768x1024` / `375x667`), Polling 3s, ป้าย `"ปิดรับคิวใหม่"`, และแบนเนอร์ `"กำลังเชื่อมต่อเซิร์ฟเวอร์ใหม่..."` เมื่อ API ล่ม<br>3. ผ่าน TDD (`RED` → `GREEN`) บนฐาน `sprint2-staging` ล่าสุด (`F-05` + `F-06` + `F-07`): Server `202/202`, Client `41/41`, E2E `11/11` (รวม `254 passed, 0 failed, 0 skipped`) |
 
 ---
 
@@ -509,32 +510,32 @@
 * **Empty State:** เมื่อไม่มีตั๋ว Active ในซีรีส์ แสดงข้อความ "ไม่มีคิวรอในขณะนี้"
 
 ### 3.5 Numbered Acceptance Criteria (AC: F-07)
-* [ ] **AC-44.1 (Unauthenticated Public Access):** เรียก `GET /api/public/queue-board` โดยไม่ส่ง Token เข้าถึงได้สำเร็จ (HTTP 200 OK)
-* [ ] **AC-44.2 (Zero PII Assertion on Response Values):** ตรวจสอบ JSON Response body ทุกระดับ ต้องไม่พบข้อมูลส่วนบุคคลใดๆ ทั้งในแง่คีย์และค่า (Value String Check): ไม่พบ `userId`, `username`, `passwordHash`, `fullName`, `tokenVersion`, `handledByStaffId` ใน `JSON.stringify(body)`
-* [ ] **AC-44.3 (UpNext Limit & Waiting Count Accuracy):** ในกรณีที่มีคิวรอ 5 ใบ (`upNext.length === 5`), 6 ใบ (`upNext.length === 5`, `waitingCount === 6`), หรือมากกว่า 5 ตั๋ว รายการ `upNext` ต้องไม่เกิน `UP_NEXT_LIMIT` (5 ใบ) และค่า `waitingCount` ต้องแสดงจำนวนคิวรอจริงทั้งหมด
-* [ ] **AC-44.4 (Integer Sorting Assertion):** รายการใน `upNext` ต้องเรียงตาม `queueNumber` (ตัวเลขจำนวนเต็ม) อย่างถูกต้อง โดยคิวหมายเลข 9 ต้องแสดงก่อนหมายเลข 10
-* [ ] **AC-44.5 (Closed Series Visibility with Badge):** ซีรีส์ที่ปิดรับคิว (`isActive: false`) หากยังมีตั๋ว Active ค้างอยู่ ต้องแสดงบนบอร์ดพร้อมป้าย "ปิดรับคิวใหม่" (`isActive: false`)
-* [ ] **AC-44.6 (Excluded Status Filtering):** ตั๋วสถานะ `NO_SHOW`, `CANCELLED`, และ `COMPLETED` ต้องไม่ปรากฏใน `nowServing`, `upNext`, หรือ `waitingCount`
-* [ ] **AC-44.7 (Responsive Display Across Viewports):** หน้าเว็บ `/board` แสดงผลได้ถูกต้องบน Viewport ขนาด 1920×1080 (TV), 768px (Tablet), และ 375px (Mobile) โดยไม่ล้นจอ
-* [ ] **AC-44.8 (Board Polling, Ordering, Empty/Hidden Rules & Degraded UI):** (1) `/board` อัปเดตอัตโนมัติผ่าน 3s polling โดยไม่ reload และแสดงแบนเนอร์ error เมื่อ API ล้มเหลว; (2) `nowServing` เรียงตาม `calledAt ASC`; (3) ซีรีส์ปิดที่ไม่มีตั๋วค้างถูกซ่อน (`DEC-04`), ขณะที่ซีรีส์เปิดที่ไม่มีคิวรอต้องยังแสดงการ์ดว่าง
+* [x] **AC-44.1 (Unauthenticated Public Access):** เรียก `GET /api/public/queue-board` โดยไม่ส่ง Token เข้าถึงได้สำเร็จ (HTTP 200 OK)
+* [x] **AC-44.2 (Zero PII Assertion on Response Values):** ตรวจสอบ JSON Response body ทุกระดับ ต้องไม่พบข้อมูลส่วนบุคคลใดๆ ทั้งในแง่คีย์และค่า (Value String Check): ไม่พบ `userId`, `username`, `passwordHash`, `fullName`, `tokenVersion`, `handledByStaffId` ใน `JSON.stringify(body)`
+* [x] **AC-44.3 (UpNext Limit & Waiting Count Accuracy):** ในกรณีที่มีคิวรอ 5 ใบ (`upNext.length === 5`), 6 ใบ (`upNext.length === 5`, `waitingCount === 6`), หรือมากกว่า 5 ตั๋ว รายการ `upNext` ต้องไม่เกิน `UP_NEXT_LIMIT` (5 ใบ) และค่า `waitingCount` ต้องแสดงจำนวนคิวรอจริงทั้งหมด
+* [x] **AC-44.4 (Integer Sorting Assertion):** รายการใน `upNext` ต้องเรียงตาม `queueNumber` (ตัวเลขจำนวนเต็ม) อย่างถูกต้อง โดยคิวหมายเลข 9 ต้องแสดงก่อนหมายเลข 10
+* [x] **AC-44.5 (Closed Series Visibility with Badge):** ซีรีส์ที่ปิดรับคิว (`isActive: false`) หากยังมีตั๋ว Active ค้างอยู่ ต้องแสดงบนบอร์ดพร้อมป้าย "ปิดรับคิวใหม่" (`isActive: false`)
+* [x] **AC-44.6 (Excluded Status Filtering):** ตั๋วสถานะ `NO_SHOW`, `CANCELLED`, และ `COMPLETED` ต้องไม่ปรากฏใน `nowServing`, `upNext`, หรือ `waitingCount`
+* [x] **AC-44.7 (Responsive Display Across Viewports):** หน้าเว็บ `/board` แสดงผลได้ถูกต้องบน Viewport ขนาด 1920×1080 (TV), 768px (Tablet), และ 375px (Mobile) โดยไม่ล้นจอ
+* [x] **AC-44.8 (Board Polling, Ordering, Empty/Hidden Rules & Degraded UI):** (1) `/board` อัปเดตอัตโนมัติผ่าน 3s polling โดยไม่ reload และแสดงแบนเนอร์ error เมื่อ API ล้มเหลว; (2) `nowServing` เรียงตาม `calledAt ASC`; (3) ซีรีส์ปิดที่ไม่มีตั๋วค้างถูกซ่อน (`DEC-04`), ขณะที่ซีรีส์เปิดที่ไม่มีคิวรอต้องยังแสดงการ์ดว่าง
 
 ### 3.6 Software Test Specification (STS: TEST-44)
 | Test ID | Covered AC | Level | Test File | Preconditions | Inputs | Expected Output |
 | :---: | :---: | :---: | :--- | :--- | :--- | :--- |
-| **TEST-44A** | `AC-44.1`, `AC-44.2`, `AC-44.6` | Security | `server/tests/api/public-board.test.ts` *(planned)* | มีตั๋ว WAITING, CALLED, UNBOXING, COMPLETED, NO_SHOW, CANCELLED | `GET /api/public/queue-board` ไม่ส่ง auth | HTTP `200`, ค่า Seed username/name ไม่ปรากฏใน body string, ตั๋ว inactive ไม่แสดง |
-| **TEST-44B** | `AC-44.3` | Integration | `server/tests/api/public-board.test.ts` *(planned)* | ทดสอบ boundary ที่ 5, 6 และ 8 ตั๋ว (คิว 4..11) | `GET /api/public/queue-board` | ที่ 5 → `upNext=5/waiting=5`; ที่ 6 → `upNext=5/waiting=6`; ที่ 8 → `upNext=5/waiting=8` เรียง 4 ถึง 8 |
-| **TEST-44C** | `AC-44.8` | E2E | `e2e/public-board.spec.ts` *(planned)* | หน้า `/board` เปิดอยู่, เปลี่ยนสถานะตั๋วผ่าน API และจำลอง API error | รอ ≤ 5 วินาที | หน้าจอ `/board` อัปเดตอัตโนมัติ (3s polling + buffer CI) และแสดงแบนเนอร์เตือนเมื่อ API ล่ม |
-| **TEST-44D** | `AC-44.5` | Integration | `server/tests/api/public-board.test.ts` *(planned)* | ซีรีส์ CRY ปิด (`isActive: false`) แต่มีคิวรอ 1 ใบ | `GET /api/public/queue-board` | การ์ด CRY ปรากฏบนบอร์ด, `isActive: false`, `waitingCount === 1`, ป้าย `"ปิดรับคิวใหม่"` |
-| **TEST-44E** | `AC-44.4` | Boundary | `server/tests/api/public-board.test.ts` *(planned)* | มีตั๋วคิว 9 และคิว 10 ในระบบ | `GET /api/public/queue-board` | `upNext[0].queueNumber === 9`, `upNext[1].queueNumber === 10` |
-| **TEST-44F** | `AC-44.7` | UI/E2E | `e2e/responsive.spec.ts` *(planned)* | เข้าหน้า `/board` ด้วย Viewport 1920×1080, 768×1024, 375×667 | ตรวจสอบ bounding box | ไม่มี horizontal scrollbar, font ขนาดอ่านง่าย |
-| **TEST-44G** | `AC-44.8` | Integration | `server/tests/api/public-board.test.ts` *(planned)* | (1) `CRY` มี 2 ตั๋ว `nowServing` ต่างเวลา `calledAt`; (2) `SKP` ปิดและไม่มีตั๋ว (`DEC-04`); (3) `LAB` เปิดและมี 0 คิว | `GET /api/public/queue-board` | `nowServing` เรียง `calledAt ASC`; `SKP` ถูกซ่อนจาก `boards[]`; `LAB` ยังแสดงพร้อม `waitingCount: 0` |
+| **TEST-44A** | `AC-44.1`, `AC-44.2`, `AC-44.6` | Security | `server/tests/api/public-board.test.ts` | มีตั๋ว WAITING, CALLED, UNBOXING, COMPLETED, NO_SHOW, CANCELLED | `GET /api/public/queue-board` ไม่ส่ง auth | HTTP `200`, ค่า Seed username/name ไม่ปรากฏใน body string, ตั๋ว inactive ไม่แสดง |
+| **TEST-44B** | `AC-44.3` | Integration | `server/tests/api/public-board.test.ts` | ทดสอบ boundary ที่ 5, 6 และ 8 ตั๋ว (คิว 4..11) | `GET /api/public/queue-board` | ที่ 5 → `upNext=5/waiting=5`; ที่ 6 → `upNext=5/waiting=6`; ที่ 8 → `upNext=5/waiting=8` เรียง 4 ถึง 8 |
+| **TEST-44C** | `AC-44.8` | E2E | `e2e/public-board.spec.ts` | หน้า `/board` เปิดอยู่, เปลี่ยนสถานะตั๋วผ่าน API และจำลอง API error | รอ ≤ 5 วินาที | หน้าจอ `/board` อัปเดตอัตโนมัติ (3s polling + buffer CI) และแสดงแบนเนอร์เตือนเมื่อ API ล่ม |
+| **TEST-44D** | `AC-44.5` | Integration | `server/tests/api/public-board.test.ts` | ซีรีส์ CRY ปิด (`isActive: false`) แต่มีคิวรอ 1 ใบ | `GET /api/public/queue-board` | การ์ด CRY ปรากฏบนบอร์ด, `isActive: false`, `waitingCount === 1`, ป้าย `"ปิดรับคิวใหม่"` |
+| **TEST-44E** | `AC-44.4` | Boundary | `server/tests/api/public-board.test.ts` | มีตั๋วคิว 9 และคิว 10 ในระบบ | `GET /api/public/queue-board` | `upNext[0].queueNumber === 9`, `upNext[1].queueNumber === 10` |
+| **TEST-44F** | `AC-44.7` | UI/E2E | `e2e/responsive.spec.ts` | เข้าหน้า `/board` ด้วย Viewport 1920×1080, 768×1024, 375×667 | ตรวจสอบ bounding box | ไม่มี horizontal scrollbar, font ขนาดอ่านง่าย |
+| **TEST-44G** | `AC-44.8` | Integration | `server/tests/api/public-board.test.ts` | (1) `CRY` มี 2 ตั๋ว `nowServing` ต่างเวลา `calledAt`; (2) `SKP` ปิดและไม่มีตั๋ว (`DEC-04`); (3) `LAB` เปิดและมี 0 คิว | `GET /api/public/queue-board` | `nowServing` เรียง `calledAt ASC`; `SKP` ถูกซ่อนจาก `boards[]`; `LAB` ยังแสดงพร้อม `waitingCount: 0` |
 
 ### 3.7 Definition of Done (DoD) — F-07
-- [ ] Route `/api/public/queue-board` เป็น Public ไม่ผ่าน auth middleware
-- [ ] ใช้ Prisma `select` projection ปลอด PII ทั้งหมด ([EV-A07](#appendix-b), `TEST-44A`)
-- [ ] บันทึก `[RED]` → `[GREEN]` commit chain
-- [ ] หน้าเว็บ UI `/board` Kiosk-style Responsive + Polling 3 วินาที
-- [ ] PR Review และ CI ผ่านครบถ้วน
+- [x] Route `/api/public/queue-board` เป็น Public ไม่ผ่าน auth middleware
+- [x] ใช้ Prisma `select` projection ปลอด PII ทั้งหมด (`TEST-44A`)
+- [x] บันทึก `[RED]` → `[GREEN]` commit chain (`51287ac` → `75a1b82`)
+- [x] หน้าเว็บ UI `/board` Kiosk-style Responsive + Polling 3 วินาที
+- [ ] PR Review และ CI ผ่านครบถ้วน *(PR `#73` `test-and-docker` CI PASS — รอ Approve & Merge เข้า `sprint2-staging`)*
 
 ---
 
@@ -823,7 +824,7 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 | `/my-ticket` | `client/src/pages/MyTicketPage.tsx` | `COLLECTOR` | แสดงการ์ดตั๋ว Active หลายซีรีส์ (Polling 3s), Countdown sync `serverNow` (`F-06`), ปุ่ม Cancel + Modal (`F-05`) | `accepted` (S1/L7) / `tested` (`F-05`, PR `#71` Merged `1da1a55`) / `tested` (`F-06`, `71f617f`) |
 | `/staff/counter` | `client/src/pages/StaffCounterPage.tsx` | `BOX_MASTER` | คิวรอเฉพาะซีรีส์ตน (Polling 3s), Call Next, Verify & Start, Complete, ปุ่ม No-Show 120s (`F-06`), สวิตช์เปิด-ปิดซีรีส์ (`F-09`) | `accepted` (S1) / `tested` (`F-06`, `71f617f`) / `planned` (`F-09`) |
 | `/forbidden` | `client/src/pages/ForbiddenPage.tsx` | All | หน้าแจ้งเตือน 403 เมื่อเข้า URL นอกบทบาท | `accepted` |
-| `/board` | `client/src/pages/BoardPage.tsx` *(planned)* | Public | จอบอร์ดหน้าร้าน Kiosk-style แสดง Now Serving + Up Next (Max 5) + Polling 3s + Error Banner (`F-07`) | `planned` |
+| `/board` | `client/src/pages/BoardPage.tsx` | Public | จอบอร์ดหน้าร้าน Kiosk-style แสดง Now Serving + Up Next (Max 5) + Polling 3s + Error Banner (`F-07`) | `tested` |
 
 * **API Approach:** RESTful JSON ภายใต้ prefix `/api/*`, Envelope มาตรฐาน `{ data }` / `{ error }` (ไม่มี boolean `success`), Bearer JWT authentication (`Authorization: Bearer <token>`), Error Handling รวมศูนย์ผ่าน `errorHandler` ที่ไม่คืน stack trace และไม่ leak ข้อมูลภายใน (`500 INTERNAL_ERROR`)
 
@@ -847,7 +848,7 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 | `POST /api/staff/tickets/:id/start-unboxing` | `authenticateToken` | `BOX_MASTER` | Assigned Series + Handler Exclusive | `401 UNAUTHENTICATED`<br>`403 FORBIDDEN_ROLE`<br>`404 RESOURCE_NOT_FOUND`<br>`403 FORBIDDEN_SERIES`<br>`403 FORBIDDEN_NOT_HANDLER`<br>`400 INVALID_STATE_TRANSITION` | `server/src/routes/staff.routes.ts:25`<br>`server/src/services/staff.service.ts:237-302` ([EV-A04](#appendix-b)) |
 | `POST /api/staff/tickets/:id/complete` | `authenticateToken` | `BOX_MASTER` | Assigned Series + Handler Exclusive | `401 UNAUTHENTICATED`<br>`403 FORBIDDEN_ROLE`<br>`404 RESOURCE_NOT_FOUND`<br>`403 FORBIDDEN_SERIES`<br>`403 FORBIDDEN_NOT_HANDLER`<br>`400 INVALID_STATE_TRANSITION` | `server/src/routes/staff.routes.ts:33`<br>`server/src/services/staff.service.ts:323-388` |
 | `POST /api/staff/tickets/:id/no-show` *(F-06)* | `authenticateToken` | `BOX_MASTER` | Handler Exclusive + Time $\ge$ 120s | `401 UNAUTHENTICATED`<br>`403 FORBIDDEN_ROLE`<br>`404 RESOURCE_NOT_FOUND`<br>`403 FORBIDDEN_SERIES`<br>`403 FORBIDDEN_NOT_HANDLER`<br>`400 INVALID_STATE_TRANSITION`<br>`400 NO_SHOW_WINDOW_NOT_EXPIRED` | `server/src/routes/staff.routes.ts` *(71f617f)*<br>Master Contract Part B §2.4 |
-| `GET /api/public/queue-board` *(F-07)* | None | Public | Zero PII (Prisma select projection) | None (Unrestricted Public Access) | `server/src/routes/public.routes.ts` *(planned)*<br>Master Contract Part B §3.3 |
+| `GET /api/public/queue-board` *(F-07)* | None | Public | Zero PII (Prisma select projection) | None (Unrestricted Public Access) | `server/src/routes/public.routes.ts`<br>`server/src/services/public.service.ts` |
 | `GET /api/staff/analytics` *(F-08)* | `authenticateToken` | `BOX_MASTER` | ข้อมูลสถิติเฉพาะซีรีส์ที่ได้รับมอบหมาย | `401 UNAUTHENTICATED`<br>`403 FORBIDDEN_ROLE`<br>`400 VALIDATION_ERROR`<br>`403 FORBIDDEN_SERIES` | `server/src/routes/staff.routes.ts` *(planned)*<br>Master Contract Part C §1.3 |
 | `PATCH /api/staff/series/:id/status` *(F-09)* | `authenticateToken` | `BOX_MASTER` | เฉพาะซีรีส์ที่ได้รับมอบหมาย | `401 UNAUTHENTICATED`<br>`403 FORBIDDEN_ROLE`<br>`400 VALIDATION_ERROR`<br>`404 RESOURCE_NOT_FOUND`<br>`403 FORBIDDEN_SERIES` | `server/src/routes/staff.routes.ts` *(planned)*<br>Master Contract Part C §2.2 |
 
@@ -913,8 +914,8 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 | **F-03** | Staff Counter & Call/Complete | 1 | `accepted` | `staff.service.ts`, `StaffCounterPage.tsx` | `accepted` (`v0.1.0-sprint1` — [EV-A07](#appendix-b)) |
 | **F-04** | Ticket Inspection & Ownership | 1 (ext Lab 7) | `accepted` | `ticket.service.ts`, `MyTicketPage.tsx` | `accepted` (`v0.3.0-lab7` — [EV-B04](#appendix-b), [EV-A07](#appendix-b)) |
 | **F-05** | Queue Cancellation | **2** | `tested` | `ticket.service.ts`, `ticket.routes.ts`, `MyTicketPage.tsx` *(Issue `#64`)* | `tested` (`TEST-41A..41L`, `ab03141` — PR `#71` Merged `1da1a55`) |
-| **F-06** | Server-Enforced 120s No-Show | **2** | `tested` | `staff.service.ts`, `CountdownTimer.tsx`, `StaffCounterPage.tsx` *(Issue `#65` / `D2-I3`)* | `tested` (`TEST-42A..D`, `TEST-43A..K/U`, `71f617f` — PR pending review) |
-| **F-07** | Public Queue Display Board | **2** | `planned` | `public.service.ts`, `public.routes.ts`, `BoardPage.tsx` *(Issue `D2-I4`)* | `planned` (no implementation evidence yet) |
+| **F-06** | Server-Enforced 120s No-Show | **2** | `tested` | `staff.service.ts`, `CountdownTimer.tsx`, `StaffCounterPage.tsx` *(Issue `#65` / `D2-I3`)* | `tested` (`TEST-42A..D`, `TEST-43A..K/U`, `71f617f` — PR `#72` Merged `59650a1`) |
+| **F-07** | Public Queue Display Board | **2** | `tested` | `public.service.ts`, `public.controller.ts`, `public.routes.ts`, `BoardPage.tsx` *(Issue `D2-I4` `#66`)* | `tested` (254/254 total: Server 202, Client 41, E2E 11; pending PR review/merge) |
 | **F-08** | Daily Service Analytics | 3 | `planned` | `staff.service.ts`, Staff Analytics UI *(Post-D2)* | `planned` (no implementation evidence yet) |
 | **F-09** | Series Availability Control | **3 (D2 Target Progress)** | `planned` | `staff.service.ts`, `staff.routes.ts`, `StaffCounterPage.tsx` *(Issue `D2-I5`)* | `planned` (Toggle API/UI pending `D2-I5`; Baseline `BR-09` 409 verified) |
 | **S3-HARDEN** | Rate Limiting & Hardening | 3 | `planned` | `app.ts`, `env.ts`, `express-rate-limit` *(Post-D2)* | `planned` (no implementation evidence yet) |
@@ -991,14 +992,14 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 | **AC-43.8** | F-06 Staff Countdown Timer & Button State UI | Yes | Yes | `tested` | `TEST-43I` (`[GREEN]`) | `71f617f` |
 | **AC-43.9** | F-06 Collector `/my-ticket` Server-Synced Countdown (`LIM-01` fix) | Yes | Yes | `tested` | `TEST-43J` (`[GREEN]`) | `71f617f` |
 | **AC-43.10** | F-06 Cross-Series `403`, `404`, `DEC-03` Post-120s Start & Unit State-Machine | Yes | Yes | `tested` | `TEST-43K`, `TEST-43U` (`[GREEN]`) | `71f617f` |
-| **AC-44.1** | F-07 Public Unauthenticated Access (200) | No | No | `planned` | - | TBD |
-| **AC-44.2** | F-07 Zero PII Assertion in Body Values | No | No | `planned` | - | TBD |
-| **AC-44.3** | F-07 UpNext Max 5 (5/6/8 Boundary) & WaitingCount | No | No | `planned` | - | TBD |
-| **AC-44.4** | F-07 Integer QueueNumber Sorting | No | No | `planned` | - | TBD |
-| **AC-44.5** | F-07 Closed Series Display with Badge (`ปิดรับคิวใหม่`) | No | No | `planned` | - | TBD |
-| **AC-44.6** | F-07 Excluded Inactive Status Filter | No | No | `planned` | - | TBD |
-| **AC-44.7** | F-07 Responsive Layout Across Viewports | No | No | `planned` | - | TBD |
-| **AC-44.8** | F-07 Board 3s Polling, Degraded Error State, `calledAt` Sort & `DEC-04` Hidden Empty Closed Series | No | No | `planned` | - | TBD |
+| **AC-44.1** | F-07 Public Unauthenticated Access (200) | Yes | Yes | `tested` | `TEST-44A` (`[GREEN]`) | `75a1b82` |
+| **AC-44.2** | F-07 Zero PII Assertion in Body Values | Yes | Yes | `tested` | `TEST-44A` (`[GREEN]`) | `75a1b82` |
+| **AC-44.3** | F-07 UpNext Max 5 (5/6/8 Boundary) & WaitingCount | Yes | Yes | `tested` | `TEST-44B` (`[GREEN]`) | `75a1b82` |
+| **AC-44.4** | F-07 Integer QueueNumber Sorting | Yes | Yes | `tested` | `TEST-44E` (`[GREEN]`) | `75a1b82` |
+| **AC-44.5** | F-07 Closed Series Display with Badge (`ปิดรับคิวใหม่`) | Yes | Yes | `tested` | `TEST-44D`, `board.test.tsx` (`[GREEN]`) | `75a1b82` |
+| **AC-44.6** | F-07 Excluded Inactive Status Filter | Yes | Yes | `tested` | `TEST-44A` (`[GREEN]`) | `75a1b82` |
+| **AC-44.7** | F-07 Responsive Layout Across Viewports | Yes | Yes | `tested` | `TEST-44F` (`1920x1080`, `768x1024`, `375x667`) | `75a1b82` |
+| **AC-44.8** | F-07 Board 3s Polling, Degraded Error State, `calledAt` Sort & `DEC-04` Hidden Empty Closed Series | Yes | Yes | `tested` | `TEST-44C`, `TEST-44G`, `board.test.tsx` | `75a1b82` |
 | **AC-45.1** | F-08 Daily Aggregation Accuracy | No | No | `planned` | - | TBD |
 | **AC-45.2** | F-08 Role, Auth & Series Authorization (`401`/`403`) | No | No | `planned` | - | TBD |
 | **AC-45.3** | F-08 Mathematical Precision of Averages | No | No | `planned` | - | TBD |
@@ -1034,7 +1035,7 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 | **FR-10** | Complete | F-03 | 1 | AC-27, AC-33 | TEST-27,33 | `server/tests/api/staff-transition.test.ts`, `e2e/full-journey.spec.ts` | `accepted` (`v0.3.0-lab7`) | State lifecycle completion |
 | **FR-11** | Cancel Queue | **F-05** | **2** | AC-41.1..41.11 | TEST-41A..41L | `server/tests/api/cancel.test.ts`, `concurrency/cancel-race.test.ts`, `client/src/tests/ticket.test.tsx` | `tested` (`D2-I2` `#64`) | Re-join ได้ทันที, ข้ามเลขถาวร |
 | **FR-12** | No-Show | **F-06** | **2** | AC-42.1..42.3, AC-43.1..43.10 | TEST-42A..D, TEST-43A..K, 43U | `server/tests/api/no-show.test.ts`, `no-show-race.test.ts` | `tested` (`71f617f`) | Server-enforced Δt ≥ 120s + `serverNow` sync |
-| **FR-13** | Public Board | **F-07** | **2** | AC-44.1..44.8 | TEST-44A..44G | `server/tests/api/public-board.test.ts` *(planned)* | `planned` | Zero PII, Polling 3s, Max 5 |
+| **FR-13** | Public Board | **F-07** | **2** | AC-44.1..44.8 | TEST-44A..44G | `server/tests/api/public-board.test.ts`, `client/src/tests/board.test.tsx`, `e2e/public-board.spec.ts`, `e2e/responsive.spec.ts` | `tested` | Zero PII, Polling 3s, Max 5 |
 | **FR-14** | Analytics | **F-08** | **3** | AC-45.1..45.4 | TEST-45A..45E | `server/tests/api/analytics.test.ts` *(planned)* | `planned` | แม่นยำตามสูตรคณิตศาสตร์ |
 | **FR-15** | Series Toggle | **F-09** | **3** | AC-46.1..46.5 | TEST-46A..46F | `server/tests/api/series-toggle.test.ts` *(planned)* | `planned` | ตั๋วค้างเดิมยังให้บริการได้จนจบ |
 | **BR-01** | Monotonic No | F-02, F-05 | 1, 2 | AC-10, AC-17, AC-18, AC-41.3 | TEST-10,17,18,41B | `server/tests/concurrency/numbering.test.ts`, `api/cancel.test.ts` | `accepted (S1) / tested (S2)` | Composite key `(seriesId, queueDate)` |
@@ -1047,11 +1048,11 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 | **BR-08** | 120s Timeout | **F-06** | **2** | AC-42.1..42.3, AC-43.1 | TEST-42A..D, 43A | `server/tests/api/no-show.test.ts` | `tested` (`71f617f`) | App clock FakeClock boundary |
 | **BR-09** | Inactive Block | F-02, F-09 | 1, 3 | AC-12, AC-46.2 | TEST-12,46B | `server/tests/api/join.test.ts` | `accepted (S1) / planned (S3)` | `409 SERIES_CLOSED` |
 | **NFR-01** | Bcrypt Hash | F-01 | 1 | AC-07 | TEST-07 | `server/tests/security/password-hash.test.ts` | `accepted` (`v0.3.0-lab7`) | Salt rounds $\ge 10$ |
-| **NFR-02** | Access & Zero PII | F-01, F-04, F-07 | 1, 2 | AC-04, AC-14, AC-31, AC-37, AC-44.2 | TEST-04,14,31,37,44A | `server/tests/security/unauthenticated.test.ts`, `ticket-security.test.ts` | `accepted (S1) / planned (S2)` | 401/403 non-leak + Zero PII in public payload |
+| **NFR-02** | Access & Zero PII | F-01, F-04, F-07 | 1, 2 | AC-04, AC-14, AC-31, AC-37, AC-44.2 | TEST-04,14,31,37,44A | `server/tests/security/unauthenticated.test.ts`, `ticket-security.test.ts`, `api/public-board.test.ts` | `accepted (S1) / tested (F-07)` | 401/403 non-leak + Zero PII in public payload |
 | **NFR-03** | Concurrency | F-02 | 1 | AC-15 | TEST-15 | `server/tests/concurrency/numbering.test.ts` | `accepted` (`v0.3.0-lab7`) | 50 concurrent requests: 0 duplicate |
 | **NFR-04** | Race Guard | F-02 | 1 | AC-16 | TEST-16 | `server/tests/concurrency/duplicate.test.ts` | `accepted` (`v0.3.0-lab7`) | 10 duplicate concurrent: 1 pass, 9 fail |
 | **NFR-05** | Persistence | Infra | 1, Lab 5 | AC-39 | TEST-39 | `scripts/test-persistence.mjs` | `tested` (`v0.2.0-lab5`) | ข้อมูลคงทนหลัง restart/redeploy 3/3 |
-| **NFR-06** | Responsive | UI, F-07 | 1, 2 | AC-20, AC-44.7 | TEST-20, TEST-44F | `e2e/responsive.spec.ts` | `accepted (S1) / planned (S2)` | ไม่มี overflow ที่ 375px; TV 1080p |
+| **NFR-06** | Responsive | UI, F-07 | 1, 2 | AC-20, AC-44.7 | TEST-20, TEST-44F | `e2e/responsive.spec.ts` | `accepted (S1) / tested (F-07)` | ไม่มี overflow ที่ 375px; TV 1080p |
 | **NFR-07** | Rate Limit | **S3** | **3** | AC-47.1..47.3 | TEST-47A..D | `server/tests/security/rate-limit.test.ts` *(planned)* | `planned` | Max 10 requests / 15 minutes |
 
 ---
@@ -1060,9 +1061,9 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 
 | หมวดหมู่ (Category) | ช่องว่างที่ตรวจพบ (Identified Gap) | สาเหตุและผลกระทบ (Impact) | แผนการตรวจสอบและหลักฐานยืนยัน (Planned Final Verification) |
 | :--- | :--- | :--- | :--- |
-| **Remaining Unimplemented Requirements (`D2-I4..I5` & Sprint 3)** | `F-05` (`FR-11`, `AC-41`) และ `F-06` (`FR-12`, `BR-08`, `AC-42..43`) พัฒนาพร้อม TDD ผ่านแล้ว (`tested`); ส่วน `FR-13..FR-15`, `NFR-07` และ `AC-44..47` (`F-07`, `F-08`, `F-09`) ยังอยู่ในสถานะ `planned` | `D2-I2` Merged แล้วและ `D2-I3` อยู่ระหว่างเปิด PR; งานที่เหลือตามแผนคือ `D2-I4` (`F-07`), `D2-I5` (`F-09`) และ Sprint 3 Full (`F-08`) | ปิด review/merge `D2-I3` (`#65`), พัฒนา `D2-I4..D2-I5` ด้วย TDD `[RED]`→`[GREEN]`, และรันชุดเต็มใน `D2-I6` |
-| **GCP Cloud Run Live Evidence (`v0.3.0` / `v0.5.0`)** | Baseline `v0.3.0-lab7` ผ่าน CD Run `#45357138027` (`popqueue-00007-npd` / `popqueue-migrate-j2lpp`) + Live `/api/health` (`a07a7be`) + `/api/ready` (`connected`) แล้ว; GCP Owner `@Theerawat82` ตั้ง IAM `secretAccessor` ให้ `popqueue-seed-collector-pw` / `popqueue-seed-staff-pw`, อัปเดต/รัน `popqueue-migrate --wait` และทดสอบ Login (`401` รหัส dev เดิม / `200` ทั้ง `collector1` และ `staff_crybaby`) สำเร็จแล้ว; ยังเหลือ verify Candidate ใหม่ | ขาดหลักฐาน Live Check ที่ผูกกับ release candidate `v0.4.0-sprint2` / `v0.5.0-d2-rc` หลังรวมฟีเจอร์ Sprint 2–3 | รัน Live Check + Cloud SQL Persistence + Demo 1–5 บน `v0.5.0-d2-rc` ใน `D2-I6` (`#68`) |
-| **UI Interactive Behaviors** | Cancel Modal (`TEST-41K`) และ Countdown 120s (`/staff/counter` `TEST-43I` + `/my-ticket` `TEST-43J`) ผ่าน Client Vitest (`39/39`) แล้ว; `/board` error banner และ Toggle สวิตช์ยังอยู่ในสถานะ `planned` | ต้องยืนยันฟีเจอร์ที่เหลือและรัน Playwright E2E เต็มรูปแบบบน Candidate | เพิ่ม Component/E2E Tests (`public-board.spec.ts` ครอบคลุม `TEST-44C/F`, `TEST-46D`) และรัน `test:e2e` ใน `D2-I4`/`D2-I6` |
+| **Remaining Unimplemented Requirements (`D2-I5` & Sprint 3)** | Sprint 2 หลัก (`F-05`, `F-06`, `F-07`: `FR-11..13`, `BR-08`, `AC-41..44`) พัฒนาพร้อม TDD ผ่านครบแล้ว (`tested`); ส่วน `FR-14..FR-15`, `NFR-07` และ `AC-45..47` (`F-08`, `F-09`) ยังอยู่ในสถานะ `planned` | `D2-I2` (`#64`) และ `D2-I3` (`#65`) Merged เข้า `sprint2-staging` แล้ว (`1da1a55`, `59650a1`) และ `D2-I4` (`#66`, `F-07`) อยู่ระหว่าง Review PR `#73`; งานพัฒนาที่เหลือตามแผนคือ `D2-I5` (`F-09`) และ Sprint 3 Full (`F-08`, `S3-HARDEN`) | ปิด review/merge PR `#73`, ปล่อย `v0.4.0-sprint2`, พัฒนา `D2-I5` (`F-09`) ด้วย TDD `[RED]`→`[GREEN]`, และรันชุดเต็มใน `D2-I6` |
+| **GCP Cloud Run Live Evidence (`v0.3.0` / `v0.5.0`)** | Baseline `v0.3.0-lab7` ผ่าน CD Run `#45357138027` (`popqueue-00007-npd` / `popqueue-migrate-j2lpp`) + Live `/api/health` (`a07a7be`) + `/api/ready` (`connected`) แล้ว; GCP Owner `@Theerawat82` ตั้ง IAM `secretAccessor` ให้ `popqueue-seed-collector-pw` / `popqueue-seed-staff-pw`, อัปเดต/รัน `popqueue-migrate --wait` และทดสอบ Login (`401` รหัส dev เดิม / `200` ทั้ง `collector1` และ `staff_crybaby`) สำเร็จแล้ว; ยังเหลือ verify Candidate ใหม่ | ขาดหลักฐาน Live Check ที่ผูกกับ release candidate `v0.4.0-sprint2` / `v0.5.0-d2-rc` หลังรวมฟีเจอร์ Sprint 2–3 | รัน Live Check + Cloud SQL Persistence + Demo 1–5 บน `v0.4.0-sprint2` และ `v0.5.0-d2-rc` ใน `D2-I4`/`D2-I6` (`#66`/`#68`) |
+| **UI Interactive Behaviors** | Cancel Modal (`TEST-41K`), Countdown 120s (`TEST-43I`/`43J`), และ `/board` 3s polling / degraded banner / multi-viewport (`TEST-44C`/`44F`) ผ่าน Vitest + Playwright (`254/254`) แล้ว; Toggle สวิตช์ `F-09` ยังอยู่ในสถานะ `planned` | เหลือยืนยัน `F-09` (`D2-I5`) และ Full Regression บน Release Candidate | เพิ่ม Component/Integration Tests (`TEST-46D`) ใน `D2-I5` และรัน Full Suite + `test:e2e` บน `v0.5.0-d2-rc` ใน `D2-I6` |
 | **Cross-Day Queue Drift (`G-07`)** | `F-07` ไม่กรอง `queueDate` เพื่อให้ตรงกับ `call-next` หากมีตั๋วค้างข้ามคืนจะขึ้นก่อน | ยอมรับเป็น Known Limitation (`A-07`/`G-07`) ร้านเปิดเป็นรอบรายวัน ไม่มีสคริปต์ Auto-Cancel | พนักงานเคลียร์คิวก่อนปิดร้านผ่าน Complete / No-Show; เปิดเผยชัดเจนใน Known Limitations |
 | **Network Latency Drift** | Client timer กับ Server timer อาจคลาดเคลื่อนจาก latency | ปุ่ม No-Show อาจกดไม่ติดหากเวลาบน client เร็วกว่า server | บังคับใช้ `serverNow` ISO timestamp (`AC-42.3`, `TEST-42D`) ซิงก์ local offset ทั้ง 2 หน้าจอ (`TEST-43I/J`) |
 
@@ -1119,7 +1120,7 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 | :---: | :--- | :--- | :--- | :--- | :---: | :---: |
 | **F-05** | Queue Cancellation | AC-41.1..AC-41.11 | `ticket.service.ts`<br>`ticket.routes.ts`<br>`MyTicketPage.tsx` | `TEST-41A..41L`<br>`cancel-race.test.ts` | `tested` (`D2-I2`, `ab03141`) | `v0.4.0-sprint2` |
 | **F-06** | Server 120s No-Show | AC-42.1..42.3, AC-43.1..43.10 | `staff.service.ts`, `ticket.service.ts`<br>`staff.routes.ts`, `countdown.ts`<br>`CountdownTimer.tsx`, `MyTicketPage.tsx`, `StaffCounterPage.tsx` | `TEST-42A..D`, `TEST-43A..K/U`<br>`no-show-race.test.ts`<br>`staff.test.tsx`, `ticket.test.tsx` | `tested` (`71f617f`) | `v0.4.0-sprint2` |
-| **F-07** | Public Queue Board | AC-44.1..AC-44.8 | `public.service.ts`<br>`public.routes.ts`<br>`BoardPage.tsx` | `TEST-44A..44G`<br>`public-board.spec.ts` | `planned` | `v0.4.0-sprint2` |
+| **F-07** | Public Queue Board | AC-44.1..AC-44.8 | `public.service.ts`<br>`public.controller.ts`<br>`public.routes.ts`<br>`BoardPage.tsx` | `TEST-44A..44G`<br>`board.test.tsx`<br>`public-board.spec.ts`<br>`responsive.spec.ts` | `tested` (`75a1b82`) | `v0.4.0-sprint2` |
 
 ---
 
@@ -1132,7 +1133,7 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 | **CF-03** | `cancel` × Multi-Ticket (BR-02 v2) | ยกเลิกตั๋ว 1 ใบในมือ ตั๋วใบอื่นในซีรีส์อื่นยังคงอยู่ปกติ ([EV-B04](#appendix-b)); ยกเลิกใบสุดท้ายแสดง Empty State สะอาด | `TEST-41G`, `TEST-41K` | `tested` (`ab03141`) |
 | **CF-04** | `series-toggle` × `join` | เมื่อปิดซีรีส์ (`isActive: false`) คำขอ Join ใหม่ต้องถูกปฏิเสธด้วย `409 SERIES_CLOSED` (AC-12) | `TEST-46B` | `planned` |
 | **CF-05** | `series-toggle` × Public Board | ซีรีส์ที่ปิดแต่มีตั๋วค้าง ยังคงแสดงบนบอร์ดพร้อมป้าย Badge "ปิดรับคิวใหม่"; หากไม่มีตั๋วค้างให้ซ่อน (`DEC-04`) | `TEST-44D`, `TEST-44G` | `planned` |
-| **CF-06** | `cancel` / `no-show` × Public Board | ตั๋วที่ถูก Cancel หรือ No-Show ต้องหายจากบอร์ดหน้าร้านทันทีภายในการ Polling รอบถัดไป | `TEST-44A`, `TEST-44C` | `planned` |
+| **CF-06** | `cancel` / `no-show` × Public Board | ตั๋วที่ถูก Cancel หรือ No-Show ต้องหายจากบอร์ดหน้าร้านทันทีภายในการ Polling รอบถัดไป | `TEST-44A`, `TEST-44C` | `tested` (`75a1b82`) |
 | **CF-07** | Role Guard Consistency | ทุก Endpoint ใหม่ต้องคืน HTTP `403 FORBIDDEN_ROLE` เมื่อเรียกโดย Role ที่ไม่ได้รับอนุญาต ([EV-B01](#appendix-b)) | `TEST-41I`, `43G`, `45B`, `46F` | `planned` |
 | **CF-08** | Sprint 1 Critical Journey Invariant | การเพิ่มฟีเจอร์ทั้งหมดต้องไม่ทำให้ E2E Journey เดิมของ Sprint 1 เกิด Regression ([EV-A07](#appendix-b)) | `e2e/full-journey.spec.ts` | `tested` (`v0.3.0-lab7`; re-run `planned` on `v0.5.0-d2-rc`) |
 
@@ -1148,8 +1149,8 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 | :---: | :---: | :--- | :--- | :---: | :---: | :---: | :--- | :---: |
 | **`D2-I1`** | **`#69`** *(Closed)*<br>PR `#62`, `#63`, `#70` *(Merged)* | **Contract, Governance & CI Staging Setup (`v1.7 → v1.9`):** Master Spec + `AGENTS.md` + `ci-docker.yml` (`sprint2/3-staging`) + Milestone `#5` / Labels / Issues `#64`–`#69` + `protect-staging` (`sprint2-staging`, `merge` only) + Seed IAM | `docs/sprint2-master-contract` *(Merged `f6b088e`)*<br>`fix/sprint2-i01-ci-branch-rules` *(Merged `b9a4404`)*<br>`docs/sprint2-i01-doc-reconcile` *(Merged `a85f7c0`)* | `sprint2-staging` | `@Theerawat82` (`v1.7–v1.8`)<br>`@apfirst13` (`v1.9`) | `@apfirst13` / `@Theerawat82` | Contract Gate (`G0/G1`), `EV-A/B/D`, `test-and-docker`, Seed IAM | **พ. 25 พ.ย. 12:00** *(DONE — PR `#62`/`#63`/`#70` Merged, `#69` Closed & Seed IAM Verified)* |
 | **`D2-I2`** | **`#64`** *(Closed)*<br>PR `#71` *(Merged)* | **F-05 Queue Cancellation:** API `POST /api/tickets/:id/cancel` + UI ปุ่มยกเลิก/Modal/Empty State + Race Test (`Refs #64`) | `feature/sprint2-i02-f05-cancel` *(Merged `1da1a55`)* | `sprint2-staging` | `@apfirst13` | `@Theerawat82` | `AC-41.1..41.11`, `TEST-41A..41L`, `CF-01`, `CF-03` | **พ. 25 พ.ย. 23:59** *(DONE — PR `#71` Merged `1da1a55` & `#64` Closed)* |
-| **`D2-I3`** | **`#65`** *(Open)* | **F-06 Server-Enforced 120s No-Show & `serverNow` Sync:** `POST /api/staff/tickets/:id/no-show` + `serverNow` บน 3 API + Countdown ทั้ง `/my-ticket` (`LIM-01`) และ `/staff/counter` (`Refs #65`) | `feature/sprint2-i03-f06-no-show` *(จาก `1da1a55`)* | `sprint2-staging` | `@Theerawat82` | `@apfirst13` | `AC-42.1..42.3`, `AC-43.1..43.10`, `TEST-42A..D`, `TEST-43A..K/U`, `CF-02` | **พฤ. 26 พ.ย. 18:00** *(tested `71f617f` — PR pending review)* |
-| **`D2-I4`** | **`#66`** *(Open)* | **F-07 Public Queue Board & Sprint 2 Release (`v0.4.0-sprint2`):** `GET /api/public/queue-board` (Zero PII) + `/board` Kiosk UI + Release PR `sprint2-staging → main` + Deploy & Tag (`Refs #66`) | `feature/sprint2-i04-f07-public-board` *(จาก `sprint2-staging`)* | `sprint2-staging` → `main` | `@apfirst13` *(Feature)*<br>สลับ opener/merger ตอน Release PR ตาม HEAD author | `@Theerawat82` | `AC-44.1..44.8`, `TEST-44A..44G`, `CF-05`, `CF-06` | **ศ. 27 พ.ย. 12:00** (Feature/Gate)<br>**ศ. 27 พ.ย. 18:00** (`v0.4.0` deployed) |
+| **`D2-I3`** | **`#65`** *(Closed)*<br>PR `#72` *(Merged)* | **F-06 Server-Enforced 120s No-Show & `serverNow` Sync:** `POST /api/staff/tickets/:id/no-show` + `serverNow` บน 3 API + Countdown ทั้ง `/my-ticket` (`LIM-01`) และ `/staff/counter` (`Refs #65`) | `feature/sprint2-i03-f06-no-show` *(Merged `59650a1`)* | `sprint2-staging` | `@Theerawat82` | `@apfirst13` | `AC-42.1..42.3`, `AC-43.1..43.10`, `TEST-42A..D`, `TEST-43A..K/U`, `CF-02` | **พฤ. 26 พ.ย. 18:00** *(DONE — PR `#72` Merged `59650a1` & `#65` Closed)* |
+| **`D2-I4`** | **`#66`** *(Open)*<br>PR `#73` *(In Review)* | **F-07 Public Queue Board & Sprint 2 Release (`v0.4.0-sprint2`):** `GET /api/public/queue-board` (Zero PII) + `/board` Kiosk UI + Release PR `sprint2-staging → main` + Deploy & Tag (`Refs #66`) | `feature/sprint2-i04-f07-public-board` *(จาก `59650a1`)* | `sprint2-staging` → `main` | `@apfirst13` *(Feature)*<br>สลับ opener/merger ตอน Release PR ตาม HEAD author | `@Theerawat82` | `AC-44.1..44.8`, `TEST-44A..44G`, `CF-05`, `CF-06` | **ศ. 27 พ.ย. 12:00** *(Feature `tested` `75a1b82` — PR `#73` รอ Merge)*<br>**ศ. 27 พ.ย. 18:00** (`v0.4.0` deployed) |
 | **`D2-I5`** | **`#67`** *(Open)* | **F-09 Series Availability Control (Sprint 3 Working Progress):** `PATCH /api/staff/series/:id/status` + `isActive` ใน `GET /api/staff/tickets` + Toggle Switch UI (`Refs #67`) | `feature/sprint2-i05-f09-series-toggle` *(เริ่มโค้ดได้ทันทีหลัง `#65`; PR เข้า `sprint3-staging`)* | `sprint3-staging` | `@Theerawat82` | `@apfirst13` | `AC-46.1..46.5`, `TEST-46A..46F`, `CF-04`, `CF-05`, `CF-07` | **ส. 28 พ.ย. 12:00** *(โค้ดเริ่ม พฤ.ค่ำ/ศ.)* |
 | **`D2-I6`** | **`#68`** *(Open)* | **Final Candidate (`v0.5.0-d2-rc`), Full Regression, Live Verification & Deliverable 2 PDF:** Release PR `sprint3-staging → main`, รัน Full Suite Verbose + Persistence + Live Cloud Run + Private Credential Handoff + Export PDF (`Refs #68`) | `docs/sprint2-i06-d2-final-report` | `sprint3-staging` → `main` | ทั้งสองคน (`@apfirst13` ↔ `@Theerawat82`) | Cross-Review | `CF-08`, Full Suite Verbose, Persistence, Demo 1–5, PDF Rubric 70 pts | **ส. 28 พ.ย. 18:00** (`v0.5.0` Freeze)<br>**อา. 29 พ.ย. 18:00** (ส่ง LEB2 ก่อน 23:59) |
 
@@ -1166,20 +1167,20 @@ PopQueue เป็นระบบบริหารจัดการคิว�
      - เพิ่ม `cancelTicket` ใน `client/src/api/ticket.api.ts`, ปุ่มยกเลิก + Confirmation Modal + Double-submit disabled state + Toast + Clean Empty State (`404 NO_ACTIVE_TICKET` ไม่ขึ้นกรอบแดง) บน `client/src/pages/MyTicketPage.tsx`
    - **TDD & Exit Criteria (DONE):** `[RED]` `9a2998f` → `[GREEN]` `ab03141` → docs `adb9c75` ผ่าน `TEST-41A..41L`, `cancel-race.test.ts` (`CF-01`), `client/src/tests/ticket.test.tsx`, Review โดย `@Theerawat82`, Merged PR `#71` (`1da1a55`) เข้า `sprint2-staging` และปิด `#64` แล้ว
 
-3. **`D2-I3` (`#65`) — `F-06` Server-Enforced 120s No-Show & `serverNow` Sync (Track B — `@Theerawat82`)**
+3. **`D2-I3` (`#65` Closed) — `F-06` Server-Enforced 120s No-Show & `serverNow` Sync (Track B — `@Theerawat82`, PR `#72` Merged `59650a1`)**
    - **Deliverables:**
      - ขยาย `canTransition` (`CALLED → NO_SHOW`) ใน `server/src/utils/state-machine.ts` (`TEST-43U`)
      - เพิ่ม `noShow` ใน `server/src/services/staff.service.ts` (ใช้ `clock.now()`, `Math.ceil` สำหรับ `remainingSeconds`, Atomic `updateMany`, คง `startUnboxing` เดิมไว้) และ route `POST /api/staff/tickets/:id/no-show`
      - เพิ่ม `data.serverNow` (`clock.now().toISOString()`) ใน `POST /api/staff/call-next`, `GET /api/tickets/my-ticket`, `GET /api/staff/tickets` โดยรักษา backward compatibility ของ `data.ticket` / `data.tickets`
      - สร้าง `client/src/utils/countdown.ts`, อัปเดต `CountdownTimer.tsx`, `MyTicketPage.tsx` (ปิด `LIM-01` รีเฟรชไม่รีเซ็ต `02:00`), และ `StaffCounterPage.tsx` (ปุ่ม No-Show disable <120s / enable ≥120s + Modal + Toast)
-   - **TDD & Exit Criteria (`tested` `71f617f`):** `[RED]` `8eb200a` → `[GREEN]` `71f617f` ผ่าน `TEST-42A..D`, `TEST-43A..K/U`, `no-show-race.test.ts` (`CF-02`), `staff.test.tsx`, `ticket.test.tsx` (`Server 197/197`, `Client 39/39`, `typecheck`/`lint`/`build` PASS) — รอ CI & Review โดย `@apfirst13`
+   - **TDD & Exit Criteria (DONE):** `[RED]` `8eb200a` → `[GREEN]` `71f617f` ผ่าน `TEST-42A..D`, `TEST-43A..K/U`, `no-show-race.test.ts` (`CF-02`), `staff.test.tsx`, `ticket.test.tsx`, Review โดย `@apfirst13`, Merged PR `#72` (`59650a1`) เข้า `sprint2-staging` และปิด `#65` แล้ว
 
 4. **`D2-I4` (`#66`) — `F-07` Public Queue Display Board & Sprint 2 Release `v0.4.0-sprint2` (Track A — `@apfirst13`)**
    - **Deliverables:**
-     - สร้าง `server/src/services/public.service.ts` (Prisma `select` projection ปลอด PII, `ORDER BY queueDate ASC, queueNumber ASC`, `nowServing` เรียง `calledAt ASC`, `upNext` max 5, ซ่อนซีรีส์ปิดที่ไม่มีตั๋ว `DEC-04`, แสดงซีรีส์เปิดว่าง) และ `server/src/routes/public.routes.ts` (`GET /api/public/queue-board`, `Cache-Control: no-store...`, ไม่ผ่าน auth)
+     - สร้าง `server/src/services/public.service.ts` (Prisma `select` projection ปลอด PII, `ORDER BY queueDate ASC, queueNumber ASC`, `nowServing` เรียง `calledAt ASC`, `upNext` max 5, ซ่อนซีรีส์ปิดที่ไม่มีตั๋ว `DEC-04`, แสดงซีรีส์เปิดว่าง), `server/src/controllers/public.controller.ts` และ `server/src/routes/public.routes.ts` (`GET /api/public/queue-board`, `Cache-Control: no-store...`, ไม่ผ่าน auth)
      - สร้าง `client/src/pages/BoardPage.tsx` (route `/board` Kiosk-style, 3s polling, Error/Degraded banner, ป้าย `"ปิดรับคิวใหม่"`, Responsive `1920×1080` / `768px` / `375px`)
      - ผ่าน **Go/No-Go Decision Gate (ศ. 27 พ.ย. 12:00)** → เปิด Release PR `sprint2-staging → main` → Merge ให้ `deploy.yml` Deploy อัตโนมัติ → Smoke Check ผ่าน → สร้าง Annotated Tag **`v0.4.0-sprint2`**
-   - **TDD & Exit Criteria:** `TEST-44A..44G`, `e2e/public-board.spec.ts`, `e2e/responsive.spec.ts` ผ่าน 100%, `CF-05`/`CF-06` ผ่าน, และ Live Cloud Run แสดง commit ตรงกับ `v0.4.0-sprint2`
+   - **TDD & Exit Criteria (`tested` `75a1b82`):** `[RED]` `51287ac` → `[GREEN]` `75a1b82` ผ่าน `TEST-44A..44G`, `board.test.tsx`, `e2e/public-board.spec.ts`, `e2e/responsive.spec.ts` (`Server 202/202`, `Client 41/41`, `E2E 11/11` รวม `254/254`), `CF-06` ผ่าน, CI `#45605895541` PASS (PR `#73` รอ Approve & Merge; Live Release `v0.4.0-sprint2` รอขั้นตอน Release PR)
 
 5. **`D2-I5` (`#67`) — `F-09` Series Availability Control — Sprint 3 Working Progress (Track B — `@Theerawat82`)**
    - **Scheduling De-risk Rule:** เพื่อไม่ให้ Part C (15 คะแนน) ไปกระจุกเสี่ยงในวันเสาร์ `@Theerawat82` **เริ่มเขียนโค้ดและเทสต์ของ `D2-I5` (`#67`) ได้ทันทีหลังจบ `D2-I3` (`#65`) (พฤ. ค่ำ / ศ. เช้า)** บน branch `feature/sprint2-i05-f09-series-toggle` จากนั้นเมื่อ `v0.4.0-sprint2` ขึ้น `main` จึงแตก `sprint3-staging` จาก `main` → เพิ่มเข้า `protect-staging` → ซิงก์ branch และเปิด PR เข้า `sprint3-staging` ทันที
@@ -1235,8 +1236,8 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 | :---: | :---: | :---: | :--- | :--- | :---: | :---: |
 | **G0 / G1** | **`D2-I1`** (`#69`) | **พ. 25 พ.ย. 12:00** | PR `#62` (`f6b088e`), `#63` (`b9a4404`), `#70` (`a85f7c0`) Merged, `protect-staging` (`refs/heads/sprint2-staging` + `merge` only), Issues `#64`–`#69` เปิดครบ, ปิด `#69`, และ `@Theerawat82` ตั้ง IAM `secretAccessor` + รัน `popqueue-migrate --wait` ยืนยัน Live Login (`401`/`200`) แล้ว | **DONE** — PR `#62`/`#63`/`#70` Merged, `#69` Closed, Seed Secrets IAM ใช้งานจริงแล้ว | `@Theerawat82` & `@apfirst13` | - |
 | **G2a (Track A)** | **`D2-I2`** (`#64`) | **พ. 25 พ.ย. 23:59** | พัฒนา `F-05` Cancel ด้วย TDD (`9a2998f` → `ab03141` → `adb9c75`) + UI `/my-ticket` + `cancel-race.test.ts` (`Refs #64`) | **DONE** — `TEST-41A..41L` ผ่าน, PR `#71` Merged เข้า `sprint2-staging` (`1da1a55`) และปิด `#64` แล้ว | `@apfirst13` (Author)<br>`@Theerawat82` (Reviewer) | `G1` |
-| **G2b (Track B)** | **`D2-I3`** (`#65`) | **พ. 25 – พฤ. 26 พ.ย. 18:00** | พัฒนา `F-06` No-Show 120s + `serverNow` Sync ทั้ง Staff & Collector `/my-ticket` (`8eb200a` → `71f617f`, `Refs #65`) | `TEST-42A..D`, `TEST-43A..K/U` ผ่าน (`Server 197/197`, `Client 39/39`) — **รอ `@apfirst13` Review & Merge PR เข้า `sprint2-staging`** | `@Theerawat82` (Author)<br>`@apfirst13` (Reviewer) | `G1` |
-| **G3a (Track A)** | **`D2-I4`** (`#66`) | **พฤ. 26 – ศ. 27 พ.ย. 12:00** | พัฒนา `F-07` Public Queue Board (`/api/public/queue-board`, `/board` UI, Polling 3s, E2E) (`Refs #66`) | `TEST-44A..44G` ผ่าน, PR พร้อมบน `sprint2-staging` | `@apfirst13` (Author)<br>`@Theerawat82` (Reviewer) | `G2a` |
+| **G2b (Track B)** | **`D2-I3`** (`#65`) | **พ. 25 – พฤ. 26 พ.ย. 18:00** | พัฒนา `F-06` No-Show 120s + `serverNow` Sync ทั้ง Staff & Collector `/my-ticket` (`8eb200a` → `71f617f`, `Refs #65`) | **DONE** — `TEST-42A..D`, `TEST-43A..K/U` ผ่าน, PR `#72` Merged เข้า `sprint2-staging` (`59650a1`) และปิด `#65` แล้ว | `@Theerawat82` (Author)<br>`@apfirst13` (Reviewer) | `G1` |
+| **G3a (Track A)** | **`D2-I4`** (`#66`) | **พฤ. 26 – ศ. 27 พ.ย. 12:00** | พัฒนา `F-07` Public Queue Board (`/api/public/queue-board`, `/board` UI, Polling 3s, E2E) (`51287ac` → `75a1b82`, `Refs #66`) | `tested` — `TEST-44A..44G` & E2E ผ่าน (`254/254`), CI `#45605895541` PASS (**รอ `@Theerawat82` Review & Merge PR `#73`**) | `@apfirst13` (Author)<br>`@Theerawat82` (Reviewer) | `G2a` |
 | **G3b (Parallel Prep)** | **`D2-I5`** (`#67`) | **พฤ. 26 18:00 – ศ. 27 พ.ย. 18:00** | `@Theerawat82` พัฒนาโค้ด/เทสต์ `F-09` Series Toggle ล่วงหน้าบน feature branch **ขนานกับ `D2-I4`** (ลดความเสี่ยง Part C) | `TEST-46A..46F` ผ่านใน local พร้อมเปิด PR ทันทีหลัง `v0.4.0` | `@Theerawat82` | `G2b` |
 | **Go/No-Go Gate** | **`D2-I4`** (`#66`) | **ศ. 27 พ.ย. 12:00** | ทบทวนความพร้อม `F-05`, `F-06`, `F-07` บน `sprint2-staging` (หาก `F-07` UI มีปัญหาล็อกเป็น Minimum Viable Board ตาม `AC-44.1..44.8`; หากต้อง Scope Revision ให้ขอ TA อนุมัติเป็นลายลักษณ์อักษร) | ยืนยันความพร้อมเปิด Release PR `v0.4.0-sprint2` | ทั้งสองคน | `G2a`, `G2b`, `G3a` |
 | **G4 (Release `v0.4.0`)** | **`D2-I4`** (`#66`) | **ศ. 27 พ.ย. 18:00** | เปิด Release PR `sprint2-staging → main` → Merge (`deploy.yml` Deploy อัตโนมัติ + `smoke_test.py`) → ตรวจ Live ผ่าน → Push Tag **`v0.4.0-sprint2`** | `v0.4.0-sprint2` Live บน `popqueue` Cloud Run | ทั้งสองคน | `Go/No-Go Gate` |
@@ -1251,13 +1252,13 @@ PopQueue เป็นระบบบริหารจัดการคิว�
 
 | มิติการประเมินความพร้อม (Readiness Lens) | เกณฑ์การประเมินตาม Rubric & Lecture 12 | สถานะปัจจุบัน (Current Status) | ผลการประเมิน (Readiness Verdict) |
 | :--- | :--- | :---: | :---: |
-| **1. Feature Implementation** | ฟีเจอร์ Sprint 2 (`F-05..07`) + Sprint 3 Progress (`F-09`) พัฒนาพร้อม TDD ครบ | `F-05` Merged (`PR #71`) & `F-06` (`71f617f`) `tested`; เหลือ `D2-I4` (`F-07`) และ `D2-I5` (`F-09`) | **NOT READY** *(รอ `D2-I3` PR Merge + `D2-I4..I5`)* |
-| **2. Regression & Skipped Tests** | ชุดทดสอบเต็มรันผ่าน 100% บน Candidate (`0 failed, 0 skipped`) | `Server 197/197` + `Client 39/39` ผ่านบน `71f617f` (`0 failed, 0 skipped`; `test:e2e` คงค้างรอ `D2-I4`/`D2-I6` — **ยังไม่ได้รันบน `v0.5.0-d2-rc`**) | **NOT READY FOR RC** *(Core `D2-I3` GREEN — [EV-A07](#appendix-b))* |
-| **3. Security & Role Guard Integrity** | 401/403 Guards, Zero PII Public Board, ไม่เปิดเผยรหัสจริงใน Git/PDF | Baseline + `F-05` (`401/403`) + `F-06` (`401/403 FORBIDDEN_SERIES/NOT_HANDLER`) ผ่าน; เหลือ Zero PII Public Board (`F-07`) และ `F-09` | **NOT READY** *(รอ `D2-I4..I5`)* |
-| **4. Live Deployment & Rollback Plan** | Deploy บน Cloud Run `popqueue` + Live Check + Rollback Procedure | Rollback procedure พร้อมใน `deploy.yml` (`workflow_dispatch` + `image_tag`); Baseline `v0.3.0-lab7` rev `popqueue-00007-npd` ทำงานปกติ; Seed Secrets IAM + `popqueue-migrate --wait` + Live Login (`401`/`200`) ยืนยันแล้ว; Live Candidate ใหม่รอ `D2-I4`/`D2-I6` | **NOT READY** *(รอ `D2-I4`/`D2-I6`)* |
-| **5. Governance, Known Issues & Release Notes** | Contract ตรงโค้ดจริง, Known Issues (`LIM-01` fixed in `F-06`, `G-07`, `TD-01..04`) เปิดเผยชัด, Release Notes ฉบับ Candidate | PR `#62`/`#63`/`#70` (`D2-I1`, `#69` Closed) & PR `#71` (`D2-I2`, `#64` Closed) Merged เข้า `sprint2-staging`; `protect-staging` ป้องกัน `sprint2-staging` (`merge` only); `v1.11` (`D2-I3`) เปิด PR เพื่อ Review | **IN PROGRESS** |
-| **6. Evidence Plan Completeness** | 2 Test Excerpts, TDD Red/Green, 2 PR Chains, Captioned Screenshots, Private Credential Handoff | แผนครบใน §4–§5 และเก็บ TDD `[RED]`→`[GREEN]` ของ `F-05` + `F-06` แล้ว (รอ `F-07`/`F-09`/E2E/Screenshots ใน `D2-I4..I6`) | **READY FOR EXECUTION** |
-| **สรุปคำวินิจฉัยความพร้อมภาพรวม** | **Overall Release Candidate Verdict** | **NOT READY FOR PRODUCTION DEPLOYMENT**<br>*(คงสถานะ NOT READY ในขั้น `v1.11` จนกว่าจะจบ Merge `D2-I3` (`#65`), พัฒนา `D2-I4..D2-I5`, ผ่าน Go/No-Go Gate ศ. 27 พ.ย. 12:00, Deploy และรัน Full Suite + Live Verification บน `v0.5.0-d2-rc` ใน `D2-I6`)* | |
+| **1. Feature Implementation** | ฟีเจอร์ Sprint 2 (`F-05..07`) + Sprint 3 Progress (`F-09`) พัฒนาพร้อม TDD ครบ | `F-05` (`PR #71`), `F-06` (`PR #72`) Merged และ `F-07` (`75a1b82`) `tested` (PR `#73` รอ Merge); เหลือ `D2-I5` (`F-09`) | **NOT READY** *(รอ PR `#73` Merge + `D2-I5`)* |
+| **2. Regression & Skipped Tests** | ชุดทดสอบเต็มรันผ่าน 100% บน Candidate (`0 failed, 0 skipped`) | `Server 202/202` + `Client 41/41` + `E2E 11/11` (`254/254` passed, `0 failed, 0 skipped` บน `d6bd417` — **ยังไม่ได้รันบน `v0.5.0-d2-rc`**) | **NOT READY FOR RC** *(Sprint 2 `F-05..07` GREEN — [EV-A07](#appendix-b))* |
+| **3. Security & Role Guard Integrity** | 401/403 Guards, Zero PII Public Board, ไม่เปิดเผยรหัสจริงใน Git/PDF | Baseline + `F-05` (`401/403`) + `F-06` (`401/403 FORBIDDEN_SERIES/NOT_HANDLER`) + `F-07` Zero PII (`TEST-44A`) ผ่านทั้งหมด; เหลือ `F-09` (`D2-I5`) | **NOT READY** *(รอ `D2-I5`)* |
+| **4. Live Deployment & Rollback Plan** | Deploy บน Cloud Run `popqueue` + Live Check + Rollback Procedure | Rollback procedure พร้อมใน `deploy.yml` (`workflow_dispatch` + `image_tag`); Baseline `v0.3.0-lab7` rev `popqueue-00007-npd` ทำงานปกติ; Seed Secrets IAM + `popqueue-migrate --wait` + Live Login (`401`/`200`) ยืนยันแล้ว; Live Candidate ใหม่รอ `v0.4.0-sprint2` (`D2-I4`) / `v0.5.0-d2-rc` (`D2-I6`) | **NOT READY** *(รอ Release `v0.4.0` / `v0.5.0`)* |
+| **5. Governance, Known Issues & Release Notes** | Contract ตรงโค้ดจริง, Known Issues (`LIM-01` fixed in `F-06`, `G-07`, `TD-01..04`) เปิดเผยชัด, Release Notes ฉบับ Candidate | PR `#62`/`#63`/`#70` (`D2-I1`, `#69` Closed), PR `#71` (`D2-I2`, `#64` Closed) & PR `#72` (`D2-I3`, `#65` Closed) Merged เข้า `sprint2-staging`; `protect-staging` ป้องกัน `sprint2-staging` (`merge` only); `v1.12` (`D2-I4`) เปิด PR `#73` เพื่อ Review | **IN PROGRESS** |
+| **6. Evidence Plan Completeness** | 2 Test Excerpts, TDD Red/Green, 2 PR Chains, Captioned Screenshots, Private Credential Handoff | แผนครบใน §4–§5 และเก็บ TDD `[RED]`→`[GREEN]` ของ `F-05`, `F-06`, `F-07` แล้ว (รอ `F-09`/Live Screenshots/Verbose Suite ใน `D2-I5..I6`) | **READY FOR EXECUTION** |
+| **สรุปคำวินิจฉัยความพร้อมภาพรวม** | **Overall Release Candidate Verdict** | **NOT READY FOR PRODUCTION DEPLOYMENT**<br>*(คงสถานะ NOT READY ในขั้น `v1.12` จนกว่าจะ Merge PR `#73`, พัฒนา `D2-I5` (`F-09`), ผ่าน Go/No-Go Gate ศ. 27 พ.ย. 12:00, Deploy และรัน Full Suite + Live Verification บน `v0.4.0-sprint2` / `v0.5.0-d2-rc` ใน `D2-I4`/`D2-I6`)* | |
 
 # Appendix A: Local Setup, Deployment Ref, Safe Test Accounts & AI-Use Declaration
 
@@ -1338,8 +1339,8 @@ docker compose up -d --build
 | Lab 5–7 Continuity, CI/CD Pipeline & Maintenance (`v0.2.0`–`v0.3.0`) | Co-Author / Reviewer | Co-Author / Reviewer | `accepted` |
 | Master Contract `v1.0–v1.9`, `AGENTS.md`, CI Staging Triggers & Ruleset Setup (`D2-I1` `#69`, PR `#62`/`#63`/`#70` Merged) | Author (`v1.0–v1.5`, `v1.9`) / Reviewer (`v1.6–v1.8`) | Reviewer (`v1.0–v1.5`, `v1.9`) / Author (`v1.6–v1.8`) | `Done` *(PR `#62`/`#63`/`#70` Merged, `#69` Closed & Seed IAM Verified)* |
 | `D2-I2` (`#64`): F-05 Queue Cancellation (Backend, UI & TDD Tests) | Author | Reviewer & Merger | `Merged` *(PR `#71` `1da1a55`, `#64` Closed)* |
-| `D2-I3` (`#65`): F-06 No-Show 120s & `serverNow` Sync (Backend, UI & TDD Tests) | Reviewer & Merger | Author | `tested` (`8eb200a` → `71f617f`, `v1.11` — PR pending review) |
-| `D2-I4` (`#66`): F-07 Public Queue Display Board & `v0.4.0-sprint2` Release | Author | Reviewer & Merger | `planned` |
+| `D2-I3` (`#65`): F-06 No-Show 120s & `serverNow` Sync (Backend, UI & TDD Tests) | Reviewer & Merger | Author | `Merged` *(PR `#72` `59650a1`, `71f617f`)* |
+| `D2-I4` (`#66`): F-07 Public Queue Display Board & `v0.4.0-sprint2` Release | Author | Reviewer & Merger | `tested` *(Feature & Tests verified locally; pending PR & release)* |
 | `D2-I5` (`#67`): F-09 Series Availability Control (Sprint 3 Working Progress) | Reviewer & Merger | Author | `planned` |
 | Deployment Verification, Live Smoke/Persistence & Rollback Checks (`D2-I6` `#68`) | Co-Executor | Co-Executor | `planned` |
 | Automated Testing, TDD Gate Enforcement & AI Output Verification | Co-Reviewer / Supervisor | Co-Reviewer / Supervisor | `in progress` |
