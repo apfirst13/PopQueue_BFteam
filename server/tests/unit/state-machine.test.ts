@@ -63,4 +63,22 @@ describe('State Machine Unit: canTransition (TEST-28U, AC-28, BR-03)', () => {
       }
     });
   });
+
+  describe('TEST-43U (AC-43.10, F-06): NO_SHOW transition validation', () => {
+    it('allows NO_SHOW only from CALLED and rejects all other statuses', () => {
+      const noShowAction = 'NO_SHOW' as TicketAction;
+      expect(canTransition(TicketStatus.CALLED, noShowAction)).toBe(true);
+
+      const nonCalledStatuses: TicketStatus[] = [
+        TicketStatus.WAITING,
+        TicketStatus.UNBOXING,
+        TicketStatus.COMPLETED,
+        TicketStatus.CANCELLED,
+        TicketStatus.NO_SHOW,
+      ];
+      for (const status of nonCalledStatuses) {
+        expect(canTransition(status, noShowAction)).toBe(false);
+      }
+    });
+  });
 });

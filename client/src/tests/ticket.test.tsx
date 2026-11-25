@@ -452,4 +452,54 @@ describe('MyTicketPage Component Tests (AC-19, AC-33, Master §4.3, §4.6)', () 
       expect(confirmBtn).not.toBeDisabled();
     });
   });
+
+  describe('TEST-43J (AC-43.9, F-06, LIM-01): Collector Server-Synced Countdown Across Refresh', () => {
+    it('syncs countdown from calledAt and serverNow without resetting to 02:00 on remount/refresh', async () => {
+      const cryCalled = {
+        id: 't-cry-1',
+        displayNumber: 'CRY-001',
+        queueNumber: 1,
+        status: 'CALLED',
+        waitingAhead: 0,
+        series: { id: 's-cry', code: 'CRY', name: 'Crybaby Sunset Concert' },
+        createdAt: '2026-11-25T09:58:00.000Z',
+        calledAt: '2026-11-25T10:00:00.000Z',
+        startedAt: null,
+      };
+
+      // 1. Initial mount at +45s elapsed -> should show 01:15 (75s remaining)
+      vi.mocked(fetch).mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: async () => ({
+          data: {
+            ticket: cryCalled,
+            tickets: [cryCalled],
+            serverNow: '2026-11-25T10:00:45.000Z',
+          },
+        }),
+      } as Response);
+
+      const firstRender = renderTicket();
+      expect(await screen.findByText('01:15')).toBeInTheDocument();
+      firstRender.unmount();
+
+      // 2. Remount / browser refresh 5s later (+50s elapsed) -> should show 01:10 (never reset to 02:00)
+      vi.mocked(fetch).mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: async () => ({
+          data: {
+            ticket: cryCalled,
+            tickets: [cryCalled],
+            serverNow: '2026-11-25T10:00:50.000Z',
+          },
+        }),
+      } as Response);
+
+      renderTicket();
+      expect(await screen.findByText('01:10')).toBeInTheDocument();
+      expect(screen.queryByText('02:00')).not.toBeInTheDocument();
+    });
+  });
 });
