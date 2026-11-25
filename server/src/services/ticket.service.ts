@@ -2,6 +2,7 @@ import { Prisma, Role, TicketStatus } from '@prisma/client';
 import { prisma } from '../config/db.js';
 import { AppError } from '../middleware/error-handler.js';
 import { Clock, defaultClock, getQueueDate, getQueueDateAsDate } from '../utils/clock.js';
+import { canTransition } from '../utils/state-machine.js';
 
 export interface JoinQueueResult {
   ticketId: string;
@@ -53,6 +54,14 @@ export interface TicketDetailResult {
 export interface TicketUserIdentity {
   id: string;
   role: Role;
+}
+
+export interface CancelTicketResult {
+  id: string;
+  seriesId: string;
+  displayNumber: string;
+  status: TicketStatus;
+  forfeitedAt: string;
 }
 
 export class TicketService {
@@ -300,6 +309,80 @@ export class TicketService {
     }
 
     return result;
+  }
+
+  /**
+   * Cancels a collector's own WAITING queue ticket (F-05, FR-11, AC-41.1..41.8, Decision 4)
+   * Evaluation order:
+   * 1) Resource existence (404 RESOURCE_NOT_FOUND)
+   * 2) Ownership guard (403 FORBIDDEN_OWNERSHIP) - checked before state transition per Decision 4
+   * 3) State transition validity (400 INVALID_STATE_TRANSITION)
+   * 4) Atomic conditional update (id, userId, status = WAITING)
+   */
+  async cancelTicket(
+    userId: string,
+    ticketId: string,
+    clock: Clock = defaultClock,
+  ): Promise<CancelTicketResult> {
+    const ticket = await prisma.queueTicket.findUnique({
+      where: { id: ticketId },
+      select: {
+        id: true,
+        userId: true,
+        seriesId: true,
+        displayNumber: true,
+        status: true,
+      },
+    });
+
+    if (!ticket) {
+      throw new AppError(404, 'RESOURCE_NOT_FOUND', 'Ticket not found');
+    }
+
+    if (ticket.userId !== userId) {
+      throw new AppError(
+        403,
+        'FORBIDDEN_OWNERSHIP',
+        'Forbidden: You do not have permission to cancel this ticket',
+      );
+    }
+
+    if (!canTransition(ticket.status, 'CANCEL')) {
+      throw new AppError(
+        400,
+        'INVALID_STATE_TRANSITION',
+        'Invalid ticket state transition: only WAITING tickets can be cancelled',
+      );
+    }
+
+    const now = clock.now();
+    const result = await prisma.queueTicket.updateMany({
+      where: {
+        id: ticketId,
+        userId,
+        status: TicketStatus.WAITING,
+      },
+      data: {
+        status: TicketStatus.CANCELLED,
+        forfeitedAt: now,
+      },
+    });
+
+    if (result.count === 0) {
+      throw new AppError(
+        400,
+        'INVALID_STATE_TRANSITION',
+        'Invalid ticket state transition: concurrent state change detected',
+      );
+    }
+
+    return {
+      id: ticket.id,
+      seriesId: ticket.seriesId,
+      displayNumber: ticket.displayNumber,
+      status: TicketStatus.CANCELLED,
+      forfeitedAt: now.toISOString(),
+    };
   }
 }
 

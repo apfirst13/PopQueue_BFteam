@@ -43,7 +43,13 @@ const STATUS_ORDER: Record<string, number> = {
   COMPLETED: 3,
 };
 
-function ActiveTicketCard({ ticket }: { ticket: ActiveTicket }): React.JSX.Element {
+function ActiveTicketCard({
+  ticket,
+  onRequestCancel,
+}: {
+  ticket: ActiveTicket;
+  onRequestCancel: (ticket: ActiveTicket) => void;
+}): React.JSX.Element {
   const colors = getSeriesColors(ticket.series.code);
   const currentStepIdx = STATUS_ORDER[ticket.status] ?? 0;
 
@@ -145,32 +151,44 @@ function ActiveTicketCard({ ticket }: { ticket: ActiveTicket }): React.JSX.Eleme
 
           {/* State 1: WAITING */}
           {ticket.status === 'WAITING' && (
-            <div
-              className="pop-in"
-              style={{
-                width: '100%',
-                padding: '16px',
-                backgroundColor: 'var(--color-waiting-bg)',
-                borderRadius: 'var(--radius-md)',
-                border: '1.5px solid #BFDBFE',
-                marginTop: '8px',
-                textAlign: 'center',
-              }}
-            >
+            <>
               <div
+                className="pop-in"
                 style={{
-                  fontSize: '1.2rem',
-                  fontWeight: 700,
-                  color: 'var(--color-waiting-text)',
-                  fontFamily: 'var(--font-display)',
+                  width: '100%',
+                  padding: '16px',
+                  backgroundColor: 'var(--color-waiting-bg)',
+                  borderRadius: 'var(--radius-md)',
+                  border: '1.5px solid #BFDBFE',
+                  marginTop: '8px',
+                  textAlign: 'center',
                 }}
               >
-                เหลืออีก {ticket.waitingAhead} คิวก่อนหน้า
+                <div
+                  style={{
+                    fontSize: '1.2rem',
+                    fontWeight: 700,
+                    color: 'var(--color-waiting-text)',
+                    fontFamily: 'var(--font-display)',
+                  }}
+                >
+                  เหลืออีก {ticket.waitingAhead} คิวก่อนหน้า
+                </div>
+                <div style={{ fontSize: '0.85rem', color: 'var(--color-muted)', marginTop: '4px' }}>
+                  กรุณารอรับการเรียกคิวจากพนักงานหน้าร้าน
+                </div>
               </div>
-              <div style={{ fontSize: '0.85rem', color: 'var(--color-muted)', marginTop: '4px' }}>
-                กรุณารอรับการเรียกคิวจากพนักงานหน้าร้าน
+              <div style={{ width: '100%', marginTop: '14px' }}>
+                <button
+                  type="button"
+                  className="btn btn-danger-outline"
+                  style={{ width: '100%' }}
+                  onClick={() => onRequestCancel(ticket)}
+                >
+                  ยกเลิกคิว
+                </button>
               </div>
-            </div>
+            </>
           )}
 
           {/* State 2: CALLED */}
@@ -252,6 +270,10 @@ export function MyTicketPage(): React.JSX.Element {
   const [isNoTicket, setIsNoTicket] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<{ code?: string; message: string } | null>(null);
+  const [pendingCancelTicket, setPendingCancelTicket] = useState<ActiveTicket | null>(null);
+  const [isCancelling, setIsCancelling] = useState<boolean>(false);
+  const [cancelError, setCancelError] = useState<{ code?: string; message: string } | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const loadTicket = useCallback(async (isSilent = false) => {
     if (!isSilent) {
@@ -291,6 +313,46 @@ export function MyTicketPage(): React.JSX.Element {
     loadTicket(false);
   }, [loadTicket]);
 
+  useEffect(() => {
+    if (!toastMessage) return;
+    const timer = setTimeout(() => setToastMessage(null), 5000);
+    return () => clearTimeout(timer);
+  }, [toastMessage]);
+
+  const handleRequestCancel = (ticket: ActiveTicket) => {
+    setCancelError(null);
+    setPendingCancelTicket(ticket);
+  };
+
+  const handleCloseCancelModal = () => {
+    if (isCancelling) return;
+    setPendingCancelTicket(null);
+    setCancelError(null);
+  };
+
+  const handleConfirmCancel = async () => {
+    if (!pendingCancelTicket || isCancelling) return;
+    setCancelError(null);
+    setIsCancelling(true);
+    try {
+      await ticketApi.cancelTicket(pendingCancelTicket.id);
+      setPendingCancelTicket(null);
+      setToastMessage('ยกเลิกคิวสำเร็จ');
+      await loadTicket(false);
+    } catch (err) {
+      if (err instanceof ApiError) {
+        setCancelError({ code: err.code, message: err.message });
+        if (err.code === 'INVALID_STATE_TRANSITION' || err.code === 'RESOURCE_NOT_FOUND') {
+          void loadTicket(true);
+        }
+      } else {
+        setCancelError({ message: 'ไม่สามารถยกเลิกคิวได้ กรุณาตรวจสอบการเชื่อมต่อแล้วลองใหม่' });
+      }
+    } finally {
+      setIsCancelling(false);
+    }
+  };
+
   // Single page-level 3-second polling while at least one ticket is active
   const hasActiveTickets = tickets.some((t) => t.status !== 'COMPLETED');
   usePolling(
@@ -301,6 +363,25 @@ export function MyTicketPage(): React.JSX.Element {
     !isLoading && hasActiveTickets,
   );
 
+  const toastBanner = toastMessage ? (
+    <div className="alert toast-success pop-in" role="status" style={{ marginBottom: '16px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600 }}>
+          <CheckIcon size={18} />
+          <span>{toastMessage}</span>
+        </div>
+        <button
+          type="button"
+          className="toast-dismiss-btn"
+          aria-label="ปิดการแจ้งเตือน"
+          onClick={() => setToastMessage(null)}
+        >
+          ×
+        </button>
+      </div>
+    </div>
+  ) : null;
+
   if (isLoading) {
     return <LoadingSkeleton text="กำลังตรวจสอบข้อมูลบัตรคิว..." />;
   }
@@ -308,6 +389,7 @@ export function MyTicketPage(): React.JSX.Element {
   if (error) {
     return (
       <div style={{ marginTop: '20px' }}>
+        {toastBanner}
         <ErrorAlert
           code={error.code}
           message={error.message}
@@ -322,39 +404,44 @@ export function MyTicketPage(): React.JSX.Element {
 
   if (isNoTicket || tickets.length === 0) {
     return (
-      <div className="card" style={{ textAlign: 'center', padding: '48px 20px', marginTop: '16px' }}>
-        <div
-          style={{
-            width: '64px',
-            height: '64px',
-            margin: '0 auto 16px',
-            backgroundColor: 'var(--color-primary-soft)',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'var(--color-primary)',
-          }}
-          aria-hidden="true"
-        >
-          <ToyBoxIcon size={32} />
+      <div style={{ marginTop: '16px' }}>
+        {toastBanner}
+        <div className="card" style={{ textAlign: 'center', padding: '48px 20px' }}>
+          <div
+            style={{
+              width: '64px',
+              height: '64px',
+              margin: '0 auto 16px',
+              backgroundColor: 'var(--color-primary-soft)',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'var(--color-primary)',
+            }}
+            aria-hidden="true"
+          >
+            <ToyBoxIcon size={32} />
+          </div>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.35rem', marginBottom: '8px' }}>
+            ยังไม่มีบัตรคิว
+          </h2>
+          <p style={{ color: 'var(--color-muted)', marginBottom: '24px', fontSize: '0.95rem' }}>
+            ไม่มีคิวที่กำลังรอ — คุณยังไม่มีบัตรคิวที่กำลังใช้งานในขณะนี้
+          </p>
+          <Link to="/series" className="btn btn-primary" style={{ padding: '12px 24px' }}>
+            <TicketIcon size={18} />
+            <span>เลือกซีรีส์และรับบัตรคิว</span>
+          </Link>
         </div>
-        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.35rem', marginBottom: '8px' }}>
-          ยังไม่มีบัตรคิว
-        </h2>
-        <p style={{ color: 'var(--color-muted)', marginBottom: '24px', fontSize: '0.95rem' }}>
-          คุณยังไม่มีบัตรคิวที่กำลังใช้งานในขณะนี้
-        </p>
-        <Link to="/series" className="btn btn-primary" style={{ padding: '12px 24px' }}>
-          <TicketIcon size={18} />
-          <span>เลือกซีรีส์และรับบัตรคิว</span>
-        </Link>
       </div>
     );
   }
 
   return (
     <div className="ticket-wrapper">
+      {toastBanner}
+
       {/* Header */}
       <div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
@@ -373,9 +460,58 @@ export function MyTicketPage(): React.JSX.Element {
       {/* Ordered List of Active Tickets (BR-02 v2) */}
       <div className="tickets-list" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
         {tickets.map((t) => (
-          <ActiveTicketCard key={t.id} ticket={t} />
+          <ActiveTicketCard key={t.id} ticket={t} onRequestCancel={handleRequestCancel} />
         ))}
       </div>
+
+      {/* Cancel Confirmation Modal (F-05, AC-41.10, AC-41.11) */}
+      {pendingCancelTicket && (
+        <div className="modal-backdrop">
+          <div
+            className="card modal-dialog pop-in"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="cancel-dialog-title"
+            aria-describedby="cancel-dialog-desc"
+          >
+            <h3
+              id="cancel-dialog-title"
+              style={{ fontFamily: 'var(--font-display)', fontSize: '1.2rem', marginBottom: '10px' }}
+            >
+              ยืนยันการยกเลิกคิว
+            </h3>
+            <p
+              id="cancel-dialog-desc"
+              style={{ color: 'var(--color-text)', fontSize: '0.95rem', marginBottom: '16px' }}
+            >
+              ต้องการยกเลิกคิว {pendingCancelTicket.displayNumber} หรือไม่? เลขคิวนี้จะไม่สามารถนำกลับมาใช้ได้อีก
+            </p>
+            {cancelError && (
+              <div style={{ marginBottom: '16px' }}>
+                <ErrorAlert code={cancelError.code} message={cancelError.message} />
+              </div>
+            )}
+            <div className="modal-actions">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={handleCloseCancelModal}
+                disabled={isCancelling}
+              >
+                เก็บคิวไว้
+              </button>
+              <button
+                type="button"
+                className="btn btn-danger"
+                onClick={handleConfirmCancel}
+                disabled={isCancelling}
+              >
+                {isCancelling ? 'กำลังยกเลิกคิว...' : 'ยืนยันยกเลิกคิว'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

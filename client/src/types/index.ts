@@ -89,6 +89,17 @@ export interface MyTicketResponse {
   };
 }
 
+// POST /api/tickets/:id/cancel -> 200
+export interface CancelTicketResponse {
+  data: {
+    id: string;
+    seriesId: string;
+    displayNumber: string;
+    status: TicketStatus;
+    forfeitedAt: string;
+  };
+}
+
 // GET /api/staff/tickets -> 200
 export interface ActiveServingTicketDto {
   id: string;

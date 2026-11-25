@@ -58,6 +58,26 @@ export class TicketController {
       next(error);
     }
   }
+
+  async cancelTicket(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      if (!req.user) {
+        throw new AppError(401, 'UNAUTHENTICATED', 'Authentication required or token has been revoked');
+      }
+
+      const parseResult = ticketIdParamSchema.safeParse(req.params);
+      if (!parseResult.success) {
+        throw new AppError(400, 'VALIDATION_ERROR', 'Validation failed: ticket id must be a valid UUID');
+      }
+
+      const clock = req.app.locals.clock ?? defaultClock;
+      const data = await ticketService.cancelTicket(req.user.id, parseResult.data.id, clock);
+
+      res.status(200).json({ data });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export const ticketController = new TicketController();
