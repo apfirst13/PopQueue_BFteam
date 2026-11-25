@@ -825,3 +825,74 @@ body {
   gap: 8px;
   padding-right: 4px;
 }
+
+/* Danger Buttons, Toasts & Confirmation Modal (F-05) */
+.btn-danger {
+  background-color: var(--color-error);
+  color: #FFFFFF;
+  border-color: var(--color-error);
+}
+
+.btn-danger:hover:not(:disabled) {
+  background-color: #991B1B;
+  border-color: #991B1B;
+}
+
+.btn-danger-outline {
+  background-color: #FFFFFF;
+  color: var(--color-error);
+  border-color: #FECACA;
+}
+
+.btn-danger-outline:hover:not(:disabled) {
+  background-color: var(--color-error-bg);
+  border-color: var(--color-error);
+}
+
+.toast-success {
+  background-color: var(--color-success-bg);
+  color: var(--color-success);
+  border-left-color: var(--color-success);
+  border-top: 1px solid #BBF7D0;
+  border-right: 1px solid #BBF7D0;
+  border-bottom: 1px solid #BBF7D0;
+}
+
+.toast-dismiss-btn {
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 200;
+}
+
+.modal-dialog {
+  width: 100%;
+  max-width: 420px;
+  background-color: #FFFFFF;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.modal-actions .btn {
+  flex: 1 1 140px;
+}

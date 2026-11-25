@@ -21,6 +21,14 @@ ticketRouter.get(
   (req, res, next) => ticketController.getMyTicket(req, res, next),
 );
 
+// POST /api/tickets/:id/cancel - Queue Cancellation (F-05, AC-41.1..41.11)
+ticketRouter.post(
+  '/:id/cancel',
+  authenticateToken,
+  requireRole([Role.COLLECTOR]),
+  (req, res, next) => ticketController.cancelTicket(req, res, next),
+);
+
 // GET /api/tickets/:id - Ticket Details by ID (F-04, AC-36..38)
 ticketRouter.get(
   '/:id',

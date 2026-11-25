@@ -3,7 +3,7 @@ export interface ProtectedRouteDef {
   path: string;
   description: string;
   body?: unknown;
-  addedInIssue: 'I-02' | 'I-03' | 'I-04' | 'I-05' | 'I-06';
+  addedInIssue: 'I-02' | 'I-03' | 'I-04' | 'I-05' | 'I-06' | 'D2-I2';
 }
 
 /**
@@ -56,5 +56,11 @@ export const protectedRoutes: ProtectedRouteDef[] = [
     path: '/api/staff/tickets/00000000-0000-0000-0000-000000000000/complete',
     description: 'Complete unboxing service for ticket',
     addedInIssue: 'I-06',
+  },
+  {
+    method: 'POST',
+    path: '/api/tickets/00000000-0000-0000-0000-000000000000/cancel',
+    description: 'Cancel collector waiting queue ticket (F-05)',
+    addedInIssue: 'D2-I2',
   },
 ];
