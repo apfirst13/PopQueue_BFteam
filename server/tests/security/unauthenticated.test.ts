@@ -20,7 +20,7 @@ describe('Security: Unauthenticated & Malformed Token Protection (TEST-04, AC-04
   protectedRoutes.forEach((route) => {
     describe(`${route.method} ${route.path} (${route.description})`, () => {
       const executeRequest = (authHeader?: string) => {
-        let req = request(app)[route.method.toLowerCase() as 'get' | 'post'](route.path);
+        let req = request(app)[route.method.toLowerCase() as 'get' | 'post' | 'patch' | 'delete'](route.path);
         if (authHeader) {
           req = req.set('Authorization', authHeader);
         }

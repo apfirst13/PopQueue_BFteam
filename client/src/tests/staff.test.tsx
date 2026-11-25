@@ -383,4 +383,196 @@ describe('StaffCounterPage Component Tests (Master §3.6)', () => {
       expect(callNextBtn).toBeEnabled();
     });
   });
+
+  describe('F-09 (AC-46.1..46.5): Series Availability Toggle Switch UI States', () => {
+    it('toggles series off with loading/disabled state, toast, closed badge, while keeping Call Next active for queued tickets', async () => {
+      const user = userEvent.setup();
+
+      const openCryPayload = {
+        data: {
+          serverNow: '2026-11-25T10:00:00.000Z',
+          series: [
+            {
+              seriesId: 's-cry',
+              code: 'CRY',
+              name: 'Crybaby Sunset Concert',
+              isActive: true,
+              activeServing: null,
+              waitingQueue: [
+                {
+                  id: 't-1',
+                  displayNumber: 'CRY-001',
+                  queueNumber: 1,
+                  createdAt: '2026-11-25T09:50:00.000Z',
+                  userFullName: 'Collector 1',
+                },
+              ],
+            },
+          ],
+        },
+      };
+
+      const closedCryPayload = {
+        data: {
+          serverNow: '2026-11-25T10:00:05.000Z',
+          series: [
+            {
+              ...openCryPayload.data.series[0],
+              isActive: false,
+            },
+          ],
+        },
+      };
+
+      let resolveToggle!: (value: Response) => void;
+      const pendingTogglePromise = new Promise<Response>((resolve) => {
+        resolveToggle = resolve;
+      });
+
+      vi.mocked(fetch)
+        .mockResolvedValueOnce({
+          ok: true,
+          status: 200,
+          json: async () => openCryPayload,
+        } as Response)
+        .mockReturnValueOnce(pendingTogglePromise)
+        .mockResolvedValueOnce({
+          ok: true,
+          status: 200,
+          json: async () => closedCryPayload,
+        } as Response);
+
+      renderStaff();
+
+      const toggleSwitch = await screen.findByRole('switch', { name: /เปิด-ปิดรับคิวซีรีส์ CRY/i });
+      expect(toggleSwitch).toBeChecked();
+      expect(toggleSwitch).toBeEnabled();
+      expect(screen.getByText('เปิดรับคิว')).toBeInTheDocument();
+
+      await user.click(toggleSwitch);
+
+      // While request is in flight: disabled to guard against double click and displays loading indicator
+      expect(toggleSwitch).toBeDisabled();
+      expect(screen.getByText(/กำลังอัปเดต|กำลังบันทึก/i)).toBeInTheDocument();
+
+      expect(vi.mocked(fetch)).toHaveBeenCalledWith(
+        '/api/staff/series/s-cry/status',
+        expect.objectContaining({
+          method: 'PATCH',
+          body: JSON.stringify({ isActive: false }),
+        }),
+      );
+
+      await act(async () => {
+        resolveToggle({
+          ok: true,
+          status: 200,
+          json: async () => ({
+            data: {
+              id: 's-cry',
+              code: 'CRY',
+              name: 'Crybaby Sunset Concert',
+              isActive: false,
+            },
+          }),
+        } as Response);
+      });
+
+      expect(await screen.findByText(/ปิดรับคิวเรียบร้อย/i)).toBeInTheDocument();
+      const updatedSwitch = screen.getByRole('switch', { name: /เปิด-ปิดรับคิวซีรีส์ CRY/i });
+      expect(updatedSwitch).not.toBeChecked();
+      expect(updatedSwitch).toBeEnabled();
+      expect(screen.getByText('ปิดรับคิว')).toBeInTheDocument();
+
+      // Existing queued tickets can still be called (AC-46.4)
+      expect(screen.getByRole('button', { name: /เรียกคิวถัดไป|call next/i })).toBeEnabled();
+    });
+
+    it('reverts switch state and displays error notification when PATCH fails with 403 FORBIDDEN_SERIES, then allows re-open', async () => {
+      const user = userEvent.setup();
+
+      const closedCryPayload = {
+        data: {
+          serverNow: '2026-11-25T10:00:00.000Z',
+          series: [
+            {
+              seriesId: 's-cry',
+              code: 'CRY',
+              name: 'Crybaby Sunset Concert',
+              isActive: false,
+              activeServing: null,
+              waitingQueue: [],
+            },
+          ],
+        },
+      };
+
+      const reopenedCryPayload = {
+        data: {
+          serverNow: '2026-11-25T10:00:10.000Z',
+          series: [
+            {
+              ...closedCryPayload.data.series[0],
+              isActive: true,
+            },
+          ],
+        },
+      };
+
+      vi.mocked(fetch)
+        .mockResolvedValueOnce({
+          ok: true,
+          status: 200,
+          json: async () => closedCryPayload,
+        } as Response)
+        .mockResolvedValueOnce({
+          ok: false,
+          status: 403,
+          json: async () => ({
+            error: {
+              code: 'FORBIDDEN_SERIES',
+              message: 'Staff is not assigned to this series',
+              statusCode: 403,
+            },
+          }),
+        } as Response)
+        .mockResolvedValueOnce({
+          ok: true,
+          status: 200,
+          json: async () => ({
+            data: {
+              id: 's-cry',
+              code: 'CRY',
+              name: 'Crybaby Sunset Concert',
+              isActive: true,
+            },
+          }),
+        } as Response)
+        .mockResolvedValueOnce({
+          ok: true,
+          status: 200,
+          json: async () => reopenedCryPayload,
+        } as Response);
+
+      renderStaff();
+
+      const toggleSwitch = await screen.findByRole('switch', { name: /เปิด-ปิดรับคิวซีรีส์ CRY/i });
+      expect(toggleSwitch).not.toBeChecked();
+      expect(screen.getByText('ปิดรับคิว')).toBeInTheDocument();
+
+      // 1) Click to open -> receives 403 FORBIDDEN_SERIES -> must revert to unchecked
+      await user.click(toggleSwitch);
+
+      expect(await screen.findByText(/FORBIDDEN_SERIES/i)).toBeInTheDocument();
+      expect(screen.getByRole('switch', { name: /เปิด-ปิดรับคิวซีรีส์ CRY/i })).not.toBeChecked();
+      expect(screen.getByText('ปิดรับคิว')).toBeInTheDocument();
+
+      // 2) Retry toggle -> succeeds -> switch checked + "เปิดรับคิวสำเร็จ"
+      await user.click(screen.getByRole('switch', { name: /เปิด-ปิดรับคิวซีรีส์ CRY/i }));
+
+      expect(await screen.findByText(/เปิดรับคิวสำเร็จ/i)).toBeInTheDocument();
+      expect(screen.getByRole('switch', { name: /เปิด-ปิดรับคิวซีรีส์ CRY/i })).toBeChecked();
+      expect(screen.getByText('เปิดรับคิว')).toBeInTheDocument();
+    });
+  });
 });
